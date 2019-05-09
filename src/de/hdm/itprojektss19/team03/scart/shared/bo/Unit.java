@@ -2,7 +2,7 @@ package de.hdm.itprojektss19.team03.scart.shared.bo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class Unit implements IsSerializable {
+public class Unit extends BusinessObject implements IsSerializable {
 
 	/*
 	 * Units fuer GroceryList Entries, auf Datenbank fuer Groups abspeichern.
