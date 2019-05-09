@@ -1,6 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
-public class Article {
+public class Article extends BusinessObject {
 
 	private static final long serialVersionUID = 1L;
 	private String name = "";

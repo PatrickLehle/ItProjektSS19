@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * @author TomHager
  */
 
-public class Group implements IsSerializable {
+public class Group extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<User> users = new ArrayList<User>();
