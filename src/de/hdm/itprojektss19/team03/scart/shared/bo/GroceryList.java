@@ -1,26 +1,40 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
 
+import java.util.ArrayList;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 public class GroceryList implements IsSerializable {
 	
 	private static final long serialVersionUID = 1L;
+	private String name = "";
+	private Group group = new Group();
+	private ArrayList<Article> articles = new ArrayList<Article>();
 	
-	private long groceryListId;
-		
-	public String groceryListName = "";
-	
-	/*
-	 * ArrayList Articles fehlt noch!!!
-	 */
-	
-	private long groupId;
-	
-	public long getGroupById(long groupId) {
-		this.groupId = groupId;
-		
-		
+	public String getGroceryListName() {
+		return name;
 	}
+	
+	public void setGroceryListName(String name) {
+		this.name = name;
+	}
+	
+	public Group getGroup() {
+		return group;
+	}
+	
+	public void setGroup(Group group) {
+		this.group = group;
+	}
+	
+	public ArrayList<Article> getArticles() {
+		return articles;
+	}
+	
+	public void setArticles(ArrayList<Article> articles) {
+		this.articles = articles;
+	}
+	
 }

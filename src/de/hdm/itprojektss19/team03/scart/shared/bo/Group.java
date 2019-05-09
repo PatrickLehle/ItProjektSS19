@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -9,38 +10,25 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 
 public class Group implements IsSerializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
-	private long groupId;
-	
-	/*
-	 * ArrayList fuer User in einer Group fehlt!
-	 */
-	private String groupName ="";
+	private ArrayList<User> users = new ArrayList<User>();
+	private String name = "";
 
-	public long getGroupId() {
-		return groupId;
+	public ArrayList<User> getUsers() {
+		return users;
 	}
-
-	public void setGroupId(long groupId) {
-		this.groupId = groupId;
+	
+	public void setUsers(ArrayList<User> users) {
+		this.users = users;
 	}
-
+	
 	public String getGroupName() {
-		return groupName;
+		return name;
 	}
 
-	public void setGroupName(String groupName) {
-		this.groupName = groupName;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	public long getGroupById() {
-		return groupId;
+	public void setGroupName(String name) {
+		this.name = name;
 	}
 
 }
