@@ -1,18 +1,16 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
-
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+public class LoginInfo extends BusinessObject implements IsSerializable {
 
-public class LoginInfo implements IsSerializable {
-
-/**
- * Realisiering einer exemplarischen LoginInfo, welche alle relevanten Informationen des
- * eingeloggten Users enthaelt.
- * 
- * @see <code>IsSerializable</code>
- * 
- */
+	/**
+	 * Realisiering einer exemplarischen LoginInfo, welche alle relevanten
+	 * Informationen des eingeloggten Users enthaelt.
+	 * 
+	 * @see <code>IsSerializable</code>
+	 * 
+	 */
 
 	private boolean loggedIn = false;
 	private String loginUrl = "";
@@ -20,8 +18,8 @@ public class LoginInfo implements IsSerializable {
 	private String emailAddress = "";
 
 	/**
-	 * Gibt TRUE zurueck, wenn ein User angemeldet ist andernfalls wird 
-	 * FALSE zurueckgegeben.
+	 * Gibt TRUE zurueck, wenn ein User angemeldet ist andernfalls wird FALSE
+	 * zurueckgegeben.
 	 * 
 	 * @return loggedIn status ob der User eingeloggt ist
 	 */
@@ -42,10 +40,9 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Setzt den Login-Status
 	 * 
-	 * @param loggedIn Status setzen für den eingeloggten User
+	 * @param loggedIn Status setzen fuer den eingeloggten User
 	 */
-	
-	
+
 	public void setLoginIn(boolean loggedIn) {
 		this.loggedIn = loggedIn;
 	}
@@ -82,7 +79,7 @@ public class LoginInfo implements IsSerializable {
 	/**
 	 * Setzt die LogoutUrl
 	 * 
-	 * @param logoutUrl für den Loggout
+	 * @param logoutUrl fuer den Loggout
 	 */
 	public void setLogoutUrl(String logoutUrl) {
 		this.logoutUrl = logoutUrl;
