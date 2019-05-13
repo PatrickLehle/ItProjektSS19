@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/*
+/**
  * Groups erstellen und verwalten.
  * @author TomHager
  */
@@ -29,6 +29,11 @@ public class Group extends BusinessObject implements IsSerializable {
 
 	public void setGroupName(String name) {
 		this.name = name;
+	}
+
+	public Object getGroceryListId() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
