@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>de.hdm.itprojektss19.team03.scart.server.GreetingServiceImpl</servlet-class>
+    <!-- <servlet-class>de.hdm.itprojektss19.team03.scart.server.</servlet-class> -->
   </servlet>
   
   <servlet-mapping>
