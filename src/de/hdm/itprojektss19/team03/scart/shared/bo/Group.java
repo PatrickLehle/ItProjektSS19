@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/*
+/**
  * Groups erstellen und verwalten.
  * @author TomHager
  */
