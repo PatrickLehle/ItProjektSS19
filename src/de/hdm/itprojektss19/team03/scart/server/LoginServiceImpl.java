@@ -5,6 +5,9 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
+import de.hdm.itprojektss19.team03.scart.shared.LoginService;
+import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
+
 
 
 /**
@@ -25,12 +28,12 @@ LoginService{
 	    
 	    
 	    if (user != null) {
-	      loginInfo.setLoggedIn(true);
+	      loginInfo.setLoginIn(true);
 	      loginInfo.setEmailAddress(user.getEmail());
-	      loginInfo.setNickname(user.getNickname());
+	      //loginInfo.setNickname(user.getNickname());
 	      loginInfo.setLogoutUrl(userService.createLogoutURL(requestUri));
 	    } else {
-	      loginInfo.setLoggedIn(false);
+	      loginInfo.setLoginIn(false);
 	      loginInfo.setLoginUrl(userService.createLoginURL(requestUri));
 	    }
 	    return loginInfo;
