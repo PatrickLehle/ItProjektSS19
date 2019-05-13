@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-/*
+/**
  * Groups erstellen und verwalten.
  * @author TomHager
  */
 
-public class Group implements IsSerializable {
+public class Group extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private ArrayList<User> users = new ArrayList<User>();

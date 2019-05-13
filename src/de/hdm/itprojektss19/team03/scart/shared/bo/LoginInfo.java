@@ -2,7 +2,7 @@ package de.hdm.itprojektss19.team03.scart.shared.bo;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class LoginInfo implements IsSerializable {
+public class LoginInfo extends BusinessObject implements IsSerializable {
 
 	/**
 	 * Realisiering einer exemplarischen LoginInfo, welche alle relevanten
