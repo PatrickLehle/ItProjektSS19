@@ -7,8 +7,8 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name = "";
-	private Group group = new Group();
-	private ArrayList<Article> articles = new ArrayList<Article>();
+	private int groupId;
+	private ArrayList<Integer> articleIds = new ArrayList<Integer>();
 
 	public String getGroceryListName() {
 		return name;
@@ -18,20 +18,20 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
-	public Group getGroup() {
-		return group;
+	public int getGroupId() {
+		return groupId;
 	}
 
-	public void setGroup(Group group) {
-		this.group = group;
+	public void setGroup(int groupId) {
+		this.groupId = groupId;
 	}
 
-	public ArrayList<Article> getArticles() {
-		return articles;
+	public ArrayList<Integer> getArticles() {
+		return articleIds;
 	}
 
-	public void setArticles(ArrayList<Article> articles) {
-		this.articles = articles;
+	public void setArticles(ArrayList<Integer> articleIds) {
+		this.articleIds = articleIds;
 	}
 
 }
