@@ -10,6 +10,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.*;
 
@@ -130,5 +131,44 @@ EditorService{
 		
 	}
 	
+	public User getUserByName(User u) {
+		return u;
+		
+	}
+	public User getUSerByEmail(User u) {
+		return u;
+		
+	}
 	
+	public ArrayList<Group> getAllGroupByUser(User u) {
+		return // ArrayList Rueckgabevariable muss hier noch spezifiziert werden		
+	}
+	public void addUserToGroup(User u, Group g) {
+		
+	}
+	
+	public Unit createUnit(Unit un) {
+		return un;
+	}
+	
+	public void deleteUnit(Unit un) {
+		
+	}
+	public Unit getUnitById(int id) {
+		return // Unit Rueckgabevariable muss hier noch spezifiziert werden		
+	}
+	
+	public Unit getUnitByName(String name) {
+		return // Unit Rueckgabevariable muss hier noch spezifiziert werden		
+	}
+	public Entry createEntry(Entry e) {
+		return e;
+	}
+	public void deleteEntry(Entry e) {
+		
+	}
+	public Entry getEntryById(int id) {
+		return // Entry Rueckgabevariable muss hier noch spezifiziert werden		
+	}
 }
+
