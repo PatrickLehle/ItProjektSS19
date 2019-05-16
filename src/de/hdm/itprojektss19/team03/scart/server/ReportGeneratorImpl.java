@@ -5,6 +5,7 @@ import java.util.*;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 
