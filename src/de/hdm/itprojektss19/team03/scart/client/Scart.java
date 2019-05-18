@@ -41,9 +41,9 @@ public class Scart implements EntryPoint {
 	@Override
 	public void onModuleLoad() {
 		User user = new User();
-		Navigation nav = new Navigation(user);
+	//	Navigation nav = new Navigation(user);
 		
-		RootPanel.get("Navigation").add(nav);
+	//	RootPanel.get("Navigation").add(nav);
 		
 	}
 
