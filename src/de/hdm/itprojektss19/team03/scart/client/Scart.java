@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import de.hdm.itprojektss19.team03.scart.client.gui.Navigation;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 
 /**
@@ -39,7 +40,10 @@ public class Scart implements EntryPoint {
 
 	@Override
 	public void onModuleLoad() {
-		// TODO Auto-generated method stub
+		User user = new User();
+	Navigation nav = new Navigation(user);
+		
+	RootPanel.get("navigation").add(nav);
 		
 	}
 

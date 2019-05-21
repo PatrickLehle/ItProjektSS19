@@ -31,4 +31,9 @@ public class Group extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
+	public Object getGroceryListId() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
