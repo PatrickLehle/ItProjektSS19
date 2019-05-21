@@ -7,7 +7,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 
 public class GroceryListForm extends VerticalPanel {
 
-	public GroceryListForm(GroceryList selection) {
+	public GroceryListForm(de.hdm.itprojektss19.team03.scart.client.gui.GroceryList groceryList) {
 		// TODO Auto-generated constructor stub
 	}
 
