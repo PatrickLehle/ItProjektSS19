@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 
 /**
@@ -126,7 +127,8 @@ public class GroupMapper {
 				// Hoechste ID um 1 erhoehen, um naechste ID zu erhalten
 				group.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO groups (id, name) " + "VALUES (" + group.getId() + ",'" + group.getGroupName() + "')");
+				stmt.executeUpdate("INSERT INTO groups (id, name, userId) " + "VALUES (" + group.getId() + ",'" 
+				+ group.getGroupName() + "'),'" + UserMapper.userMapper().findbyUserId(group.getUsers().get(0).getId()) + "')");
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -148,7 +150,7 @@ public class GroupMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE groups " + "SET name=\"" + group.getGroupName() + "WHERE id=" + group.getId());
+			stmt.executeUpdate("UPDATE groups " + "SET name=" + group.getGroupName() + "userId=" + group.getUsers() + "WHERE id=" + group.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
