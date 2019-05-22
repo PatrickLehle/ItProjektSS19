@@ -12,7 +12,14 @@ public class Retailer extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private String retailerName = "";
+	
+	public Retailer() {
+		
+	}
 
+	public Retailer(String name) {
+		
+	}
 	public String getRetailerName() {
 		return retailerName;
 	}

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
@@ -8,7 +9,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  * @see <code>BusinessObject</code>
  * 
- * @author PatrickLehle
+ * @author PatrickLehle, JulianHofer
+ * 
  */
 public class User extends BusinessObject implements IsSerializable {
 
@@ -17,25 +19,31 @@ public class User extends BusinessObject implements IsSerializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Instanzvariable von Klasse User
-	 */
+	
 	private String username = "";
+	private String email = "";
+	
+	public User() {
+		
+	}
+	public User (String username, String emailAdress) {
+		
+	}
+	public String getEmail() {
+		return email;
+	}
 
-	/*
-	 * Auslesen der Email
-	 * 
-	 * @return email - Email Adresse des Users
-	 */
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
 	public String getUsername() {
 		return username;
 	}
 
-	/**
-	 * setzen der Email
-	 * 
-	 * @param email des Users
-	 */
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}

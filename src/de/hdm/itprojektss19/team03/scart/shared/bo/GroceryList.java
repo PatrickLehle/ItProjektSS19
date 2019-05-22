@@ -11,6 +11,12 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private Group group = new Group();
 	private Vector<Article> articles = new Vector<Article>();
 
+	public GroceryList() {
+		
+	}
+	public GroceryList(String name, Group g) {
+		
+	}
 	public String getGroceryListName() {
 		return name;
 	}
@@ -19,12 +25,12 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
-	public Group getGroup() {
-		return group;
+	public int getGroupId() {
+		return groupId;
 	}
 
-	public void setGroup(Group group) {
-		this.group = group;
+	public void setGroup(int groupId) {
+		this.groupId = groupId;
 	}
 
 	public Vector<Article> getArticles() {
