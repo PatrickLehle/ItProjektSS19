@@ -5,8 +5,16 @@ public class Article extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 	private String name = "";
 	private int quantity = 1;
-	private Retailer retailer = new Retailer();
+	private int retailerId;
 	private Unit unit = new Unit();
+	
+	public int getRetailerId() {
+		return retailerId;
+	}
+	
+	public void setRetailerId(int retailerId) {
+		this.retailerId = retailerId;
+	}
 
 	public String getName() {
 		return name;
@@ -22,14 +30,6 @@ public class Article extends BusinessObject {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public Retailer getRetailer() {
-		return retailer;
-	}
-
-	public void setRetailer(Retailer retailer) {
-		this.retailer = retailer;
 	}
 
 	public Unit getUnit() {
