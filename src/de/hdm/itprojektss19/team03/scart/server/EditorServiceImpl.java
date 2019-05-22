@@ -256,14 +256,15 @@ EditorService{
 		//Input fuer Article Attribute muss noch erledigt werden
 		
 		
-				try {
+		try {
 						Article temp = new Article(); //Mit dem Input der Attribute muss hier ein neues Object mit den Attributen erstellt werden
 						aMapper.insert(temp);
 						//Ausgabe der Rueckgabe aus der insert Funktion fehlt
 					
-				} catch (IllegalArgumentException e) {
+		
+		} catch (IllegalArgumentException e) {
 					e.printStackTrace();
-				}
+		}
 	}
 	
 	public void saveArticle(Article a) throws IllegalArgumentException{
@@ -284,8 +285,7 @@ EditorService{
 	}
 	
 	public Article getArticleById(int articleId) throws IllegalArgumentException{
-		//aMapper.findByKey(articleId); Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
-		
+		aMapper.findByKey(articleId); //Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
 	}
 	
 	/**
