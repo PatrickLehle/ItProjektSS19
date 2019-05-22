@@ -96,7 +96,7 @@ EditorService{
 		
 		this.uMapper = UserMapper.userMapper();
 		this.gMapper = GroupMapper.groupMapper();
-		this.glMapper = GroceryListMapper.grocerylistMapper();
+		this.glMapper = GroceryListMapper.groceryListMapper();
 		this.aMapper = ArticleMapper.articleMapper();
 		this.eMapper = EntryMapper.entryMapper();
 		this.rMapper = RetailerMapper.retailerMapper();

@@ -17,6 +17,9 @@ public class Group extends BusinessObject implements IsSerializable {
 	public Group() {
 		
 	}
+	public Group(String name) {
+		
+	}
 
 	public ArrayList<User> getUsers() {
 		return users;
