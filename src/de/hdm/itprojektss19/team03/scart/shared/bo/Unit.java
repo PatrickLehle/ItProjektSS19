@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Unit extends BusinessObject implements IsSerializable {
 
-	/*
+	/**
 	 * Units fuer GroceryList Entries, auf Datenbank fuer Groups abspeichern.
 	 * 
 	 * @author TomHager

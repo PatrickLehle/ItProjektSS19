@@ -8,9 +8,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * 
  * @see <code>BusinessObject</code>
  * 
- * 
- * 
- * 
  * @author PatrickLehle, JulianHofer
  * 
  */
