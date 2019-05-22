@@ -17,6 +17,9 @@ public class Retailer extends BusinessObject implements IsSerializable {
 		
 	}
 
+	public Retailer(String name) {
+		
+	}
 	public String getRetailerName() {
 		return retailerName;
 	}

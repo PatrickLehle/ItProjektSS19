@@ -16,6 +16,9 @@ public class Unit extends BusinessObject implements IsSerializable {
 	public Unit() {
 	
 	}
+	public Unit(String name) {
+		
+	}
 
 	public String getUnitName() {
 		return name;
