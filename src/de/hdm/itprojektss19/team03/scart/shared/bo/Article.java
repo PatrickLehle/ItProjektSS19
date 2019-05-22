@@ -8,6 +8,14 @@ public class Article extends BusinessObject {
 	private int retailerId;
 	private Unit unit = new Unit();
 	
+	public Article() {
+		
+	}
+	
+	public Article (String name, int quantity, int retailerId, Unit unit) {
+		
+	}
+	
 	public int getRetailerId() {
 		return retailerId;
 	}
