@@ -15,6 +15,9 @@ public class Entry extends BusinessObject implements IsSerializable{
 	private static final long serialVersionUID = 1L;
 	private int entryId = 0;
 	
+	public Entry() {
+		
+	}
 
 
 }

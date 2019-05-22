@@ -12,6 +12,10 @@ public class Unit extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name = "";
+	
+	public Unit() {
+	
+	}
 
 	public String getUnitName() {
 		return name;
