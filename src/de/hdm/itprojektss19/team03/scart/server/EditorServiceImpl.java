@@ -208,6 +208,8 @@ EditorService{
 	 */
 	
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException{
+	
+	}
 		
 	}
 	
@@ -269,15 +271,17 @@ EditorService{
 	 */
 	
 	public Retailer createRetailer(Retailer r) throws IllegalArgumentException{
-		
+			
+		return this.rMapper.insert(r); //Retailer Objekt in der DB speichern
+			
 	}
 	
 	public void saveRetailer(Retailer r) throws IllegalArgumentException{
-		
+		this.rMapper.update(r); //Speichert Retailer
 	}
 	
 	public void deleteRetailer(Retailer r) throws IllegalArgumentException{
-		
+		this.rMapper.delete(r); // Löscht Retailer
 	}
 	
 	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException{
