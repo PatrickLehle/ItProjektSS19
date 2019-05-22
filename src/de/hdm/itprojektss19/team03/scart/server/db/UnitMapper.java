@@ -16,7 +16,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
  * Datenbank ab.
  * 
  * @author Marco Dell'Oso, Thies
- * TODO Unit Object hinzufügen, soblad der Unit Mapper fertig is
  *
  */
 public class UnitMapper {
