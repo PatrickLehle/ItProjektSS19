@@ -20,6 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 	 * alle Client-seitigen Klassen relevant sind.
 	 * 
 	 * @author PatrickLehle, TomHager, MarcoDell'Oso
+	 * @author DennisLehle
 	 * @author Peter Thies
 	 */
 
@@ -170,18 +171,18 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 		}
 
 		/**
-		 * Setzen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+		 * Setzen eines Users für die Bearbeitung in der Scart Verwaltung
 		 * 
-		 * @param n Nutzer 
+		 * @param u User 
 		 */
-		public final void setCurrentNutzer(User u) {
+		public final void setCurrentUser(User u) {
 			this.user = u;
 		}
 
 		/**
-		 * Auslesen eines Nutzers für die Bearbeitung in der Sontact Verwaltung
+		 * Auslesen eines Users für die Bearbeitung in der Scart Verwaltung
 		 * 
-		 * @return nutzer der gerade eingeloggt ist.
+		 * @return user der gerade eingeloggt ist.
 		 */
 		public User getCurrentUser() {
 			return user;

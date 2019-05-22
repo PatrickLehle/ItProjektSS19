@@ -1,13 +1,11 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
-import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
@@ -24,7 +22,7 @@ import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 
 /**
  * 
- * @author bastiantilk, PatrickLehle 
+ * @author bastiantilk, PatrickLehle, MarcoDell'Oso, JulianHofer 
  * Serverseitiger RPC-Service fuer den Editor.
  * 
  */
@@ -278,7 +276,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
-		this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
+		return this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
 	}
 
 	/**
@@ -338,6 +336,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}catch(IllegalArgumentException e) {
 			e.printStackTrace();
 		}
+		return u;
 	}
 				
 			
@@ -377,6 +376,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	@Override
 	public User createUser(String emailAdress) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
