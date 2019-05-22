@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -64,11 +63,9 @@ public class UserMapper {
 	 * @param Die ID des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Id
 	 */
-	public Vector<User> findbyUserName(int username) {
+	public User findbyUserName(int username) {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
-
-		Vector<User> users = new Vector<User>();
 
 		try {
 			Statement statement = con.createStatement();
@@ -80,12 +77,13 @@ public class UserMapper {
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
 
-				users.addElement(user);
+				return user;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
+			return null;
 		}
-		return users;
+		return null;
 	}
 	
 	/**
@@ -94,11 +92,9 @@ public class UserMapper {
 	 * @param Die ID des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Id
 	 */
-	public Vector<User> findbyUserId(int userId) {
+	public User findbyUserId(int userId) {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
-
-		Vector<User> users = new Vector<User>();
 
 		try {
 			Statement statement = con.createStatement();
@@ -110,12 +106,13 @@ public class UserMapper {
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
 
-				users.addElement(user);
+				return user;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
+			return null;
 		}
-		return users;
+		return null;
 	}
 	
 	
@@ -125,11 +122,9 @@ public class UserMapper {
 	 * @param Die Email des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
 	 */
-	public Vector<User> findByUserEmail(String userEmail) {
+	public User findByUserEmail(String userEmail) {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
-
-		Vector<User> users = new Vector<User>();
 
 		try {
 			Statement statement = con.createStatement();
@@ -141,12 +136,13 @@ public class UserMapper {
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
 
-				users.addElement(user);
+				return user;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
+			return null;
 		}
-		return users;
+		return null;
 	}
 	
 	/**
@@ -189,7 +185,7 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE users " + "SET name=\"" + user.getUsername()  + "\" " + "SET email=\"" + user.getEmail() + "\" " + "\" "
+			stmt.executeUpdate("UPDATE users " + "SET name=\"" + user.getUsername()  + "\" " + "SET email=\"" + user.getEmail() + "\" "
 					+ "WHERE id=" + user.getId());
 
 		} catch (SQLException e2) {
