@@ -4,7 +4,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class Retailer extends BusinessObject implements IsSerializable {
 
-	/*
+	/**
 	 * Retailer fuer GroceryList Entries, auf Datenbank fuer Groups abspeichern.
 	 * 
 	 * @author TomHager

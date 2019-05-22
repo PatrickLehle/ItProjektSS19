@@ -7,18 +7,42 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>de.hdm.itprojektss19.team03.scart.server.GreetingServiceImpl</servlet-class>
+    <servlet-name>editorServlet</servlet-name>
+    <servlet-class>de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/itprojektss19/greet</url-pattern>
+    <servlet-name>editorServlet</servlet-name>
+    <url-pattern>/scart/editorservice</url-pattern>
+    <url-pattern>/scartreport/editorservice</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>reportServlet</servlet-name>
+    <servlet-class>de.hdm.itprojektss19.team03.scart.server.ReportGeneratorImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>reportServlet</servlet-name>
+    <url-pattern>/scartreport/reportgenerator</url-pattern>
+  </servlet-mapping>
+
+ <servlet>
+    <servlet-name>loginService</servlet-name>
+    <servlet-class>de.hdm.itprojektss19.team03.scart.server.LoginServiceImpl</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+    <url-pattern>/scart/loginservice</url-pattern>
+     <url-pattern>/scartreport/loginservice</url-pattern>
+   <!--   <url-pattern>/scart/loginReport</url-pattern> -->
   </servlet-mapping>
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>ItProjektSS19.html</welcome-file>
+        <welcome-file>Scart.html</welcome-file>
+    	<welcome-file>ScartReport.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
