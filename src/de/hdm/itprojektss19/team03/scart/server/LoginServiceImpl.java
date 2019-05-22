@@ -13,7 +13,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 /**
  * 
  * @author bastiantilk
- * Loginklasse im Server Package. Verweist auf LoginInfo in shared
+ * Loginklasse im Server Package. Verweist auf 'LoginInfo' in shared
  */
 
 public class LoginServiceImpl extends RemoteServiceServlet implements

@@ -10,7 +10,11 @@ import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
-
+/**
+ * 
+ * @author bastiantilk
+ *
+ */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements
 ReportGenerator{
 	
@@ -41,23 +45,27 @@ ReportGenerator{
 		if (this.getEditorService() == null) {
 			return null;
 		}
+		return null;
 	}
 	
 	public ArrayList<Article> getStatistic(int UID, Date start, Date end) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
+		return null;
 	} 
 	
 	public ArrayList<Article> getStatistic(int UID, Retailer retailer) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
+		return null;
 	}
 	
 	public ArrayList<Article> getStatistic(int UID, Date start, Date end, Retailer retailer) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
+		return null;
 	} 
 }
