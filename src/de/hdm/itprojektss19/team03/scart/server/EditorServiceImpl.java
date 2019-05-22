@@ -329,8 +329,25 @@ EditorService{
 	 */
 	
 	public Unit createUnit(Unit u) throws IllegalArgumentException{
-		
+		try {
+			int temp1=0;
+			
+			for(int i=0; i<= unMapper.findAll().size(); i++) {
+				if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
+					temp1++;
+				}
+			}
+				if(temp1 >0) {
+					unMapper.insert(u);
+					//Rueckgabewert vom Mapper wird noch nicht verarbeitet
+				}
+				
+		}catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 	}
+				
+			
 	
 	public void saveUnit(Unit u) throws IllegalArgumentException{
 		
