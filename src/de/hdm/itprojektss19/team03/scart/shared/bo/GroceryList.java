@@ -26,10 +26,6 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		this.group = group;
 	}
 
-	public ArrayList<Article> getArticles() {
-		return articles;
-	}
-
 	public void setArticles(ArrayList<Article> articles) {
 		this.articles = articles;
 	}
