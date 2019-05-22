@@ -64,6 +64,36 @@ public class UserMapper {
 	 * @param Die ID des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Id
 	 */
+	public Vector<User> findbyUserName(int username) {
+		// DB-Verbindung herstellen
+		Connection con = DBConnection.connection();
+
+		Vector<User> users = new Vector<User>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE name=" + username);
+			// Neues user Objekt f�r jede gefundene ID
+			while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("name"));
+				user.setEmail(rs.getString("email"));
+
+				users.addElement(user);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return users;
+	}
+	
+	/**
+	 * Sucht alle User anhand der ID
+	 * 
+	 * @param Die ID des Users
+	 * @return Vector mit allen gefunden Usern mit entsprechender Id
+	 */
 	public Vector<User> findbyUserId(int userId) {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
