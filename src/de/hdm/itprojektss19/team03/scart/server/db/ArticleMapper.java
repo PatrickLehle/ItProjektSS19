@@ -15,6 +15,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
  * Datenbank ab.
  * 
  * @author Marco Dell'Oso
+ * TODO Unit Object hinzufügen, soblad der Unit Mapper fertig is
  *
  */
 public class ArticleMapper {

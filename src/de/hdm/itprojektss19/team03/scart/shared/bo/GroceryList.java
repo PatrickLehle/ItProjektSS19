@@ -1,6 +1,5 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
-import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class GroceryList extends BusinessObject implements IsSerializable {
@@ -8,7 +7,7 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private String name = "";
 	private int groupId;
-	private ArrayList<Integer> articleIds = new ArrayList<Integer>();
+	private Article[] articles;
 
 	public String getGroceryListName() {
 		return name;
@@ -26,12 +25,12 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		this.groupId = groupId;
 	}
 
-	public ArrayList<Integer> getArticles() {
-		return articleIds;
+	public Article[] getArticles() {
+		return articles;
 	}
 
-	public void setArticles(ArrayList<Integer> articleIds) {
-		this.articleIds = articleIds;
+	public void setArticles(Article[] articles) {
+		this.articles = articles;
 	}
 
 }
