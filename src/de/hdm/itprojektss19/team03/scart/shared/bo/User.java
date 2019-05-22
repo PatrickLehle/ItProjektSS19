@@ -1,3 +1,5 @@
+package de.hdm.itprojektss19.team03.scart.shared.bo;
+
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -21,6 +23,12 @@ public class User extends BusinessObject implements IsSerializable {
 	private String username = "";
 	private String email = "";
 	
+	public User() {
+		
+	}
+	public User (String username, String emailAdress) {
+		
+	}
 	public String getEmail() {
 		return email;
 	}

@@ -43,6 +43,8 @@ public interface EditorService extends RemoteService {
 	 */
 	public User createUser(String emailAdress) throws IllegalArgumentException;
 	
+	
+	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteUser(User u);
