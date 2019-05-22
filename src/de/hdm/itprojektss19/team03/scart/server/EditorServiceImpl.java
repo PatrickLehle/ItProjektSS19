@@ -207,15 +207,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
-
+		return this.glMapper.insert(gl);
 	}
 
 	public void saveGroceryList(GroceryList gl) throws IllegalArgumentException {
-
+		this.glMapper.update(gl);
 	}
 
 	public void deleteGroceryList(GroceryList gl) throws IllegalArgumentException {
-
+		this.glMapper.delete(gl);
 	}
 
 	public Vector<GroceryList> getGroceryListByOwner(User u) throws IllegalArgumentException {
@@ -226,8 +226,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	// public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList>
 	// result, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
-	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
-
+	public GroceryList getGroceryListById(int groceryListId) throws IllegalArgumentException {
+		return this.glMapper.findByKey(groceryListId);
 	}
 
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
