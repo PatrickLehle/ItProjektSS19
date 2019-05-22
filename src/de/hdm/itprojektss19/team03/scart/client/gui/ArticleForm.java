@@ -4,7 +4,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.ListBox;
+//import com.google.gwt.user.client.ui.ListBox;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 
@@ -15,7 +15,7 @@ public class ArticleForm extends VerticalPanel {
 	//ListBox unitListBox = new ListBox();
 	Label newArticle = new Label("Artikel: ");
 	Button cancelButton = new Button("Abbrechen");
-	Button addButton = new Button("Artikel Hinzufügen");
+	Button addButton = new Button("Artikel Hinzufï¿½gen");
 	
 	
 	

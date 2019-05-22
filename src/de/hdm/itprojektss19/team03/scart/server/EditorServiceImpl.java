@@ -21,16 +21,18 @@ import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
-import de.hdm.itprojektss19.team03.scart.*;
 
 /**
  * 
- * @author bastiantilk, PatrickLehle Serverseitiger RPC-Service fuer den Editor.
+ * @author bastiantilk, PatrickLehle 
+ * Serverseitiger RPC-Service fuer den Editor.
  * 
  */
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
 
 	public EditorServiceImpl() throws IllegalArgumentException {
+	
+		
 
 	}
 
@@ -163,33 +165,34 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public Group createGroup(Group g) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().insert(g);
+		return this.gMapper.insert(g);
 	}
 
 	public void saveGroup(Group g) throws IllegalArgumentException {
-		GroupMapper.groupMapper().update(g);
+		this.gMapper.update(g);
 	}
 
 	public void deleteGroup(Group g) throws IllegalArgumentException {
-		GroupMapper.groupMapper().delete(g);
+		this.gMapper.delete(g);
 	}
 
 	public Group getGrouById(int groupId) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().findbyGroupId(groupId);
+		return this.gMapper.findbyGroupId(groupId);
 
 	}
 
 	public Vector<Group> getAllGroupsByUser(User u) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().findAll();
+		return this.gMapper.findAll();
 	}
 
 	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
 		g.addUser(u);
-		GroupMapper.groupMapper().update(g);
+		this.gMapper.update(g);
 	}
 
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
-
+		g.removeUser(u);
+		this.gMapper.update(g);
 	}
 
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
@@ -204,15 +207,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
-
+		return this.glMapper.insert(gl);
 	}
 
 	public void saveGroceryList(GroceryList gl) throws IllegalArgumentException {
-
+		this.glMapper.update(gl);
 	}
 
 	public void deleteGroceryList(GroceryList gl) throws IllegalArgumentException {
-
+		this.glMapper.delete(gl);
 	}
 
 	public Vector<GroceryList> getGroceryListByOwner(User u) throws IllegalArgumentException {
@@ -223,8 +226,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	// public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList>
 	// result, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
-	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
-
+	public GroceryList getGroceryListById(int groceryListId) throws IllegalArgumentException {
+		return this.glMapper.findByKey(groceryListId);
 	}
 
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
@@ -249,7 +252,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			Article temp = new Article(); // Mit dem Input der Attribute muss hier ein neues Object mit den Attributen
 											// erstellt werden
-			aMapper.insert(temp);
+			this.aMapper.insert(temp);
 			// Ausgabe der Rueckgabe aus der insert Funktion fehlt
 
 		} catch (IllegalArgumentException e) {
@@ -275,7 +278,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
-		aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
+		this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
 	}
 
 	/**
@@ -283,17 +286,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Retailer
 	 * **********************************************************************
 	 */
-
-	public Retailer createRetailer(Retailer r) throws IllegalArgumentException {
-
+	
+	public Retailer createRetailer(Retailer r) throws IllegalArgumentException{
+			
+		return this.rMapper.insert(r); //Retailer Objekt in der DB speichern
+			
 	}
-
-	public void saveRetailer(Retailer r) throws IllegalArgumentException {
-
+	
+	public void saveRetailer(Retailer r) throws IllegalArgumentException{
+		this.rMapper.update(r); //Speichert Retailer
 	}
-
-	public void deleteRetailer(Retailer r) throws IllegalArgumentException {
-
+	
+	public void deleteRetailer(Retailer r) throws IllegalArgumentException{
+		this.rMapper.delete(r); // Löscht Retailer
 	}
 
 	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException {
