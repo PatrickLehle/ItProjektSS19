@@ -9,6 +9,12 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private int groupId;
 	private Article[] articles;
 
+	public GroceryList() {
+		
+	}
+	public GroceryList(String name, Group g) {
+		
+	}
 	public String getGroceryListName() {
 		return name;
 	}

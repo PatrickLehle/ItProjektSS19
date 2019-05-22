@@ -12,7 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
  * 
- * @author bastiantilk
+ * @author bastiantilk, PatrickLehle
  *
  */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements
@@ -41,28 +41,28 @@ ReportGenerator{
 		
 	}
 	
-	public ArrayList<Article> getStatistic(int UID) {
+	public Vector<Article> getStatistic(int UID) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	}
 	
-	public ArrayList<Article> getStatistic(int UID, Date start, Date end) {
+	public Vector<Article> getStatistic(int UID, Date start, Date end) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	} 
 	
-	public ArrayList<Article> getStatistic(int UID, Retailer retailer) {
+	public Vector<Article> getStatistic(int UID, Retailer retailer) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	}
 	
-	public ArrayList<Article> getStatistic(int UID, Date start, Date end, Retailer retailer) {
+	public Vector<Article> getStatistic(int UID, Date start, Date end, Retailer retailer) {
 		if (this.getEditorService() == null) {
 			return null;
 		}

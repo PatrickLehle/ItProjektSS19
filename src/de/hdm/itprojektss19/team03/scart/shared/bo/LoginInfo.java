@@ -16,6 +16,10 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	private String loginUrl = "";
 	private String logoutUrl = " ";
 	private String emailAddress = "";
+	
+	public LoginInfo() {
+		
+	}
 
 	/**
 	 * Gibt TRUE zurueck, wenn ein User angemeldet ist andernfalls wird FALSE
