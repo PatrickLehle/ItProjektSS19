@@ -68,6 +68,8 @@ public class ArticleMapper {
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
 				article.setRetailerId(rs.getInt("retailer"));
+				UnitMapper uM = new UnitMapper();
+				uM.findByKey(rs.getInt("unit"));
 				return article;
 			}
 		} catch (SQLException e2) {
@@ -101,7 +103,8 @@ public class ArticleMapper {
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
 				article.setRetailerId(rs.getInt("retailer"));
-
+				UnitMapper uM = new UnitMapper();
+				uM.findByKey(rs.getInt("unit"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -135,7 +138,8 @@ public class ArticleMapper {
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
 				article.setRetailerId(rs.getInt("retailer"));
-
+				UnitMapper uM = new UnitMapper();
+				uM.findByKey(rs.getInt("unit"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -174,8 +178,8 @@ public class ArticleMapper {
 				// Höchste ID um 1 erhöhen, um nächste ID zu erhalten
 				article.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO articles (id, name, quantity, retailer) " + "VALUES (" + article.getId()
-						+ "," + article.getRetailerId() + ")");
+				stmt.executeUpdate("INSERT INTO articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
+						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnit() +")");
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -197,7 +201,7 @@ public class ArticleMapper {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("UPDATE articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
-					+ article.getQuantity() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
+					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnit() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
 					+ "WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
