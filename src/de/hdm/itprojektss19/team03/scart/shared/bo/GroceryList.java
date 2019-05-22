@@ -1,4 +1,5 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
+<<<<<<< HEAD
 import java.util.ArrayList;
 
 public class GroceryList {
@@ -42,6 +43,25 @@ public class GroceryList {
 
 	public void setGroceryListID(long groceryListID) {
 		this.groceryListID = groceryListID;
+=======
+
+import java.util.ArrayList;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+public class GroceryList extends BusinessObject implements IsSerializable {
+
+	private static final long serialVersionUID = 1L;
+	private String name = "";
+	private Group group = new Group();
+	private ArrayList<Article> articles = new ArrayList<Article>();
+
+	public String getGroceryListName() {
+		return name;
+	}
+
+	public void setGroceryListName(String name) {
+		this.name = name;
+>>>>>>> dev
 	}
 
 	public Group getGroup() {
@@ -52,13 +72,21 @@ public class GroceryList {
 		this.group = group;
 	}
 
+<<<<<<< HEAD
 	public String getName() {
 		return name;
+=======
+	public ArrayList<Article> getArticles() {
+		return articles;
+>>>>>>> dev
 	}
 
 	public void setArticles(ArrayList<Article> articles) {
 		this.articles = articles;
 	}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 }
