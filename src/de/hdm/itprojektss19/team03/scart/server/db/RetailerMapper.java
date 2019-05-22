@@ -58,7 +58,7 @@ public class RetailerMapper {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement
-					.executeQuery("SELECT id, name FROM retaileres WHERE id=" + id);
+					.executeQuery("SELECT id, name FROM retailers WHERE id=" + id);
 
 			// Es darf nur ein Ergebinis gefunden werden, da id der Primärschlüssel ist
 			if (rs.next()) {
