@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
@@ -11,7 +12,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class Group extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
-	private ArrayList<User> users = new ArrayList<User>();
+	private Vector<User> users = new Vector<User>();
 	private String name = "";
 	
 	public Group() {
@@ -21,11 +22,11 @@ public class Group extends BusinessObject implements IsSerializable {
 		
 	}
 
-	public ArrayList<User> getUsers() {
+	public Vector<User> getUsers() {
 		return users;
 	}
 	
-	public void setUsers(ArrayList<User> users) {
+	public void setUsers(Vector<User> users) {
 		this.users = users;
 	}
 	
@@ -40,6 +41,14 @@ public class Group extends BusinessObject implements IsSerializable {
 	public Object getGroceryListId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public void addUser(User u) {
+		this.users.add(u);
+	}
+	
+	public void removeUser(User u) {
+		this.users.remove(u);
 	}
 
 }
