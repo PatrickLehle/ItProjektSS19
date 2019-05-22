@@ -341,7 +341,6 @@ EditorService{
 					unMapper.insert(u);
 					//Rueckgabewert vom Mapper wird noch nicht verarbeitet
 				}
-				
 		}catch(IllegalArgumentException e) {
 			e.printStackTrace();
 		}
