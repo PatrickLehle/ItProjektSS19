@@ -52,7 +52,7 @@ EditorService{
 	 * Die Mapperklasse wird referenziert, die die <code>Group</code>-mit der
 	 * Datenbank vergleicht.
 	 */
-	private gMapper gMapper = null;
+	private GroupMapper gMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die die <code>Retailer</code>-mit
