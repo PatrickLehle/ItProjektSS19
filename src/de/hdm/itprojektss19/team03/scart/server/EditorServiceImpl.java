@@ -337,7 +337,7 @@ EditorService{
 					temp1++;
 				}
 			}
-				if(temp1 >0) {
+				if(temp1 ==0) {
 					unMapper.insert(u);
 					//Rueckgabewert vom Mapper wird noch nicht verarbeitet
 				}
