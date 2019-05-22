@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 
 /**
  * 
@@ -116,4 +117,75 @@ public class GroceryListMapper {
 
 		return groceryLists;
 	}
+	
+	/**
+	 * Fuegt in der Datenbank eine neue Einkaufsliste ein
+	 * 
+	 * @param GL-Objekt das in die DB eingefuegt werden soll
+	 * @return Die Eingefuegte GL mit aktueller ID
+	 */
+	public GroceryList insert(GroceryList gl) {
+		// DB-Verbindung herstellen
+		Connection con = DBConnection.connection();
+		
+		try {
+			Statement stmt = con.createStatement();
+
+			// Suche die aktuell hoechsten ID
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM groceryLists ");
+
+			if (rs.next()) {
+				// Hoechste ID um 1 erhoehen, um naechste ID zu erhalten
+				gl.setId(rs.getInt("maxid") + 1);
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO groceryLists (id, name) " + "VALUES (" + gl.getId() + ",'" + gl.getGroceryListName() + "')");
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+
+		return gl;
+	}			
+		
+	/**
+	 * Aendert eine Einkaufsliste in der Datenbank
+	 * 
+	 * @param Zu aendernde GL
+	 * @return Geaenderte GL
+	 */
+	public GroceryList update(GroceryList gl) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("UPDATE groups " + "SET name=\"" + gl.getGroceryListName() + "WHERE id=" + gl.getId());
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+
+		return gl;
+	}
+	
+	/**
+	 * Loescht eine GL aus der Datenbank
+	 * 
+	 * @param Zu loeschende GL
+	 */
+	public void delete(GroceryList gl) {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement stmt = con.createStatement();
+
+			stmt.executeUpdate("DELETE FROM groceryLists " + "WHERE id=" + gl.getId());
+
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+	}
+	
 }

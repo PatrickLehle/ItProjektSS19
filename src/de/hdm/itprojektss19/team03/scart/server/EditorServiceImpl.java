@@ -15,18 +15,17 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-import de.hdm.thies.bankProjekt.shared.bo.Account;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
-import de.hdm.itprojektss19.team03.scart.*;
 
 /**
  * 
- * @author bastiantilk, PatrickLehle Serverseitiger RPC-Service fuer den Editor.
+ * @author bastiantilk, PatrickLehle 
+ * Serverseitiger RPC-Service fuer den Editor.
  * 
  */
 public class EditorServiceImpl extends RemoteServiceServlet implements EditorService {
@@ -166,33 +165,34 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 
 	public Group createGroup(Group g) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().insert(g);
+		return this.gMapper.insert(g);
 	}
 
 	public void saveGroup(Group g) throws IllegalArgumentException {
-		GroupMapper.groupMapper().update(g);
+		this.gMapper.update(g);
 	}
 
 	public void deleteGroup(Group g) throws IllegalArgumentException {
-		GroupMapper.groupMapper().delete(g);
+		this.gMapper.delete(g);
 	}
 
 	public Group getGrouById(int groupId) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().findbyGroupId(groupId);
+		return this.gMapper.findbyGroupId(groupId);
 
 	}
 
 	public Vector<Group> getAllGroupsByUser(User u) throws IllegalArgumentException {
-		return GroupMapper.groupMapper().findAll();
+		return this.gMapper.findAll();
 	}
 
 	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
 		g.addUser(u);
-		GroupMapper.groupMapper().update(g);
+		this.gMapper.update(g);
 	}
 
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
-
+		g.removeUser(u);
+		this.gMapper.update(g);
 	}
 
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
@@ -252,7 +252,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			Article temp = new Article(); // Mit dem Input der Attribute muss hier ein neues Object mit den Attributen
 											// erstellt werden
-			aMapper.insert(temp);
+			this.aMapper.insert(temp);
 			// Ausgabe der Rueckgabe aus der insert Funktion fehlt
 
 		} catch (IllegalArgumentException e) {
@@ -278,7 +278,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
-		aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
+		this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
 	}
 
 	/**
