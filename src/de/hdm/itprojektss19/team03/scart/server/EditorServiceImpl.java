@@ -34,9 +34,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	/**
-	 * Serialisierung
-	 */
+//SERIALIZATION===========================================================================
+	
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -81,12 +80,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	private GroceryListMapper glMapper = null;
 
-	/**
-	 * *****************************************************************************
-	 * **** Initialisierung
-	 * *****************************************************************************
-	 * ****
-	 */
+//INITIALIZATION===========================================================================
 
 	public void init() throws IllegalArgumentException {
 
@@ -123,6 +117,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 
 	}
+	
+	@Override
+	public User createUser(String emailAdress) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 	public void deleteUser(User u) throws IllegalArgumentException {
 		// Sollte es ueberhaupt erlaubt sein einen User zu loeschen?
@@ -157,10 +158,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	/**
-	 * ********************************************************************** Group
-	 * **********************************************************************
-	 */
+//GROUP===========================================================================
 
 	public Group createGroup(Group g) throws IllegalArgumentException {
 		try {
@@ -245,11 +243,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return null;
 	}
 
-	/**
-	 * **********************************************************************
-	 * GroceryList
-	 * **********************************************************************
-	 */
+//GROCERYLIST===========================================================================
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
 		try {
@@ -311,11 +305,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return null;
 	}
 
-	/**
-	 * **********************************************************************
-	 * Article
-	 * **********************************************************************
-	 */
+//ARTICLE===========================================================================
 
 	public Article createArticle(Article a) throws IllegalArgumentException {
 		// Input fuer Article Attribute muss noch erledigt werden
@@ -330,6 +320,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			return null;
 		}
+		return a;
 	}
 
 	public void saveArticle(Article a) throws IllegalArgumentException {
@@ -360,11 +351,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	/**
-	 * **********************************************************************
-	 * Retailer
-	 * **********************************************************************
-	 */
+//RETAILER===========================================================================
 	
 	public Retailer createRetailer(Retailer r) throws IllegalArgumentException{
 		try {
@@ -418,10 +405,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	/**
-	 * ********************************************************************** Unit
-	 * **********************************************************************
-	 */
+//UNIT===========================================================================
 	
 	public Unit createUnit(Unit u) throws IllegalArgumentException{
 		try {
@@ -462,10 +446,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	/**
-	 * ********************************************************************** Entry
-	 * **********************************************************************
-	 */
+//ENTRY===========================================================================
 
 	public Entry createEntry(Entry e) throws IllegalArgumentException {
 		return null;
@@ -480,16 +461,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	@Override
-	public User createUser(String emailAdress) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
+//	@Override
+//	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 }
+
+

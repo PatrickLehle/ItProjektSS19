@@ -20,6 +20,8 @@ public interface EditorServiceAsync {
 	
 //USER===========================================================================
 	
+	void createUser(String username, String emailAdress, AsyncCallback <User> asyncCallback);
+	
 	void createUser(String emailAdress, AsyncCallback <User> asyncCallback);
 	
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
@@ -27,7 +29,7 @@ public interface EditorServiceAsync {
 	void getUserById(int userId, AsyncCallback<User> callback);
 	
 	void getUserByGMail(String email, AsyncCallback<User> callback);
-	
+
 //GROUP===========================================================================
 	
 	void createGroup(Group g, AsyncCallback <Group> asyncCallback);
@@ -56,7 +58,7 @@ public interface EditorServiceAsync {
 	
 	void getGroceryListByOwner(User u, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
-	void getGroceryListById(Object groceryListId, AsyncCallback<GroceryList> asyncCallback);
+	void getGroceryListById(int groceryListId, AsyncCallback<GroceryList> asyncCallback);
 
 	void getGroupByGroceryList(int groceryListId, AsyncCallback<Vector<Group>> asyncCallback);
 	

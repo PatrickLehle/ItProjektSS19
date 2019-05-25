@@ -20,6 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 @RemoteServiceRelativePath("editorservice")
 public interface EditorService extends RemoteService {
+	
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl #init();
@@ -27,12 +28,17 @@ public interface EditorService extends RemoteService {
 	public void init() throws IllegalArgumentException;
 	
 	
-	/*
-	 * **********************************************************************
-	 * User
-	 * **********************************************************************
-	 */
+//USER===========================================================================
 	
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #createUser(String emailAddress);
+	 * @param username, emailAddress 
+	 * 						Email Adresse des Users
+	 * @return angelegter/ erstellter User
+	 */
+	public User createUser( String username, String emailAdress) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -42,7 +48,6 @@ public interface EditorService extends RemoteService {
 	 * @return angelegter/ erstellter User
 	 */
 	public User createUser(String emailAdress) throws IllegalArgumentException;
-	
 	
 	
 	/**
@@ -74,12 +79,7 @@ public interface EditorService extends RemoteService {
 	public User getUserByGMail(String email) throws IllegalArgumentException;
 	
 	
-	/*
-	 * **********************************************************************
-	 * Group
-	 * **********************************************************************
-	 */
-	
+//GROUP===========================================================================
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -150,12 +150,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Group> statusSharingGroup(Vector<Group> result);
 	
-	/*
-	 * **********************************************************************
-	 * GroceryList
-	 * **********************************************************************
-	 */
-	
+//GROCERYLIST===========================================================================
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -207,7 +202,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt gesuchte GroceryList via Id zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException;
+	public GroceryList getGroceryListById(int groceryListId) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -218,12 +213,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Group> getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
 	
-	/*
-	 * **********************************************************************
-	 * Article
-	 * **********************************************************************
-	 */
-	
+//ARTICLE===========================================================================
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -258,13 +248,8 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Article getArticleById(int articleId) throws IllegalArgumentException;
-	
-	/*
-	 * **********************************************************************
-	 * Retailer
-	 * **********************************************************************
-	 */
-	
+
+//RETAILER===========================================================================
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -330,12 +315,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException;
 	
-	/*
-	 * **********************************************************************
-	 * Unit
-	 * **********************************************************************
-	 */
-	
+//UNIT===========================================================================
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -380,13 +360,8 @@ public interface EditorService extends RemoteService {
 	 */
 	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
 	
-	/*
-	 * **********************************************************************
-	 * Entry
-	 * **********************************************************************
-	 */
-	
-	
+//ENTRY===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createEntry(Entry e);
