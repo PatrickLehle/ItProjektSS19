@@ -192,7 +192,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Group getGrouById(int groupId) throws IllegalArgumentException {
+	public Group getGroupById(int groupId) throws IllegalArgumentException {
 		try {
 			
 		return this.gMapper.findbyGroupId(groupId);

@@ -14,6 +14,7 @@ public class Group extends BusinessObject implements IsSerializable {
 	private static final long serialVersionUID = 1L;
 	private Vector<User> users = new Vector<User>();
 	private String name = "";
+	private int groupId;
 	
 	public Group() {
 		
@@ -38,9 +39,17 @@ public class Group extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
-	public Object getGroceryListId() {
+	public GroceryList getGroceryListId() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public int getGroupById() {
+		return groupId;
+	}
+	
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 	
 	public void addUser(User u) {

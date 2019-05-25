@@ -38,7 +38,7 @@ public interface EditorServiceAsync {
 	
 	void deleteGroup(Group g, AsyncCallback<Void> asyncCallback);
 	
-	void getGrouById(int groupId, AsyncCallback<Group> asyncCallback);
+	void getGroupById(int groupId, AsyncCallback<Group> asyncCallback);
 	
 	void getAllGroupsByUser(User u, AsyncCallback<Vector<Group>> asyncCallback);
 

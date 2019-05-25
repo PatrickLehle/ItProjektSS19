@@ -113,7 +113,7 @@ public interface EditorService extends RemoteService {
 	 * @return gesuchte Gruppe via groupId
 	 * @throws IllegalArgumentException
 	 */
-	public Group getGrouById(int groupId) throws IllegalArgumentException;
+	public Group getGroupById(int groupId) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

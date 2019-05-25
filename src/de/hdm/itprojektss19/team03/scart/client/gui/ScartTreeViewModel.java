@@ -181,31 +181,33 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 		}
 
 		/**
-		 * Diese Methode wird aufgerufen wenn der User einee Group selektiert.
+		 * Diese Methode wird aufgerufen wenn der User eine Group selektiert.
 		 * 
 		 * @param selectedGroup der ausgewaehlt wurde
 		 */
 		public void setSelectedGroup(Group selectedGroup) {
 
-			// Aenderungen am Kontakt durch KontaktForm moeglich.
-			this.selectedGroup = selectedGroup;
+			// Aenderungen am Group durch GroupForm moeglich.
+		    this.selectedGroup = selectedGroup;
 			this.groupForm.setSelectedGroup(selectedGroup);
 
 			// GroceryList in der sich groups befinden wird aktualsiert.
 			if (selectedGroup != null) {
 
-				// Selektierte GroceryLists anhand der ID in der Datenbank finden.
-				this.ev.getGroceryListById(this.selectedGroup.getGroceryListId(), new AsyncCallback<GroceryList>() {
+				// Selektierte Group anhand der ID in der Datenbank finden.
+				this.ev.getGroupById(this.selectedGroup.getGroupById(), new AsyncCallback<Group>() {
 
+					
 					@Override
 					public void onFailure(Throwable caught) {
 						ClientsideSettings.getLogger().severe("Hopala");
 					}
 
 					@Override
-					public void onSuccess(GroceryList result) {
-						selectedGroceryList = result;
-						GroceryListForm.setSelectedGroceryList(result);
+					public void onSuccess(Group result) {
+						//there is a bug i need to resolve.. will be fixed soon <3
+			//			selectedGroup = result;
+						groupForm.setSelectedGroup(result);
 					}
 				});
 			}
@@ -287,8 +289,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 		 */
 		public void updateGroup(final Group group) {
 			
-			//Auslesen der GroceryList per id
-			this.ev.getGroceryListById(group.getGroceryListId(), new AsyncCallback<GroceryList>() {
+			//Auslesen der Group per id
+			this.ev.getGroupById(group.getGroupById(), new AsyncCallback<Group>() {
 
 				@Override
 				public void onFailure(Throwable caught) {
@@ -296,7 +298,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 				}
 
 				@Override
-				public void onSuccess(GroceryList result) {
+				public void onSuccess(Group result) {
 					List<Group> groupList = groupDataProvider.get(result).getList();
 
 					for (int i = 0; i < groupList.size(); i++) {
@@ -313,17 +315,16 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 		 * Loeschung eines Group-Objekts aus der GroceryList.
 		 * 
 		 * @param group die geloescht wird
-		 * @param groceryList aus die die group geloescht wird
 		 */
-		public void deleteGroup(Group group, GroceryList GroceryList) {
+		public void deleteGroup(Group group) {
 
 			// Wenn der Baumknoten noch nicht angelegt wurde, gibt es hier nichts zu tun
-			if (!this.groupDataProvider.containsKey(GroceryList)) {
+			if (!this.groupDataProvider.containsKey(group)) {
 				return;
 			}
 
-			groupDataProvider.get(GroceryList).getList().remove(group);
-			selectionModel.setSelected(GroceryList, true);
+			groupDataProvider.remove(group);
+			selectionModel.setSelected(group, true);
 		}
 
 		@Override
