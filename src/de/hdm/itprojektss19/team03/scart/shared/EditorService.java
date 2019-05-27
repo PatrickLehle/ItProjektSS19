@@ -78,6 +78,14 @@ public interface EditorService extends RemoteService {
 	 */
 	public User getUserByGMail(String email) throws IllegalArgumentException;
 	
+	/**
+	 * 
+	 * @param user
+	 * @return  gibt eigenes user Profil zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public User getOwnProfile(User user) throws IllegalArgumentException;
+	
 	
 //GROUP===========================================================================
 	

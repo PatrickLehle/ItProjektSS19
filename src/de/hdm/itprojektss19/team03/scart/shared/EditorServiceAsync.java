@@ -29,6 +29,8 @@ public interface EditorServiceAsync {
 	void getUserById(int userId, AsyncCallback<User> callback);
 	
 	void getUserByGMail(String email, AsyncCallback<User> callback);
+	
+	void getOwnProfile(User u, AsyncCallback<User> callback); 
 
 //GROUP===========================================================================
 	
