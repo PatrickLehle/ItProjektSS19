@@ -9,6 +9,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -18,8 +20,10 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.Navigation;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.ShowGroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 
 /**
@@ -59,7 +63,7 @@ public class Scart implements EntryPoint {
 	 	*/	
 		public void onModuleLoad() {
 			
-			loginService.login(GWT.getHostPageBaseURL() + "Scart.html", new AsyncCallback<LoginInfo>() {
+		loginService.login(GWT.getHostPageBaseURL() + "Scart.html", new AsyncCallback<LoginInfo>() {
 
 				@Override
 				public void onFailure(Throwable e) {
@@ -140,9 +144,111 @@ public class Scart implements EntryPoint {
 		 * @param user
 		 */
 		private void opening(User user) {
-			//Hier passiert noch etwas... wird spaeter implementiert <3
+			
+			//Logout wird gesetzt
+			HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
+			+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
+			RootPanel.get("nutzermenu").add(signOutLink);
+			
+			//Naechster Schritt ist das setzen von Cookies zur identifikation eines Users.
+			Cookies.setCookie("nutzerGMail", user.getEmail()); 
+			
+			//Wenn der user bereits existiert, wird zusaetzlich die userID gesetzt.
+			Cookies.setCookie("userID", String.valueOf(user.getId()));
+			RootPanel.get("navigator").add(new Navigation(user));
+			
+			editorVerwaltung.getOwnProfile(user, new AsyncCallback <User>(){
+				
+				@Override
+				public void onFailure(Throwable e){
+					e.getMessage().toString();
+				}
+				@Override
+				public void onSuccess(User result) {
+					
+					//Das eigene Profil wird gesetzt fuer auesseren Zugriff.
+					ownProfil = result;
+					
+					//Labels setzen den Namen des User der eingeloggt ist.
+					profilLb.setText(result.getUsername());
+					profilLb.setTitle("Your Profil");
+					
+					// Label wird mit ClickHandler verknuepft, um auf das eigene Profil zu gelangen.
+					profilLb.addClickHandler(new ownProfilClickHandler());
+					profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
+					
+					searchlb.setText("Search ");
+					searchlb.setTitle("Aufruf der Suchseite für eine gezielte Kontaktsuche");
+					searchlb.addClickHandler(new searchClickHandler());
+					searchlb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
+					// Hier wird das UserMenu <div> container gecleared.
+					RootPanel.get("usermenu").clear();
+					
+					// Logout wird hier erstellt.
+					HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
+					+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
+					signOutLink.setTitle("You're leaving? That's not smart.");
+					
+					RootPanel.get("usermenu").add(searchlb);
+					RootPanel.get("usermenu").add(new HTML("<p><span class='glyphicon glyphicon-search'></span> &nbsp;"));
+					RootPanel.get("usermenu").add(new HTML("  "));
+					RootPanel.get("usermenu").add(profilLb);
+					RootPanel.get("usermenu").add(new HTML("<p><span class='glyphicon glyphicon-user'></span> &nbsp;"));
+					RootPanel.get("usermenu").add(signOutLink);
+					
+				}
+				
+			});
+			
+			
+			/*
+			 * Hinzufuegen der Scart.html/ScartReport.html in den Footer.
+			 */
+			HorizontalPanel footer = new HorizontalPanel();
+			Anchor homepage = new Anchor("Homepage ", "Scart.html");
+			HTML textOne = new HTML(" | ");
+			HTML textTwo = new HTML(" | © 2019 Scart, Hochschule der\n" + "Medien Stuttgart | ");
+			Anchor reportGeneratorLink = new Anchor (" ReportGenerator ", "ScartReport.html");
+			
+			footer.add(homepage);
+			footer.add(textOne);
+			footer.add(reportGeneratorLink);
+			footer.add(textTwo);
+			
+			// Das footerPanel wird gestylt
+			RootPanel.get("footer").setStylePrimaryName("footer");
+			// Das footerPanel wird dem <div> footer hinzugefuegt
+			RootPanel.get("footer").add(footer);
+			// Hinzufuegen der Uebersicht fuer alle Kontakte
+			RootPanel.get("content").add(new ShowGroceryList(user));
+		}
+		/**
+		 * ClickHandler des Labels, um auf das eigene Profil aufzurufen.
+		 * 
+		 * @author PatrickLehle
+		 *
+		 */
+		class ownProfilClickHandler implements ClickHandler {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				RootPanel.get("content").clear();
+				new GroupForm(ownProfil);
+				
+			}
+			
 		}
 		
-		
+		class searchClickHandler implements ClickHandler {
 
+			@Override
+			public void onClick(ClickEvent event) {
+				//wird noch implementiert <3
+			}
+			
+		}
+		
 }
+
+
+

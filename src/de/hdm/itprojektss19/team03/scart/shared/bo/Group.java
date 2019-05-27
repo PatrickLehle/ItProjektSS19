@@ -10,12 +10,18 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 
 public class Group extends BusinessObject implements IsSerializable {
+	
+//INITIALIZATION=============================================================
 
 	private static final long serialVersionUID = 1L;
 	private Vector<User> users = new Vector<User>();
 	private String name = "";
 	private int groupId;
 	private GroceryList groceryList;
+	private boolean status;
+	
+	
+//CONSTRUCZTORS==============================================================
 	
 	public Group() {
 		
@@ -24,6 +30,8 @@ public class Group extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
+//METHODS====================================================================
+	
 	public Vector<User> getUsers() {
 		return users;
 	}
@@ -58,6 +66,14 @@ public class Group extends BusinessObject implements IsSerializable {
 	
 	public void removeUser(User u) {
 		this.users.remove(u);
+	}
+	
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+	public boolean getStatus() {
+		return status;
 	}
 
 }

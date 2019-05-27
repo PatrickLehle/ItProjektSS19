@@ -93,6 +93,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.unMapper = UnitMapper.unitMapper();
 
 	}
+	
+//USER====================================================================================
 
 	public User createUser(String username, String emailAdress) throws IllegalArgumentException {
 		// E-Mail und Username muss zunaechst ueber GUI abgefragt werden
@@ -120,8 +122,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	@Override
 	public User createUser(String emailAdress) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+
+			User result = uMapper.findByUserEmail(emailAdress);
+
+			if (result != null) {
+				return result;
+				// Email bereits vorhanden
+			} else {
+				User newUser = new User(emailAdress);
+				uMapper.insert(newUser);
+				return newUser;
+				// Ausgabe der Rueckgabe aus der insert Funktion fehlt
+			}
+
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 
@@ -156,6 +174,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+
+	@Override
+	public User getOwnProfile(User user) throws IllegalArgumentException {
+		return this.uMapper.findbyUserId(user.getId());
 	}
 
 //GROUP===========================================================================
@@ -460,6 +484,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteEntry(Entry e) throws IllegalArgumentException {
 
 	}
+
 
 
 

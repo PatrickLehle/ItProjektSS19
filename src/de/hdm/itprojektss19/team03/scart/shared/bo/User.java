@@ -26,8 +26,14 @@ public class User extends BusinessObject implements IsSerializable {
 	public User() {
 		
 	}
+	
+	public User (String emailAdress) {
+		this.email = emailAdress;
+	}
+	
 	public User (String username, String emailAdress) {
-		
+			this.username = username;
+			this.email = emailAdress;
 	}
 	public String getEmail() {
 		return email;
