@@ -61,7 +61,7 @@ public class ArticleMapper {
 			ResultSet rs = statement
 					.executeQuery("SELECT id, name, quantity, retailer, unit FROM Articles WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Primärschlüssel ist
+			// Es darf nur ein Ergebinis gefunden werden, da id der Primï¿½rschlï¿½ssel ist
 			if (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -96,7 +96,7 @@ public class ArticleMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT id, name, quantity, retailer, unit FROM articles");
 
-			// Neues article Objekt für jede gefundene ID
+			// Neues article Objekt fï¿½r jede gefundene ID
 			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -131,7 +131,7 @@ public class ArticleMapper {
 			ResultSet rs = statement.executeQuery(
 					"SELECT id, name, quantity, retailer, unit FROM articles" + "WHERE retailer=" + retailerId);
 
-			// Neues article Objekt für jede gefundene ID
+			// Neues article Objekt fï¿½r jede gefundene ID
 			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -160,10 +160,10 @@ public class ArticleMapper {
 	}
 
 	/**
-	 * Fügt in der Datenbank einen neuen Artikel ein
+	 * Fï¿½gt in der Datenbank einen neuen Artikel ein
 	 * 
-	 * @param Artikel-Objekt das in die DB eingefügt werden soll
-	 * @return Der Eingefügte Artikel mit aktueller ID
+	 * @param Artikel-Objekt das in die DB eingefï¿½gt werden soll
+	 * @return Der Eingefï¿½gte Artikel mit aktueller ID
 	 */
 	public Article insert(Article article) {
 		// DB-Verbindung herstellen
@@ -171,15 +171,15 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			// Suche die aktuell höchsten ID
+			// Suche die aktuell hï¿½chsten ID
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM articles ");
 
 			if (rs.next()) {
-				// Höchste ID um 1 erhöhen, um nächste ID zu erhalten
+				// Hï¿½chste ID um 1 erhï¿½hen, um nï¿½chste ID zu erhalten
 				article.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
-						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnit() +")");
+						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnitName() +")");
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -189,10 +189,10 @@ public class ArticleMapper {
 	}
 
 	/**
-	 * Ändert einen Artikel in der Datenbank
+	 * ï¿½ndert einen Artikel in der Datenbank
 	 * 
-	 * @param Zu ändernder Artikel
-	 * @return Geänderter Artikel
+	 * @param Zu ï¿½ndernder Artikel
+	 * @return Geï¿½nderter Artikel
 	 */
 	public Article update(Article article) {
 		Connection con = DBConnection.connection();
@@ -201,7 +201,7 @@ public class ArticleMapper {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("UPDATE articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
-					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnit() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
+					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnitName() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
 					+ "WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
@@ -212,9 +212,9 @@ public class ArticleMapper {
 	}
 	
 	/**
-	 * Löscht einen Artikel aus der Datenbank
+	 * Lï¿½scht einen Artikel aus der Datenbank
 	 * 
-	 * @param Zu löschender Artikel
+	 * @param Zu lï¿½schender Artikel
 	 */
 	public void delete(Article article) {
 		Connection con = DBConnection.connection();
