@@ -453,36 +453,73 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			
 	
 	public void saveUnit(Unit u) throws IllegalArgumentException{
-		
+		try {
+			
+			
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void deleteUnit(Unit u) throws IllegalArgumentException {
-
+		try {
+			
+			
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Unit getUnitById(int unitId) throws IllegalArgumentException {
-		return null;
-
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Unit getUnitByName(String unitName) throws IllegalArgumentException {
-		return null;
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 //ENTRY===========================================================================
 
 	public Entry createEntry(Entry e) throws IllegalArgumentException {
-		return null;
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException ex) {
+			ex.printStackTrace();
+			return null;
+		}
 
 	}
 
 	public void saveEntry(Entry e) throws IllegalArgumentException {
-
+		try {
+			
+			
+		} catch(IllegalArgumentException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public void deleteEntry(Entry e) throws IllegalArgumentException {
-
+		try {
+			
+			
+		} catch(IllegalArgumentException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 
