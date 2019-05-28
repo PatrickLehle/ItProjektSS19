@@ -410,23 +410,44 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException {
-		return null;
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 	public Vector<Article> getArticleByDate(Date start, Date end) throws IllegalArgumentException {
-		return null;
-
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Vector<Article> getArticleByDateRetailer(Date start, Date end, Retailer r) throws IllegalArgumentException {
-		return null;
-
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException {
-		return null;
-
+		try {
+			
+			return null;
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 //UNIT===========================================================================
