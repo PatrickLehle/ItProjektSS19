@@ -62,7 +62,7 @@ public class UnitMapper {
 			ResultSet rs = statement
 					.executeQuery("SELECT id, name FROM unites WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Primärschlüssel ist
+			// Es darf nur ein Ergebinis gefunden werden, da id der Primï¿½rschlï¿½ssel ist
 			if (rs.next()) {
 				Unit unit = new Unit();
 				unit.setId(rs.getInt("id"));
@@ -94,7 +94,7 @@ public class UnitMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT id, name FROM units");
 
-			// Neues unit Objekt für jede gefundene ID
+			// Neues unit Objekt fï¿½r jede gefundene ID
 			while (rs.next()) {
 				Unit unit = new Unit();
 				unit.setId(rs.getInt("id"));
@@ -111,10 +111,10 @@ public class UnitMapper {
 
 	
 	/**
-	 * Fügt in der Datenbank einen neuen Unit ein
+	 * Fï¿½gt in der Datenbank einen neuen Unit ein
 	 * 
-	 * @param Unit-Objekt das in die DB eingefügt werden soll
-	 * @return Die Eingefügte Unit mit aktueller ID
+	 * @param Unit-Objekt das in die DB eingefï¿½gt werden soll
+	 * @return Die Eingefï¿½gte Unit mit aktueller ID
 	 */
 	public Unit insert(Unit unit) {
 		// DB-Verbindung herstellen
@@ -122,11 +122,11 @@ public class UnitMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			// Suche die aktuell höchsten ID
+			// Suche die aktuell hï¿½chsten ID
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM units ");
 
 			if (rs.next()) {
-				// Höchste ID um 1 erhöhen, um nächste ID zu erhalten
+				// Hï¿½chste ID um 1 erhï¿½hen, um nï¿½chste ID zu erhalten
 				unit.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO units (id, name) " + "VALUES (" + unit.getId()
@@ -140,10 +140,10 @@ public class UnitMapper {
 	}
 
 	/**
-	 * Ändert einen Unit in der Datenbank
+	 * ï¿½ndert einen Unit in der Datenbank
 	 * 
-	 * @param Zu ändernder Unit
-	 * @return Geänderter Unit
+	 * @param Zu ï¿½ndernder Unit
+	 * @return Geï¿½nderter Unit
 	 */
 	public Unit update(Unit unit) {
 		Connection con = DBConnection.connection();
@@ -161,9 +161,9 @@ public class UnitMapper {
 	}
 	
 	/**
-	 * Löscht einen Unit aus der Datenbank
+	 * Lï¿½scht einen Unit aus der Datenbank
 	 * 
-	 * @param Zu löschender Unit
+	 * @param Zu lï¿½schender Unit
 	 */
 	public void delete(Unit unit) {
 		Connection con = DBConnection.connection();
@@ -176,6 +176,27 @@ public class UnitMapper {
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	public Unit findUnitByName(String name) {
+		Connection con = DBConnection.connection();
+		
+		try {
+		Statement statement = con.createStatement();
+		ResultSet rs = statement.executeQuery("SELECT name FROM units" +"WHERE name="+ name);
+
+		if(rs.next()) {
+			Unit u = new Unit();
+			u.setId(rs.getInt("id"));
+			u.setUnitName(rs.getString("name"));
+
+			return u;
+		}
+	} catch (SQLException e2) {
+		e2.printStackTrace();
+	}
+
+	return null;
 	}
 
 }
