@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
@@ -291,7 +292,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Articel eines Retailers zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -301,7 +302,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen/ mehrere Articel in einer Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getArticleByDate(Date start, Date end) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -312,7 +313,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Article eines Retailers mit Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getArticleByDateRetailer(Date start, Date end, Retailer r) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

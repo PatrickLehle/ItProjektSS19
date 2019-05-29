@@ -1,11 +1,13 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
@@ -60,7 +62,7 @@ public class RetailerMapper {
 			ResultSet rs = statement
 					.executeQuery("SELECT id, name FROM retailers WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Primärschlüssel ist
+			// Es darf nur ein Ergebinis gefunden werden, da id der Primï¿½rschlï¿½ssel ist
 			if (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
@@ -92,7 +94,7 @@ public class RetailerMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT id, name FROM retailers");
 
-			// Neues retailer Objekt für jede gefundene ID
+			// Neues retailer Objekt fï¿½r jede gefundene ID
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
@@ -109,10 +111,10 @@ public class RetailerMapper {
 
 	
 	/**
-	 * Fügt in der Datenbank einen neuen Retailer ein
+	 * Fï¿½gt in der Datenbank einen neuen Retailer ein
 	 * 
-	 * @param Retailer-Objekt das in die DB eingefügt werden soll
-	 * @return Die Eingefügte Retailer mit aktueller ID
+	 * @param Retailer-Objekt das in die DB eingefï¿½gt werden soll
+	 * @return Die Eingefï¿½gte Retailer mit aktueller ID
 	 */
 	public Retailer insert(Retailer retailer) {
 		// DB-Verbindung herstellen
@@ -120,11 +122,11 @@ public class RetailerMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			// Suche die aktuell höchsten ID
+			// Suche die aktuell hï¿½chsten ID
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM retailers ");
 
 			if (rs.next()) {
-				// Höchste ID um 1 erhöhen, um nächste ID zu erhalten
+				// Hï¿½chste ID um 1 erhï¿½hen, um nï¿½chste ID zu erhalten
 				retailer.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO retailers (id, name) " + "VALUES (" + retailer.getId()
@@ -138,10 +140,10 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * Ändert einen Retailer in der Datenbank
+	 * ï¿½ndert einen Retailer in der Datenbank
 	 * 
-	 * @param Zu ändernder Retailer
-	 * @return Geänderter Retailer
+	 * @param Zu ï¿½ndernder Retailer
+	 * @return Geï¿½nderter Retailer
 	 */
 	public Retailer update(Retailer retailer) {
 		Connection con = DBConnection.connection();
@@ -159,9 +161,9 @@ public class RetailerMapper {
 	}
 	
 	/**
-	 * Löscht einen Retailer aus der Datenbank
+	 * Lï¿½scht einen Retailer aus der Datenbank
 	 * 
-	 * @param Zu löschender Retailer
+	 * @param Zu lï¿½schender Retailer
 	 */
 	public void delete(Retailer retailer) {
 		Connection con = DBConnection.connection();
@@ -174,6 +176,43 @@ public class RetailerMapper {
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	public Retailer findById(int id) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// Query fuer den Select
+		String selectByKey = "SELECT * FROM retailer WHERE id=? ORDER BY id";
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+
+			// Execute SQL Statement
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+
+				// Ergebnis-Tupel in Objekt umwandeln
+				Retailer kl = new Retailer();
+
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
+				kl.setId(rs.getInt("id"));
+				kl.setRetailerName(rs.getString("RetailerName"));
+				kl.setRetailerId(rs.getInt("retailerid"));
+
+				return kl;
+			}
+		}
+
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+
+		return null;
 	}
 
 }

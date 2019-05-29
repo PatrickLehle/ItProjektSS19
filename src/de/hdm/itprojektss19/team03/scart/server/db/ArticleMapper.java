@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
@@ -14,7 +15,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author Marco Dell'Oso
+ * @author Marco Dell'Oso, PatrickLehle
  *
  */
 public class ArticleMapper {
@@ -94,7 +95,7 @@ public class ArticleMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, quantity, retailer, unit FROM articles");
+			ResultSet rs = statement.executeQuery("SELECT id, name, quantity, retailer, unit FROM Articles");
 
 			// Neues article Objekt f�r jede gefundene ID
 			while (rs.next()) {
@@ -129,7 +130,7 @@ public class ArticleMapper {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(
-					"SELECT id, name, quantity, retailer, unit FROM articles" + "WHERE retailer=" + retailerId);
+					"SELECT id, name, quantity, retailer, unit FROM Articles" + "WHERE retailer=" + retailerId);
 
 			// Neues article Objekt f�r jede gefundene ID
 			while (rs.next()) {
@@ -172,13 +173,13 @@ public class ArticleMapper {
 			Statement stmt = con.createStatement();
 
 			// Suche die aktuell h�chsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM articles ");
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Articles ");
 
 			if (rs.next()) {
 				// H�chste ID um 1 erh�hen, um n�chste ID zu erhalten
 				article.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
+				stmt.executeUpdate("INSERT INTO Articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
 						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnitName() +")");
 			}
 		} catch (SQLException e2) {
@@ -200,7 +201,7 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("UPDATE articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
+			stmt.executeUpdate("UPDATE Articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
 					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnitName() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
 					+ "WHERE id=" + article.getId());
 
@@ -222,11 +223,34 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM articles " + "WHERE id=" + article.getId());
+			stmt.executeUpdate("DELETE FROM Articles " + "WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end){
+		Connection con = DBConnection.connection();
+		
+		Vector<Article> result = new Vector<Article>();
+		
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Articles " + "WHERE date BETWEEN dateStart=" + start + "AND" + "dateEnd=" + end);
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.getName();
+				a.getRetailerName();
+				a.getCreationDat();
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+	
+		return result;
 	}
 
 }

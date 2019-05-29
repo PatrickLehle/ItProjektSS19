@@ -20,6 +20,12 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class UserMapper {
 
 	private static UserMapper userMapper = null;
+	
+	/**
+	 * Beugt mehrfach Instanzierung vor.
+	 */
+	protected UserMapper() {
+	};
 
 	public static UserMapper userMapper() {
 		if (userMapper == null) {

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
@@ -122,32 +123,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	
 	@Override
 	public User createUser(String emailAdress) throws IllegalArgumentException {
-		try {
-
-			User result = uMapper.findByUserEmail(emailAdress);
-
-			if (result != null) {
-				return result;
-				// Email bereits vorhanden
-			} else {
-				User newUser = new User(emailAdress);
-				uMapper.insert(newUser);
-				return newUser;
-				// Ausgabe der Rueckgabe aus der insert Funktion fehlt
-			}
-
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			return null;
-		}
+		
+		User user = new User();
+		user.setEmail(emailAdress);
+		user.setId(1);
+		return this.uMapper.insert(user);
 	}
 	
 
 	public void deleteUser(User u) throws IllegalArgumentException {
-		// Sollte es ueberhaupt erlaubt sein einen User zu loeschen?
+		
 
 		try {
 			uMapper.delete(u);
+			
 
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -409,23 +398,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException {
-		return null;
+	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException {
+		return this.aMapper.findByRetailerId(r.getRetailerId());
 
 	}
 
-	public Vector<Article> getArticleByDate(Date start, Date end) throws IllegalArgumentException {
-		return null;
+	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException {
+		return this.aMapper.findAllArticleByDate(start, end);
 
 	}
 
-	public Vector<Article> getArticleByDateRetailer(Date start, Date end, Retailer r) throws IllegalArgumentException {
+	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException {
 		return null;
 
 	}
 
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException {
-		return null;
+		return this.rMapper.findById(retailerId);
 
 	}
 
@@ -484,6 +473,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void deleteEntry(Entry e) throws IllegalArgumentException {
 
 	}
+
+
 
 
 

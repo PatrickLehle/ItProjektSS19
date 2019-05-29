@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
@@ -85,11 +86,11 @@ public interface EditorServiceAsync {
 	
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 	
-	void getArticleByRetailer(Retailer r, AsyncCallback<Article> asyncCallback);
+	void getAllArticleByRetailer(Retailer r, AsyncCallback <Vector<Article>> asyncCallback);
 	
-	void getArticleByDate(Date start, Date end, AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByDate(Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
 	
-	void getArticleByDateRetailer(Date start, Date end, Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
