@@ -442,20 +442,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			
 	
 	public void saveUnit(Unit u) throws IllegalArgumentException{
-		
+		this.unMapper.update(u);
 	}
 
 	public void deleteUnit(Unit u) throws IllegalArgumentException {
-
+		this.unMapper.delete(u);
 	}
 
 	public Unit getUnitById(int unitId) throws IllegalArgumentException {
-		return null;
+		return this.unMapper.findByKey(unitId);
 
 	}
 
 	public Unit getUnitByName(String unitName) throws IllegalArgumentException {
-		return null;
+		return this.unMapper.findUnitByName(unitName);
 
 	}
 
