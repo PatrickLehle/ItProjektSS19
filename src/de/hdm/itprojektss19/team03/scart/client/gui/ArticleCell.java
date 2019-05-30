@@ -22,7 +22,7 @@ public class ArticleCell extends AbstractCell<Article> {
 		sb.appendHtmlConstant(" ");
 		sb.appendHtmlConstant(a.getRetailerName().toString());
 		sb.appendHtmlConstant(" ");
-		sb.appendHtmlConstant(a.getUnitName().toString());
+		sb.appendHtmlConstant(a.getUnit().toString());
 		sb.appendHtmlConstant("</div>");
 	}
 }

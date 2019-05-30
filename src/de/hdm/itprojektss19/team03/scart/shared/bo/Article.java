@@ -15,8 +15,7 @@ public class Article extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 	private String name = "";
 	private int quantity;
-	private Unit unit;
-	private Unit unitId;
+	private String unit;
 	private Retailer retailer;
 	private Retailer retailerId;
 	private Timestamp creationDat;
@@ -28,7 +27,7 @@ public class Article extends BusinessObject {
 		
 	}
 	
-	public Article (String name, int quantity, Unit unit, Retailer retailer ) {
+	public Article (String name, int quantity, String unit, Retailer retailer ) {
 		this.name = name;
 		this.quantity = quantity;
 		this.unit = unit;
@@ -37,7 +36,13 @@ public class Article extends BusinessObject {
 	
 //METHODS===============================================================
 	
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 	
+	public String getUnit() {
+		return this.unit;
+	}
 	public void setRetailerName(String name) {
 		this.setRetailerName(name);
 	}
@@ -45,7 +50,6 @@ public class Article extends BusinessObject {
 	public String getRetailerName() {
 			return retailer.getRetailerName();
 	}
-	
 
 	public String getName() {
 		return name;
@@ -61,14 +65,6 @@ public class Article extends BusinessObject {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public String getUnitName() {
-		return unit.getUnitName();
-	}
-
-	public void setUnitName(String name) {
-		this.unit.setUnitName(name);
 	}
 
 	public Timestamp getCreationDat() {

@@ -68,6 +68,7 @@ public class Scart implements EntryPoint {
 				@Override
 				public void onFailure(Throwable e) {
 					Window.alert("Login Error: " + e.toString());
+					
 
 				}
 
@@ -89,7 +90,6 @@ public class Scart implements EntryPoint {
 							public void onSuccess(User user) {
 								//Ist der Nutzer noch registriert wird er zur Startseite weitergeleitet.
 								if (user != null) {
-									
 									RootPanel.get("content").clear();
 									// Die start Methode wird geladen
 									opening(user);
@@ -151,7 +151,7 @@ public class Scart implements EntryPoint {
 			RootPanel.get("usermenu").add(signOutLink);
 			
 			//Naechster Schritt ist das setzen von Cookies zur identifikation eines Users.
-			Cookies.setCookie("nutzerGMail", user.getEmail()); 
+			Cookies.setCookie("userGMail", user.getEmail()); 
 			
 			//Wenn der user bereits existiert, wird zusaetzlich die userID gesetzt.
 			Cookies.setCookie("userID", String.valueOf(user.getId()));
