@@ -12,7 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
+//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public interface EditorServiceAsync {
@@ -96,15 +96,15 @@ public interface EditorServiceAsync {
 
 //UNIT===========================================================================
 	
-	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
-	
-	void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	
-	void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	
-	void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
-	
-	void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
+//	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
+//	
+//	void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
+//	
+//	void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
+//	
+//	void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
+//	
+//	void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
 
 //ENTRY===========================================================================
 	

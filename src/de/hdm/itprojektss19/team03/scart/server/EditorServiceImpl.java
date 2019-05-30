@@ -12,13 +12,13 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
+//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
-import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
+//import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 
 /**
@@ -67,7 +67,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Die Mapperklasse wird referenziert, die die <code>Unit</code> mit der
 	 * Datenbank vergleicht.
 	 */
-	private UnitMapper unMapper = null;
+//	private UnitMapper unMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die die <code>Entry</code> mit der
@@ -91,7 +91,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.aMapper = ArticleMapper.articleMapper();
 //		this.eMapper = EntryMapper.entryMapper();
 		this.rMapper = RetailerMapper.retailerMapper();
-		this.unMapper = UnitMapper.unitMapper();
+//		this.unMapper = UnitMapper.unitMapper();
 
 	}
 	
@@ -337,12 +337,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public void saveArticle(Article a) throws IllegalArgumentException {
-
+		this.aMapper.update(a);
 	}
 
 	public void deleteArticle(Article a) throws IllegalArgumentException {
-		// Sollten Articles ueberhaupt geloescht werden
-
 		try {
 			aMapper.delete(a);
 			// Erfolgts Message fuer erfolgreiches Loeschen
@@ -420,44 +418,44 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 //UNIT===========================================================================
 	
-	public Unit createUnit(Unit u) throws IllegalArgumentException{
-		try {
-			int temp1=0;
-			
-			for(int i=0; i<= unMapper.findAll().size(); i++) {
-				if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
-					temp1++;
-				}
-			}
-				if(temp1 ==0) {
-					unMapper.insert(u);
-				}	
-				return u; //Rueckgabewert vom Mapper wird noch nicht verarbeitet
-		}catch(IllegalArgumentException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-				
-			
-	
-	public void saveUnit(Unit u) throws IllegalArgumentException{
-		this.unMapper.update(u);
-	}
-
-	public void deleteUnit(Unit u) throws IllegalArgumentException {
-		this.unMapper.delete(u);
-	}
-
-	public Unit getUnitById(int unitId) throws IllegalArgumentException {
-		return this.unMapper.findByKey(unitId);
-
-	}
-
-	public Unit getUnitByName(String unitName) throws IllegalArgumentException {
-		return this.unMapper.findUnitByName(unitName);
-
-	}
+//	public Unit createUnit(Unit u) throws IllegalArgumentException{
+//		try {
+//			int temp1=0;
+//			
+//			for(int i=0; i<= unMapper.findAll().size(); i++) {
+//				if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
+//					temp1++;
+//				}
+//			}
+//				if(temp1 ==0) {
+//					unMapper.insert(u);
+//				}	
+//				return u; //Rueckgabewert vom Mapper wird noch nicht verarbeitet
+//		}catch(IllegalArgumentException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
+//				
+//			
+//	
+//	public void saveUnit(Unit u) throws IllegalArgumentException{
+//		this.unMapper.update(u);
+//	}
+//
+//	public void deleteUnit(Unit u) throws IllegalArgumentException {
+//		this.unMapper.delete(u);
+//	}
+//
+//	public Unit getUnitById(int unitId) throws IllegalArgumentException {
+//		return this.unMapper.findByKey(unitId);
+//
+//	}
+//
+//	public Unit getUnitByName(String unitName) throws IllegalArgumentException {
+//		return this.unMapper.findUnitByName(unitName);
+//
+//	}
 
 //ENTRY===========================================================================
 

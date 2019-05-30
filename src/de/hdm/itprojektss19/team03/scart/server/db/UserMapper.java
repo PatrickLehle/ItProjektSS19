@@ -1,18 +1,20 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author JulianHofer
+ * @author JulianHofer, PatrickLehle
  * @author Thies
  * 
  */
@@ -54,7 +56,6 @@ public class UserMapper {
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
-
 				users.addElement(user);
 			}
 		} catch (SQLException e2) {
@@ -75,7 +76,8 @@ public class UserMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE name=" + username);
+			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE name=" + username);	
+			
 			// Neues user Objekt f�r jede gefundene ID
 			while (rs.next()) {
 				User user = new User();
@@ -99,20 +101,33 @@ public class UserMapper {
 	 * @return Vector mit allen gefunden Usern mit entsprechender Id
 	 */
 	public User findbyUserId(int userId) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
+		String selectByKey = "SELECT * FROM users WHERE id=?";
 
 		try {
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE users=" + userId);
-			// Neues user Objekt f�r jede gefundene ID
-			while (rs.next()) {
-				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
+			// Aufbau der DB-Verbindung
+			con = DBConnection.connection();
 
-				return user;
+			// Aufbereitung des vorbereitenden Statements
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, userId);
+
+			// Ausfuehren des SQL Statement
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+
+				// Ergebnis-Tupel in Objekt umwandeln
+				User u = new User();
+
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
+				u.setId(rs.getInt(1));
+				u.setEmail(rs.getString(2));
+
+				return u;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -129,20 +144,31 @@ public class UserMapper {
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
 	 */
 	public User findByUserEmail(String userEmail) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
+		String key = "SELECT * FROM users WHERE email=?";
 
 		try {
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE email=" + userEmail);
-			// Neues user Objekt f�r jede gefundene ID
-			while (rs.next()) {
-				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
+			// Aufbau der DB-Verbindung
+			con = DBConnection.connection();
 
-				return user;
+			// Aufbereitung des vorbereitenden Statements
+			stmt = con.prepareStatement(key);
+			stmt.setString(1, userEmail);
+
+			// Ausfuehren des SQL Statement
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				// Ergebnis-Tupel in Objekt umwandeln
+				User u = new User();
+				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
+				u.setId(rs.getInt(1));
+				u.setEmail(rs.getString(2));
+
+				return u;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -165,7 +191,7 @@ public class UserMapper {
 			Statement stmt = con.createStatement();
 
 			// Suche die aktuell h�chsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM users ");
+			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid FROM users ");
 
 			if (rs.next()) {
 				// H�chste ID um 1 erh�hen, um n�chste ID zu erhalten

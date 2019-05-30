@@ -12,7 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
+//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -326,48 +326,48 @@ public interface EditorService extends RemoteService {
 	
 //UNIT===========================================================================
 	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #createUnit(Unit u);
-	 * @param u
-	 * @return eine Unit wird erstellt
-	 * @throws IllegalArgumentException
-	 */
-	public Unit createUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #saveUnit(Unit u);
-	 * @param u
-	 * @throws IllegalArgumentException
-	 */
-	public void saveUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #deleteUnit(Unit u);
-	 * @param u
-	 * @throws IllegalArgumentException
-	 */
-	public void deleteUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #getUnitById(int unitId);
-	 * @param unitId
-	 * @return es wird nach einer Unit via Id gesucht
-	 * @throws IllegalArgumentException
-	 */
-	public Unit getUnitById(int unitId) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #getUnitByName(String unitName);
-	 * @param unitName
-	 * @return es wird eine Unit via name gesucht
-	 * @throws IllegalArgumentException
-	 */
-	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #createUnit(Unit u);
+//	 * @param u
+//	 * @return eine Unit wird erstellt
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit createUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #saveUnit(Unit u);
+//	 * @param u
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void saveUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #deleteUnit(Unit u);
+//	 * @param u
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void deleteUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #getUnitById(int unitId);
+//	 * @param unitId
+//	 * @return es wird nach einer Unit via Id gesucht
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit getUnitById(int unitId) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #getUnitByName(String unitName);
+//	 * @param unitName
+//	 * @return es wird eine Unit via name gesucht
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
 	
 //ENTRY===========================================================================
 

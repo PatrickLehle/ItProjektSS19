@@ -60,17 +60,19 @@ public class ArticleMapper {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement
-					.executeQuery("SELECT id, name, quantity, retailer, unit FROM Articles WHERE id=" + id);
+					.executeQuery("SELECT id, name, menge FROM Articles WHERE id=" + id);
 
 			// Es darf nur ein Ergebinis gefunden werden, da id der Prim�rschl�ssel ist
 			if (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
-				article.setQuantity(rs.getInt("quantity"));
-				article.setRetailerId(rs.getInt("retailer"));
-				UnitMapper uM = new UnitMapper();
-				uM.findByKey(rs.getInt("unit"));
+				article.setQuantity(rs.getInt("menge"));
+				//article.setRetailerId(rs.getInt("retailer"));
+				//article.setQuantity(rs.getInt("quantity"));
+				//article.setRetailerId(rs.getInt("retailer"));
+				//UnitMapper uM = new UnitMapper();
+				//uM.findByKey(rs.getInt("unit"));
 				return article;
 			}
 		} catch (SQLException e2) {
@@ -104,8 +106,9 @@ public class ArticleMapper {
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
 				article.setRetailerId(rs.getInt("retailer"));
-				UnitMapper uM = new UnitMapper();
-				uM.findByKey(rs.getInt("unit"));
+				article.setUnit("unit");
+//				UnitMapper uM = new UnitMapper();
+//				uM.findByKey(rs.getInt("unit"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -139,8 +142,9 @@ public class ArticleMapper {
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
 				article.setRetailerId(rs.getInt("retailer"));
-				UnitMapper uM = new UnitMapper();
-				uM.findByKey(rs.getInt("unit"));
+				article.setUnit("unit");
+				//UnitMapper uM = new UnitMapper();
+			//	uM.findByKey(rs.getInt("unit"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -171,6 +175,7 @@ public class ArticleMapper {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
+			System.out.println(stmt);
 
 			// Suche die aktuell h�chsten ID
 			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Articles ");
@@ -180,7 +185,7 @@ public class ArticleMapper {
 				article.setId(rs.getInt("maxid") + 1);
 				stmt = con.createStatement();
 				stmt.executeUpdate("INSERT INTO Articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
-						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnitName() +")");
+						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnit() +")");
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -202,7 +207,7 @@ public class ArticleMapper {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("UPDATE Articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
-					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnitName() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
+					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnit() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
 					+ "WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
@@ -237,13 +242,16 @@ public class ArticleMapper {
 		
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Articles " + "WHERE date BETWEEN dateStart=" + start + "AND" + "dateEnd=" + end);
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Articles WHERE date BETWEEN dateStart=" + start + "AND" + "dateEnd=" + end);
 
 			while (rs.next()) {
 				Article a = new Article();
-				a.getName();
-				a.getRetailerName();
-				a.getCreationDat();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setRetailerId(rs.getInt("retailer"));
+				a.setUnit("unit");
+				a.setCreationDat(start);
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
