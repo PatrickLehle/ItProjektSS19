@@ -49,7 +49,7 @@ public class UserMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users");
+			ResultSet rs = statement.executeQuery("SELECT * FROM user");
 			// Neues user Objekt f�r jede gefundene ID
 			while (rs.next()) {
 				User user = new User();
@@ -65,47 +65,17 @@ public class UserMapper {
 	}
 	
 	/**
-	 * Sucht alle User anhand der ID
+	 * Sucht einen User anhand der eindeutigen ID
 	 * 
 	 * @param Die ID des Users
-	 * @return Vector mit allen gefunden Usern mit entsprechender Id
-	 */
-	public User findbyUserName(int username) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
-
-		try {
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, email FROM users" + "WHERE name=" + username);	
-			
-			// Neues user Objekt f�r jede gefundene ID
-			while (rs.next()) {
-				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
-
-				return user;
-			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
-		}
-		return null;
-	}
-	
-	/**
-	 * Sucht alle User anhand der ID
-	 * 
-	 * @param Die ID des Users
-	 * @return Vector mit allen gefunden Usern mit entsprechender Id
+	 * @return User mit der entsprechenden ID
 	 */
 	public User findbyUserId(int userId) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT * FROM users WHERE id=?";
+		String selectByKey = "SELECT * FROM user WHERE id=?";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -126,6 +96,7 @@ public class UserMapper {
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt(1));
 				u.setEmail(rs.getString(2));
+				u.setUsername(rs.getString(3));
 
 				return u;
 			}
@@ -148,7 +119,7 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String key = "SELECT * FROM users WHERE email=?";
+		String key = "SELECT * FROM user WHERE email=?";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -162,12 +133,11 @@ public class UserMapper {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// Ergebnis-Tupel in Objekt umwandeln
 				User u = new User();
-				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt(1));
 				u.setEmail(rs.getString(2));
 
+				con.close();
 				return u;
 			}
 		} catch (SQLException e2) {
@@ -184,21 +154,40 @@ public class UserMapper {
 	 * @return Der Eingef�gte User mit aktueller ID
 	 */
 	public User insert(User user) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
-		
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM user";
+
+		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
+		String insertSQL = "INSERT INTO user (id, email, name) VALUES (?,?,?)";
+
 		try {
-			Statement stmt = con.createStatement();
+			// Aufbau der DB-Verbindung
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxIdSQL);
 
-			// Suche die aktuell h�chsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid FROM users ");
+			// MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
 
+			// Damit dieser daraufhin um 1 inkrementiert der ID des BO zugewiesen wird
 			if (rs.next()) {
-				// H�chste ID um 1 erh�hen, um n�chste ID zu erhalten
 				user.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO users (id, name, email) " + "VALUES (" + user.getId() + ")");
 			}
+
+			// Jetzt erfolgt das Einfuegen des Objekts
+			stmt = con.prepareStatement(insertSQL);
+
+			// Setzen der ? als Platzhalter fuer den Wert
+			stmt.setInt(1, user.getId());
+			stmt.setString(2, user.getEmail());
+			stmt.setString(3, user.getUsername());
+
+			// Ausfuehren des SQL Statement
+			stmt.executeUpdate();
+
+			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
@@ -206,24 +195,34 @@ public class UserMapper {
 		return user;
 	}
 	/**
-	 * �ndert einen User in der Datenbank
+	 * Ein user wird in der DB nachträglich auf den neusten Stand gebracht
 	 * 
 	 * @param Zu �ndernder User
 	 * @return Ge�nderter User
 	 */
 	public User update(User user) {
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum Einfuegen des Tupels in die DB
+		String updateSQL = "UPDATE user SET email=?, name=? WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
+			// Aufbau der DB-Verbindung
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
 
-			stmt.executeUpdate("UPDATE users " + "SET name=\"" + user.getUsername()  + "\" " + "SET email=\"" + user.getEmail() + "\" "
-					+ "WHERE id=" + user.getId());
-
-		} catch (SQLException e2) {
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getUsername());
+			stmt.setInt(3, user.getId());
+	
+			// Ausfuehren des SQL-Statements
+			stmt.executeUpdate();
+		}
+		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return user;
 	}
 	
@@ -238,7 +237,7 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM users " + "WHERE id=" + user.getId());
+			stmt.executeUpdate("DELETE FROM user " + "WHERE id=" + user.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();

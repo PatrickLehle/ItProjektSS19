@@ -397,7 +397,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException {
-		return this.aMapper.findByRetailerId(r.getRetailerId());
+		return this.aMapper.findArticleByRetailerId(r.getRetailerId());
 
 	}
 
