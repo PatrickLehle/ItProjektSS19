@@ -16,23 +16,14 @@ public class Article extends BusinessObject {
 	private String name = "";
 	private int quantity;
 	private String unit;
-	private Retailer retailer;
-	private Retailer retailerId;
+	private int retailerId;
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	
+	
 //CONSTRUCTORS==========================================================
 	
-	public Article() {
-		
-	}
-	
-	public Article (String name, int quantity, String unit, Retailer retailer ) {
-		this.name = name;
-		this.quantity = quantity;
-		this.unit = unit;
-		this.retailer = retailer;
-	}
+//Default Constructor
 	
 //METHODS===============================================================
 	
@@ -42,13 +33,6 @@ public class Article extends BusinessObject {
 	
 	public String getUnit() {
 		return this.unit;
-	}
-	public void setRetailerName(String name) {
-		this.setRetailerName(name);
-	}
-	
-	public String getRetailerName() {
-			return retailer.getRetailerName();
 	}
 
 	public String getName() {
@@ -84,13 +68,15 @@ public class Article extends BusinessObject {
 		this.modDat = modDat;
 	}
 
+//RETAILER======================================================
+	
 	public void setRetailerId(int retailerId) {
-		this.retailerId.setRetailerId(retailerId);
+		this.retailerId =retailerId;
 		
 	}
 
 	public int getRetailerId() {
-		return this.retailerId.getRetailerId();
+		return this.retailerId;
 	}
 
 }

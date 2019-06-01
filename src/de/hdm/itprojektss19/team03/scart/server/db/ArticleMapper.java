@@ -1,14 +1,15 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
  * 
@@ -53,35 +54,30 @@ public class ArticleMapper {
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
 	 */
 	public Article findByKey(int id) {
-
-		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement
-					.executeQuery("SELECT id, name, menge FROM Articles WHERE id=" + id);
+			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Prim�rschl�ssel ist
+			//Nur EIN Ergebnis, da id =PRIMARY-KEY
 			if (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
-				article.setQuantity(rs.getInt("menge"));
-				//article.setRetailerId(rs.getInt("retailer"));
-				//article.setQuantity(rs.getInt("quantity"));
-				//article.setRetailerId(rs.getInt("retailer"));
-				//UnitMapper uM = new UnitMapper();
-				//uM.findByKey(rs.getInt("unit"));
+				article.setQuantity(rs.getInt("quantity"));
+				article.setUnit(rs.getString("unit"));
+				article.setRetailerId(rs.getInt("retailerId"));
+				article.setCreationDat(rs.getTimestamp("creationDat"));
+				article.setModDat(rs.getTimestamp("modDat"));
+				
 				return article;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
-
 		return null;
-
 	}
 
 	/**
@@ -90,31 +86,34 @@ public class ArticleMapper {
 	 * @return Vector mit allen gefundenen Artikeln
 	 */
 	public Vector<Article> findAll() {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
-
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String all = "SELECT * FROM article";
+		
 		Vector<Article> articles = new Vector<Article>();
 
 		try {
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name, quantity, retailer, unit FROM Articles");
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(all);
+			ResultSet rs = stmt.executeQuery();
 
-			// Neues article Objekt f�r jede gefundene ID
 			while (rs.next()) {
-				Article article = new Article();
-				article.setId(rs.getInt("id"));
-				article.setName(rs.getString("name"));
-				article.setQuantity(rs.getInt("quantity"));
-				article.setRetailerId(rs.getInt("retailer"));
-				article.setUnit("unit");
-//				UnitMapper uM = new UnitMapper();
-//				uM.findByKey(rs.getInt("unit"));
-				articles.addElement(article);
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit(rs.getString("unit"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+	
+				articles.addElement(a);
 			}
-		} catch (SQLException e2) {
-			e2.printStackTrace();
 		}
-
+		catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
 		return articles;
 	}
 
@@ -124,46 +123,34 @@ public class ArticleMapper {
 	 * @param Die ID des Retailers
 	 * @return Vector mit allen gefunden Artikeln des Retailers
 	 */
-	public Vector<Article> findByRetailerId(int retailerId) {
-		// DB-Verbindung herstellen
+	public Vector<Article> findArticleByRetailerId(int retailerId) {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> articles = new Vector<Article>();
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery(
-					"SELECT id, name, quantity, retailer, unit FROM Articles" + "WHERE retailer=" + retailerId);
+			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE retailerId=" + retailerId);
 
-			// Neues article Objekt f�r jede gefundene ID
+			//Hier wird fuer jeden gefundenen Article immer ein neues Object erstellt
 			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
 				article.setQuantity(rs.getInt("quantity"));
-				article.setRetailerId(rs.getInt("retailer"));
 				article.setUnit("unit");
-				//UnitMapper uM = new UnitMapper();
-			//	uM.findByKey(rs.getInt("unit"));
+				article.setRetailerId(rs.getInt("retailerId"));
+				article.setCreationDat(rs.getTimestamp("creationDat"));
+				article.setModDat(rs.getTimestamp("modDat"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
+		//Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
 		return articles;
 	}
-
-	/**
-	 * Sucht alle Artikel, die einem bestimmten Retailer haben
-	 * 
-	 * @param Retailer Objekt
-	 * @return Vector mit allen gefunden Artikeln des Retailers
-	 */
-	public Vector<Article> findByRetailer(Retailer retailer) {
-		return findByRetailerId(retailer.getId());
-	}
-
+	
 	/**
 	 * F�gt in der Datenbank einen neuen Artikel ein
 	 * 
@@ -171,26 +158,42 @@ public class ArticleMapper {
 	 * @return Der Eingef�gte Artikel mit aktueller ID
 	 */
 	public Article insert(Article article) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM article";
+
+		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat) VALUES (?,?,?,?,?,?,?)";
+
 		try {
-			Statement stmt = con.createStatement();
-			System.out.println(stmt);
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxIdSQL);
 
-			// Suche die aktuell h�chsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM Articles ");
+			// MAX ID Query ausfuehren
+			ResultSet rs = stmt.executeQuery();
 
+			// ...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
 			if (rs.next()) {
-				// H�chste ID um 1 erh�hen, um n�chste ID zu erhalten
 				article.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO Articles (id, name, quantity, retailer, unit) " + "VALUES (" + article.getId()
-						+ "," + article.getName() + "," + article.getQuantity() + "," + article.getRetailerId() + "," + article.getUnit() +")");
 			}
+			// Jetzt erfolgt der Insert
+			stmt = con.prepareStatement(insert);
+
+			// Setzen der ? Platzhalter als Values
+			stmt.setInt(1, article.getId());
+			stmt.setString(2, article.getName());
+			stmt.setInt(3, article.getQuantity());
+			stmt.setString(4, article.getUnit());
+			stmt.setInt(5, article.getRetailerId());
+			stmt.setTimestamp(6, article.getCreationDat());
+			stmt.setTimestamp(7, article.getModDat());
+			
+			// INSERT-Query ausfuehren
+			stmt.executeUpdate();
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return article;
 	}
 
@@ -201,19 +204,28 @@ public class ArticleMapper {
 	 * @return Ge�nderter Artikel
 	 */
 	public Article update(Article article) {
-		Connection con = DBConnection.connection();
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=? WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("UPDATE Articles " + "SET name=\"" + article.getName() + "\" " + "SET quantity=\""
-					+ article.getQuantity() + "\" " + "SET unit=\"" + article.getUnit() + "\" " + "SET retailer=\"" + article.getRetailerId() + "\" " + "\" "
-					+ "WHERE id=" + article.getId());
-
-		} catch (SQLException e2) {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(update);
+		
+			stmt.setString(1, article.getName());
+			stmt.setInt(2, article.getQuantity());
+			stmt.setString(3, article.getUnit());
+			stmt.setInt(4, article.getRetailerId());
+			stmt.setTimestamp(5, article.getModDat());
+			stmt.setInt(6, article.getId());
+			
+			stmt.executeUpdate();
+		}
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return article;
 	}
 	
@@ -227,14 +239,18 @@ public class ArticleMapper {
 
 		try {
 			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELETE FROM Articles " + "WHERE id=" + article.getId());
+			stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 	}
-	
+	/**
+	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
+	 * @param start
+	 * @param end
+	 * @return
+	 */
 	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end){
 		Connection con = DBConnection.connection();
 		
@@ -242,22 +258,23 @@ public class ArticleMapper {
 		
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Articles WHERE date BETWEEN dateStart=" + start + "AND" + "dateEnd=" + end);
-
+			//Query das zwei Timestamps als interval aller Article darin zurueck gibt
+			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+ "' AND '"+end+"'");
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
 				a.setName(rs.getString("name"));
 				a.setQuantity(rs.getInt("quantity"));
-				a.setRetailerId(rs.getInt("retailer"));
 				a.setUnit("unit");
-				a.setCreationDat(start);
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-	
 		return result;
 	}
 
