@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -63,6 +64,41 @@ public class UserMapper {
 		}
 		return users;
 	}
+	/**
+	 * Gibt einen Vecotr aller User mit dem selben Namen zurueck
+	 * @param name
+	 * @param u
+	 * @return Vecotr mit allen Usern die den selben Namen tragen
+	 */
+	public Vector<User> findUserByName(String name, User u){
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String select = "SELECT * FROM user WHERE name=?";
+
+		Vector<User> result = new Vector<User>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+				User user = new User();
+				user.setId(rs.getInt("id"));
+				user.setUsername(rs.getString("name"));
+				user.setEmail(rs.getString("email"));
+
+				result.addElement(u);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return result;
+	}
 	
 	/**
 	 * Sucht einen User anhand der eindeutigen ID
@@ -114,7 +150,7 @@ public class UserMapper {
 	 * @param Die Email des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
 	 */
-	public User findByUserEmail(String userEmail) {
+	public User findUserByEmail(String userEmail) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
