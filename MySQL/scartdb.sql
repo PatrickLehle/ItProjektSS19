@@ -49,10 +49,10 @@ CREATE TABLE `grocerylistarticle` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `group`
+-- Table structure for table `groups`
 --
 
-CREATE TABLE `group` (
+CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -117,9 +117,9 @@ ALTER TABLE `grocerylistarticle`
   ADD KEY `articleId` (`articleId`);
 
 --
--- Indexes for table `group`
+-- Indexes for table `groups`
 --
-ALTER TABLE `group`
+ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -149,31 +149,31 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `article`
 --
 ALTER TABLE `article`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `group`
+-- AUTO_INCREMENT for table `groups`
 --
-ALTER TABLE `group`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `groups`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `retailer`
 --
 ALTER TABLE `retailer`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
@@ -189,7 +189,7 @@ ALTER TABLE `article`
 -- Constraints for table `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `group` (`id`);
+  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`);
 
 --
 -- Constraints for table `grocerylistarticle`
@@ -202,5 +202,5 @@ ALTER TABLE `grocerylistarticle`
 -- Constraints for table `groupuser`
 --
 ALTER TABLE `groupuser`
-  ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `group` (`id`),
+  ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
   ADD CONSTRAINT `groupuser_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
