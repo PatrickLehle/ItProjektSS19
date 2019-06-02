@@ -1,11 +1,14 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 
 
@@ -53,27 +56,27 @@ public class GroceryListMapper {
 	 * @return Das GroceryList-Objekt, falls ein passendes gefunden wurde.
 	 */
 	public GroceryList findByKey(int id) {
-
-		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement
-					.executeQuery("SELECT id, name, groupId, articleIds FROM GroceryLists WHERE id=" + id);
+					.executeQuery("SELECT * FROM grocerylist WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Prim�rschl�ssel ist
+			// Ergebnis wird nur ein Objekt sein
 			if (rs.next()) {
-				GroceryList groceryList = new GroceryList();
-				groceryList.setId(rs.getInt("id"));
-				groceryList.setGroceryListName(rs.getString("name"));
-				return groceryList;
+				GroceryList gl = new GroceryList();
+				gl.setId(rs.getInt("id"));
+				gl.setGroceryListName(rs.getString("name"));
+				gl.setCreationDat(rs.getTimestamp("creationDat"));
+				gl.setModDat(rs.getTimestamp("modDat"));
+				gl.setGroupId(rs.getInt("groupId"));
+				return gl;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
-
 		return null;
 	}
 
@@ -83,26 +86,28 @@ public class GroceryListMapper {
 	 * @return Vector mit allen gefundenen groceryLists
 	 */
 	public Vector<GroceryList> findAll() {
-		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
 		Vector<GroceryList> groceryLists = new Vector<GroceryList>();
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM GroceryList");
+			ResultSet rs = statement.executeQuery("SELECT * FROM grocerylist");
 
-			// Neues groceryList Objekt f�r jede gefundene ID
+			//Fuer jede gefundene GL wird ein neues Objekt erstellt
 			while (rs.next()) {
-				GroceryList groceryList = new GroceryList();
-				groceryList.setId(rs.getInt("id"));
-				groceryList.setGroceryListName(rs.getString("name"));
-				groceryLists.addElement(groceryList);
+				GroceryList gl = new GroceryList();
+				gl.setId(rs.getInt("id"));
+				gl.setGroceryListName(rs.getString("name"));
+				gl.setCreationDat(rs.getTimestamp("creationDat"));
+				gl.setModDat(rs.getTimestamp("modDat"));
+				gl.setGroupId(rs.getInt("groupId"));
+
+				groceryLists.addElement(gl);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return groceryLists;
 	}
 	
@@ -113,26 +118,35 @@ public class GroceryListMapper {
 	 * @return Die Eingefuegte GL mit aktueller ID
 	 */
 	public GroceryList insert(GroceryList gl) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-			// Suche die aktuell hoechsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM groceryLists ");
+		String maxId = "SELECT MAX(id) AS maxid FROM grocerylist";
+
+		String insert = "INSERT INTO grocerylist (id, name, creationDat, modDat, groupId) VALUES (?,?,?,?,?)";
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxId);
+
+			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// Hoechste ID um 1 erhoehen, um naechste ID zu erhalten
 				gl.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO groceryLists (id, name) " + "VALUES (" + gl.getId() + ",'" + gl.getGroceryListName() + "')");
 			}
+			stmt = con.prepareStatement(insert);
+
+			stmt.setInt(1, gl.getId());
+			stmt.setString(2, gl.getGroceryListName());
+			stmt.setTimestamp(3,gl.getCreationDat());
+			stmt.setTimestamp(4,gl.getModDat());
+			stmt.setInt(5, gl.getGroupId());
+
+			stmt.executeUpdate();
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			return null;
 		}
-
 		return gl;
 	}			
 		
@@ -143,18 +157,24 @@ public class GroceryListMapper {
 	 * @return Geaenderte GL
 	 */
 	public GroceryList update(GroceryList gl) {
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String updateSQL = "UPDATE grocerylist SET name=?, modDat=? WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
 
-			stmt.executeUpdate("UPDATE groups " + "SET name=\"" + gl.getGroceryListName() + "WHERE id=" + gl.getId());
+			stmt.setString(1, gl.getGroceryListName());
+			stmt.setTimestamp(2, gl.getModDat());
+			stmt.setInt(3, gl.getId());
 
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			stmt.executeUpdate();
 		}
-
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
 		return gl;
 	}
 	
@@ -169,11 +189,43 @@ public class GroceryListMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM groceryLists " + "WHERE id=" + gl.getId());
+			stmt.executeUpdate("DELETE FROM groceryList " + "WHERE id=" + gl.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 	}
 	
+	public Vector<GroceryList> findGroceryListByName(String name, GroceryList gl){
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String select = "SELECT * FROM grocerylist WHERE name=?";
+
+		Vector<GroceryList> result = new Vector<GroceryList>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+				GroceryList groceryList = new GroceryList();
+				groceryList.setId(rs.getInt("id"));
+				groceryList.setGroceryListName(rs.getString("name"));
+				groceryList.setCreationDat(rs.getTimestamp("creationDat"));
+				groceryList.setModDat(rs.getTimestamp("modDat"));
+				groceryList.setGroupId(rs.getInt("groupId"));
+
+				result.addElement(gl);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return result;
+	}
+
 }

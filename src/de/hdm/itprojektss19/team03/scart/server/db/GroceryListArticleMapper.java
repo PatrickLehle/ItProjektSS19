@@ -106,11 +106,11 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT grocerylistarticle.grocerylisteid, grocerylist.name, article.id, article.name, "
-				+ "article.creationdate, article.moddate, " + "FROM grocerylistarticle "
-				+ "JOIN article " + "ON grocerylistarticle.articleid = article.id " + "JOIN grocerylist "
-				+ "ON grocerylistarticle.grocerylistid = grocerylist.id "
-				+ "WHERE grocerylistarticle.grocerylistid= " + grocerylistId;
+		String selectByKey = "SELECT grocerylistarticle.grocerylistId, grocerylist.name, article.id, article.name, "
+				+ "article.creationDat, article.modDat FROM grocerylistarticle "
+				+ "JOIN article ON grocerylistarticle.articleId = article.id " + "JOIN grocerylist "
+				+ "ON grocerylistarticle.grocerylistId = grocerylist.id "
+				+ "WHERE grocerylistarticle.grocerylistId= " + grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -126,8 +126,8 @@ public class GroceryListArticleMapper {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
 				a.setName(rs.getString("name"));
-				a.setCreationDat(rs.getTimestamp("creationdate"));
-				a.setModDat(rs.getTimestamp("moddate"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
 				result.addElement(a);
 			}
 		}
@@ -138,8 +138,7 @@ public class GroceryListArticleMapper {
 	}
 
 	/**
-	 * Entfernt einen Article aus allen GroceryLists durch eine Loeschoperation
-	 * eines Articles.
+	 * Entfernt einen ausgewaehlten Article aus allen GroceryLists
 	 * 
 	 * @param a
 	 * 		das zu loeschende Objekt von allen existierenden Listen
