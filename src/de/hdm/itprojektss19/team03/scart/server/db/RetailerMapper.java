@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
@@ -74,6 +75,40 @@ public class RetailerMapper {
 			return null;
 		}
 		return null;
+	}
+	/**
+	 * Gibt einen Retailer via Namen zurueck
+	 * @param name
+	 * @param r
+	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
+	 */
+	public Vector<Retailer> findRetailerByName(String name, Retailer r){
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String select = "SELECT * FROM retailer WHERE name=?";
+
+		Vector<Retailer> result = new Vector<Retailer>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+				Retailer retailer = new Retailer();
+				retailer.setRetailerId(rs.getInt("id"));
+				retailer.setRetailerName(rs.getString("name"));
+
+				result.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return result;
 	}
 
 	/**
