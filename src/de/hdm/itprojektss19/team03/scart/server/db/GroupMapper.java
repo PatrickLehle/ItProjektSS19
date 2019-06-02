@@ -1,11 +1,13 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 
 
@@ -13,7 +15,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author JulianHofer
+ * @author JulianHofer, PatrickLehle
  * @author Thies
  * 
  */
@@ -35,15 +37,15 @@ public class GroupMapper {
 	 * @return Vector mit allen gefundenen Gruppen
 	 */
 	public Vector<Group> findAll() {
-		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
 		Vector<Group> groups = new Vector<Group>();
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name FROM groups");
-			// Neues Group Objekt fuer jede gefundene ID
+			ResultSet rs = statement.executeQuery("SELECT * FROM groups");
+		
+			//fuer jede Gruppe die gefunden wird, wird ein neues G-Object erstellt
 			while (rs.next()) {
 				Group group = new Group();
 				group.setId(rs.getInt("id"));
@@ -64,7 +66,7 @@ public class GroupMapper {
 	 * @return Vector mit allen gefunden Groups mit entsprechender Id
 	 */
 	
-	public Group findbyGroupId(int groupId) {
+	public Group findByGroupId(int groupId) {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
@@ -85,25 +87,34 @@ public class GroupMapper {
 		return null;	
 	}
 	
-	public Group findbyGroupName(int name) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
+	public Vector<Group> findGroupByName(String name, Group g) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String select = "SELECT * FROM groups WHERE name=?";
+
+		Vector<Group> result = new Vector<Group>();
 
 		try {
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name FROM groups WHERE name=" + name);
-			// Neues Group Objekt fuer gefundene ID
-			while (rs.next()) {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
 				Group group = new Group();
 				group.setId(rs.getInt("id"));
 				group.setGroupName(rs.getString("name"));
-				return group;
+
+				result.addElement(g);
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
-		return null;
+		return result;
 	}
 		
 	/**
@@ -113,26 +124,29 @@ public class GroupMapper {
 	 * @return Die Eingefuegte Gruppe mit aktueller ID
 	 */
 	public Group insert(Group group) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
-		
-		try {
-			Statement stmt = con.createStatement();
 
-			// Suche die aktuell hoechsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM groups ");
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String maxId = "SELECT MAX(id) AS maxid FROM groups";
+		String insert = "INSERT INTO groups (id, name) VALUES (?,?)";
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxId);
+			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				// Hoechste ID um 1 erhoehen, um naechste ID zu erhalten
 				group.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO groups (id, name) " + "VALUES (" + group.getId() + ",'" + group.getGroupName() + "')");
 			}
+			stmt = con.prepareStatement(insert);
+			stmt.setInt(1, group.getId());
+			stmt.setString(2, group.getGroupName());
+			stmt.executeUpdate();
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			return null;
 		}
-
 		return group;
 	}			
 		
@@ -143,18 +157,23 @@ public class GroupMapper {
 	 * @return Geaenderte Gruppe
 	 */
 	public Group update(Group group) {
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+		
+		String updateSQL = "UPDATE groups SET name=? WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(updateSQL);
 
-			stmt.executeUpdate("UPDATE groups " + "SET name=\"" + group.getGroupName() + "WHERE id=" + group.getId());
-
-		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			stmt.setString(1, group.getGroupName());
+			stmt.setInt(2, group.getId());
+			
+			stmt.executeUpdate();
 		}
-
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
 		return group;
 	}
 	
@@ -164,14 +183,19 @@ public class GroupMapper {
 	 * @param Zu loeschende Gruppe
 	 */
 	public void delete(Group group) {
-		Connection con = DBConnection.connection();
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String delete = "DELETE FROM groups WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELETE FROM groups " + "WHERE id=" + group.getId());
-
-		} catch (SQLException e2) {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(delete);
+			stmt.setInt(1, group.getId());
+			
+			stmt.executeUpdate();
+		}
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 	}
