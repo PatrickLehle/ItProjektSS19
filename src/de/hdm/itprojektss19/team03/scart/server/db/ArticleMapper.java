@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
@@ -115,6 +116,40 @@ public class ArticleMapper {
 			return null;
 		}
 		return articles;
+	}
+	
+	public Vector<Article> findArticleByName(String name, Article a){
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String select = "SELECT * FROM article WHERE name=?";
+
+		Vector<Article> result = new Vector<Article>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+				Article article = new Article();
+				article.setId(rs.getInt("id"));
+				article.setName(rs.getString("name"));
+				article.setQuantity(rs.getInt("quantity"));
+				article.setUnit(rs.getString("unit"));
+				article.setRetailerId(rs.getInt("retailerId"));
+				article.setCreationDat(rs.getTimestamp("creationDat"));
+				article.setModDat(rs.getTimestamp("modDat"));
+
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return result;
 	}
 
 	/**

@@ -102,7 +102,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 		try {
 
-			User result = uMapper.findByUserEmail(emailAdress);
+			User result = uMapper.findUserByEmail(emailAdress);
 
 			if (result != null) {
 				return result;
@@ -156,7 +156,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public User getUserByGMail(String email) throws IllegalArgumentException {
 		try {
-			User foundUser = uMapper.findByUserEmail(email);
+			User foundUser = uMapper.findUserByEmail(email);
 			return foundUser;
 
 		} catch (IllegalArgumentException e) {
@@ -208,7 +208,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Group getGroupById(int groupId) throws IllegalArgumentException {
 		try {
 			
-		return this.gMapper.findbyGroupId(groupId);
+		return this.gMapper.findByGroupId(groupId);
 		
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -232,7 +232,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
 		try {
 			
-		g.addUser(u);
 		this.gMapper.update(g);
 		
 		} catch (IllegalArgumentException e) {
@@ -242,8 +241,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
 		try { 
-			
-		g.removeUser(u);
+		
 		this.gMapper.update(g);
 		
 		} catch (IllegalArgumentException e) {
