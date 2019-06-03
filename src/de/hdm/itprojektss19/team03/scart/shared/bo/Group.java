@@ -1,54 +1,56 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
-import java.util.ArrayList;
+
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 /**
- * Groups erstellen und verwalten.
- * @author TomHager
+ *Erstellung eines <code>Group</code> Objekts.
+ * @author TomHager, Patrick Lehle
  */
 
 public class Group extends BusinessObject implements IsSerializable {
+	
+//INITIALIZATION=============================================================
 
 	private static final long serialVersionUID = 1L;
-	private Vector<User> users = new Vector<User>();
 	private String name = "";
-	
-	public Group() {
-		
-	}
-	public Group(String name) {
-		
-	}
+	private boolean status;
 
-	public Vector<User> getUsers() {
-		return users;
-	}
+//METHODS====================================================================
 	
-	public void setUsers(Vector<User> users) {
-		this.users = users;
-	}
-	
+	/**
+	 * Holen des Namens einer Gruppe
+	 * @return name
+	 */
 	public String getGroupName() {
 		return name;
 	}
 
+	/**
+	 * Setzen eines Group Namens
+	 * @param name
+	 */
 	public void setGroupName(String name) {
 		this.name = name;
 	}
-
-	public Object getGroceryListId() {
-		// TODO Auto-generated method stub
-		return null;
+	
+	/**
+	 * Setzen eines Statuses einer Group
+	 * @param status
+	 */
+	public void setStatus(boolean status) {
+		//Hat noch keine sinnvolle implementierung <3
+		this.status = status;
 	}
 	
-	public void addUser(User u) {
-		this.users.add(u);
-	}
-	
-	public void removeUser(User u) {
-		this.users.remove(u);
+	/**
+	 * Holen eines Statuses einer Gruppe
+	 * @return
+	 */
+	public boolean getStatus() {
+		//Hat noch keine sinnvolle implementierung <3
+		return status;
 	}
 
 }

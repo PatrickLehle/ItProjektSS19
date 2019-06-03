@@ -14,10 +14,13 @@ public class ArticleCell extends AbstractCell<Article> {
 		if (a == null) {
 			return;
 		}
+
 		sb.appendHtmlConstant("<div>");
 		sb.appendHtmlConstant(a.getName());
 		sb.appendHtmlConstant(" ");
 		sb.append(a.getQuantity());
+		sb.appendHtmlConstant(" ");
+		sb.appendHtmlConstant(" ");
 		sb.appendHtmlConstant(a.getUnit().toString());
 		sb.appendHtmlConstant("</div>");
 	}

@@ -3,6 +3,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTree;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -29,14 +30,7 @@ public Navigation (final User user) {
 	// Groeße des ScrollPanel´s wird angepasst.
 	sc.setSize("200px", "550px");
 	sc.setVerticalScrollPosition(10);
-	
-	
-	// Anlegen des Baumes fuer die navTreeModel fuer  Gruppen.
-	ScartTreeViewModel navTreeModel = new ScartTreeViewModel(user);
-	
-	// Anlegung des Baumes mit dem zuvor definierten TreeViewModel.
-	CellTree navTree = new CellTree(navTreeModel, null);
-	
+
 	
 	// ClickHandler fuer das Erstellen von neuen Gruppen.
 	newGroupBtn.addClickHandler(new ClickHandler() {
@@ -44,13 +38,11 @@ public Navigation (final User user) {
 		@Override
 		public void onClick(ClickEvent event) {
 			// Wird instanziiert wenn eine neue Group erstellt werden soll.
-			RootPanel.get("content").clear();
+			RootPanel.get("navigator").clear();
 			RootPanel.get("content").add(new GroupForm(user));
 		}
 	});
-	
-			// Hier wird das TreeViewModel dem ScrollPanel hinzugefuegt.
-			sc.add(navTree);
+
 			
 			// Hier wird der Button fuer die Erstellung von neuen Gruppen gestylt.
 			newGroupBtn.setPixelSize(100, 60);
