@@ -42,9 +42,8 @@ public class Scart implements EntryPoint {
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label searchlb = new Label();
 	private Label profilLb = new Label();
-	private Label loginLabel = new Label("Welcome to Scart");
 	private HTML loginHTML = new HTML("<h7></h7>");
-	private	HTML scartHTML = new HTML("<h8>SCART</h8>");
+	private	HTML scartHTML = new HTML("<h8>Welcome to Scart</h8>");
 	private Anchor signInLink = new Anchor("sign in with Google");
 	
 	
@@ -125,7 +124,7 @@ public class Scart implements EntryPoint {
 						signInLink.setHref(loginInfo.getLoginUrl());
 						loginPanel.add(loginHTML);
 						loginPanel.add(scartHTML);
-						loginPanel.add(loginLabel);
+					//	loginPanel.add(loginLabel);
 						loginPanel.add(signInLink);
 						loginPanel.addStyleName("login");
 						
