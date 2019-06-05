@@ -412,7 +412,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Article> getArticleByRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 			
+<<<<<<< Updated upstream
 			return this.aMapper.findByRetailerId(r.getId()); // Findet Artikel über RetailerId
+=======
+			return aMapper.findByRetailer(r);
+>>>>>>> Stashed changes
 		} catch(IllegalArgumentException e) {
 			e.printStackTrace();
 			return null;
