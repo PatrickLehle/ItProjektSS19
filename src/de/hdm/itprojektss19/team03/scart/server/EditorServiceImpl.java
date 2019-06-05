@@ -335,7 +335,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public void saveArticle(Article a) throws IllegalArgumentException {
-		this.aMapper.update(a);
+		try {
+			
+			this.aMapper.update(a);
+			
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	public void deleteArticle(Article a) throws IllegalArgumentException {
