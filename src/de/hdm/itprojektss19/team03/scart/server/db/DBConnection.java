@@ -14,11 +14,11 @@ public class DBConnection {
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
-	private static String localUrl = "jdbc:mysql://localhost:8889/ITPROJEKTSS19?user=patrick&password=patrick";
+	private static String localUrl = "jdbc:mysql://localhost:8000/ITPROJEKTSS19?user=teat&password=test";
 
 
-	private static final String username = "patrick";
-	private static final String password = "patrick";
+	private static final String username = "test";
+	private static final String password = "test";
 
 	/**
 	 * Diese Methode gibt die aufgebaute DB-Verbindung zurück
