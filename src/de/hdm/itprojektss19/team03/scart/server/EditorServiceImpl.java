@@ -317,10 +317,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 
-	public Vector<Group> getGroupByGroceryList(int groceryListId) throws IllegalArgumentException {
+	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
-		return null;
+		
+		try {
+			
+			return gMapper.findByGroupId(glMapper.findByKey(groceryListId).getGroupId());
+
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 //ARTICLE===========================================================================
