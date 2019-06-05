@@ -22,7 +22,7 @@ import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 
 /**
  * 
- * @author bastiantilk, PatrickLehle, MarcoDell'Oso, JulianHofer 
+ * @author bastiantilk, PatrickLehle, MarcoDell'Oso, JulianHofer, vanduyho
  * Serverseitiger RPC-Service fuer den Editor.
  * 
  */
@@ -409,10 +409,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException {
+	public Vector<Article> getArticleByRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 			
-			return null;
+			return this.aMapper.findByRetailerId(r.getId()); // Findet Artikel über RetailerId
 		} catch(IllegalArgumentException e) {
 			e.printStackTrace();
 			return null;
@@ -433,7 +433,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Article> getArticleByDateRetailer(Date start, Date end, Retailer r) throws IllegalArgumentException {
 		try {
 			
-			return null;
+			return this.null;
 		} catch(IllegalArgumentException e) {
 			e.printStackTrace();
 			return null;
@@ -443,7 +443,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException {
 		try {
 			
-			return null;
+			return this.rMapper.findByKey(retailerId); // Findet Retailer über Id
 		} catch(IllegalArgumentException e) {
 			e.printStackTrace();
 			return null;

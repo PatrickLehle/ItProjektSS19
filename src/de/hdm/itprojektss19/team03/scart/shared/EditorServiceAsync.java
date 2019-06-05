@@ -85,7 +85,7 @@ public interface EditorServiceAsync {
 	
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 	
-	void getArticleByRetailer(Retailer r, AsyncCallback<Article> asyncCallback);
+	void getArticleByRetailer(Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
 	
 	void getArticleByDate(Date start, Date end, AsyncCallback<Vector<Article>> asyncCallback);
 	
