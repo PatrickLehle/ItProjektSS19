@@ -330,7 +330,7 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+ "' AND '"+end+"'"+ " AND retailerId=" + r.getId());
+			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));

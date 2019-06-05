@@ -168,7 +168,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	@Override
 	public User getOwnProfile(User user) throws IllegalArgumentException {
+		try { 
+			
 		return this.uMapper.findbyUserId(user.getId());
+		
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		} 
 	}
 
 //GROUP===========================================================================
@@ -386,7 +393,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			
 			this.rMapper.update(r); //Speichert Retailer
 
-			
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
