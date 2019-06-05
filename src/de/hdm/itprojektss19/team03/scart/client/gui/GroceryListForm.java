@@ -51,6 +51,4 @@ public class GroceryListForm extends VerticalPanel {
 		
 	}
 
-	
-
 }

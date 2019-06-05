@@ -50,8 +50,8 @@ public class GroceryListCell extends AbstractCell<GroceryList> {
 			return;
 		}
 		sb.appendHtmlConstant("<div>");
-		sb.appendHtmlConstant(gl.getGroup().getGroupName());
-		sb.appendHtmlConstant(">");
+		sb.append(gl.getGroupId());
+		sb.appendHtmlConstant(" ");
 		sb.appendHtmlConstant(gl.getGroceryListName());
 		/**
 		 * Wenn Liste gefiltert wird nach Retailer. 
@@ -72,6 +72,7 @@ public class GroceryListCell extends AbstractCell<GroceryList> {
 			sb.appendHtmlConstant(gl.getArticles().iterator().next().getUnit().toString());
 			sb.appendHtmlConstant("</td>");
 			sb.appendHtmlConstant("</tr>");
+			sb.appendHtmlConstant("</div>");
 		}
 	}
 
