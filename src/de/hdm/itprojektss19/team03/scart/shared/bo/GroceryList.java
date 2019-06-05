@@ -23,6 +23,7 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private int groupId;
+	private Vector<Article> articles = new Vector<Article>();
 
 	public String getGroceryListName() {
 		return name;
@@ -56,5 +57,12 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		return this.groupId;
 	}
 	
+	public Vector<Article> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(Vector<Article> articles) {
+		this.articles = articles;
+	}
 
 }

@@ -17,8 +17,8 @@ public class DBConnection {
 	private static String localUrl = "jdbc:mysql://localhost:8000/ITPROJEKTSS19?user=teat&password=test";
 
 
-	private static final String username = "patrick";
-	private static final String password = "patrick";
+	private static final String username = "test";
+	private static final String password = "test";
 
 	/**
 	 * Diese Methode gibt die aufgebaute DB-Verbindung zurück
