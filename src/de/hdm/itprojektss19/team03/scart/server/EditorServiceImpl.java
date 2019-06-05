@@ -405,12 +405,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException {
-		return null;
+		try {
+			return this.aMapper.findAllArticleByDateRetailer(start, end, r);
+			
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException {
+		try {
+			
 		return this.rMapper.findById(retailerId);
+		
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
