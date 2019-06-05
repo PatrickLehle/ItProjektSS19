@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
@@ -11,7 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
+//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public interface EditorServiceAsync {
@@ -19,6 +20,8 @@ public interface EditorServiceAsync {
 	void init(AsyncCallback<Void> callback);
 	
 //USER===========================================================================
+	
+	void createUser(String username, String emailAdress, AsyncCallback <User> asyncCallback);
 	
 	void createUser(String emailAdress, AsyncCallback <User> asyncCallback);
 	
@@ -28,6 +31,8 @@ public interface EditorServiceAsync {
 	
 	void getUserByGMail(String email, AsyncCallback<User> callback);
 	
+	void getOwnProfile(User u, AsyncCallback<User> callback); 
+
 //GROUP===========================================================================
 	
 	void createGroup(Group g, AsyncCallback <Group> asyncCallback);
@@ -36,7 +41,7 @@ public interface EditorServiceAsync {
 	
 	void deleteGroup(Group g, AsyncCallback<Void> asyncCallback);
 	
-	void getGrouById(int groupId, AsyncCallback<Group> asyncCallback);
+	void getGroupById(int groupId, AsyncCallback<Group> asyncCallback);
 	
 	void getAllGroupsByUser(User u, AsyncCallback<Vector<Group>> asyncCallback);
 
@@ -56,7 +61,7 @@ public interface EditorServiceAsync {
 	
 	void getGroceryListByOwner(User u, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
-	void getGroceryListById(Object groceryListId, AsyncCallback<GroceryList> asyncCallback);
+	void getGroceryListById(int groceryListId, AsyncCallback<GroceryList> asyncCallback);
 
 	void getGroupByGroceryList(int groceryListId, AsyncCallback<Vector<Group>> asyncCallback);
 	
@@ -81,25 +86,25 @@ public interface EditorServiceAsync {
 	
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 	
-	void getArticleByRetailer(Retailer r, AsyncCallback<Article> asyncCallback);
+	void getAllArticleByRetailer(Retailer r, AsyncCallback <Vector<Article>> asyncCallback);
 	
-	void getArticleByDate(Date start, Date end, AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByDate(Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
 	
-	void getArticleByDateRetailer(Date start, Date end, Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
 //UNIT===========================================================================
 	
-	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
-	
-	void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	
-	void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	
-	void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
-	
-	void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
+//	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
+//	
+//	void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
+//	
+//	void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
+//	
+//	void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
+//	
+//	void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
 
 //ENTRY===========================================================================
 	

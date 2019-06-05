@@ -9,6 +9,10 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
+import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
+import de.hdm.itprojektss19.team03.scart.shared.report.ArticleReport;
+import de.hdm.itprojektss19.team03.scart.shared.report.ArticleRetailerReport;
 
 /**
  * 
@@ -41,28 +45,57 @@ ReportGenerator{
 		
 	}
 	
-	public Vector<Article> getStatistic(int UID) {
+//	public Vector<Article> getStatistic(int UID) {
+//		if (this.getEditorService() == null) {
+//			return null;
+//		}
+//		return null;
+//	}
+//	
+//	public Vector<Article> getStatistic(int UID, Date start, Date end) {
+//		if (this.getEditorService() == null) {
+//			return null;
+//		}
+//		return null;
+//	} 
+//	
+//	public Vector<Article> getStatistic(int UID, Retailer retailer) {
+//		if (this.getEditorService() == null) {
+//			return null;
+//		}
+//		return null;
+//	}
+//	
+// Vector<Article> getStatistic(int UID, Date start, Date end, Retailer retailer) {
+//		if (this.getEditorService() == null) {
+//			return null;
+//		}
+//		return null;
+//	}
+	@Override
+	public ArticleReport createStatisticA(int UID, Article a) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	}
-	
-	public Vector<Article> getStatistic(int UID, Date start, Date end) {
-		if (this.getEditorService() == null) {
-			return null;
-		}
+	@Override
+	public ArticleDateReport createStatisticAD(int UID, Article a, Date start, Date end) {
+	if (this.getEditorService() == null) {
 		return null;
-	} 
-	
-	public Vector<Article> getStatistic(int UID, Retailer retailer) {
+	}
+	return null;
+	}
+	@Override
+	public ArticleRetailerReport createStatisticAR(int UID, Article a, Retailer r) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	}
-	
-	public Vector<Article> getStatistic(int UID, Date start, Date end, Retailer retailer) {
+	@Override
+	public ArticleDateRetailerReport createStatisticADR(int UID, Article a, Date start, Date end, Retailer r)
+			throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}

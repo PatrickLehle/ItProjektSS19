@@ -8,42 +8,66 @@ import com.google.appengine.api.utils.SystemProperty;
 /**
  * Klasse zum Datenbankverbindung aufbauen und verwalten
  * 
- * @author Marco Dell'Oso
- * TODO url Pfade anpassen, testen
+ * @author Marco Dell'Oso, PatrickLehle
  */
 public class DBConnection {
 
-    private static Connection con = null;
+	private static Connection con = null;
+	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
+	private static String localUrl = "jdbc:mysql://localhost:8889/ITPROJEKTSS19?user=patrick&password=patrick";
 
-    // URL zur Google Cloud für Produktiv-Betrieb
-    private static String googleUrl = "jdbc:google:mysql://norse-decoder-240009:europe-west1:itprojekt-ss19-scart/itprojekt-ss19-scart?user=test&password=test";
-    // URL zu localer MYSQL DB für lokale Tests
-    private static String localUrl = "jdbc:mysql://127.0.0.1:3306/itprojekt-ss19-scart?user=test&password=test";
 
-    /**
-     * Methode zur Herstellung einer Datenbank-Verbindungs-Instanz
-     * @return  DBConncetion-Objekt.
-     */
-    public static Connection connection() {
-        if (con == null) {
-            String url = null;
-            try {
-                if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
-                    Class.forName("com.mysql.jdbc.GoogleDriver");
-                    url = googleUrl;
-                } else {
-                    Class.forName("com.mysql.jdbc.Driver");
-                    url = localUrl;
-                }
-                con = DriverManager.getConnection(url);
-            } catch (Exception e) {
-                con = null;
-                e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
-            }
-        }
+	private static final String username = "patrick";
+	private static final String password = "patrick";
 
-        return con;
-    }
+	/**
+	 * Diese Methode gibt die aufgebaute DB-Verbindung zurÃ¼ck
+	 * 
+	 * @return con
+	 */
+	public static Connection connection() {
+		
+		String user = "";
+		String pass = "";
 
+		/**
+		 * Wenn es bisher keine Connection zur DB gab, ...
+		 */
+		if (con == null) {
+			String url = null;
+			
+			try {
+				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
+					Class.forName("com.mysql.jdbc.GoogleDriver");
+					url = googleUrl;
+					user = username;
+					pass = password;
+				} else {
+					Class.forName("com.mysql.jdbc.Driver");
+					url = localUrl;
+					user = "patrick";
+					pass = "patrick";
+				}
+
+				con = DriverManager.getConnection(url, user, pass);
+
+				// Absicherung con = null
+				if (con != null) {
+
+					System.out.println("Current Connection:" + con.toString());
+
+				} else {
+
+					System.out.println("No connection available.");
+
+				}
+			} catch (Exception e) {
+				con = null;
+				e.printStackTrace();
+				throw new RuntimeException("Does not work!" + e.getMessage().toString()
+						+ "Infos: " + user + ", " + pass + ", " + url);
+			}
+		}
+		return con;
+	}
 }
