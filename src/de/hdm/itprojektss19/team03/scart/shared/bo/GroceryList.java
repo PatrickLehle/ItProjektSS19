@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -19,17 +20,9 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 	private String name = "";
-	private Group group;
-	private Vector<Article> articles = new Vector<Article>();
-	private int groceryListId;
-	
-	public void setGroceryListId(int groceryListId) {
-		this.groceryListId = groceryListId;
-	}
-	
-	public int getGroceryListId() {
-		return this.groceryListId;
-	}
+	private Timestamp creationDat;
+	private Timestamp modDat;
+	private int groupId;
 
 	public String getGroceryListName() {
 		return name;
@@ -39,20 +32,29 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 		this.name = name;
 	}
 
-	public String getGroupName() {
-		return group.getGroupName();
+	public void setCreationDat(Timestamp creationDat) {
+		this.creationDat = creationDat;
 	}
-
-	public void setGroupName(String group) {
-		this.group.setGroupName(group);
+	
+	public Timestamp getCreationDat() {
+		return this.creationDat;
 	}
-
-	public Vector<Article> getArticles() {
-		return articles;
+	
+	public void setModDat(Timestamp modDat) {
+		this.modDat = modDat;
 	}
-
-	public void setArticles(Vector<Article> articles) {
-		this.articles = articles;
+	
+	public Timestamp getModDat() {
+		return this.modDat;
 	}
+	
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
+	}
+	
+	public int getGroupId() {
+		return this.groupId;
+	}
+	
 
 }

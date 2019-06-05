@@ -1,11 +1,14 @@
 package de.hdm.itprojektss19.team03.scart.server.db;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
@@ -13,7 +16,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author Marco Dell'Oso, Thies
+ * @author Marco Dell'Oso, Patrick Lehle
+ * @author Thies
  *
  */
 public class RetailerMapper {
@@ -57,24 +61,54 @@ public class RetailerMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement
-					.executeQuery("SELECT id, name FROM retailers WHERE id=" + id);
+			ResultSet rs = statement.executeQuery("SELECT id, name FROM retailer WHERE id=" + id);
 
-			// Es darf nur ein Ergebinis gefunden werden, da id der Primärschlüssel ist
+			// Es darf nur ein Ergebinis gefunden werden, da id der Primï¿½rschlï¿½ssel ist
 			if (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
 				retailer.setRetailerName(rs.getString("name"));
-
 				return retailer;
 			}
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
-
 		return null;
+	}
+	/**
+	 * Gibt einen Retailer via Namen zurueck
+	 * @param name
+	 * @param r
+	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
+	 */
+	public Vector<Retailer> findRetailerByName(String name, Retailer r){
+		Connection con = null;
+		PreparedStatement stmt = null;
 
+		String select = "SELECT * FROM retailer WHERE name=?";
+
+		Vector<Retailer> result = new Vector<Retailer>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(select);
+			stmt.setString(1, name);
+
+			ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+				Retailer retailer = new Retailer();
+				retailer.setRetailerId(rs.getInt("id"));
+				retailer.setRetailerName(rs.getString("name"));
+
+				result.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			return null;
+		}
+		return result;
 	}
 
 	/**
@@ -90,9 +124,9 @@ public class RetailerMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name FROM retailers");
+			ResultSet rs = statement.executeQuery("SELECT id, name FROM retailer");
 
-			// Neues retailer Objekt für jede gefundene ID
+			// Neues retailer Objekt fï¿½r jede gefundene ID
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
@@ -106,74 +140,105 @@ public class RetailerMapper {
 
 		return retailers;
 	}
-
 	
 	/**
-	 * Fügt in der Datenbank einen neuen Retailer ein
+	 * Fï¿½gt in der Datenbank einen neuen Retailer ein
 	 * 
-	 * @param Retailer-Objekt das in die DB eingefügt werden soll
-	 * @return Die Eingefügte Retailer mit aktueller ID
+	 * @param Retailer-Objekt das in die DB eingefï¿½gt werden soll
+	 * @return Die Eingefï¿½gte Retailer mit aktueller ID
 	 */
 	public Retailer insert(Retailer retailer) {
-		// DB-Verbindung herstellen
-		Connection con = DBConnection.connection();
+		
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
+		String insertSQL = "INSERT INTO retailer (id, name) VALUES (?,?)";
+
 		try {
-			Statement stmt = con.createStatement();
-
-			// Suche die aktuell höchsten ID
-			ResultSet rs = stmt.executeQuery("SELECT MAX(id) AS maxid " + "FROM retailers ");
-
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxIdSQL);
+			ResultSet rs = stmt.executeQuery();
+			
 			if (rs.next()) {
-				// Höchste ID um 1 erhöhen, um nächste ID zu erhalten
 				retailer.setId(rs.getInt("maxid") + 1);
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO retailers (id, name) " + "VALUES (" + retailer.getId()
-						+ "," + retailer.getRetailerName() + ")");
 			}
+			stmt = con.prepareStatement(insertSQL);
+			stmt.setInt(1, retailer.getId());
+			stmt.setString(2, retailer.getRetailerName());
+			stmt.executeUpdate();
+
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return retailer;
 	}
 
 	/**
-	 * Ändert einen Retailer in der Datenbank
+	 * ï¿½ndert einen Retailer in der Datenbank
 	 * 
-	 * @param Zu ändernder Retailer
-	 * @return Geänderter Retailer
+	 * @param Zu ï¿½ndernder Retailer
+	 * @return Geï¿½nderter Retailer
 	 */
 	public Retailer update(Retailer retailer) {
-		Connection con = DBConnection.connection();
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String update = "UPDATE retailer SET name=? WHERE id=?";
 
 		try {
-			Statement stmt = con.createStatement();
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(update);
 
-			stmt.executeUpdate("UPDATE retailers " + "SET name=\"" + retailer.getRetailerName() + "WHERE id=" + retailer.getId());
-
-		} catch (SQLException e2) {
+			stmt.setString(1, retailer.getRetailerName());
+			stmt.setInt(2, retailer.getId());
+			stmt.executeUpdate();
+		}
+		catch (SQLException e2) {
 			e2.printStackTrace();
 		}
-
 		return retailer;
 	}
 	
 	/**
-	 * Löscht einen Retailer aus der Datenbank
+	 * Lï¿½scht einen Retailer aus der Datenbank
 	 * 
-	 * @param Zu löschender Retailer
+	 * @param Zu lï¿½schender Retailer
 	 */
 	public void delete(Retailer retailer) {
 		Connection con = DBConnection.connection();
-
 		try {
 			Statement stmt = con.createStatement();
-
-			stmt.executeUpdate("DELETE FROM retailers " + "WHERE id=" + retailer.getId());
+			stmt.executeUpdate("DELETE FROM retailer WHERE id=" + retailer.getId());
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+	}
+	
+	public Retailer findById(int id) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+		String selectByKey = "SELECT * FROM retailer WHERE id=? ORDER BY id";
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+			stmt.setInt(1, id);
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				Retailer r = new Retailer();
+				r.setId(rs.getInt("id"));
+				r.setRetailerName(rs.getString("name"));
+				return r;
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return null;
 	}
 
 }

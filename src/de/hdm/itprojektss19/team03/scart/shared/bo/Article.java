@@ -15,37 +15,25 @@ public class Article extends BusinessObject {
 	private static final long serialVersionUID = 1L;
 	private String name = "";
 	private int quantity;
-	private Unit unit;
-	private Unit unitId;
-	private Retailer retailer;
-	private Retailer retailerId;
+	private String unit;
+	private int retailerId;
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	
+	
 //CONSTRUCTORS==========================================================
 	
-	public Article() {
-		
-	}
-	
-	public Article (String name, int quantity, Unit unit, Retailer retailer ) {
-		this.name = name;
-		this.quantity = quantity;
-		this.unit = unit;
-		this.retailer = retailer;
-	}
+//Default Constructor
 	
 //METHODS===============================================================
 	
-	
-	public void setRetailerName(String name) {
-		this.setRetailerName(name);
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
-	public String getRetailerName() {
-			return retailer.getRetailerName();
+	public String getUnit() {
+		return this.unit;
 	}
-	
 
 	public String getName() {
 		return name;
@@ -61,14 +49,6 @@ public class Article extends BusinessObject {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
-	}
-
-	public String getUnitName() {
-		return unit.getUnitName();
-	}
-
-	public void setUnitName(String name) {
-		this.unit.setUnitName(name);
 	}
 
 	public Timestamp getCreationDat() {
@@ -88,13 +68,15 @@ public class Article extends BusinessObject {
 		this.modDat = modDat;
 	}
 
+//RETAILER======================================================
+	
 	public void setRetailerId(int retailerId) {
-		this.retailerId.setRetailerId(retailerId);
+		this.retailerId =retailerId;
 		
 	}
 
 	public int getRetailerId() {
-		return this.retailerId.getRetailerId();
+		return this.retailerId;
 	}
 
 }

@@ -42,9 +42,8 @@ public class Scart implements EntryPoint {
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label searchlb = new Label();
 	private Label profilLb = new Label();
-	private Label loginLabel = new Label("Welcome to Scart");
 	private HTML loginHTML = new HTML("<h7></h7>");
-	private	HTML scartHTML = new HTML("<h8>SCART</h8>");
+	private	HTML scartHTML = new HTML("<h8>Welcome to Scart</h8>");
 	private Anchor signInLink = new Anchor("sign in with Google");
 	
 	
@@ -61,13 +60,14 @@ public class Scart implements EntryPoint {
 	 	* die automatisch aufgerufen wird, in dem ein Modul geladen wird. Vergleichbar
 	 	* mit der <code>main()</code> Methode.
 	 	*/	
-		public void onModuleLoad() {
+	public void onModuleLoad() {
 			
 		loginService.login(GWT.getHostPageBaseURL() + "Scart.html", new AsyncCallback<LoginInfo>() {
 
 				@Override
 				public void onFailure(Throwable e) {
 					Window.alert("Login Error: " + e.toString());
+					
 
 				}
 
@@ -89,7 +89,6 @@ public class Scart implements EntryPoint {
 							public void onSuccess(User user) {
 								//Ist der Nutzer noch registriert wird er zur Startseite weitergeleitet.
 								if (user != null) {
-									
 									RootPanel.get("content").clear();
 									// Die start Methode wird geladen
 									opening(user);
@@ -125,7 +124,7 @@ public class Scart implements EntryPoint {
 						signInLink.setHref(loginInfo.getLoginUrl());
 						loginPanel.add(loginHTML);
 						loginPanel.add(scartHTML);
-						loginPanel.add(loginLabel);
+					//	loginPanel.add(loginLabel);
 						loginPanel.add(signInLink);
 						loginPanel.addStyleName("login");
 						
@@ -148,10 +147,10 @@ public class Scart implements EntryPoint {
 			//Logout wird gesetzt
 			HTML signOutLink = new HTML("<p><a href='" + loginInfo.getLogoutUrl() 
 			+ "'><span class='glyphicon glyphicon-log-out'></span></a></p>");
-			RootPanel.get("nutzermenu").add(signOutLink);
+			RootPanel.get("usermenu").add(signOutLink);
 			
 			//Naechster Schritt ist das setzen von Cookies zur identifikation eines Users.
-			Cookies.setCookie("nutzerGMail", user.getEmail()); 
+			Cookies.setCookie("userGMail", user.getEmail()); 
 			
 			//Wenn der user bereits existiert, wird zusaetzlich die userID gesetzt.
 			Cookies.setCookie("userID", String.valueOf(user.getId()));
@@ -178,7 +177,7 @@ public class Scart implements EntryPoint {
 					profilLb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
 					
 					searchlb.setText("Search ");
-					searchlb.setTitle("Aufruf der Suchseite für eine gezielte Kontaktsuche");
+					searchlb.setTitle("Search for a specific GroceryList/ Article");
 					searchlb.addClickHandler(new searchClickHandler());
 					searchlb.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
 					// Hier wird das UserMenu <div> container gecleared.
@@ -246,7 +245,7 @@ public class Scart implements EntryPoint {
 				//wird noch implementiert <3
 			}
 			
-		}
+	}
 		
 }
 

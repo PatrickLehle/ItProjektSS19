@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
@@ -11,7 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
+//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -291,7 +292,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Articel eines Retailers zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getArticleByRetailer(Retailer r) throws IllegalArgumentException;
+	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -301,7 +302,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen/ mehrere Articel in einer Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getArticleByDate(Date start, Date end) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -312,7 +313,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Article eines Retailers mit Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getArticleByDateRetailer(Date start, Date end, Retailer r) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -325,48 +326,48 @@ public interface EditorService extends RemoteService {
 	
 //UNIT===========================================================================
 	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #createUnit(Unit u);
-	 * @param u
-	 * @return eine Unit wird erstellt
-	 * @throws IllegalArgumentException
-	 */
-	public Unit createUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #saveUnit(Unit u);
-	 * @param u
-	 * @throws IllegalArgumentException
-	 */
-	public void saveUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #deleteUnit(Unit u);
-	 * @param u
-	 * @throws IllegalArgumentException
-	 */
-	public void deleteUnit(Unit u) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #getUnitById(int unitId);
-	 * @param unitId
-	 * @return es wird nach einer Unit via Id gesucht
-	 * @throws IllegalArgumentException
-	 */
-	public Unit getUnitById(int unitId) throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #getUnitByName(String unitName);
-	 * @param unitName
-	 * @return es wird eine Unit via name gesucht
-	 * @throws IllegalArgumentException
-	 */
-	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #createUnit(Unit u);
+//	 * @param u
+//	 * @return eine Unit wird erstellt
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit createUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #saveUnit(Unit u);
+//	 * @param u
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void saveUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #deleteUnit(Unit u);
+//	 * @param u
+//	 * @throws IllegalArgumentException
+//	 */
+//	public void deleteUnit(Unit u) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #getUnitById(int unitId);
+//	 * @param unitId
+//	 * @return es wird nach einer Unit via Id gesucht
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit getUnitById(int unitId) throws IllegalArgumentException;
+//	
+//	/**
+//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+//	 *      #getUnitByName(String unitName);
+//	 * @param unitName
+//	 * @return es wird eine Unit via name gesucht
+//	 * @throws IllegalArgumentException
+//	 */
+//	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
 	
 //ENTRY===========================================================================
 
