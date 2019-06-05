@@ -395,12 +395,26 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException {
+		try {
+			
 		return this.aMapper.findArticleByRetailerId(r.getRetailerId());
+		
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
 	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try { 
+			
 		return this.aMapper.findAllArticleByDate(start, end);
+		
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 
 	}
 
@@ -498,6 +512,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			ex.printStackTrace();
 		}
 	}
+
+	
+	/**
+	@Override
+	public Vector<Article> getArticleByRetailer(Retailer r) throws IllegalArgumentException {
+		try { 
+			return aMapper.findArticleByRetailerId(r.getId());
+			
+		} catch(IllegalArgumentException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	*/
 
 
 

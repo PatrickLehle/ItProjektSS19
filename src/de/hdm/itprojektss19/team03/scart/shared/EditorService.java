@@ -292,7 +292,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Articel eines Retailers zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Article getArticleByRetailer(Retailer r) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
