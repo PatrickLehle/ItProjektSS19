@@ -34,7 +34,7 @@ public class GroceryListForm extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(new ArticleForm(article));
+				//RootPanel.get("content").add(new ArticleForm(article));
 			}
 		});
 
