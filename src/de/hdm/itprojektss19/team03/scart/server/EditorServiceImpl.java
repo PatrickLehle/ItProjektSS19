@@ -67,13 +67,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Die Mapperklasse wird referenziert, die die <code>Unit</code> mit der
 	 * Datenbank vergleicht.
 	 */
-//	private UnitMapper unMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die die <code>Entry</code> mit der
 	 * Datenbank vergleicht.
 	 */
-//	private EntryMapper eMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die die <code>GroceryList</code> mit der
@@ -89,9 +87,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.gMapper = GroupMapper.groupMapper();
 		this.glMapper = GroceryListMapper.groceryListMapper();
 		this.aMapper = ArticleMapper.articleMapper();
-//		this.eMapper = EntryMapper.entryMapper();
 		this.rMapper = RetailerMapper.retailerMapper();
-//		this.unMapper = UnitMapper.unitMapper();
+
 
 	}
 	
