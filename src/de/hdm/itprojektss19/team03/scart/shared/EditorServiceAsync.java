@@ -63,7 +63,7 @@ public interface EditorServiceAsync {
 
 	void getGroceryListById(int groceryListId, AsyncCallback<GroceryList> asyncCallback);
 
-	void getGroupByGroceryList(int groceryListId, AsyncCallback<Vector<Group>> asyncCallback);
+	void getGroupByGroceryList(int groceryListId, AsyncCallback<Group> asyncCallback);
 	
 	void statusSharingGroceryList(Vector<GroceryList> result, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
