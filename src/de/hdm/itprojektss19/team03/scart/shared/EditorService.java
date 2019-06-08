@@ -220,7 +220,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt Gruppe einer GroceryList als Ergebnis zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Group> getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
+	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
 	
 //ARTICLE===========================================================================
 	
