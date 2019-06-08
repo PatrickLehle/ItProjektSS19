@@ -1,0 +1,65 @@
+/** Add css rules here for your application. */
+
+div {
+	resize: both;
+}
+
+/*LOGIN-STYLING-START========================================================*/
+
+.login {
+position: absolute; 
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px; 
+    background: url('https://images.unsplash.com/photo-1529321440961-39288681287f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80');
+    background-size: cover; 
+ 	background-position: center;
+    display: block;
+	padding: 200px 26% 20px 30%; 
+}
+
+.login tbody {
+    opacity: 0.8;   
+	border-radius: 25px;
+    background: #edeb8d;
+    padding: 50px;
+    display: block;
+    box-shadow: 0px 0px 8px #999;
+}
+
+
+/* Sign in with google*/
+.login a {
+	/* top, right, bottom, left */
+	margin: 20px 40px 30px 90px;
+    padding: 15px 15px; 
+    background: #52a1ff;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    text-align: center; 
+    font-family: serif;
+}
+
+.login a:focus,
+.login a:hover {
+	background: #489bda;
+}
+
+/* Scart Text in Box */
+.login h7 {
+	opacity: 0.5;
+	text-align: center;
+	margin: 20px 40px 30px 90px
+	padding: 100px 30% 20px 20px;
+	/* padding: 15px 15px 15px 15px; */
+	/* margin-bottom: 20px; */
+} 
+
+.login h8{
+	font-family: serif;
+	padding: 10px 10px 10px 60px; 
+	font-size: 25px;
+}
+/*LOGIN-STYLING-END========================================================*/
