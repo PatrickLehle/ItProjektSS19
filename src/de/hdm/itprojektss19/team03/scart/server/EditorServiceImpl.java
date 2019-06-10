@@ -252,6 +252,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 		}
 	}
+	
+	public Vector<Group> findAllGroups() throws IllegalArgumentException{
+		return gMapper.findAll();
+	}
 
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
 		// TODO Auto-generated method stub
@@ -380,6 +384,26 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return null;
 		}
 	}
+	
+	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByDateRetailer(id, start, end);
+			
+		} catch(IllegalArgumentException e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public Vector<Article> findAllArticle() throws IllegalArgumentException{
+		try {
+			return this.aMapper.findAll();
+		} catch(IllegalArgumentException e){
+				e.printStackTrace();
+				return null;
+	}		
+	}
+
 
 //RETAILER===========================================================================
 	
@@ -438,9 +462,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException {
+	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException {
 		try {
-			return this.aMapper.findAllArticleByDateRetailer(start, end, r);
+			return this.aMapper.findAllArticleByDateRetailer(id, start, end);
 			
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
@@ -459,6 +483,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return null;
 		}
 
+	}
+	
+	public Vector<Retailer> findAllRetailer(){
+		try {
+			return this.rMapper.findAll();
+		}catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 //UNIT===========================================================================
