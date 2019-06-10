@@ -1,5 +1,10 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -28,11 +33,12 @@ public class GroupForm extends VerticalPanel {
 	
 	
 	//TEXTBOXEN=======================================================
-		TextBox groupTextbox = new TextBox(); 
+	TextBox groupTextbox = new TextBox(); 
 	
 	//LABELS==========================================================
-	Label createGroup = new Label("Gruppe erstellen");
-	Label name = new Label("Gruppenname: ");
+	Label createGroupLabel = new Label("Gruppe erstellen");
+	Label nameLabel = new Label("Gruppenname: ");
+	Label responseLabel = new Label("");
 	
 	/**
 	Label groups = new Label("Gruppe");
@@ -41,8 +47,8 @@ public class GroupForm extends VerticalPanel {
 	*/
 	
 	//BUTTONS=========================================================
-	Button back = new Button("Zurück");
-	Button removeGroup = new Button("Erstellen");
+	Button backButton = new Button("Zurück");
+	Button createGroupButton = new Button("Erstellen");
 	
 	/**
 		Button back = new Button("Zurück");
@@ -56,16 +62,19 @@ public class GroupForm extends VerticalPanel {
 	//PANELS==========================================================
 	
 	
-	HorizontalPanel header = new HorizontalPanel();
+	VerticalPanel header = new VerticalPanel();
 	
-	VerticalPanel hauptPanel = new VerticalPanel();
+	HorizontalPanel hauptPanel = new HorizontalPanel();
 	
-	HorizontalPanel createGroupPanel = new HorizontalPanel(); //Panel fuer Ueberschrift
-	HorizontalPanel inputPanel = new HorizontalPanel(); //Label und Textbox
-	HorizontalPanel buttonPanel = new HorizontalPanel(); //Buttons
+	VerticalPanel contentBox = new VerticalPanel(); //Content Panel
+	
+	VerticalPanel createGroupPanel = new VerticalPanel(); //Panel fuer Ueberschrift
+	VerticalPanel inputPanel = new VerticalPanel(); //Label und Textbox
+	VerticalPanel buttonPanel = new VerticalPanel(); //Buttons
+	VerticalPanel responsePanel = new VerticalPanel(); //Server responseLabel
 
 
-	HorizontalPanel footer = new HorizontalPanel();
+	VerticalPanel footer = new VerticalPanel();
 
 	public GroupForm(User user) {
 		// TODO Auto-generated constructor stub
@@ -74,19 +83,73 @@ public class GroupForm extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("footer").clear();
 		
-		RootPanel.get("contentHeader").add(new HTML("Scart"));
-		RootPanel.get("content").add(createGroupPanel);
-		RootPanel.get("content").add(inputPanel);
-		RootPanel.get("content").add(buttonPanel);
-		RootPanel.get("footer").add(footer);
 		
-		createGroupPanel.add(createGroup);
+		createGroupPanel.add(createGroupLabel);
 		
-		inputPanel.add(name);
+		inputPanel.add(nameLabel);
 		inputPanel.add(groupTextbox);
 		
-		buttonPanel.add(back);
-		buttonPanel.add(buttonPanel);
+		buttonPanel.add(backButton);
+		buttonPanel.add(createGroupButton);
+		
+		responsePanel.add(responseLabel);
+		responseLabel.setVisible(false);
+		
+		contentBox.add(createGroupPanel);
+		contentBox.add(inputPanel);
+		contentBox.add(buttonPanel);
+		
+		RootPanel.get("contentHeader").add(new HTML("Scart"));
+		
+		RootPanel.get("content").add(contentBox);
+		
+		RootPanel.get("footer").add(footer);
+		
+		
+		
+		createGroupButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
+					return; //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+				} else {
+					return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
+				}
+		}
+		});
+		
+		
+		
+		class MyHandler implements ClickHandler, KeyUpHandler {
+			/**
+			 * Fired when the user clicks on the sendButton.
+			 */
+			public void onClick(ClickEvent event) {
+				SendNameToServer();
+			}
+
+			/**
+			 * Fired when the user types in the nameField.
+			 */
+			public void onKeyUp(KeyUpEvent event) {
+				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+					SendNameToServer();
+				}
+			}
+			
+			private void SendNameToServer() {
+				
+				
+				responseLabel.setVisible(true);
+				responseLabel.setText("");
+				
+				//Methode mit AsyncCallback
+				//OnFailure
+				
+				//OnSuccess
+			}
+			
+		}
+		
 	}
 
 	public GroupForm(Group selection) {
