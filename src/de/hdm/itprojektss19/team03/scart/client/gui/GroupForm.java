@@ -63,9 +63,7 @@ public class GroupForm extends VerticalPanel {
 	
 	
 	HorizontalPanel header = new HorizontalPanel();
-	
-	//HorizontalPanel hauptPanel = new HorizontalPanel();
-	
+		
 	VerticalPanel contentBox = new VerticalPanel(); //Content Panel
 	
 	HorizontalPanel createGroupPanel = new HorizontalPanel(); //Panel fuer Ueberschrift
@@ -79,11 +77,7 @@ public class GroupForm extends VerticalPanel {
 	public GroupForm(User user) {
 		// TODO Auto-generated constructor stub
 		
-		RootPanel.get("content").clear();
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("footer").clear();
-		
-		
+		//Elemente werden dem Panel hinzugefuegt
 		createGroupLabel.setHorizontalAlignment(ALIGN_CENTER);
 		createGroupPanel.add(createGroupLabel);
 		createGroupPanel.setHorizontalAlignment(ALIGN_CENTER);
@@ -98,21 +92,26 @@ public class GroupForm extends VerticalPanel {
 		buttonPanel.add(createGroupButton);
 		buttonPanel.setHorizontalAlignment(ALIGN_CENTER);
 		
-		
+		//Zur Ausgabe der erfolgreichen/fehlgeschlagenen Serverantwort
 		responseLabel.setHorizontalAlignment(ALIGN_CENTER);
 		responsePanel.add(responseLabel);
 		responseLabel.setVisible(false);
 		responsePanel.setHorizontalAlignment(ALIGN_CENTER);
 		
-		
+		//Alle Panels werden zur in die ContentBox hinzugefuegt
 		contentBox.add(createGroupPanel);
 		contentBox.add(inputPanel);
 		contentBox.add(buttonPanel);
 		contentBox.add(responsePanel);
 		
+
+		RootPanel.get("content").clear();
+		RootPanel.get("contentHeader").clear();
+		RootPanel.get("footer").clear();
+		
 		RootPanel.get("contentHeader").add(new HTML("Scart"));
 		
-		RootPanel.get("content").add(contentBox);
+		RootPanel.get("content").add(contentBox); //Alle Panels werden in die "Content" div geschoben
 		
 		RootPanel.get("footer").add(footer);
 		
@@ -135,7 +134,7 @@ public class GroupForm extends VerticalPanel {
 			 * Fired when the user clicks on the sendButton.
 			 */
 			public void onClick(ClickEvent event) {
-				SendNameToServer();
+				SendNameToServer(); //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
 			}
 
 			/**
