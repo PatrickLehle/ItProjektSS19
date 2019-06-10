@@ -62,19 +62,19 @@ public class GroupForm extends VerticalPanel {
 	//PANELS==========================================================
 	
 	
-	VerticalPanel header = new VerticalPanel();
+	HorizontalPanel header = new HorizontalPanel();
 	
-	HorizontalPanel hauptPanel = new HorizontalPanel();
+	//HorizontalPanel hauptPanel = new HorizontalPanel();
 	
 	VerticalPanel contentBox = new VerticalPanel(); //Content Panel
 	
-	VerticalPanel createGroupPanel = new VerticalPanel(); //Panel fuer Ueberschrift
-	VerticalPanel inputPanel = new VerticalPanel(); //Label und Textbox
-	VerticalPanel buttonPanel = new VerticalPanel(); //Buttons
-	VerticalPanel responsePanel = new VerticalPanel(); //Server responseLabel
+	HorizontalPanel createGroupPanel = new HorizontalPanel(); //Panel fuer Ueberschrift
+	HorizontalPanel inputPanel = new HorizontalPanel(); //Label und Textbox
+	HorizontalPanel buttonPanel = new HorizontalPanel(); //Buttons
+	HorizontalPanel responsePanel = new HorizontalPanel(); //Server responseLabel
 
 
-	VerticalPanel footer = new VerticalPanel();
+	HorizontalPanel footer = new HorizontalPanel();
 
 	public GroupForm(User user) {
 		// TODO Auto-generated constructor stub
@@ -84,20 +84,31 @@ public class GroupForm extends VerticalPanel {
 		RootPanel.get("footer").clear();
 		
 		
+		createGroupLabel.setHorizontalAlignment(ALIGN_CENTER);
 		createGroupPanel.add(createGroupLabel);
+		createGroupPanel.setHorizontalAlignment(ALIGN_CENTER);
+
 		
 		inputPanel.add(nameLabel);
 		inputPanel.add(groupTextbox);
+		inputPanel.setHorizontalAlignment(ALIGN_CENTER);
+
 		
 		buttonPanel.add(backButton);
 		buttonPanel.add(createGroupButton);
+		buttonPanel.setHorizontalAlignment(ALIGN_CENTER);
 		
+		
+		responseLabel.setHorizontalAlignment(ALIGN_CENTER);
 		responsePanel.add(responseLabel);
 		responseLabel.setVisible(false);
+		responsePanel.setHorizontalAlignment(ALIGN_CENTER);
+		
 		
 		contentBox.add(createGroupPanel);
 		contentBox.add(inputPanel);
 		contentBox.add(buttonPanel);
+		contentBox.add(responsePanel);
 		
 		RootPanel.get("contentHeader").add(new HTML("Scart"));
 		
