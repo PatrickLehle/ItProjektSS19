@@ -2,6 +2,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
@@ -51,12 +52,13 @@ public class GroceryListForm extends VerticalPanel {
 				return article.getName();
 			}
 		};
-		/**
-		 * TextColumn<Article> articleQuantity = new TextColumn<Article>() {
-		 * 
-		 * @Override public String getValue(Article article) { return
-		 *           article.getQuantity(); } };
-		 */
+		Column<Article, Number> articleQuantity = new Column<Article, Number>(new NumberCell()) {
+			@Override
+			public Integer getValue(Article article) {
+				return article.getQuantity();
+			}
+		};
+
 		TextColumn<Article> articleUnit = new TextColumn<Article>() {
 			@Override
 			public String getValue(Article article) {
@@ -99,21 +101,14 @@ public class GroceryListForm extends VerticalPanel {
 		// ArticleCt.insertColumn(1, articleQuantity, a.getQuantity());
 		ArticleCt.addColumn(articleUnit, "Mengeneinheit");
 		ArticleCt.insertColumn(2, articleUnit, a.getUnit());
-		//ArticleCt.addColumn(articleRetailer, "Laden");
-		//ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
+		ArticleCt.addColumn(articleRetailer, "Laden");
+		ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
 
 		vt.add(ArticleCt);
 		vt.add(hpButtons);
-		
-		
-		RootPanel.get("content").add(vt); //Fraglich ob man in dieser Klasse auch das RootPanel veraendern sollte, oder ob das die "Seiten"-Klasse macht
-		
-		
-		
-		
-		
-		
-		
+
+		RootPanel.get("content").add(vt); // Fraglich ob man in dieser Klasse auch das RootPanel veraendern sollte, oder
+											// ob das die "Seiten"-Klasse macht
 
 		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
 		// hp.getElement(articleList);
