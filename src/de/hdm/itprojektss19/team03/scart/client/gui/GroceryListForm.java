@@ -25,8 +25,8 @@ public class GroceryListForm extends VerticalPanel {
 	// braucht man hier ein VerticalPanel, die Artikel werden sowiso in hp
 	// angezeigt?
 	VerticalPanel vt = new VerticalPanel();
-	HorizontalPanel hp = new HorizontalPanel();
-	HorizontalPanel hpF = new HorizontalPanel();
+	HorizontalPanel hpTitle = new HorizontalPanel();
+	HorizontalPanel hpButtons = new HorizontalPanel();
 
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button();
@@ -36,6 +36,8 @@ public class GroceryListForm extends VerticalPanel {
 	
 	//Name der GroceryList wird ausgegeben
 	Label titelLabel = new Label();
+	
+	ScrollPanel sc = new ScrollPanel();
 
 	public void onLoad() {
 		super.onLoad();
@@ -43,16 +45,31 @@ public class GroceryListForm extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
-		RootPanel.get("content").add(vt);
 		
-		ScrollPanel sc = new ScrollPanel();
+		//RootPanel.get("content").add(vt);
+		
+		
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
+		
+		hpTitle.add(titelLabel); //Titel Label wird in Horitontales Panel eingefuegt
+		
+		sc.add(ArticleCt); //CellTable wird in das Scroll Panel hinzugefuegt
+		
+		hpButtons.add(addBtn); //Buttons werden dem horizontal Panel unten hinzugefuegt
+		hpButtons.add(editBtn);
+		hpButtons.add(deleteBtn);
+		
+		vt.add(hpTitle);
 		vt.add(sc);
-
-		vt.add(hp);
-		hp.add(titelLabel);
-		hp.add(ArticleCt);
+		vt.add(hpButtons);
+		
+		RootPanel.get("content").add(vt);
+		
+		
+		
+		
+		
 		
 		
 
@@ -61,13 +78,13 @@ public class GroceryListForm extends VerticalPanel {
 		// getArticles().iterator().next().getName());
 		// if bedingung
 
-		hpF.add(editBtn);
+		//hpF.add(editBtn);
 		editBtn.addClickHandler(new EditClickHandler());
 		editBtn.setEnabled(true);
-		hpF.add(deleteBtn);
+		//hpF.add(deleteBtn);
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		deleteBtn.setEnabled(true);
-		hpF.add(addBtn);
+		//hpF.add(addBtn);
 		addBtn.addClickHandler(new AddClickHandler());
 		addBtn.setEnabled(true);
 		/**
