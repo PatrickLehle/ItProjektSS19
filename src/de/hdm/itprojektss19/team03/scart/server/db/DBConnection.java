@@ -14,7 +14,7 @@ public class DBConnection {
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
-	private static String localUrl = "jdbc:mysql://localhost:8000/ITPROJEKTSS19?user=teat&password=test";
+	private static String localUrl = "jdbc:mysql://localhost:8000/ITPROJEKTSS19?user=test&password=test";
 
 
 	private static final String username = "test";
