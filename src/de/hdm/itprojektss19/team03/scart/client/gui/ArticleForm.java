@@ -3,12 +3,13 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-//import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -38,14 +39,7 @@ public class ArticleForm extends VerticalPanel {
 	TextBox articleTb = new TextBox();
 	TextBox quantityTb = new TextBox();
 	TextBox unitTb = new TextBox();
-	TextBox retailerTb = new TextBox();
-	/**
-	*public String articleText = "";
-	*public int quantityText;
-	*public String unitText = "";
-	*public String retailerText = "";
-	*/
-	
+	ListBox retailerLb = new ListBox();
 
 	public void onLoad() {
 		super.onLoad();
@@ -67,7 +61,7 @@ public class ArticleForm extends VerticalPanel {
 		hp2.add(unitTb);
 		vt.add(hp3);
 		hp3.add(newRetailer);
-		hp3.add(retailerTb);
+		hp3.add(retailerLb);
 		
 		vt.add(hp4);
 		hp4.add(addBtn);
@@ -92,7 +86,7 @@ public class ArticleForm extends VerticalPanel {
 			RootPanel.get("contentHeader").clear();
 			RootPanel.get("content").clear();
 			RootPanel.get("footer").clear();
-			// GroceryListForm.onLoad();
+			RootPanel.get("content");
 		}
 	}
 
@@ -101,15 +95,14 @@ public class ArticleForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (articleTb != null && quantityTb != null && unitTb != null && retailerTb != null) {
-				ClientsideSettings.getEditorVerwaltung();
-				/**
-				*articleText = articleTb.getText();
-				*quantityText = Integer.parseInt(quantityTb.getText());
-				*unitText = unitTb.getText();
-				*retailerText = retailerTb.getText();
-				*/
-				
+			if (articleTb != null && quantityTb != null && unitTb != null && retailerLb != null) {
+				Article a = null;
+				AsyncCallback<Article> asyncCallback = null;
+				ev.createArticle(a, asyncCallback);
+				a.setName(articleTb.getText());
+				a.setQuantity(Integer.parseInt(quantityTb.getText()));
+				a.setUnit(unitTb.getText());
+				a.setRetailerId(retailerLb.getItemCount());
 			} else {
 				Window.alert("Bitte alle Angaben eintragen.");
 			}
