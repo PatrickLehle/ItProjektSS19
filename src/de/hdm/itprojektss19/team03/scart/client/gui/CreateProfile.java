@@ -8,15 +8,13 @@ import com.google.gwt.user.client.ui.Button;
 
 
 /**
- * Die ProfileForm zeigt das Profil eines Users
+ * Die CreateProfile erzeugt einen neuen User
  * 
  * @author vanduyho
  *
  */
 
-public class ProfileForm extends VerticalPanel {
-	
-	User user = new User();
+public class CreateProfile extends VerticalPanel {
 	
 	//LABELS================================================
 	Label newProfile = new Label("Dein Profil");
@@ -42,13 +40,11 @@ public class ProfileForm extends VerticalPanel {
 	
 	/**
 	 * 
-	 * Konstruktor fuer die ProfileForm Klasse 
+	 * Konstruktor fuer die CreateProfile Klasse 
 	 * 
 	 */
 
-	public ProfileForm(User u) {
-		
-		this.user = u;
+	public CreateProfile(User user) {
 		
 		//Labels in jeweilige Panels hinzufuegen
 		
