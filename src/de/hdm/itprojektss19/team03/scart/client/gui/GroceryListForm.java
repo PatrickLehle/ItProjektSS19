@@ -97,12 +97,12 @@ public class GroceryListForm extends VerticalPanel {
 		Retailer r = new Retailer();
 		ArticleCt.addColumn(articleName, "Artikel Name");
 		ArticleCt.insertColumn(0, articleName, a.getName());
-		// ArticleCt.addColumn(articleQuantity, "Menge");
+		ArticleCt.addColumn(articleQuantity, "Menge");
 		// ArticleCt.insertColumn(1, articleQuantity, a.getQuantity());
 		ArticleCt.addColumn(articleUnit, "Mengeneinheit");
 		ArticleCt.insertColumn(2, articleUnit, a.getUnit());
-		ArticleCt.addColumn(articleRetailer, "Laden");
-		ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
+		// ArticleCt.addColumn(articleRetailer, "Laden");
+		// ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
 
 		vt.add(ArticleCt);
 		vt.add(hpButtons);
