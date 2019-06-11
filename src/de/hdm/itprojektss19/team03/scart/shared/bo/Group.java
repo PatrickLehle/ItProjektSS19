@@ -23,6 +23,14 @@ public class Group extends BusinessObject implements IsSerializable {
 	 * Holen des Namens einer Gruppe
 	 * @return name
 	 */
+	public Group() {
+		
+	}
+	
+	public Group(String name) {
+		setGroupName(name);
+	}
+	
 	public String getGroupName() {
 		return name;
 	}

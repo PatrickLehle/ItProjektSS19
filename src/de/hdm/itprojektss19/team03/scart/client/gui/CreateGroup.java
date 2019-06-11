@@ -5,6 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -141,7 +142,12 @@ public class CreateGroup extends VerticalPanel {
 			 * Fired when the user clicks on the sendButton.
 			 */
 			public void onClick(ClickEvent event) {
-				SendNameToServer(); //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
+				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
+				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
+					SendNameToServer(); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+				} else {
+					return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
+				}
 			}
 
 			/**
@@ -149,16 +155,31 @@ public class CreateGroup extends VerticalPanel {
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					SendNameToServer();
+					if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
+						SendNameToServer(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+					} else {
+						return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
+					}
 				}
 			}
 			
-			private void SendNameToServer() {
-				
-				
+			private void SendNameToServer(String groupName) {
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
 				
+				Group newGroup = New Group(groupName);
+				
+				ev.createGroup(newGroup, new AsyncCallback<String>() {
+					
+					public void onFailure(Throwable caught) {
+						
+					}
+
+					
+					public void onSuccess(String arg0) {
+						
+					}
+				});
 				//Methode mit AsyncCallback
 				
 				//OnFailure
