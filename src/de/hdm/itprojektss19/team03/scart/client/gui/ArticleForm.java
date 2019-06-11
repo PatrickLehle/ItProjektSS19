@@ -8,7 +8,7 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HTML;
+//import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -22,71 +22,100 @@ public class ArticleForm extends VerticalPanel {
 
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hp = new HorizontalPanel();
+	HorizontalPanel hp1 = new HorizontalPanel();
+	HorizontalPanel hp2 = new HorizontalPanel();
+	HorizontalPanel hp3 = new HorizontalPanel();
+	HorizontalPanel hp4 = new HorizontalPanel();
+	Article articleToDisplay = null;
 	Button cancelBtn = new Button("Abbrechen");
 	Button addBtn = new Button("Hinzufügen");
-	Article articleToDisplay = null;
-	
+
 	Label newArticle = new Label("Artikel: ");
 	Label newQuantity = new Label("Menge: ");
-	Label newUnit = new Label("Mengeneinheit");	
+	Label newUnit = new Label("Mengeneinheit");
 	Label newRetailer = new Label("Shop: ");
-	
+
 	TextBox articleTb = new TextBox();
 	TextBox quantityTb = new TextBox();
 	TextBox unitTb = new TextBox();
 	TextBox retailerTb = new TextBox();
+	/**
+	*public String articleText = "";
+	*public int quantityText;
+	*public String unitText = "";
+	*public String retailerText = "";
+	*/
 	
+
 	public void onLoad() {
 		super.onLoad();
-		
-		RootPanel.get("content").clear();
+
 		RootPanel.get("contentHeader").clear();
+		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
+		//eventuell Flextable nehmen um maximal 2 in eine Reihe zu bekommen
+		RootPanel.get("content").add(vt);
 		
-		//RootPanel.get("contentHeader").add("Neuer Artikel");
-		RootPanel.get("content").add(newArticle);
-		RootPanel.get("content").add(newQuantity);
-		RootPanel.get("content").add(newUnit);
-		RootPanel.get("content").add(newRetailer);
+		vt.add(hp);
+		hp.add(newArticle);
+		hp.add(articleTb);
+		vt.add(hp1);
+		hp1.add(newQuantity);
+		hp1.add(quantityTb);
+		vt.add(hp2);
+		hp2.add(newUnit);
+		hp2.add(unitTb);
+		vt.add(hp3);
+		hp3.add(newRetailer);
+		hp3.add(retailerTb);
 		
-		
-		
-		
-		vt.add(addBtn);
+		vt.add(hp4);
+		hp4.add(addBtn);
 		addBtn.addClickHandler(new AddClickHandler());
 		addBtn.setEnabled(true);
-		
-		vt.add(cancelBtn);
+
+		hp4.add(cancelBtn);
 		cancelBtn.addClickHandler(new DeleteClickHandler());
 		cancelBtn.setEnabled(true);
-		
-		this.add(hp);
-		
+
+		//ClientsideSettings.getEditorVerwaltung();
 	}
-		
+
+	/**
+	 * ClickHandler fuer das Abbrechen beim Hinzufuegen eines neuen Artikels in
+	 * einer GroceryList. RootPanel wird gecleared und GroceryList wird geoeffnet.
+	 */
 	private class DeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (articleToDisplay == null) {
-				
-			} else {
-			}
+			RootPanel.get("contentHeader").clear();
+			RootPanel.get("content").clear();
+			RootPanel.get("footer").clear();
+			// GroceryListForm.onLoad();
 		}
 	}
+
+	// ClickHandler fuer das Hinzufuegen eines Artikels in eine GroceryList
 	private class AddClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (articleToDisplay != null) {	
+			if (articleTb != null && quantityTb != null && unitTb != null && retailerTb != null) {
+				ClientsideSettings.getEditorVerwaltung();
+				/**
+				*articleText = articleTb.getText();
+				*quantityText = Integer.parseInt(quantityTb.getText());
+				*unitText = unitTb.getText();
+				*retailerText = retailerTb.getText();
+				*/
 				
 			} else {
-				Window.alert("Bitte Artikel eintragen.");
+				Window.alert("Bitte alle Angaben eintragen.");
 			}
 		}
-	}	
+	}
 
-	
 	public ArticleForm(User user) {
 		// TODO Auto-generated constructor stub
 	}
