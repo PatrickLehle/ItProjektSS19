@@ -47,9 +47,9 @@ public class ArticleForm extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
-		//eventuell Flextable nehmen um maximal 2 in eine Reihe zu bekommen
+		// eventuell Flextable nehmen um maximal 2 in eine Reihe zu bekommen
 		RootPanel.get("content").add(vt);
-		
+
 		vt.add(hp);
 		hp.add(newArticle);
 		hp.add(articleTb);
@@ -62,7 +62,7 @@ public class ArticleForm extends VerticalPanel {
 		vt.add(hp3);
 		hp3.add(newRetailer);
 		hp3.add(retailerLb);
-		
+
 		vt.add(hp4);
 		hp4.add(addBtn);
 		addBtn.addClickHandler(new AddClickHandler());
@@ -72,7 +72,7 @@ public class ArticleForm extends VerticalPanel {
 		cancelBtn.addClickHandler(new DeleteClickHandler());
 		cancelBtn.setEnabled(true);
 
-		//ClientsideSettings.getEditorVerwaltung();
+		// ClientsideSettings.getEditorVerwaltung();
 	}
 
 	/**
@@ -96,13 +96,13 @@ public class ArticleForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent e) {
 			if (articleTb != null && quantityTb != null && unitTb != null && retailerLb != null) {
-				Article a = null;
+				Article a = new Article();
 				AsyncCallback<Article> asyncCallback = null;
-				ev.createArticle(a, asyncCallback);
 				a.setName(articleTb.getText());
 				a.setQuantity(Integer.parseInt(quantityTb.getText()));
 				a.setUnit(unitTb.getText());
 				a.setRetailerId(retailerLb.getItemCount());
+				ev.createArticle(a, asyncCallback);
 			} else {
 				Window.alert("Bitte alle Angaben eintragen.");
 			}
