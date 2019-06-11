@@ -4,8 +4,11 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -13,6 +16,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 
 public class GroceryListForm extends VerticalPanel {
 
@@ -24,12 +28,14 @@ public class GroceryListForm extends VerticalPanel {
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel hpF = new HorizontalPanel();
 
-	Button addBtn = new Button(
-			"<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
+	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
+
+	CellTable ArticleCt = new CellTable();
 	
-	// private Vector<Article> articleList = new Vector<Article>();
+	//Name der GroceryList wird ausgegeben
+	Label titelLabel = new Label();
 
 	public void onLoad() {
 		super.onLoad();
@@ -37,14 +43,18 @@ public class GroceryListForm extends VerticalPanel {
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
-
+		RootPanel.get("content").add(vt);
+		
 		ScrollPanel sc = new ScrollPanel();
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
 		vt.add(sc);
 
-		RootPanel.get("content").add(vt);
-		vt.add(this.hp);
+		vt.add(hp);
+		hp.add(titelLabel);
+		hp.add(ArticleCt);
+		
+		
 
 		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
 		// hp.getElement(articleList);
@@ -61,31 +71,34 @@ public class GroceryListForm extends VerticalPanel {
 		addBtn.addClickHandler(new AddClickHandler());
 		addBtn.setEnabled(true);
 		/**
-		 * newArticleBtn.setPixelSize(100, 60); 
-		 * newArticleBtn.setStyleName("button1");
+		 * newArticleBtn.setPixelSize(100, 60); newArticleBtn.setStyleName("button1");
 		 * newArticleBtn.setTitle("add Article");
 		 */
 
 	}
+
 	private class EditClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
 		}
 	}
+
 	private class DeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
 		}
 	}
+
+	// Oeffnet ArticleForm Panel zum Hinzufuegen eines Artikels
 	private class AddClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
+
 		}
 	}
-
 
 	public GroceryListForm(de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm groceryList) {
 		// TODO Auto-generated constructor stub
