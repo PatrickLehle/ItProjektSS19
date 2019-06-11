@@ -7,7 +7,9 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleReport;
@@ -18,7 +20,7 @@ public interface ReportGenerator extends RemoteService{
 	
 	void init();
 	
-	public ArticleReport createStatisticA(int UID, Article a) throws IllegalArgumentException;
+	public ArticleReport createStatisticA(User u) throws IllegalArgumentException;
 	
 	public ArticleDateReport createStatisticAD(int UID,Article a, Date start, Date end) throws IllegalArgumentException;
 	

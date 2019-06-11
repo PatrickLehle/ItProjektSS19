@@ -5,7 +5,9 @@ import java.util.Date;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleReport;
@@ -21,7 +23,7 @@ public interface ReportGeneratorAsync {
 	
 	void init(AsyncCallback<Void> callback);
 
-	void createStatisticA(int UID, Article a, AsyncCallback<ArticleReport> callback);
+	void createStatisticA(User u, AsyncCallback<ArticleReport> callback);
 	
 	void createStatisticAD(int UID, Article a, Date start, Date end, AsyncCallback<ArticleDateReport> callback);
 	

@@ -145,15 +145,18 @@ public class ReportFilterForm extends VerticalPanel {
 		this.add(getReportBtn);
 
 		//Muss noch bearbeitet werden. cannot be resolve to a type error...
-		//editorVerwaltung.findAllGroups(new AllGroupsCallback());
+		//editorVerwaltung.findAllGroups(new AsyncCallback<Vector<Group>>());
 		
-		class AllGroupsCallback implements AsyncCallback <Vector<Group>> {
-
+		
+		
+		class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
+			
 			public void onFailure(Throwable caught) {
 
 			}
 
 			public void onSuccess(Vector<Group> result) {
+				
 				allGroups = result;
 
 				if (allGroupsS.size() != result.size()) {
