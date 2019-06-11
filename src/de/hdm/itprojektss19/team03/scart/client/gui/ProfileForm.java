@@ -32,11 +32,13 @@ public class ProfileForm extends VerticalPanel {
 	
 	//PANELS================================================
 	
+	VerticalPanel contentPanel = new VerticalPanel(); // Panel für Content
+	
 	HorizontalPanel newProfilePanel = new HorizontalPanel(); //Panel fuer Ueberschrift
 	HorizontalPanel firstNamePanel = new HorizontalPanel(); //Panel fuer Vorname
 	HorizontalPanel lastNamePanel = new HorizontalPanel(); //Panel fuer Nachname
 	HorizontalPanel emailAdressPanel = new HorizontalPanel(); //Panel fuer E-Mail Adresse
-	HorizontalPanel buttonPanel = new HorizontalPanel(); // Panel fuer Buttons
+	HorizontalPanel buttonPanel = new HorizontalPanel(); //Panel fuer Buttons
 	
 	/**
 	 * 
@@ -47,6 +49,26 @@ public class ProfileForm extends VerticalPanel {
 	public ProfileForm(User u) {
 		
 		this.user = u;
+		
+		//Labels in jeweilige Panels hinzufuegen
+		
+		newProfilePanel.add(newProfile);
+		firstNamePanel.add(firstName);
+		lastNamePanel.add(lastName);
+		emailAdressPanel.add(emailAdress);
+
+			
+		//Buttons in buttonPanel hinzugfuegen
+		
+		buttonPanel.add(editButton);
+		buttonPanel.add(deleteButton);
+		
+		//Panels in contentPanels hinzufuegen
+				
+		contentPanel.add(newProfilePanel);
+		contentPanel.add(firstNamePanel);
+		contentPanel.add(lastNamePanel);
+		contentPanel.add(emailAdressPanel);
 		
 	}
 	
