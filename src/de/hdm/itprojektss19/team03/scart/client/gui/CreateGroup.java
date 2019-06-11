@@ -27,9 +27,10 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * @author bastiantilk
  *
  */
-public class GroupForm extends VerticalPanel {
+public class CreateGroup extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	//Aufruf durch ev.createGroup(g, asyncCallback);
 	
 	
 	//TEXTBOXEN=======================================================
@@ -39,6 +40,9 @@ public class GroupForm extends VerticalPanel {
 	Label createGroupLabel = new Label("Gruppe erstellen");
 	Label nameLabel = new Label("Gruppenname: ");
 	Label responseLabel = new Label("");
+	
+	Label footerHome = new Label("Home");
+	Label footerReport = new Label("Report");
 	
 	/**
 	Label groups = new Label("Gruppe");
@@ -74,7 +78,7 @@ public class GroupForm extends VerticalPanel {
 
 	HorizontalPanel footer = new HorizontalPanel();
 
-	public GroupForm(User user) {
+	public CreateGroup(User user) {
 		// TODO Auto-generated constructor stub
 		
 		//Elemente werden dem Panel hinzugefuegt
@@ -103,6 +107,9 @@ public class GroupForm extends VerticalPanel {
 		contentBox.add(inputPanel);
 		contentBox.add(buttonPanel);
 		contentBox.add(responsePanel);
+		
+		footer.add(footerHome);
+		footer.add(footerReport);
 		
 
 		RootPanel.get("content").clear();
@@ -153,6 +160,7 @@ public class GroupForm extends VerticalPanel {
 				responseLabel.setText("");
 				
 				//Methode mit AsyncCallback
+				
 				//OnFailure
 				
 				//OnSuccess
@@ -162,7 +170,7 @@ public class GroupForm extends VerticalPanel {
 		
 	}
 
-	public GroupForm(Group selection) {
+	public CreateGroup(Group selection) {
 		// TODO Auto-generated constructor stub
 	}
 
