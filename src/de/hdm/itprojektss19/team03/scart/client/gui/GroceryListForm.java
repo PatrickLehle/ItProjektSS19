@@ -103,8 +103,16 @@ public class GroceryListForm extends VerticalPanel {
 
 		vt.add(ArticleCt);
 		vt.add(hpButtons);
-
-		RootPanel.get("content").add(vt);
+		
+		
+		RootPanel.get("content").add(vt); //Fraglich ob man in dieser Klasse auch das RootPanel veraendern sollte, oder ob das die "Seiten"-Klasse macht
+		
+		
+		
+		
+		
+		
+		
 
 		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
 		// hp.getElement(articleList);
