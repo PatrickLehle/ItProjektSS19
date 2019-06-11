@@ -144,7 +144,7 @@ public class CreateGroup extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
 				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
-					SendNameToServer(); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+					SendNameToServer(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
 				} else {
 					return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
 				}
@@ -167,24 +167,28 @@ public class CreateGroup extends VerticalPanel {
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
 				
-				Group newGroup = New Group(groupName);
+				Group createGroup = new Group(groupName);
 				
-				ev.createGroup(newGroup, new AsyncCallback<String>() {
+				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
 					public void onFailure(Throwable caught) {
+						//Ausgeben einer Fehlermeldung
+						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
+						//responseLabel.addStyleName("serverResponseLabel");
+						//responseLabel.setText(SERVER_ERROR);
 						
 					}
 
 					
-					public void onSuccess(String arg0) {
+					@Override
+					public void onSuccess(Group arg0) {
+						// TODO Auto-generated method stub
+						responseLabel.setText("Erfolg: "+arg0.getGroupName()+" konnte erstellt werden");
+						
 						
 					}
 				});
-				//Methode mit AsyncCallback
 				
-				//OnFailure
-				
-				//OnSuccess
 			}
 			
 		}
