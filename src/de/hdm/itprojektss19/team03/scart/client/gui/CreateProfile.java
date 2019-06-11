@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.Button;
 
 
 /**
- * Die CreateProfile erzeugt einen neuen User
+ * Die CreateProfile erzeugt ein neues Userprofil
  * 
  * @author vanduyho
  *
