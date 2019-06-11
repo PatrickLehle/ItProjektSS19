@@ -74,16 +74,17 @@ public class GroceryListForm extends VerticalPanel {
 		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
 
-		// RootPanel.get("content").add(vt);
-
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
 
-		hpTitle.add(titelLabel); // Titel Label wird in Horitontales Panel eingefuegt
+		// Titel Label wird in Horitontales Panel eingefuegt
+		hpTitle.add(titelLabel);
 
-		sc.add(ArticleCt); // CellTable wird in das Scroll Panel hinzugefuegt
+		// CellTable wird in das Scroll Panel hinzugefuegt
+		sc.add(ArticleCt);
 
-		hpButtons.add(addBtn); // Buttons werden dem horizontal Panel unten hinzugefuegt
+		// Buttons werden dem horizontal Panel unten hinzugefuegt
+		hpButtons.add(addBtn);
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
 
@@ -98,8 +99,8 @@ public class GroceryListForm extends VerticalPanel {
 		// ArticleCt.insertColumn(1, articleQuantity, a.getQuantity());
 		ArticleCt.addColumn(articleUnit, "Mengeneinheit");
 		ArticleCt.insertColumn(2, articleUnit, a.getUnit());
-		ArticleCt.addColumn(articleRetailer, "Laden");
-		ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
+		//ArticleCt.addColumn(articleRetailer, "Laden");
+		//ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
 
 		vt.add(ArticleCt);
 		vt.add(hpButtons);
