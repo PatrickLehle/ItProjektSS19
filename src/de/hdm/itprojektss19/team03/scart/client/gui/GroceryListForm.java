@@ -5,6 +5,8 @@ import java.util.Vector;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -17,6 +19,7 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 public class GroceryListForm extends VerticalPanel {
 
@@ -32,59 +35,89 @@ public class GroceryListForm extends VerticalPanel {
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
 
-	CellTable ArticleCt = new CellTable();
-	
-	//Name der GroceryList wird ausgegeben
+	CellTable<Article> ArticleCt = new CellTable<Article>();
+
+	// Name der GroceryList wird ausgegeben
 	Label titelLabel = new Label();
-	
+
 	ScrollPanel sc = new ScrollPanel();
 
 	public void onLoad() {
 		super.onLoad();
 
+		TextColumn<Article> articleName = new TextColumn<Article>() {
+			@Override
+			public String getValue(Article article) {
+				return article.getName();
+			}
+		};
+		/**
+		 * TextColumn<Article> articleQuantity = new TextColumn<Article>() {
+		 * 
+		 * @Override public String getValue(Article article) { return
+		 *           article.getQuantity(); } };
+		 */
+		TextColumn<Article> articleUnit = new TextColumn<Article>() {
+			@Override
+			public String getValue(Article article) {
+				return article.getUnit();
+			}
+		};
+		TextColumn<Retailer> articleRetailer = new TextColumn<Retailer>() {
+			@Override
+			public String getValue(Retailer retailer) {
+				return retailer.getRetailerName();
+			}
+		};
+
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
 		RootPanel.get("footer").clear();
-		
-		//RootPanel.get("content").add(vt);
-		
-		
+
+		// RootPanel.get("content").add(vt);
+
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
-		
-		hpTitle.add(titelLabel); //Titel Label wird in Horitontales Panel eingefuegt
-		
-		sc.add(ArticleCt); //CellTable wird in das Scroll Panel hinzugefuegt
-		
-		hpButtons.add(addBtn); //Buttons werden dem horizontal Panel unten hinzugefuegt
+
+		hpTitle.add(titelLabel); // Titel Label wird in Horitontales Panel eingefuegt
+
+		sc.add(ArticleCt); // CellTable wird in das Scroll Panel hinzugefuegt
+
+		hpButtons.add(addBtn); // Buttons werden dem horizontal Panel unten hinzugefuegt
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
-		
+
 		vt.add(hpTitle);
 		vt.add(sc);
+
+		Article a = new Article();
+		Retailer r = new Retailer();
+		ArticleCt.addColumn(articleName, "Artikel Name");
+		ArticleCt.insertColumn(0, articleName, a.getName());
+		// ArticleCt.addColumn(articleQuantity, "Menge");
+		// ArticleCt.insertColumn(1, articleQuantity, a.getQuantity());
+		ArticleCt.addColumn(articleUnit, "Mengeneinheit");
+		ArticleCt.insertColumn(2, articleUnit, a.getUnit());
+		ArticleCt.addColumn(articleRetailer, "Laden");
+		ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
+
+		vt.add(ArticleCt);
 		vt.add(hpButtons);
-		
+
 		RootPanel.get("content").add(vt);
-		
-		
-		
-		
-		
-		
-		
 
 		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
 		// hp.getElement(articleList);
 		// getArticles().iterator().next().getName());
 		// if bedingung
 
-		//hpF.add(editBtn);
+		// hpF.add(editBtn);
 		editBtn.addClickHandler(new EditClickHandler());
 		editBtn.setEnabled(true);
-		//hpF.add(deleteBtn);
+		// hpF.add(deleteBtn);
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		deleteBtn.setEnabled(true);
-		//hpF.add(addBtn);
+		// hpF.add(addBtn);
 		addBtn.addClickHandler(new AddClickHandler());
 		addBtn.setEnabled(true);
 		/**
