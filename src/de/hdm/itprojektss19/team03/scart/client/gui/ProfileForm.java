@@ -32,6 +32,15 @@ public class ProfileForm {
 	HorizontalPanel emailAdressPanel = null;
 	HorizontalPanel buttonPanel = null;
 
+	/**
+	 * Konstruktor fuer die ProfileForm Klasse 
+	 * 
+	 */
 	
+	public ProfileForm (User u) {
+		
+		this.user = u;
+		
+	}
 	
 }
