@@ -2,10 +2,10 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 /**
  * 
- * @author vanduyho
+ * @author Julian Hofer
  *
  */
 
-public class DeleteProfile {
+public class DeleteGroup {
 
 }

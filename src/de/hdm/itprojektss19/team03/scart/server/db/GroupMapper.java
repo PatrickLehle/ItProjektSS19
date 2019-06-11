@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 
 /**

@@ -20,7 +20,7 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
-import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.CreateGroup;
 import de.hdm.itprojektss19.team03.scart.client.gui.Navigation;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ShowGroceryList;
@@ -206,7 +206,7 @@ public class Scart implements EntryPoint {
 			HorizontalPanel footer = new HorizontalPanel();
 			Anchor homepage = new Anchor("Homepage ", "Scart.html");
 			HTML textOne = new HTML(" | ");
-			HTML textTwo = new HTML(" | © 2019 Scart, Hochschule der\n" + "Medien Stuttgart | ");
+			HTML textTwo = new HTML("| © 2019 Scart, Hochschule der\n" + "<center>Medien Stuttgart | ");
 			Anchor reportGeneratorLink = new Anchor (" ReportGenerator ", "ScartReport.html");
 			
 			footer.add(homepage);
@@ -232,7 +232,7 @@ public class Scart implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent event) {
 				RootPanel.get("content").clear();
-				new GroupForm(ownProfil);
+				new CreateGroup(ownProfil);
 				
 			}
 			
@@ -242,7 +242,11 @@ public class Scart implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				//wird noch implementiert <3
+				User u = new User();
+				u.setId(Integer.valueOf(Cookies.getCookie("userID")));
+				u.setEmail(Cookies.getCookie("userEmail"));
+				RootPanel.get("content").clear();
+			//	RootPanel.get("content").add(new ShowArticle(u));
 			}
 			
 	}

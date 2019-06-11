@@ -69,7 +69,7 @@ public class GroceryListCell extends AbstractCell<GroceryList> {
 			sb.append(gl.getArticles().iterator().next().getQuantity());
 			sb.appendHtmlConstant("</td>");
 			sb.appendHtmlConstant("<td>");
-			sb.appendHtmlConstant(gl.getArticles().iterator().next().getUnit().toString());
+			sb.appendHtmlConstant(gl.getArticles().iterator().next().getUnit());
 			sb.appendHtmlConstant("</td>");
 			sb.appendHtmlConstant("</tr>");
 			sb.appendHtmlConstant("</div>");
