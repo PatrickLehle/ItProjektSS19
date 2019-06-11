@@ -153,14 +153,6 @@ public interface EditorService extends RemoteService {
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #findAllGroups()
-	 * @return
-	 * @throws IllegalArgumentException
-	 */
-	public Vector<Group> findAllGroups() throws IllegalArgumentException;
-	
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #statusSharingGroup(Vector<Group> result);
 	 * @param result
 	 * @return zeigt den Status der Gruppen an
@@ -266,14 +258,6 @@ public interface EditorService extends RemoteService {
 	 */
 	public Article getArticleById(int articleId) throws IllegalArgumentException;
 
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #findAllArticle()
-	 * @return
-	 * @throws IllegalArgumentException
-	 */
-	public Vector<Article> findAllArticle() throws IllegalArgumentException;
-
 //RETAILER===========================================================================
 	
 	/**
@@ -329,7 +313,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Article eines Retailers mit Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	public Vector<Article> getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

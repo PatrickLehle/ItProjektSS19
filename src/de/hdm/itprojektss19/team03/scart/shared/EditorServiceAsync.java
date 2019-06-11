@@ -49,8 +49,6 @@ public interface EditorServiceAsync {
 	
 	void leaveGroup(User u, Group g, AsyncCallback <Void> asyncCallback);
 	
-	void findAllGroups(AsyncCallback<Vector<Group>> asyncCallback);
-	
 	void statusSharingGroup(Vector<Group> result, AsyncCallback<Vector<Group>> asyncCallback);
 
 //GROCERYLIST===========================================================================
@@ -80,8 +78,6 @@ public interface EditorServiceAsync {
 	
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
 	
-	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
-	
 //RETAILER===========================================================================
 	
 	void createRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
@@ -94,7 +90,7 @@ public interface EditorServiceAsync {
 	
 	void getAllArticleByDate(Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
 	
-	void getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 

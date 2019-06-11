@@ -314,27 +314,23 @@ public class ArticleMapper {
 		return result;
 	}
 	/**
-	 * @bastiantilk, PatrickLehle
+	 * @bastiantilk
 	 * Gibt alle Artikel eines Retailers in einem Zeitraum zurueck
 	 * @param start
 	 * @param end
 	 * @param r
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end){
-		//DB Connection aufbauen
+	public Vector<Article> findAllArticleByDateRetailer(Timestamp start, Timestamp end, Retailer r){
+		//unfertig
 		Connection con = DBConnection.connection();
 		
 		Vector<Article> result = new Vector<Article>();
 		
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
-			stmt.setInt(1, id);
-//			Statement stmt = con.createStatement();
+			Statement stmt = con.createStatement();
 			
-			ResultSet rs = stmt.executeQuery();
-			
-//			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
+			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));

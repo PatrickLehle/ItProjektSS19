@@ -206,7 +206,7 @@ public class Scart implements EntryPoint {
 			HorizontalPanel footer = new HorizontalPanel();
 			Anchor homepage = new Anchor("Homepage ", "Scart.html");
 			HTML textOne = new HTML(" | ");
-			HTML textTwo = new HTML("| © 2019 Scart, Hochschule der\n" + "<center>Medien Stuttgart | ");
+			HTML textTwo = new HTML(" | © 2019 Scart, Hochschule der\n" + "Medien Stuttgart | ");
 			Anchor reportGeneratorLink = new Anchor (" ReportGenerator ", "ScartReport.html");
 			
 			footer.add(homepage);
@@ -242,11 +242,7 @@ public class Scart implements EntryPoint {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				User u = new User();
-				u.setId(Integer.valueOf(Cookies.getCookie("userID")));
-				u.setEmail(Cookies.getCookie("userEmail"));
-				RootPanel.get("content").clear();
-			//	RootPanel.get("content").add(new ShowArticle(u));
+				//wird noch implementiert <3
 			}
 			
 	}
