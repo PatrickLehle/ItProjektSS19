@@ -1,9 +1,11 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+
 
 /**
  * Die ProfileForm zeigt das Profil eines Users
@@ -14,6 +16,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 
 public class ProfileForm extends VerticalPanel {
 	
+	User user = new User();
 	
 	//LABELS================================================
 	Label newProfile = new Label("Dein Profil");
@@ -41,8 +44,12 @@ public class ProfileForm extends VerticalPanel {
 	 * 
 	 */
 
-	//public ProfileForm(Profile p) {
+	public ProfileForm(User u) {
 		
-	//}
+		this.user = u;
+		
+	}
+	
+	
 	
 }
