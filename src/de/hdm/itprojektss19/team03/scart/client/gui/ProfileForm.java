@@ -1,6 +1,8 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -66,5 +68,24 @@ public class ProfileForm {
 		contentPanel.add(emailAdressPanel);
 		
 	}
+	
+	/*
+	 * 
+	 * ClickHandler
+	 * 
+	 */
+
+	class EditButtonClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
+	
+	
+	
 	
 }
