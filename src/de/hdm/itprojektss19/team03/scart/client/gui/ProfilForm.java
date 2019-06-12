@@ -18,6 +18,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import src.de.hdm.itprojekt.client.gui.ProfilForm;
+import src.de.hdm.itprojekt.client.gui.String;
+import src.de.hdm.itprojekt.client.gui.Vector;
+import src.de.hdm.itprojekt.client.gui.ProfilForm.UpdateUserCallBack;
+import src.de.hdm.itprojekt.client.gui.ProfilForm.VerifyFieldCallback;
 
 
 /**
@@ -42,6 +47,8 @@ public class ProfilForm {
 	HorizontalPanel userNamePanel = null;
 	HorizontalPanel emailAdressPanel = null;
 	HorizontalPanel buttonPanel = null;
+	
+	private Label info;
 	
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	
@@ -261,12 +268,129 @@ public class ProfilForm {
 			
 		}
 		
+		class FindUserCallBack implements AsyncCallback<User> {
+			
+			public void onFailure(Throwable caught) {
+				
+			}
+			
+			public void onSuccess(User result) {
+				
+				if (user.getUsername() != result.getUsername() || user.getEmail() != result.getEmail()) {
+					
+					user = result;
+					buildProfil();
+					
+				}
+				
+			}
+			
+		class VerifyFieldCallback implements AsyncCallback<String[]> {
+			
+			ProfilForm profilForm;
+			TextBox userName;
+			TextBox emailAdress;
+			
+			public VerifyFieldCallback(ProfilForm pf, TextBox t1, TextBox t2) {
+				
+				this.profilForm = pf;
+				this.userName = t1;
+				this.emailAdress = t2;
+				
+				
+			}
+
+			public void onFailure(Throwable cuaght) {
+				
+				
+				
+			}
+			
+			public void onSuccess(String[] result) {
+				
+				if (result != null) {
+					
+					user.setUsername(result[0]);
+					user.setEmail(result[1]);
+					
+					//ev.updateUser(user, new UpdateUserCallBack());
+					
+				} else {
+					
+					//profilForm.add(info);
+
+					if (userName.getText().isEmpty()) {
+						userName.setFocus(true);
+					}
+					if (emailAdress.getText().isEmpty()) {
+						emailAdress.setFocus(true);
+					}
+
+				}
+				
+				
+		class FindAllUserCallback implements AsyncCallback<Vector<String>> {
+					
+			ProfilForm profilForm;
+			TextBox userName;
+			TextBox emailAdress;
+					
+			public FindAllUserCallback(ProfilForm pf, TextBox t1, TextBox t2) {
+			
+				this.profilForm = pf;
+				this.userName = t1;
+				this.emailAdress = t2;
+				
+			}
+					
+			public void onFailure(Throwable caught) {
+				
+				Window.alert(caught.getMessage());
+				
+			}
+			
+			public void onSuccess(Vector<String> result) {
+				
+				for (int i = 0; i < result.size(); i++) {
+					if (this.userName.getText() == result.get(i)) {
+						Window.alert("Die E-Mail ist bereits vergeben!");
+						return;
+					}
+				}
+				
+				String newName = userName.getText();
+				String newEmail = emailAdress.getText();
+				
+				//ev.verifyField(new String[] { newName, newEmail},
+						//new VerifyFieldCallback(this.profilForm, this.userName, this.emailAdress));
+
+				
+			}
+				
+				
+			}
+			
+			
+				}
+				
+				
+			}
+			
+			
+			
+			
+		}
+			
+			
+		}
+		
+		
 	}
 	
 	}
 
 }
-}
+
 
 
 
