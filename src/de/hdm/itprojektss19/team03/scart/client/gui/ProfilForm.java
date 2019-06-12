@@ -2,6 +2,9 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -30,7 +33,7 @@ public class ProfilForm {
 	
 	User user = null;
 	
-	Label newProfile = null;
+	Label newProfil = null;
 	Label userName = null;
 	Label emailAdress = null;
 	
@@ -56,7 +59,21 @@ public class ProfilForm {
 		this.user = u;
 		
 	}
+	
+	/*
+	 * 
+	 * onLoad-Methode
+	 * 
+	 */
 
+	public void onLoad() {
+		onLoad();
+		//buildProfil();
+		//info = new Label("Bitte füllen Sie jedes Feld aus!");
+			
+	}
+	
+	
 	/*
 	 * 
 	 * ClickHandler
@@ -84,6 +101,41 @@ public class ProfilForm {
 		TextBox emailAdress = new TextBox();
 		emailAdress.setText(user.getEmail());
 		emailAdressPanel.add(emailAdress);
+		
+		//profilForm.remove(editButton);
+		
+		Button deleteButton = new Button("Profil löschen", new DeleteButtonClickHandler(user));
+		//profilForm.add(deleteButton);
+		
+		Button saveButton = new Button("Änderungen speichern", new SaveButtonClickHandler(userName, emailAdress, profilForm));
+		
+	}
+	
+	
+	class SaveButtonClickHandler implements KeyPressHandler {
+		
+		private TextBox userName = null;
+		private TextBox emailAdress = null;
+		private ProfilForm profilForm = null;
+		
+		public SaveButtonClickHandler(TextBox name, TextBox email, ProfilForm pf) {
+			
+			this.userName = name;
+			this.emailAdress = email;
+			this.profilForm = pf;
+			
+		}
+		
+		public void onKeyPress(KeyPressEvent event) {
+			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
+				if (this.emailAdress.getText().length()>20) {
+					Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
+					return;
+				}
+				else { //v.getUserByGMail(this.emailAdress, callback);
+			
+		}
+		
 		
 	}
 	
@@ -167,7 +219,7 @@ public class ProfilForm {
 				
 			}
 			
-			public void onFailure (Throwable caught) {
+			public void onFailure(Throwable caught) {
 				
 				if (caught instanceof NotLoggedInException) {
 					
@@ -176,6 +228,24 @@ public class ProfilForm {
 				}
 				
 			}
+			
+			public void onSuccess(User result) {
+				
+				if (result != null) {
+					user = result;
+					buildProfil();
+					
+				}
+				
+			}
+			
+		}
+	
+		private void buildProfil() {
+			
+			this.clear();
+			Label newProfil = new Label("Dein Profil");
+			this.add(newProfil);
 			
 			
 		}
