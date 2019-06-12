@@ -4,17 +4,28 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.DefaultSelectionEventManager;
+import com.google.gwt.view.client.MultiSelectionModel;
+import com.google.gwt.view.client.SelectionChangeEvent;
+import com.google.gwt.view.client.SelectionModel;
+import com.google.gwt.view.client.SingleSelectionModel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -83,12 +94,59 @@ public class GroceryListForm extends VerticalPanel {
 		    }
 		  }
 		  */
+		
+		
+		/** Add a selection model to handle user selection.
+	    final SelectionModel<String> selectionModel = new MultiSelectionModel<String>();
+	    ArticleCt.setSelectionModel(selectionModel);
+	    selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+	      public void onSelectionChange(SelectionChangeEvent event) {
+	        String selected = selectionModel.getSelectedObject();
+	        if (selected != null) {
+	          Window.alert("You selected: " + selected);
+	        }
+	      }
+	    });
+	    */
+		
+		ArticleCt.setAutoHeaderRefreshDisabled(true);
+	    ArticleCt.setAutoFooterRefreshDisabled(true);
+	    
+	    
+	    //Beispieldaten
 		   List<Article> Articles = Arrays.asList(
 				    new Article("Milch", 1, "Liter", 2),
 				    new Article("Apfel", 1, "Stück", 2));
 		   
-		 //Erste Spalte fuer Checkbox/Auswahlbox  
 		   
+		   
+		  ListHandler<Article> sortHandler = new ListHandler<Article>(Articles);
+		  ArticleCt.addColumnSortHandler(sortHandler);
+		   
+		   final SelectionModel<Article> selectionModel1 = new MultiSelectionModel<Article>();
+			    ArticleCt.setSelectionModel(selectionModel1,
+			        DefaultSelectionEventManager.<Article> createCheckboxManager());
+		
+			    // Initialize the columns.
+		initTableColumns(selectionModel1, sortHandler);
+		
+		ArticleCt.setRowData(0, Articles);
+
+		RootPanel.get("content").add(vt);
+	}
+		
+		
+private void initTableColumns(final SelectionModel<Article> selectionModel1, ListHandler<Article> sortHandler) {
+			
+		 //Erste Spalte fuer Checkbox/Auswahlbox  
+		Column<Article, Boolean> checkColumn = new Column<Article, Boolean>(
+		        new CheckboxCell(true, false)) {
+		      @Override
+		      public Boolean getValue(Article object) {
+		        // Get the value from the selection model.
+		        return selectionModel1.isSelected(object);
+		      }
+		    };
 		   
 		//2. Spalte fuer den Name
 		    TextColumn<Article> nameColumn = new TextColumn<Article>() {
@@ -99,8 +157,8 @@ public class GroceryListForm extends VerticalPanel {
 		    
 		//3. Spalte fuer die Anzahl
 		    TextColumn<Article> quantityColumn = new TextColumn<Article>() {
-			      public int getValue(Article a) {
-			        return a.getQuantity();
+			      public String getValue(Article a) {
+			        return Integer.toString(a.getQuantity());
 			      }
 			    };
 		    
@@ -113,28 +171,19 @@ public class GroceryListForm extends VerticalPanel {
 		    
 		//5. Spalte fuer den Retailer
 			 TextColumn<Article> retailerColumn = new TextColumn<Article>() {
-				 public int getValue(Article a) {
-					    return a.getRetailerId();
+				 public String getValue(Article a) {
+					    return Integer.toString(a.getRetailerId());
 				 }
 			 	};	
 		
+		 // Add the columns.
+		ArticleCt.addColumn(checkColumn, "Gekauft");
+		ArticleCt.addColumn(nameColumn, "Name");
+		ArticleCt.addColumn(quantityColumn, "Menge");
+		ArticleCt.addColumn(unitColumn, "Einheit");
+		ArticleCt.addColumn(retailerColumn, "Supermarkt");
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
 
 		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
 		// hp.getElement(articleList);
@@ -156,6 +205,7 @@ public class GroceryListForm extends VerticalPanel {
 		 */
 
 	}
+
 
 	private class EditClickHandler implements ClickHandler {
 
