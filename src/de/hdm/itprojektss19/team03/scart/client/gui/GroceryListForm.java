@@ -28,8 +28,6 @@ public class GroceryListForm extends VerticalPanel {
 	HorizontalPanel hpTitle = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
 
-	private int aNum = 0;
-
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
@@ -70,7 +68,7 @@ public class GroceryListForm extends VerticalPanel {
 
 		// while Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		while (a.getId() > aNum) {
+		for (int aNum = 0; aNum < a.getId(); aNum++) {
 			aTable.setText(a.getId(), 0, a.getName());
 			aTable.setText(a.getId(), 1, Integer.toString(a.getQuantity()));
 			aTable.setText(a.getId(), 2, a.getUnit());
@@ -79,7 +77,6 @@ public class GroceryListForm extends VerticalPanel {
 			aCbox.addClickHandler(new CheckTheBox());
 			aCbox.setEnabled(true);
 			aCbox.setTitle("aCbox" + a.getId());
-			aNum++;
 		}
 		vt.add(aTable);
 
