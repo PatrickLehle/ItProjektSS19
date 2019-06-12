@@ -1,7 +1,9 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
+
 
 	/**
 	 * Diese Klasse stellt eine Menge einzelner Absätze (
@@ -22,6 +24,20 @@ import java.util.Vector;
 	   */
 	  private Vector<SimpleParagraph> subParagraphs = new Vector<SimpleParagraph>();
 
+	/**
+	 * ArrayList um die einzelnen <code>SimpleParagraph</code>-Objekte zu speichern.
+	 */
+	private ArrayList<SimpleParagraph> simpleParas = new ArrayList<SimpleParagraph>();
+		
+		/**
+		 * Methode um alle SimpleParagraph-Objekte des CompositeParagraphs auszugeben.
+		 * Es werden also alle "Unterabschnitte" hier ausgegeben.
+		 * @return ArrayList mit allen (Sub)SimpleParagraphs
+		 */
+		public ArrayList<SimpleParagraph> getAllSimpleParagraphs ()
+		{
+			return this.simpleParas;	
+		}
 	  /**
 	   * Einen Unterabschnitt hinzufügen.
 	   * 
@@ -48,6 +64,16 @@ import java.util.Vector;
 	  public Vector<SimpleParagraph> getSubParagraphs() {
 	    return this.subParagraphs;
 	  }
+	  
+		/**
+		 * Auslesen eines einzelnen Unterabschnitts von einem <code>CompositeParagraph</code>-Objekt
+		 * @param i ist der index des auszulesenden Abschnitts, wobei 0 <= i <= n und n = Anzahl der Unterabschnitte.
+		 * @return das <code>SimpleParagraph</code>-Objekt and der stelle i
+		 */
+		public SimpleParagraph getElementAt(int i)
+		{
+			return this.simpleParas.get(i);
+		}
 
 	  /**
 	   * Auslesen der Anzahl der Unterabschnitte.
