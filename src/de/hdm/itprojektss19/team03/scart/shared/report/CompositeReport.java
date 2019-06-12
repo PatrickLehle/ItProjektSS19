@@ -40,15 +40,6 @@ public int getNumSubReports() {
 }
 
 /**
- * Anzahl aller SimpleReports in dem CompositeReport auslesen.
- * @return
- */
-public int getNumberOfSimpleReports()
-{
-	return this.subReports.size();
-}
-
-/**
  * Auslesen eines einzelnen Teil-Reports.
  * @param i Position des Teilreports. Bei n Elementen laeuft der Index i von 0
  * bis n-1.
