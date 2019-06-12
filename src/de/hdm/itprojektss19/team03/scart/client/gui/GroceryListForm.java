@@ -32,6 +32,13 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 
+/**
+ * 
+ * @author bastiantilk, Tom
+ * http://samples.gwtproject.org/samples/Showcase/Showcase.html#!CwCellTable
+ * 
+ *
+ */
 public class GroceryListForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
