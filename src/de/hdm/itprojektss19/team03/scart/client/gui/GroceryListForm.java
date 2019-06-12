@@ -19,6 +19,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class GroceryListForm extends VerticalPanel {
 
@@ -26,6 +27,7 @@ public class GroceryListForm extends VerticalPanel {
 
 	// braucht man hier ein VerticalPanel, die Artikel werden sowiso in hp
 	// angezeigt?
+	private User user = null;
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hpTitle = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
@@ -203,10 +205,12 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
+			RootPanel.get("content").clear();
+			new ArticleForm(user);
 		}
 	}
 
-	public GroceryListForm(de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm groceryList) {
+	public GroceryListForm(GroceryList groceryList) {
 		// TODO Auto-generated constructor stub
 	}
 

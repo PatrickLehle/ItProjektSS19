@@ -15,12 +15,14 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class ArticleForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
+	private GroceryList groceryList = null;
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel hp1 = new HorizontalPanel();
@@ -83,10 +85,8 @@ public class ArticleForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			RootPanel.get("contentHeader").clear();
 			RootPanel.get("content").clear();
-			RootPanel.get("footer").clear();
-			RootPanel.get("content");
+			new GroceryListForm(groceryList);
 		}
 	}
 
@@ -103,6 +103,8 @@ public class ArticleForm extends VerticalPanel {
 				a.setUnit(unitTb.getText());
 				a.setRetailerId(retailerLb.getItemCount());
 				ev.createArticle(a, asyncCallback);
+				RootPanel.get("content").clear();
+				new GroceryListForm(groceryList);
 			} else {
 				Window.alert("Bitte alle Angaben eintragen.");
 			}
