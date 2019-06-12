@@ -25,20 +25,21 @@ public class GroceryListForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
-	// braucht man hier ein VerticalPanel, die Artikel werden sowiso in hp
-	// angezeigt?
 	private User user = null;
+
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hpTitle = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
 
-	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
-	Button editBtn = new Button();
-	Button deleteBtn = new Button();
+	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='right'/>");
+	Button editBtn = new Button("<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+	Button deleteBtn = new Button("<image src='/images/minusButton.png' width='16px' height='16px' align='left'/>");
+	Button checkBtn = new Button();
 
 	Boolean addBtnBoolean = false;
 	Boolean editBtnBoolean = false;
 	Boolean deleteBtnBoolean = false;
+	Boolean checkBtnBoolean = false;
 
 	TextBox editTb1 = new TextBox();
 	TextBox editTb2 = new TextBox();
@@ -72,7 +73,6 @@ public class GroceryListForm extends VerticalPanel {
 		sc.add(aTable);
 
 		vt.add(hpTitle);
-		vt.add(sc);
 
 		aTable.setText(0, 0, "Artikel");
 		aTable.setText(0, 1, "Menge");
@@ -97,6 +97,10 @@ public class GroceryListForm extends VerticalPanel {
 		hpButtons.add(addBtn);
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
+		hpButtons.add(checkBtn);
+
+		addBtn.addClickHandler(new AddClickHandler());
+		addBtn.setEnabled(true);
 
 		editBtn.addClickHandler(new EditClickHandler());
 		editBtn.setEnabled(true);
@@ -104,8 +108,9 @@ public class GroceryListForm extends VerticalPanel {
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		deleteBtn.setEnabled(true);
 
-		addBtn.addClickHandler(new AddClickHandler());
-		addBtn.setEnabled(true);
+		checkBtn.addClickHandler(new CheckClickHandler());
+		checkBtn.setEnabled(true);
+
 		/**
 		 * newArticleBtn.setPixelSize(100, 60); newArticleBtn.setStyleName("button1");
 		 * newArticleBtn.setTitle("add Article");
@@ -121,16 +126,18 @@ public class GroceryListForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (aCbox.getValue() == true) {
-				if (deleteBtnBoolean == false && editBtnBoolean == false) {
+				if (checkBtnBoolean == true) {
+					for (int i = 0; i > aTable.getRowCount(); i++) {
 					String first = aTable.getText(a.getId(), 0);
 					String second = aTable.getText(a.getId(), 1);
 					String third = aTable.getText(a.getId(), 2);
 					String fourth = aTable.getText(a.getId(), 3);
-					aTable.removeRow(a.getId());
+					aTable.removeRow(i);
 					aTable.setText(aTable.getRowCount() + 1, 0, first);
 					aTable.setText(aTable.getRowCount(), 1, second);
 					aTable.setText(aTable.getRowCount(), 2, third);
 					aTable.setText(aTable.getRowCount(), 3, fourth);
+					}
 				} else if (deleteBtnBoolean == true) {
 					aTable.removeRow(a.getId());
 				} else if (editBtnBoolean == true) {
@@ -153,9 +160,27 @@ public class GroceryListForm extends VerticalPanel {
 				} else {
 					Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 				}
+			} else {
+				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
 		}
 
+	}
+	
+	private class CheckClickHandler implements ClickHandler {
+		
+		@Override
+		public void onClick(ClickEvent e) {
+			if (checkBtnBoolean == false) {
+				checkBtnBoolean = true;
+				editBtnBoolean = false;
+				deleteBtnBoolean = false;
+			}else if (checkBtnBoolean == true) {
+				checkBtnBoolean = false;
+			}else {
+				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+			}
+		}
 	}
 
 	private class EditClickHandler implements ClickHandler {
@@ -163,6 +188,7 @@ public class GroceryListForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent e) {
 			if (editBtnBoolean == false) {
+				checkBtnBoolean = false;
 				editBtnBoolean = true;
 				deleteBtnBoolean = false;
 			} else if (editBtnBoolean == true) {
@@ -190,8 +216,9 @@ public class GroceryListForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent e) {
 			if (deleteBtnBoolean == false) {
-				deleteBtnBoolean = true;
+				checkBtnBoolean = false;
 				editBtnBoolean = false;
+				deleteBtnBoolean = true;
 			} else if (deleteBtnBoolean == true) {
 				deleteBtnBoolean = false;
 			} else {
