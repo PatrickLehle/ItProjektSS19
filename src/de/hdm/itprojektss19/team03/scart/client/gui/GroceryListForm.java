@@ -1,10 +1,13 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
@@ -32,7 +35,7 @@ public class GroceryListForm extends VerticalPanel {
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
 
-	CellTable ArticleCt = new CellTable();
+	CellTable<Article> ArticleCt = new CellTable<Article>(); //Article CellTable
 	
 	//Name der GroceryList wird ausgegeben
 	Label titelLabel = new Label();
@@ -65,6 +68,66 @@ public class GroceryListForm extends VerticalPanel {
 		vt.add(hpButtons);
 		
 		RootPanel.get("content").add(vt);
+		
+		//CellTable
+		
+		// A simple data type that represents a contact.
+		/*
+		  class Article {
+		    private final String address;
+		    private final String name;
+
+		    public Article(String name, String address) {
+		      this.name = name;
+		      this.address = address;
+		    }
+		  }
+		  */
+		   List<Article> Articles = Arrays.asList(
+				    new Article("Milch", 1, "Liter", 2),
+				    new Article("Apfel", 1, "Stück", 2));
+		   
+		 //Erste Spalte fuer Checkbox/Auswahlbox  
+		   
+		   
+		//2. Spalte fuer den Name
+		    TextColumn<Article> nameColumn = new TextColumn<Article>() {
+		      public String getValue(Article a) {
+		        return a.getName();
+		      }
+		    };
+		    
+		//3. Spalte fuer die Anzahl
+		    TextColumn<Article> quantityColumn = new TextColumn<Article>() {
+			      public int getValue(Article a) {
+			        return a.getQuantity();
+			      }
+			    };
+		    
+		//4. Spalte fuer die Einheit
+			 TextColumn<Article> unitColumn = new TextColumn<Article>() {
+				   public String getValue(Article a) {
+				     return a.getUnit();
+				   }
+				};	    
+		    
+		//5. Spalte fuer den Retailer
+			 TextColumn<Article> retailerColumn = new TextColumn<Article>() {
+				 public int getValue(Article a) {
+					    return a.getRetailerId();
+				 }
+			 	};	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		
 		

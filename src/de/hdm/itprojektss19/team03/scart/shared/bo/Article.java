@@ -22,8 +22,18 @@ public class Article extends BusinessObject {
 	
 	
 //CONSTRUCTORS==========================================================
+public Article (String name, int quantity, String unit, int retailerId) {
+		setName(name);
+		setQuantity(quantity);
+		setUnit(unit);
+		setRetailerId(retailerId);
+		
+	}
 	
 //Default Constructor
+public Article () {
+		
+	}
 	
 //METHODS===============================================================
 	
