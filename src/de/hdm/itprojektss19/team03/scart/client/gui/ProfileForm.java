@@ -1,9 +1,9 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -15,31 +15,55 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class ProfileForm {
 
-	User user = null;
+	//LABELS================================================
+	Label newProfile = new Label("Dein Profil");
+	Label firstName = new Label("Vorname: ");
+	Label lastName = new Label("Nachname: ");
+	Label emailAdress = new Label("E-Mail: ");
+
 	
-	Label newProfile = null;
-	Label firstName = null;
-	Label lastName = null;
-	Label emailAdress = null;
+	//BUTTONS===============================================
+	Button editButton = new Button ("Bearbeiten");
+	Button deleteButton = new Button ("Löschen");
 	
-	Button editButton = null;
-	Button deleteButtton = null;
 	
-	VerticalPanel newProfilePanel = null;
+	//PANELS================================================
 	
-	HorizontalPanel firstNamePanel = null;
-	HorizontalPanel lastNamePanel = null;
-	HorizontalPanel emailAdressPanel = null;
-	HorizontalPanel buttonPanel = null;
+	VerticalPanel contentPanel = new VerticalPanel(); // Panel für Content
+	
+	HorizontalPanel newProfilePanel = new HorizontalPanel(); //Panel fuer Ueberschrift
+	HorizontalPanel firstNamePanel = new HorizontalPanel(); //Panel fuer Vorname
+	HorizontalPanel lastNamePanel = new HorizontalPanel(); //Panel fuer Nachname
+	HorizontalPanel emailAdressPanel = new HorizontalPanel(); //Panel fuer E-Mail Adresse
+	HorizontalPanel buttonPanel = new HorizontalPanel(); //Panel fuer Buttons
 
 	/**
-	 * Konstruktor fuer die ProfileForm Klasse 
+	 * 
+	 * Konstruktor
 	 * 
 	 */
 	
 	public ProfileForm (User u) {
 		
-		this.user = u;
+		//Labels in jeweilige Panels hinzufuegen
+		
+		newProfilePanel.add(newProfile);
+		firstNamePanel.add(firstName);
+		lastNamePanel.add(lastName);
+		emailAdressPanel.add(emailAdress);
+
+			
+		//Buttons in buttonPanel hinzugfuegen
+		
+		buttonPanel.add(editButton);
+		buttonPanel.add(deleteButton);
+		
+		//Panels in contentPanels hinzufuegen
+				
+		contentPanel.add(newProfilePanel);
+		contentPanel.add(firstNamePanel);
+		contentPanel.add(lastNamePanel);
+		contentPanel.add(emailAdressPanel);
 		
 	}
 	
