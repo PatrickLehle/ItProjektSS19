@@ -1,6 +1,9 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
+import java.util.ArrayList;
 import java.util.Vector;
+
+
 
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels HTML formatiert. Das im
@@ -392,6 +395,76 @@ public class HTMLReportWriter extends ReportWriter {
 				 */
 				this.reportText = result.toString();
 			}
+	
+	public void simpleReportProcess(SimpleReport sr) {
+//		StringBuffer result = new StringBuffer();
+//
+//		result.append("<table class=\"SimpleReportTabelle\">");
+//
+//		if (sr.getHeaderData() != null) {
+//			result.append("<hr><br>");
+//
+//			Vector<SimpleParagraph> headerDataSP = sr.getHeaderData().getAllSimpleParagraphs();
+//			for (int i = 0; i < headerDataSP.size(); i++) {
+//				SimpleParagraph tempSP = headerDataSP.get(i);
+//
+//				result.append("<tr>");
+//				result.append("<td class=\"SimpleReportHeaderData\"><b>" + tempSP.getText() + "</b></td>");
+//				result.append("</tr>");
+//
+//			}
+//		}
+//
+//		// Hinzufügen der Zeilen in HTML Form
+//		if (sr.getRows() != null) {
+//			Vector<Row> alleZeilen = sr.getRows();
+//			for (int i = 0; i < alleZeilen.size(); i++) {
+//				Row row = alleZeilen.get(i);
+//
+//				result.append("<tr>");
+//
+//				for (int j = 0; j < row.getNumColumns(); j++) {
+//					result.append("<td class=\"ReportSpaltenInhalt\">" + row.getColumnAt(j) + "</td>");
+//				}
+//
+//				result.append("</tr>");
+//			}
+//		}
+//		result.append("</table>");
+//
+//		// Gesamtes Ergbnis in String speichern
+//		this.reportText = result.toString();
+	}
+	
+	@Override
+	public void process(CompositeReport cR) {
+//		StringBuffer result = new StringBuffer();
+//		this.resetReportText();
+//
+//		if (cR.getHeaderData() != null) {
+//			Vector<SimpleParagraph> headerDataCP = cR.getHeaderData().getAllSimpleParagraphs();
+//			for (int i = 0; i < headerDataCP.size(); i++) {
+//				SimpleParagraph tempCP = headerDataCP.get(i);
+//
+//				result.append("<tr>");
+//				result.append("<td class=\"CompositeReportHeaderData\"><b>" + tempCP.getText() + "</b></td>");
+//				result.append("</tr>");
+//				result.append("<br>");
+//
+//			}
+//
+//			result.append("<br><hr><br>");
+//
+//		}
+//
+//		for (int i = 0; i < cR.getNumSubReports(); i++) {
+//			simpleReportProcess(cR.getSubReportAt(i));
+//			result.append(reportText);
+//			result.append("<br>");
+//		}
+//		reportText = result.toString();
+
+	}
 
 	/**
 	 * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
