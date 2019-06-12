@@ -2,6 +2,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
@@ -31,6 +32,10 @@ public class GroceryListForm extends VerticalPanel {
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
+
+	Boolean addBtnBoolean = false;
+	Boolean editBtnBoolean = false;
+	Boolean deleteBtnBoolean = false;
 
 	FlexTable aTable = new FlexTable();
 	Article a = new Article();
@@ -108,16 +113,27 @@ public class GroceryListForm extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent event) {
 			if (aCbox.getValue() == true) {
-				aTable.getRowCount();
-				String first = aTable.getText(a.getId(), 0);
-				String second = aTable.getText(a.getId(), 1);
-				String third = aTable.getText(a.getId(), 2);
-				String fourth = aTable.getText(a.getId(), 3);
-				aTable.removeRow(a.getId());
-				aTable.setText(aTable.getRowCount() + 1, 0, first);
-				aTable.setText(aTable.getRowCount(), 1, second);
-				aTable.setText(aTable.getRowCount(), 2, third);
-				aTable.setText(aTable.getRowCount(), 3, fourth);
+				if (addBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false) {
+					aTable.getRowCount();
+					String first = aTable.getText(a.getId(), 0);
+					String second = aTable.getText(a.getId(), 1);
+					String third = aTable.getText(a.getId(), 2);
+					String fourth = aTable.getText(a.getId(), 3);
+					aTable.removeRow(a.getId());
+					aTable.setText(aTable.getRowCount() + 1, 0, first);
+					aTable.setText(aTable.getRowCount(), 1, second);
+					aTable.setText(aTable.getRowCount(), 2, third);
+					aTable.setText(aTable.getRowCount(), 3, fourth);
+				} else if (addBtnBoolean == true) {
+
+				} else if (editBtnBoolean == true) {
+
+				} else if (deleteBtnBoolean == true) {
+
+				} else {
+					Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+				}
+
 			}
 		}
 
@@ -127,6 +143,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
+			addBtnBoolean = false;
+			editBtnBoolean = true;
+			deleteBtnBoolean = false;
 		}
 	}
 
@@ -134,6 +153,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
+			addBtnBoolean = false;
+			editBtnBoolean = false;
+			deleteBtnBoolean = true;
 		}
 	}
 
@@ -142,6 +164,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
+			addBtnBoolean = true;
+			editBtnBoolean = false;
+			deleteBtnBoolean = false;
 
 		}
 	}
