@@ -18,10 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-import src.de.hdm.itprojekt.client.gui.EditorAdministrationAsync;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.DeleteUserCallBack;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.FindUserCallBack;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.VerifyFieldCallback;
+
 
 /**
  * 
@@ -104,10 +101,10 @@ public class ProfilForm {
 		
 		//profilForm.remove(editButton);
 		
-		Button deleteButton = new Button("Profil löschen", new DeleteButtonClickHandler(user));
+		//Button deleteButton = new Button("Profil löschen", new DeleteButtonClickHandler(user));
 		//profilForm.add(deleteButton);
 		
-		Button saveButton = new Button("Änderungen speichern", new SaveButtonClickHandler(userName, emailAdress, profilForm));
+		//Button saveButton = new Button("Änderungen speichern", new SaveButtonClickHandler(userName, emailAdress, profilForm));
 		
 	}
 	
@@ -132,7 +129,7 @@ public class ProfilForm {
 					Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 					return;
 				}
-				else { //v.getUserByGMail(this.emailAdress, callback);
+				else { //ev.getUserByGMail(this.emailAdress, callback);
 			
 		}
 		
@@ -155,7 +152,7 @@ public class ProfilForm {
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yesButton = new Button("Ja", new YesDeleteClickHandler(user, db));
-			Button noButton = new Button("Nein", new NoDeleteClickHandler(user, db));
+			Button noButton = new Button("Nein", new NoDeleteClickHandler(db));
 			Label deleteMessage = new HTML(					
 					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>"
 					);
@@ -200,11 +197,11 @@ public class ProfilForm {
 			
 			public void onClick(ClickEvent event) {
 				
-				ev.deleteUser(user.getId(), new DeleteUserCallBack(this.user));
+				ev.deleteUser(this.user, null);
 				
 				diabox.hide();
 				diabox.clear();
-					
+
 			}
 			
 		}
@@ -221,11 +218,11 @@ public class ProfilForm {
 			
 			public void onFailure(Throwable caught) {
 				
-				if (caught instanceof NotLoggedInException) {
+				//if (caught instanceof NotLoggedInException) {
 					
-					Window.Location.reload();
+					//Window.Location.reload();
 					
-				}
+				//}
 				
 			}
 			
@@ -243,10 +240,24 @@ public class ProfilForm {
 	
 		private void buildProfil() {
 			
-			this.clear();
+			HorizontalPanel newProfilPanel = new HorizontalPanel();
 			Label newProfil = new Label("Dein Profil");
-			this.add(newProfil);
+			newProfilPanel.add(newProfil);
 			
+			HorizontalPanel userNamePanel = new HorizontalPanel();
+			Label userName = new Label("Name: ");
+			userNamePanel.add(userName);
+			
+			HorizontalPanel emailAdressPanel = new HorizontalPanel();
+			Label emailAdress = new Label("E-Mail");
+			emailAdressPanel.add(emailAdress);
+			
+			editButton = new Button("Profil bearbeiten", new EditButtonClickHandler(profilForm));
+			
+			VerticalPanel contentPanel = new VerticalPanel();
+			contentPanel.add(userName);
+			contentPanel.add(emailAdress);
+			contentPanel.add(editButton);
 			
 		}
 		
@@ -254,6 +265,7 @@ public class ProfilForm {
 	
 	}
 
+}
 }
 
 
