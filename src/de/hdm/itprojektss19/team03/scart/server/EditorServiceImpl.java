@@ -257,6 +257,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return gMapper.findAll();
 	}
 
+
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
 		// TODO Auto-generated method stub
 		return null;

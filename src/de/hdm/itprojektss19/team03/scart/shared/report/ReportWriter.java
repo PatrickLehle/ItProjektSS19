@@ -46,5 +46,19 @@ public abstract class ReportWriter {
 	 * @param r der zu uebersetzende Report
 	 */
 	public abstract void process(ArticleDateRetailerReport r);
+	
+	/**
+	 * Uebersetzen eines <code>CompositeReport</code> in das Zielformat.
+	 * 
+	 * @param cr der zu uebersetzende Report
+	 */
+	public abstract void process(CompositeReport cr);
+	
+	/**
+	 * Uebersetzen eines <code>simpleReportProcess</code> in das Zielformat.
+	 * 
+	 * @param sr
+	 */
+	public abstract void simpleReportProcess(SimpleReport sr);
 
 }
