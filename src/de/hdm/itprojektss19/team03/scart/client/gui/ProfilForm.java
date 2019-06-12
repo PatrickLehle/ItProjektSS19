@@ -3,6 +3,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -55,12 +57,11 @@ public class ProfilForm {
 		
 		ProfilForm profilForm = null;
 	
-		private EditButtonClickHandler (ProfilForm pf) {
+		public EditButtonClickHandler (ProfilForm pf) {
 		
 			this.profilForm = pf;
 			
 	}
-	
 	
 	public void onClick (ClickEvent event) {
 		
@@ -76,7 +77,39 @@ public class ProfilForm {
 		
 	}
 	
+	abstract class DeleteButtonClickHandler implements ClickHandler {
+		
+		User user;
+		
+		public DeleteButtonClickHandler(User u) {
+			
+			this.user = u;
+		
+	}
 	
+		public void onClick (ClickEvent event) {
+			
+			DialogBox db = new DialogBox();
+			VerticalPanel vp = new VerticalPanel();
+			HorizontalPanel hp = new HorizontalPanel();
+			Button yesButton = new Button("Ja", new YesDeleteClickHandler(user, db));
+			Button noButton = new Button("Nein", new NoDeleteClickHandler(user, db));
+			Label deleteMessage = new HTML(					
+					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>"
+					);
+			vp.add(deleteMessage);
+			hp.add(yesButton);
+			hp.add(noButton);
+			vp.add(hp);
+			
+			db.add(vp);
+			
+		}
+		
+	}
+	
+	}
+
 }
 
 
