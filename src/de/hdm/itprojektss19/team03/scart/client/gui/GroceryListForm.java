@@ -1,15 +1,11 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import java.util.Vector;
-
-import com.google.gwt.cell.client.NumberCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -32,12 +28,17 @@ public class GroceryListForm extends VerticalPanel {
 	HorizontalPanel hpTitle = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
 
+	private int aNum = 0;
+
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button();
 	Button deleteBtn = new Button();
 
-	CellTable<Article> ArticleCt = new CellTable<Article>();
+	FlexTable aTable = new FlexTable();
+	Article a = new Article();
+	Retailer r = new Retailer();
 
+	CheckBox aCbox = new CheckBox();
 	// Name der GroceryList wird ausgegeben
 	Label titelLabel = new Label();
 
@@ -45,32 +46,6 @@ public class GroceryListForm extends VerticalPanel {
 
 	public void onLoad() {
 		super.onLoad();
-
-		TextColumn<Article> articleName = new TextColumn<Article>() {
-			@Override
-			public String getValue(Article article) {
-				return article.getName();
-			}
-		};
-		Column<Article, Number> articleQuantity = new Column<Article, Number>(new NumberCell()) {
-			@Override
-			public Integer getValue(Article article) {
-				return article.getQuantity();
-			}
-		};
-
-		TextColumn<Article> articleUnit = new TextColumn<Article>() {
-			@Override
-			public String getValue(Article article) {
-				return article.getUnit();
-			}
-		};
-		TextColumn<Retailer> articleRetailer = new TextColumn<Retailer>() {
-			@Override
-			public String getValue(Retailer retailer) {
-				return retailer.getRetailerName();
-			}
-		};
 
 		RootPanel.get("contentHeader").clear();
 		RootPanel.get("content").clear();
@@ -83,51 +58,71 @@ public class GroceryListForm extends VerticalPanel {
 		hpTitle.add(titelLabel);
 
 		// CellTable wird in das Scroll Panel hinzugefuegt
-		sc.add(ArticleCt);
+		sc.add(aTable);
+
+		vt.add(hpTitle);
+		vt.add(sc);
+
+		aTable.setText(0, 0, "Artikel");
+		aTable.setText(0, 1, "Menge");
+		aTable.setText(0, 2, "Mengeneinheit");
+		aTable.setText(0, 3, "Laden");
+
+		// while Schleife das alle Artikel mit Name Quantity Unit und RetailerName
+		// aufgelistet werden im Panel.
+		while (a.getId() > aNum) {
+			aTable.setText(a.getId(), 0, a.getName());
+			aTable.setText(a.getId(), 1, Integer.toString(a.getQuantity()));
+			aTable.setText(a.getId(), 2, a.getUnit());
+			aTable.setText(a.getId(), 3, r.getRetailerName());
+			aTable.add(aCbox);
+			aCbox.addClickHandler(new CheckTheBox());
+			aCbox.setEnabled(true);
+			aCbox.setTitle("aCbox" + a.getId());
+			aNum++;
+		}
+		vt.add(aTable);
 
 		// Buttons werden dem horizontal Panel unten hinzugefuegt
 		hpButtons.add(addBtn);
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
 
-		vt.add(hpTitle);
-		vt.add(sc);
-
-		Article a = new Article();
-		Retailer r = new Retailer();
-		ArticleCt.addColumn(articleName, "Artikel Name");
-		ArticleCt.insertColumn(0, articleName, a.getName());
-		ArticleCt.addColumn(articleQuantity, "Menge");
-		// ArticleCt.insertColumn(1, articleQuantity, a.getQuantity());
-		ArticleCt.addColumn(articleUnit, "Mengeneinheit");
-		ArticleCt.insertColumn(2, articleUnit, a.getUnit());
-		// ArticleCt.addColumn(articleRetailer, "Laden");
-		// ArticleCt.insertColumn(3, articleRetailer, r.getRetailerName());
-
-		vt.add(ArticleCt);
-		vt.add(hpButtons);
-
-		RootPanel.get("content").add(vt); // Fraglich ob man in dieser Klasse auch das RootPanel veraendern sollte, oder
-											// ob das die "Seiten"-Klasse macht
-
-		// Vector in das HorizontalePanel hinzufuegen/ Artikel als Liste anzeigen
-		// hp.getElement(articleList);
-		// getArticles().iterator().next().getName());
-		// if bedingung
-
-		// hpF.add(editBtn);
 		editBtn.addClickHandler(new EditClickHandler());
 		editBtn.setEnabled(true);
-		// hpF.add(deleteBtn);
+
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		deleteBtn.setEnabled(true);
-		// hpF.add(addBtn);
+
 		addBtn.addClickHandler(new AddClickHandler());
 		addBtn.setEnabled(true);
 		/**
 		 * newArticleBtn.setPixelSize(100, 60); newArticleBtn.setStyleName("button1");
 		 * newArticleBtn.setTitle("add Article");
 		 */
+		vt.add(hpButtons);
+
+		RootPanel.get("content").add(vt);
+
+	}
+
+	private class CheckTheBox implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			if (aCbox.getValue() == true) {
+				aTable.getRowCount();
+				String first = aTable.getText(a.getId(), 0);
+				String second = aTable.getText(a.getId(), 1);
+				String third = aTable.getText(a.getId(), 2);
+				String foruth = aTable.getText(a.getId(), 3);
+				aTable.removeRow(a.getId());
+				aTable.setText(aTable.getRowCount() + 1, 0, first);
+				aTable.setText(aTable.getRowCount() + 1, 1, second);
+				aTable.setText(aTable.getRowCount() + 1, 2, third);
+				aTable.setText(aTable.getRowCount() + 1, 3, foruth);
+			}
+		}
 
 	}
 
