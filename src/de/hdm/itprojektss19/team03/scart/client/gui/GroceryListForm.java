@@ -83,7 +83,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 		vt.add(aTable);
 
-		// Buttons werden dem horizontal Panel unten hinzugefuegt
+		// Buttons werden dem untersten horizontal Panel hinzugefuegt
 		hpButtons.add(addBtn);
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
@@ -115,12 +115,12 @@ public class GroceryListForm extends VerticalPanel {
 				String first = aTable.getText(a.getId(), 0);
 				String second = aTable.getText(a.getId(), 1);
 				String third = aTable.getText(a.getId(), 2);
-				String foruth = aTable.getText(a.getId(), 3);
+				String fourth = aTable.getText(a.getId(), 3);
 				aTable.removeRow(a.getId());
 				aTable.setText(aTable.getRowCount() + 1, 0, first);
-				aTable.setText(aTable.getRowCount() + 1, 1, second);
-				aTable.setText(aTable.getRowCount() + 1, 2, third);
-				aTable.setText(aTable.getRowCount() + 1, 3, foruth);
+				aTable.setText(aTable.getRowCount(), 1, second);
+				aTable.setText(aTable.getRowCount(), 2, third);
+				aTable.setText(aTable.getRowCount(), 3, fourth);
 			}
 		}
 
