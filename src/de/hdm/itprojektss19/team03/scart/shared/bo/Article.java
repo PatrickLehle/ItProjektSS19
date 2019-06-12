@@ -19,6 +19,7 @@ public class Article extends BusinessObject {
 	private int retailerId;
 	private Timestamp creationDat;
 	private Timestamp modDat;
+	private Timestamp delDat;
 	
 	
 //CONSTRUCTORS==========================================================
@@ -66,6 +67,14 @@ public class Article extends BusinessObject {
 
 	public void setModDat(Timestamp modDat) {
 		this.modDat = modDat;
+	}
+	
+	public void setDelDat(Timestamp delDat) {
+		this.delDat = delDat;
+	}
+	
+	public Timestamp getDelDat() {
+		return delDat;
 	}
 
 //RETAILER======================================================
