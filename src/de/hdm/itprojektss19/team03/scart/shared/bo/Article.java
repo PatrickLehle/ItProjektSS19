@@ -1,6 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * Ein Article besitzt einen Namen, eine Quantity mit ihrer Unit und einen dazugehoerigen Retailer
@@ -22,8 +23,19 @@ public class Article extends BusinessObject {
 	
 	
 //CONSTRUCTORS==========================================================
+	public Article(String name, int quantity, String unit, int retailerId) {
+		this.name = name;
+		this.quantity = quantity;
+		this.unit = unit;
+		this.retailerId = retailerId;
+		creationDat.setTime(new Date().getTime());
+		modDat.setTime(new Date().getTime());
+	}
 	
 //Default Constructor
+	public Article () {
+		
+	}
 	
 //METHODS===============================================================
 	
