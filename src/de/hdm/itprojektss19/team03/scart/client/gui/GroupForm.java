@@ -1,5 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -13,12 +15,13 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.client.gui.EditGroup;
+import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 
 /**
  * 
  * @author Julian Hofer
  *
- *	ToDo CSS Style Panels, Labels, Buttons
+ *	ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
 
 public class GroupForm extends VerticalPanel {
@@ -28,44 +31,44 @@ public class GroupForm extends VerticalPanel {
 	Group group = null;
 	
 	// PANELS
-	VerticalPanel GroupFormPanel = new VerticalPanel();
-	HorizontalPanel GroupNamePanel = null;
+	VerticalPanel groupFormPanel = new VerticalPanel();
+	VerticalPanel groupNamePanel = null;
 	
 	// Labels
-	Label GroupLabel = new Label("Gruppenname");
-	Label GroupNameLabel = null;
+	Label groupLabel = new Label("Gruppenname");
 	
 	//Buttons
-	Button GroupInfoButton = new Button("Gruppen verwalten");
-	Button CreateGroupButton = new Button("Gruppe hinzufügen");
+	Button groupInfoButton = new Button("Gruppen verwalten");
+	Button createGroupButton = new Button("Gruppe hinzufügen");
 	
-	/**
-	 * default Konstruktor
-	 */
+	
+	
 	public GroupForm() {
 		
-	}
-	
-	public GroupForm(Group g) {
-		
-		this.group = g;
-		
-		GroupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
+		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
 		// GroupNamePanel.setStyleName(CSS); TO DO
-		GroupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
-		GroupLabel.setHorizontalAlignment(ALIGN_CENTER);
+		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
 		
-		GroupFormPanel.add(GroupLabel);
-		GroupNamePanel.add(GroupNameLabel);
-		GroupFormPanel.add(GroupNamePanel);
+		groupFormPanel.add(groupLabel);
+		groupFormPanel.add(groupNamePanel);
 		
-		GroupFormPanel.add(GroupInfoButton);
-		GroupInfoButton.addClickHandler(new InfoClickHandler());
-		GroupInfoButton.setEnabled(true);
+		groupFormPanel.add(groupInfoButton);
+		groupInfoButton.addClickHandler(new InfoClickHandler());
+		groupInfoButton.setEnabled(true);
 		
-		GroupFormPanel.add(CreateGroupButton);
-		CreateGroupButton.addClickHandler(new CreateClickHandler());
-		CreateGroupButton.setEnabled(true);
+		groupFormPanel.add(createGroupButton);
+		createGroupButton.addClickHandler(new CreateClickHandler());
+		createGroupButton.setEnabled(true);
+		
+		// ToDo: durch Group User Mapper ersetzen
+		Vector<Group> gV = new Vector<Group>();
+		gV = GroupMapper.groupMapper().findAll();
+		
+		for (int i = 0; i < gV.size(); i++ ) {
+			Label groupNameLabel = new Label(gV.elementAt(i).getGroupName());
+			groupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
+			groupNamePanel.add(groupNameLabel);
+		}
 		
 		
 		
@@ -74,16 +77,7 @@ public class GroupForm extends VerticalPanel {
 	public void onLoad() {
 		super.onLoad();
 		
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("content").clear();
-		RootPanel.get("footer").clear();
-		RootPanel.get("content").add(GroupFormPanel);
-		
-		for (int i = 0; i < group.getId(); i++ ) {
-			String g = group.getGroupName(null);
-			GroupNameLabel.add(g);
-			
-		}
+	
 		
 		
 	}
@@ -96,7 +90,7 @@ public class GroupForm extends VerticalPanel {
 			// TODO Auto-generated method stub
 			
 			RootPanel.get("content").clear();
-			//RootPanel.get("Navigator").add(EditGroup); 
+			// RootPanel.get("Navigator").add("EditGroup"); 
 			
 			
 		}
