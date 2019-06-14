@@ -100,7 +100,7 @@ public class GroceryListArticleMapper {
 		}
 	}
 
-	public Vector<Article> findAllArticleByGroceryList(int grocerylistId) {
+	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -159,5 +159,4 @@ public class GroceryListArticleMapper {
 			e2.printStackTrace();
 		}
 	}
-
 }

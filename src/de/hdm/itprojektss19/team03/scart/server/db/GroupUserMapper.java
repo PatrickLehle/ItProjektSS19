@@ -132,17 +132,17 @@ public class GroupUserMapper {
 		}
 	}
 	
-	public Vector<Group> findAllGroupsByUser(int userId) {
+	public Vector<Group> findAllGroupsByUserId(int userId) {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
 		String selectByKey = "SELECT groupuser.groupId, groups.name, user.id, user.name, "
-				+ "user.email FROM groupuser "
+				+ "user.email FROM groupuser, groups, user "
 				+ "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
 				+ "ON groupuser.groupId = groups.id "
-				+ "WHERE groupuser.groupId= " + userId;
+				+ "WHERE groupuser.userId= " + userId;
 
 		Vector<Group> result = new Vector<Group>();
 
