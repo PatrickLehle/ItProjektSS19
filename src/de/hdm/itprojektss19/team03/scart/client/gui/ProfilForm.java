@@ -12,20 +12,24 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm.EditButtonClickHandler.SaveButtonClickHandler.DeleteButtonClickHandler.FindUserCallBack;
+import de.hdm.itprojektss19.team03.scart.client.gui.EditButtonClickHandler.SaveButtonClickHandler.DeleteButtonClickHandler.FindUserCallBack;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import src.de.hdm.itprojekt.client.gui.Image;
+import src.de.hdm.itprojekt.client.gui.NotLoggedInException;
 import src.de.hdm.itprojekt.client.gui.Override;
 import src.de.hdm.itprojekt.client.gui.ProfilForm;
-import src.de.hdm.itprojekt.client.gui.String;
+import src.de.hdm.itprojekt.client.gui.Throwable;
 import src.de.hdm.itprojekt.client.gui.Timer;
-import src.de.hdm.itprojekt.client.gui.Vector;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.UpdateUserCallBack;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.VerifyFieldCallback;
+import src.de.hdm.itprojekt.client.gui.ProfilForm.DeleteProfilClickHandler;
+import src.de.hdm.itprojekt.client.gui.ProfilForm.FindAllUserCallback;
+
 
 
 /**
@@ -36,6 +40,7 @@ import src.de.hdm.itprojekt.client.gui.ProfilForm.VerifyFieldCallback;
 
 public class ProfilForm {
 	
+	Widget parentForm = null;
 	User user = null;
 	
 	Label newProfil = null;
@@ -79,7 +84,7 @@ public class ProfilForm {
 		
 		this.user = u;
 		
-		//finduserCallback = new FindUserCallBack();
+		finduserCallback = new FindUserCallBack();
 		
 	}
 	
@@ -92,7 +97,7 @@ public class ProfilForm {
 	public void onLoad() {
 		
 		onLoad();
-		buildProfil();
+		//buildProfil();
 		info = new Label("Bitte füllen Sie jedes Feld aus!");
 		
 		info.addStyleName("infoProfilLabel");
@@ -100,18 +105,18 @@ public class ProfilForm {
 		
 		ev.getUserById(user.getId(), finduserCallback);
 		
-		Timer refreshProfil = new Timer() {
+		//Timer refreshProfil = new Timer() {
 
-			public void run() {
+			//public void run() {
 
-				ev.findUserByID(user.getId(), finduserCallback);
+				//ev.findUserByID(user.getId(), finduserCallback);
 
-			}
-		};
+			//}
+		//};
 
-		refreshProfil.scheduleRepeating(5000);
+		//refreshProfil.scheduleRepeating(5000);
 
-	}
+	//}
 			
 	}
 	
@@ -131,7 +136,7 @@ public class ProfilForm {
 			
 	}
 	
-	public void onClick (ClickEvent event) {
+	public void onClick(ClickEvent event) {
 		
 		userNamePanel.remove(userName);
 		TextBox userName = new TextBox();
@@ -145,11 +150,13 @@ public class ProfilForm {
 		
 		//profilForm.remove(editButton);
 		
-		//Button deleteButton = new Button("Profil löschen", new DeleteButtonClickHandler(user));
+		//Button deleteButton = new Button("Profil löschen", new DeleteButtonClickHandler(user, parentForm));
+		//deleteButton.addStyleName("DeleteProfilButton");
 		//profilForm.add(deleteButton);
 		
 		//Button saveButton = new Button("Änderungen speichern", new SaveButtonClickHandler(userName, emailAdress, profilForm));
-		
+		//profilForm.add(saveButton);
+
 	}
 	
 	
@@ -168,13 +175,14 @@ public class ProfilForm {
 		}
 		
 		public void onKeyPress(KeyPressEvent event) {
+			
 			if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER)
 				if (this.emailAdress.getText().length()>20) {
 					Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 					return;
 				}
-				else { //ev.getUserByGMail(this.emailAdress, callback);
-			
+				else { ev.getUserByGMail(this.emailAdress, AsyncCallBack user);
+					
 		}
 		
 		
@@ -183,11 +191,13 @@ public class ProfilForm {
 	class DeleteButtonClickHandler implements ClickHandler {
 		
 		User user;
+		Widget parentForm;
 		
-		public DeleteButtonClickHandler(User u) {
+		public DeleteButtonClickHandler(User u, Widget parent) {
 			
 			this.user = u;
-		
+			this.parentForm = parent;
+			
 	}
 	
 		public void onClick (ClickEvent event) {
@@ -195,7 +205,7 @@ public class ProfilForm {
 			DialogBox db = new DialogBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
-			Button yesButton = new Button("Ja", new YesDeleteClickHandler(user, db));
+			Button yesButton = new Button("Ja", new YesDeleteClickHandler(user, db, parentForm));
 			Button noButton = new Button("Nein", new NoDeleteClickHandler(db));
 			Label deleteMessage = new HTML(					
 					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>"
@@ -205,6 +215,8 @@ public class ProfilForm {
 			hp.add(noButton);
 			vp.add(hp);
 			
+			db.setGlassEnabled(true);
+			db.setAnimationEnabled(true);
 			db.center();
 			db.show();
 			
@@ -221,8 +233,13 @@ public class ProfilForm {
 			}
 			
 			public void onClick(ClickEvent event) {
+				
 				diabox.hide();
 				diabox.clear();
+				diabox.removeFromParent();
+				diabox.setAnimationEnabled(false);
+				diabox.setGlassEnabled(false);
+		
 			}
 			
 		}
@@ -232,11 +249,13 @@ public class ProfilForm {
 			
 			User user;
 			private DialogBox diabox;
+			Widget parentForm;
 			
-			public YesDeleteClickHandler(User u, DialogBox db) {
+			public YesDeleteClickHandler(User u, DialogBox db, Widget parent) {
 				
 				this.user = u;
 				this.diabox = db;
+				this.parentForm = parent;
 			}
 			
 			public void onClick(ClickEvent event) {
@@ -245,6 +264,9 @@ public class ProfilForm {
 				
 				diabox.hide();
 				diabox.clear();
+				diabox.removeFromParent();
+				diabox.setAnimationEnabled(false);
+				diabox.setGlassEnabled(false);
 
 			}
 			
@@ -252,35 +274,133 @@ public class ProfilForm {
 		
 		class DeleteUserCallBack implements AsyncCallback<Void>{
 			
+			private Widget parentForm;
 			private User user;
 			
-			public DeleteUserCallBack(User u) {
+			public DeleteUserCallBack(Widget parent, User u) {
 				
+				this.parentForm = parent;
 				this.user = u;
-				
+		
 			}
 			
 			public void onFailure(Throwable caught) {
 				
-				//if (caught instanceof NotLoggedInException) {
+				if (caught instanceof NotLoggedInException) {
 					
-					//Window.Location.reload();
-					
-				//}
-				
-			}
-			
-			public void onSuccess(User result) {
-				
-				if (result != null) {
-					user = result;
-					buildProfil();
+					Window.Location.reload();
 					
 				}
 				
 			}
 			
+			public void onSuccess(Void result) {
+				
+				//Image img = new Image(".gif");
+				//img.setWidth("50%");
+
+				Window.alert("Ihr Profil wurde erfolgreich gelöscht!");
+
+				parentForm.removeFromParent();
+
+				//RootPanel.get("app").add(img);
+
+				//class GifTimer extends Timer {
+
+					//Image img;
+
+					//public GifTimer(Image img) {
+						//this.img = img;
+					//}
+
+					//public void run() {
+						//img.removeFromParent();
+						//Window.Location.replace("/");
+
+					//}
+
+				}
+
+				//GifTimer funTimer = new GifTimer(img);
+				//funTimer.schedule(3000);
+
+			}
+
 		}
+	
+	class SaveChangesClickHandler implements ClickHandler {
+
+		private TextBox txtFirstName = null;
+		private TextBox txtLastName = null;
+		private TextBox txtNickName = null;
+		private ProfilForm profilForm = null;
+
+		private SaveChangesClickHandler(TextBox first, TextBox last, TextBox nick, ProfilForm pf) {
+			// TODO Auto-generated constructor stub
+
+			this.txtFirstName = first;
+			this.txtLastName = last;
+			this.txtNickName = nick;
+			this.profilForm = pf;
+		}
+
+		@Override
+		public void onClick(ClickEvent event) {
+			// TODO Auto-generated method stub
+			if(this.txtNickName.getText().length()>15) {
+				Window.alert("Dein Nickname darf nicht länger als 15 Zeichen sein!");
+				return;
+
+			}
+			else{ editorAdministration.findAllUserNickNames(
+					new FindAllUserCallback(this.profilForm, this.txtFirstName, this.txtLastName, this.txtNickName));
+			}
+		}
+
+	}
+
+	class CloseErrBoxClickHandler implements ClickHandler {
+
+		DialogBox errBox = null;
+
+		private CloseErrBoxClickHandler(DialogBox db) {
+
+			this.errBox = db;
+
+		}
+
+		public void onClick(ClickEvent event) {
+
+			errBox.hide();
+			errBox.clear();
+			errBox.removeFromParent();
+			errBox.setAnimationEnabled(false);
+			errBox.setGlassEnabled(false);
+
+		}
+
+	}
+
+	class UpdateUserCallBack implements AsyncCallback<User> {
+
+		public void onFailure(Throwable caught) {
+			
+			if (caught instanceof NotLoggedInException) {
+				Window.Location.reload();
+			}
+		}
+
+		public void onSuccess(User result) {
+
+			if (result != null) {
+				user = result;
+				buildProfil();
+
+			}
+
+		}
+
+	}
 	
 		private void buildProfil() {
 			
@@ -350,11 +470,11 @@ public class ProfilForm {
 					user.setUsername(result[0]);
 					user.setEmail(result[1]);
 					
-					ev.updateUser(user, new UpdateUserCallBack());
+					ev.createUser(this.userName, this.emailAdress, AsyncCallback<void>);;
 					
 				} else {
 					
-					//profilForm.add(info);
+					profilForm.add(info);
 
 					if (userName.getText().isEmpty()) {
 						userName.setFocus(true);
@@ -398,8 +518,8 @@ public class ProfilForm {
 				String newName = userName.getText();
 				String newEmail = emailAdress.getText();
 				
-				//ev.verifyField(new String[] { newName, newEmail},
-						//new VerifyFieldCallback(this.profilForm, this.userName, this.emailAdress));
+				ev.verifyField(new String[] { newName, newEmail},
+						new VerifyFieldCallback(this.profilForm, this.userName, this.emailAdress));
 
 				
 			}
