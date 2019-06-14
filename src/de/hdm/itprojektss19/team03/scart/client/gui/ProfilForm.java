@@ -16,10 +16,13 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm.EditButtonClickHandler.SaveButtonClickHandler.DeleteButtonClickHandler.FindUserCallBack;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import src.de.hdm.itprojekt.client.gui.Override;
 import src.de.hdm.itprojekt.client.gui.ProfilForm;
 import src.de.hdm.itprojekt.client.gui.String;
+import src.de.hdm.itprojekt.client.gui.Timer;
 import src.de.hdm.itprojekt.client.gui.Vector;
 import src.de.hdm.itprojekt.client.gui.ProfilForm.UpdateUserCallBack;
 import src.de.hdm.itprojekt.client.gui.ProfilForm.VerifyFieldCallback;
@@ -52,6 +55,20 @@ public class ProfilForm {
 	
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	
+	private FindUserCallBack finduserCallback;
+	//private VerifyFieldCallBack verifyFieldCallback; 
+	
+	/**
+	 * 
+	 * Default-Konstruktor
+	 * 
+	 */
+	
+	public ProfilForm() {
+		
+		
+	}
+	 
 	/**
 	 * 
 	 * Konstruktor
@@ -62,6 +79,8 @@ public class ProfilForm {
 		
 		this.user = u;
 		
+		//finduserCallback = new FindUserCallBack();
+		
 	}
 	
 	/*
@@ -71,12 +90,30 @@ public class ProfilForm {
 	 */
 
 	public void onLoad() {
+		
 		onLoad();
-		//buildProfil();
-		//info = new Label("Bitte füllen Sie jedes Feld aus!");
+		buildProfil();
+		info = new Label("Bitte füllen Sie jedes Feld aus!");
+		
+		info.addStyleName("infoProfilLabel");
+		info.addStyleName("Profil");
+		
+		ev.getUserById(user.getId(), finduserCallback);
+		
+		Timer refreshProfil = new Timer() {
+
+			public void run() {
+
+				ev.findUserByID(user.getId(), finduserCallback);
+
+			}
+		};
+
+		refreshProfil.scheduleRepeating(5000);
+
+	}
 			
 	}
-	
 	
 	/*
 	 * 
@@ -313,7 +350,7 @@ public class ProfilForm {
 					user.setUsername(result[0]);
 					user.setEmail(result[1]);
 					
-					//ev.updateUser(user, new UpdateUserCallBack());
+					ev.updateUser(user, new UpdateUserCallBack());
 					
 				} else {
 					
