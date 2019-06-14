@@ -1,1 +1,33 @@
 @charset "UTF-8";
+
+#top{
+	
+}  
+
+#usermenu{
+	border-style: solid;
+	border-size: 5px;
+	padding: 5px;
+	margin": 10px;
+}
+   	
+#navigator{
+		border-style: solid;
+	border-size: 5px;
+	padding: 5px;
+		margin": 10px;
+}
+					
+#content{
+		border-style: solid;
+	border-size: 5px;
+	padding: 5px;
+		margin": 10px;
+}
+		
+#footer{
+		border-style: solid;
+	border-size: 5px;
+	padding: 5px;
+		margin": 10px;
+}

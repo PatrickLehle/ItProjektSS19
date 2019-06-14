@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss19.team03.scart.client.gui.NavigationReport;
+import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
@@ -98,7 +99,7 @@ public class ScartReport implements EntryPoint {
 
 			private void loadReport(final User u) {
 				
-				RootPanel.get("navigatorR").add(new NavigationReport(u));
+				RootPanel.get("navigatorR").add(new ReportFilterForm(u));
 				HTML welcome = new HTML(
 						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp; Welcome to the Report Generator &nbsp; &nbsp; </b></h8> </div>");
 
