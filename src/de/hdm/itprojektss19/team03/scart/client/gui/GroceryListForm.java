@@ -1,7 +1,10 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -17,7 +20,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
-import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -50,18 +52,13 @@ public class GroceryListForm extends VerticalPanel {
 	Article a = new Article();
 	Retailer r = new Retailer();
 
-	CheckBox aCbox = new CheckBox();
-	// Name der GroceryList wird ausgegeben
 	Label titelLabel = new Label();
 
 	ScrollPanel sc = new ScrollPanel();
 
 	public void onLoad() {
 		super.onLoad();
-
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("content").clear();
-		RootPanel.get("footer").clear();
+		vt.addStyleName("main-panel");
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
@@ -70,7 +67,7 @@ public class GroceryListForm extends VerticalPanel {
 		hpTitle.add(titelLabel);
 
 		// CellTable wird in das Scroll Panel hinzugefuegt
-		sc.add(aTable);
+		// sc.add(aTable);
 
 		vt.add(hpTitle);
 
@@ -79,17 +76,13 @@ public class GroceryListForm extends VerticalPanel {
 		aTable.setText(0, 2, "Mengeneinheit");
 		aTable.setText(0, 3, "Laden");
 
-		// while Schleife das alle Artikel mit Name Quantity Unit und RetailerName
+		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		for (int aNum = 0; aNum < a.getId(); aNum++) {
-			aTable.setText(a.getId(), 0, a.getName());
-			aTable.setText(a.getId(), 1, Integer.toString(a.getQuantity()));
-			aTable.setText(a.getId(), 2, a.getUnit());
-			aTable.setText(a.getId(), 3, r.getRetailerName());
-			aTable.add(aCbox);
-			aCbox.addClickHandler(new CheckTheBox());
-			aCbox.setEnabled(true);
-			aCbox.setTitle("aCbox" + a.getId());
+		for (int aNum = 1; aNum <= 10; aNum++) {
+			aTable.setText(aNum, 0, "TEST" + aNum);
+			aTable.setText(aNum, 1, "100" + aNum);
+			aTable.setText(aNum, 2, "UNITS" + aNum);
+			aTable.setText(aNum, 3, "BESTBUY" + aNum);
 		}
 		vt.add(aTable);
 
@@ -118,109 +111,183 @@ public class GroceryListForm extends VerticalPanel {
 		vt.add(hpButtons);
 
 		RootPanel.get("content").add(vt);
-
 	}
 
-	private class CheckTheBox implements ClickHandler {
+	public static TableRowElement findNearestParentRow(Node node) {
+		Node element = findNearestParentNodeByType(node, "tr");
+		if (element != null) {
+			return element.cast();
+		}
+		return null;
+	}
+
+	public static Node findNearestParentNodeByType(Node node, String nodeType) {
+		while ((node != null)) {
+			if (Element.is(node)) {
+				Element elem = (Element) Element.as(node);
+
+				String tagName = elem.getTagName();
+
+				if (nodeType.equalsIgnoreCase(tagName)) {
+					return elem.cast();
+				}
+
+			}
+			node = node.getParentNode();
+		}
+		return null;
+	}
+
+	public CheckBox getCbCheck() {
+		CheckBox cb = new CheckBox();
+		cb.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
+				String first = aTable.getText(rowIndex, 0);
+				String second = aTable.getText(rowIndex, 1);
+				String third = aTable.getText(rowIndex, 2);
+				String fourth = aTable.getText(rowIndex, 3);
+				int rowCount = aTable.getRowCount();
+				aTable.setText(rowCount, 0, first);
+				aTable.setText(rowCount, 1, second);
+				aTable.setText(rowCount, 2, third);
+				aTable.setText(rowCount, 3, fourth);
+				aTable.setText(rowCount, 4, "gekauft");
+				aTable.removeRow(rowIndex);
+			}
+		});
+		cb.setValue(false);
+		return cb;
+	}
+
+	public class CheckClickHandler implements ClickHandler {
 
 		@Override
-		public void onClick(ClickEvent event) {
-			if (aCbox.getValue() == true) {
-				if (checkBtnBoolean == true) {
-					for (int i = 0; i > aTable.getRowCount(); i++) {
-					String first = aTable.getText(a.getId(), 0);
-					String second = aTable.getText(a.getId(), 1);
-					String third = aTable.getText(a.getId(), 2);
-					String fourth = aTable.getText(a.getId(), 3);
-					aTable.removeRow(i);
-					aTable.setText(aTable.getRowCount() + 1, 0, first);
-					aTable.setText(aTable.getRowCount(), 1, second);
-					aTable.setText(aTable.getRowCount(), 2, third);
-					aTable.setText(aTable.getRowCount(), 3, fourth);
+		public void onClick(ClickEvent e) {
+			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false) {
+				checkBtnBoolean = true;
+				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
+					if (aTable.getCellCount(aNum) == 4) {
+						aTable.setWidget(aNum, 4, getCbCheck());
 					}
-				} else if (deleteBtnBoolean == true) {
-					aTable.removeRow(a.getId());
-				} else if (editBtnBoolean == true) {
-					String first = aTable.getText(a.getId(), 0);
-					String second = aTable.getText(a.getId(), 1);
-					String third = aTable.getText(a.getId(), 2);
-					String fourth = aTable.getText(a.getId(), 3);
-					aTable.clearCell(a.getId(), 0);
-					aTable.clearCell(a.getId(), 1);
-					aTable.clearCell(a.getId(), 2);
-					aTable.clearCell(a.getId(), 3);
+				}
+			} else if (checkBtnBoolean == true) {
+				for (int i = 1; i < aTable.getRowCount(); i++) {
+					if (aTable.getText(i, 4).isEmpty() == true) {
+						aTable.removeCell(i, 4);
+					}
+				}
+				checkBtnBoolean = false;
+			} else if (editBtnBoolean == false || deleteBtnBoolean == false) {
+				Window.alert("Bitte den anderen Button deaktivieren.");
+			} else {
+				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+
+			}
+
+		}
+	}
+
+	public int globalRow;
+	public Boolean cbBoolean;
+
+	public CheckBox getCbEdit() {
+
+		CheckBox cb = new CheckBox();
+		cb.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
+				globalRow = rowIndex;
+				String first = aTable.getText(rowIndex, 0);
+				String second = aTable.getText(rowIndex, 1);
+				String third = aTable.getText(rowIndex, 2);
+				String fourth = aTable.getText(rowIndex, 3);
+				if (first.isEmpty() == false && second.isEmpty() == false && third.isEmpty() == false
+						&& fourth.isEmpty() == false) {
 					editTb1.setText(first);
 					editTb2.setText(second);
 					editTb3.setText(third);
 					editTb4.setText(fourth);
-					aTable.setWidget(a.getId(), 0, editTb1);
-					aTable.setWidget(a.getId(), 0, editTb2);
-					aTable.setWidget(a.getId(), 0, editTb3);
-					aTable.setWidget(a.getId(), 0, editTb4);
-				} else {
-					Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+					aTable.setWidget(rowIndex, 0, editTb1);
+					aTable.setWidget(rowIndex, 1, editTb2);
+					aTable.setWidget(rowIndex, 2, editTb3);
+					aTable.setWidget(rowIndex, 3, editTb4);
 				}
-			} else {
-				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
-		}
+		});
 
-	}
-	
-	private class CheckClickHandler implements ClickHandler {
-		
-		@Override
-		public void onClick(ClickEvent e) {
-			if (checkBtnBoolean == false) {
-				checkBtnBoolean = true;
-				editBtnBoolean = false;
-				deleteBtnBoolean = false;
-			}else if (checkBtnBoolean == true) {
-				checkBtnBoolean = false;
-			}else {
-				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
-			}
-		}
+		cb.setValue(false);
+		return cb;
 	}
 
-	private class EditClickHandler implements ClickHandler {
+	public class EditClickHandler implements ClickHandler {
 
 		@Override
-		public void onClick(ClickEvent e) {
-			if (editBtnBoolean == false) {
-				checkBtnBoolean = false;
+		public void onClick(ClickEvent event) {
+			if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean == false) {
 				editBtnBoolean = true;
-				deleteBtnBoolean = false;
+				for (int i = 1; i <= aTable.getRowCount(); i++) {
+					if (aTable.getCellCount(i) == 4) {
+						aTable.setWidget(i, 4, getCbEdit());
+					}
+				}
 			} else if (editBtnBoolean == true) {
+				editBtnBoolean = false;
 				String first = editTb1.getText();
 				String second = editTb2.getText();
 				String third = editTb3.getText();
 				String fourth = editTb4.getText();
-				aTable.clearCell(a.getId(), 0);
-				aTable.clearCell(a.getId(), 1);
-				aTable.clearCell(a.getId(), 2);
-				aTable.clearCell(a.getId(), 3);
-				aTable.setText(a.getId(), 0, first);
-				aTable.setText(a.getId(), 1, second);
-				aTable.setText(a.getId(), 2, third);
-				aTable.setText(a.getId(), 3, fourth);
-				editBtnBoolean = false;
+				aTable.clearCell(globalRow, 0);
+				aTable.clearCell(globalRow, 1);
+				aTable.clearCell(globalRow, 2);
+				aTable.clearCell(globalRow, 3);
+				aTable.setText(globalRow, 0, first);
+				aTable.setText(globalRow, 1, second);
+				aTable.setText(globalRow, 2, third);
+				aTable.setText(globalRow, 3, fourth);
+				for (int i = 1; i <= aTable.getRowCount(); i++) {
+					aTable.removeCell(i, 4);
+				}
+			} else if (checkBtnBoolean == false || deleteBtnBoolean == false) {
+				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
 		}
 	}
 
-	private class DeleteClickHandler implements ClickHandler {
+	public CheckBox getCbDel() {
+		CheckBox cb = new CheckBox();
+		cb.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
+				aTable.removeRow(rowIndex);
+			}
+		});
+		cb.setValue(false);
+		return cb;
+	}
+
+	public class DeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (deleteBtnBoolean == false) {
-				checkBtnBoolean = false;
-				editBtnBoolean = false;
+			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false) {
 				deleteBtnBoolean = true;
+				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
+					if (aTable.getCellCount(aNum) == 4) {
+						aTable.setWidget(aNum, 4, getCbDel());
+					}
+				}
 			} else if (deleteBtnBoolean == true) {
+				for (int i = 1; i < aTable.getRowCount(); i++) {
+					if (aTable.getText(i, 4).isEmpty() == true) {
+						aTable.removeCell(i, 4);
+					}
+				}
 				deleteBtnBoolean = false;
+			} else if (checkBtnBoolean == true || editBtnBoolean == true) {
+				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
@@ -228,7 +295,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	// Oeffnet ArticleForm Panel zum Hinzufuegen eines Artikels
-	private class AddClickHandler implements ClickHandler {
+	public class AddClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
@@ -237,12 +304,4 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	public GroceryListForm(GroceryList groceryList) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public static void setSelectedGroceryListForm(GroceryListForm selectedGroceryList) {
-		// TODO Auto-generated method stub
-
-	}
 }
