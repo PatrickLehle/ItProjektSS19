@@ -20,7 +20,7 @@ public class ShowGroceryList extends VerticalPanel {
 //INITIALISAZTION==============================================================
 
 	//Asynchrone Interface
-	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	GroceryList gl = new GroceryList();
 	
