@@ -16,8 +16,10 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
+import de.hdm.itprojektss19.team03.scart.server.db.GroupUserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
+import de.hdm.itprojektss19.team03.scart.server.db.GroceryListArticleMapper;
 //import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 
@@ -64,20 +66,22 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private ArticleMapper aMapper = null;
 
 	/**
-	 * Die Mapperklasse wird referenziert, die die <code>Unit</code> mit der
-	 * Datenbank vergleicht.
+	 *  Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und <code>User</code>
+	 *  mit der Datenbank vergleicht.
 	 */
-
-	/**
-	 * Die Mapperklasse wird referenziert, die die <code>Entry</code> mit der
-	 * Datenbank vergleicht.
-	 */
+	private GroupUserMapper guMapper = null;
 
 	/**
 	 * Die Mapperklasse wird referenziert, die die <code>GroceryList</code> mit der
 	 * Datenbank vergleicht.
 	 */
 	private GroceryListMapper glMapper = null;
+	
+	/**
+	 *  Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und <code>Article</code>
+	 *  mit der Datenbank vergleicht.
+	 */
+	private GroceryListArticleMapper glaMapper= null;
 
 //INITIALIZATION===========================================================================
 
@@ -88,8 +92,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.glMapper = GroceryListMapper.groceryListMapper();
 		this.aMapper = ArticleMapper.articleMapper();
 		this.rMapper = RetailerMapper.retailerMapper();
-
-
+		this.guMapper = GroupUserMapper.groupUserMapper();
+		this.glaMapper = GroceryListArticleMapper.groceryListArticleMapper();
+		
 	}
 	
 //USER====================================================================================
@@ -257,10 +262,22 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return gMapper.findAll();
 	}
 
-
+	@Override
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+//GROUP-USER============================================================================
+	
+	public Vector<Group> findAllGroupsByUserId(int id)throws IllegalArgumentException{
+		try{
+			return guMapper.findAllGroupsByUserId(id);
+			
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 //GROCERYLIST===========================================================================
@@ -301,9 +318,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return null;
 	}
 
-	// public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList>
-	// result, AsyncCallback<Vector<GroceryList>> asyncCallback);
-
 	public GroceryList getGroceryListById(int groceryListId) throws IllegalArgumentException {
 		try {
 			
@@ -313,6 +327,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException {
+		try {
+			return glMapper.findAllGroceryListByGroupId(id);
+			
+		}catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					return null;
+				}
 	}
 
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
@@ -329,6 +353,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return gMapper.findByGroupId(glMapper.findByKey(groceryListId).getGroupId());
 
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+//GROCERYLIST-ARTICLE===============================================================
+	
+	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException {
+		try {
+			return this.glaMapper.findAllArticleByGroceryListId(id);
+			
+		}catch (IllegalArgumentException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -566,31 +602,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			ex.printStackTrace();
 		}
 	}
-
-	
-	/**
-	@Override
-	public Vector<Article> getArticleByRetailer(Retailer r) throws IllegalArgumentException {
-		try { 
-			return aMapper.findArticleByRetailerId(r.getId());
-			
-		} catch(IllegalArgumentException ex) {
-			ex.printStackTrace();
-			return null;
-		}
-	}
-	*/
-
-
-
-
-
-
-//	@Override
-//	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 }
 
 

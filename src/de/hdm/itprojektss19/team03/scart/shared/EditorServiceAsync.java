@@ -53,6 +53,10 @@ public interface EditorServiceAsync {
 	
 	void statusSharingGroup(Vector<Group> result, AsyncCallback<Vector<Group>> asyncCallback);
 
+//GROUP-USER========================================================================
+	
+	void findAllGroupsByUserId(int id,AsyncCallback<Vector<Group>> asyncCallback);
+	
 //GROCERYLIST===========================================================================
 	
 	void createGroceryList(String name, GroceryList gl, AsyncCallback <GroceryList> asyncCallback);
@@ -68,7 +72,12 @@ public interface EditorServiceAsync {
 	void getGroupByGroceryList(int groceryListId, AsyncCallback<Group> asyncCallback);
 	
 	void statusSharingGroceryList(Vector<GroceryList> result, AsyncCallback<Vector<GroceryList>> asyncCallback);
+	
+	void findAllGroceryListByGroupId(int id, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
+//GROCERYLIST-ARTICLE=================================================================
+	
+	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
 
 //ARTICLE===========================================================================	
 	

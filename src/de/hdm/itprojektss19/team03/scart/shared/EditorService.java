@@ -167,6 +167,16 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Group> statusSharingGroup(Vector<Group> result);
 	
+//GROUP-USER============================================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroupsByUserId(int id);
+	 * @param id
+	 * @return gibt alle Gruppen eines Users zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
+	
 //GROCERYLIST===========================================================================
 	
 	/**
@@ -229,6 +239,19 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
+
+	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException;
+	
+//GROCERYLIST-ARTICLE===============================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByGroceryList(int id);
+	 * @param id
+	 * @return gibt alle Article einer GroceryList aus.
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException;
+	
 	
 //ARTICLE===========================================================================
 	
