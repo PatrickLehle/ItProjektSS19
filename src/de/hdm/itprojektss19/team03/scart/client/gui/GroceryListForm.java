@@ -16,7 +16,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 
 public class GroceryListForm extends VerticalPanel {
 
-	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	// braucht man hier ein VerticalPanel, die Artikel werden sowiso in hp
 	// angezeigt?

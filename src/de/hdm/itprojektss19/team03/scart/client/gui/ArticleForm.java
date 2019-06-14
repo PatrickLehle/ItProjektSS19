@@ -19,7 +19,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class ArticleForm extends VerticalPanel {
 
-	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hp = new HorizontalPanel();
@@ -29,7 +29,7 @@ public class ArticleForm extends VerticalPanel {
 	HorizontalPanel hp4 = new HorizontalPanel();
 	Article articleToDisplay = null;
 	Button cancelBtn = new Button("Abbrechen");
-	Button addBtn = new Button("Hinzufügen");
+	Button addBtn = new Button("Hinzufï¿½gen");
 
 	Label newArticle = new Label("Artikel: ");
 	Label newQuantity = new Label("Menge: ");
