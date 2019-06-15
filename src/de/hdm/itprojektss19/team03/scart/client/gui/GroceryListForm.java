@@ -151,15 +151,11 @@ public class GroceryListForm extends VerticalPanel {
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
-				String first = aTable.getText(rowIndex, 0);
-				String second = aTable.getText(rowIndex, 1);
-				String third = aTable.getText(rowIndex, 2);
-				String fourth = aTable.getText(rowIndex, 3);
 				int rowCount = aTable.getRowCount();
-				aTable.setText(rowCount, 0, first);
-				aTable.setText(rowCount, 1, second);
-				aTable.setText(rowCount, 2, third);
-				aTable.setText(rowCount, 3, fourth);
+				aTable.setText(rowCount, 0, aTable.getText(rowIndex, 0));
+				aTable.setText(rowCount, 1, aTable.getText(rowIndex, 1));
+				aTable.setText(rowCount, 2, aTable.getText(rowIndex, 2));
+				aTable.setText(rowCount, 3, aTable.getText(rowIndex, 3));
 				aTable.setText(rowCount, 4, "gekauft");
 				aTable.removeRow(rowIndex);
 			}
@@ -294,18 +290,14 @@ public class GroceryListForm extends VerticalPanel {
 				}
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
-				String first = editTb1.getText();
-				String second = editTb2.getText();
-				String third = editTb3.getText();
-				String fourth = editTb4.getText();
 				aTable.clearCell(globalRow, 0);
 				aTable.clearCell(globalRow, 1);
 				aTable.clearCell(globalRow, 2);
 				aTable.clearCell(globalRow, 3);
-				aTable.setText(globalRow, 0, first);
-				aTable.setText(globalRow, 1, second);
-				aTable.setText(globalRow, 2, third);
-				aTable.setText(globalRow, 3, fourth);
+				aTable.setText(globalRow, 0, editTb1.getText());
+				aTable.setText(globalRow, 1, editTb2.getText());
+				aTable.setText(globalRow, 2, editTb3.getText());
+				aTable.setText(globalRow, 3, editTb4.getText());
 				for (int i = 1; i <= aTable.getRowCount(); i++) {
 					aTable.removeCell(i, 4);
 				}
