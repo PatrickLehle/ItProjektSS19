@@ -51,6 +51,7 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox editTb4 = new TextBox();
 
 	FlexTable aTable = new FlexTable();
+	FlexTable bTable = new FlexTable();
 	Article a = new Article();
 	Retailer r = new Retailer();
 
@@ -87,6 +88,9 @@ public class GroceryListForm extends VerticalPanel {
 			aTable.setText(aNum, 3, "BESTBUY" + aNum);
 		}
 		vt.add(aTable);
+		bTable.setText(0, 0, "Gekauft");
+		bTable.setVisible(false);
+		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
 		hpButtons.add(addBtn);
@@ -114,11 +118,10 @@ public class GroceryListForm extends VerticalPanel {
 
 		RootPanel.get("content").add(vt);
 	}
-	
+
 	/**
 	 * @param node
-	 * @return
-	 * https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
+	 * @return https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
 	 */
 	public static TableRowElement findNearestParentRow(Node node) {
 		Node element = findNearestParentNodeByType(node, "tr");
@@ -146,18 +149,41 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public CheckBox getCbCheck() {
-		
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
-				int rowCount = aTable.getRowCount();
-				aTable.setText(rowCount, 0, aTable.getText(rowIndex, 0));
-				aTable.setText(rowCount, 1, aTable.getText(rowIndex, 1));
-				aTable.setText(rowCount, 2, aTable.getText(rowIndex, 2));
-				aTable.setText(rowCount, 3, aTable.getText(rowIndex, 3));
-				aTable.setText(rowCount, 4, "gekauft");
+				int rowCount = bTable.getRowCount();
+				bTable.setText(rowCount, 0, aTable.getText(rowIndex, 0));
+				bTable.setText(rowCount, 1, aTable.getText(rowIndex, 1));
+				bTable.setText(rowCount, 2, aTable.getText(rowIndex, 2));
+				bTable.setText(rowCount, 3, aTable.getText(rowIndex, 3));
+				bTable.setWidget(rowCount, 4, getCbReturn());
+				if (bTable.getRowCount() >= 2) {
+					bTable.setVisible(true);
+				}
 				aTable.removeRow(rowIndex);
+			}
+		});
+		cb.setValue(false);
+		return cb;
+	}
+
+	public CheckBox getCbReturn() {
+		CheckBox cb = new CheckBox();
+		cb.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				int rowIndex = bTable.getCellForEvent(event).getRowIndex();
+				int rowCount = aTable.getRowCount();
+				aTable.setText(rowCount, 0, bTable.getText(rowIndex, 0));
+				aTable.setText(rowCount, 1, bTable.getText(rowIndex, 1));
+				aTable.setText(rowCount, 2, bTable.getText(rowIndex, 2));
+				aTable.setText(rowCount, 3, bTable.getText(rowIndex, 3));
+				aTable.setWidget(rowCount, 4, getCbCheck());
+				bTable.removeRow(rowIndex);
+				if (bTable.getRowCount() < 2) {
+					bTable.setVisible(false);
+				}
 			}
 		});
 		cb.setValue(false);
@@ -168,12 +194,11 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false) {
+			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false
+					&& addBtnBoolean == false) {
 				checkBtnBoolean = true;
 				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					if (aTable.getCellCount(aNum) == 4) {
-						aTable.setWidget(aNum, 4, getCbCheck());
-					}
+					aTable.setWidget(aNum, 4, getCbCheck());
 				}
 			} else if (checkBtnBoolean == true) {
 				for (int i = 1; i < aTable.getRowCount(); i++) {
@@ -182,7 +207,7 @@ public class GroceryListForm extends VerticalPanel {
 					}
 				}
 				checkBtnBoolean = false;
-			} else if (editBtnBoolean == false || deleteBtnBoolean == false) {
+			} else if (editBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte den anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
@@ -281,27 +306,33 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent event) {
-			if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean == false) {
+			if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean == false
+					&& addBtnBoolean == false) {
 				editBtnBoolean = true;
-				for (int i = 1; i <= aTable.getRowCount(); i++) {
-					if (aTable.getCellCount(i) == 4) {
-						aTable.setWidget(i, 4, getCbEdit());
-					}
+				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
+					aTable.setWidget(aNum, 4, getCbEdit());
 				}
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
-				aTable.clearCell(globalRow, 0);
-				aTable.clearCell(globalRow, 1);
-				aTable.clearCell(globalRow, 2);
-				aTable.clearCell(globalRow, 3);
-				aTable.setText(globalRow, 0, editTb1.getText());
-				aTable.setText(globalRow, 1, editTb2.getText());
-				aTable.setText(globalRow, 2, editTb3.getText());
-				aTable.setText(globalRow, 3, editTb4.getText());
+				if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
+						&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
+					aTable.clearCell(globalRow, 0);
+					aTable.clearCell(globalRow, 1);
+					aTable.clearCell(globalRow, 2);
+					aTable.clearCell(globalRow, 3);
+					aTable.setText(globalRow, 0, editTb1.getText());
+					aTable.setText(globalRow, 1, editTb2.getText());
+					aTable.setText(globalRow, 2, editTb3.getText());
+					aTable.setText(globalRow, 3, editTb4.getText());
+					editTb1.setText(null);
+					editTb2.setText(null);
+					editTb3.setText(null);
+					editTb4.setText(null);
+				}
 				for (int i = 1; i <= aTable.getRowCount(); i++) {
 					aTable.removeCell(i, 4);
 				}
-			} else if (checkBtnBoolean == false || deleteBtnBoolean == false) {
+			} else if (checkBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
@@ -325,12 +356,11 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false) {
+			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
+					&& addBtnBoolean == false) {
 				deleteBtnBoolean = true;
 				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					if (aTable.getCellCount(aNum) == 4) {
-						aTable.setWidget(aNum, 4, getCbDel());
-					}
+					aTable.setWidget(aNum, 4, getCbDel());
 				}
 			} else if (deleteBtnBoolean == true) {
 				for (int i = 1; i < aTable.getRowCount(); i++) {
@@ -339,7 +369,7 @@ public class GroceryListForm extends VerticalPanel {
 					}
 				}
 				deleteBtnBoolean = false;
-			} else if (checkBtnBoolean == true || editBtnBoolean == true) {
+			} else if (checkBtnBoolean == true || editBtnBoolean == true || addBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
@@ -352,8 +382,48 @@ public class GroceryListForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent e) {
-			RootPanel.get("content").clear();
-			new ArticleForm(user);
+			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
+					&& addBtnBoolean == false) {
+				addBtnBoolean = true;
+				int i = aTable.getRowCount();
+				aTable.setWidget(i, 0, editTb1);
+				aTable.setWidget(i, 1, editTb2);
+				aTable.setWidget(i, 2, editTb3);
+				aTable.setWidget(i, 3, editTb4);
+			} else if (addBtnBoolean == true) {
+				int addRow = aTable.getRowCount() - 1;
+				if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
+						&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
+					aTable.clearCell(addRow, 0);
+					aTable.clearCell(addRow, 1);
+					aTable.clearCell(addRow, 2);
+					aTable.clearCell(addRow, 3);
+					aTable.setText(addRow, 0, editTb1.getText());
+					aTable.setText(addRow, 1, editTb2.getText());
+					aTable.setText(addRow, 2, editTb3.getText());
+					aTable.setText(addRow, 3, editTb4.getText());
+					a.setName(editTb1.getText());
+					//a.setQuantity(editTb2.getText());
+					a.setUnit(editTb3.getText());
+					r.setRetailerName(editTb4.getText());
+					editTb1.setText(null);
+					editTb2.setText(null);
+					editTb3.setText(null);
+					editTb4.setText(null);
+				} else {
+					editTb1.setText(null);
+					editTb2.setText(null);
+					editTb3.setText(null);
+					editTb4.setText(null);
+					aTable.removeRow(aTable.getRowCount() - 1);
+					Window.alert("Es wurde kein Artikel hinzugefügt da die Angaben nicht vollständig waren");
+				}
+				addBtnBoolean = false;
+			} else if (checkBtnBoolean == true || editBtnBoolean == true || deleteBtnBoolean == false) {
+				Window.alert("Bitte anderen Button deaktivieren.");
+			} else {
+				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+			}
 		}
 	}
 
