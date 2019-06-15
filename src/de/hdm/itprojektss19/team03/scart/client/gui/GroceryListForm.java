@@ -4,6 +4,8 @@ import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -112,7 +114,12 @@ public class GroceryListForm extends VerticalPanel {
 
 		RootPanel.get("content").add(vt);
 	}
-
+	
+	/**
+	 * @param node
+	 * @return
+	 * https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
+	 */
 	public static TableRowElement findNearestParentRow(Node node) {
 		Node element = findNearestParentNodeByType(node, "tr");
 		if (element != null) {
@@ -139,6 +146,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public CheckBox getCbCheck() {
+		
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -189,7 +197,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public int globalRow;
-	public Boolean cbBoolean;
+	public int finalGlobalRow;
 
 	public CheckBox getCbEdit() {
 
@@ -198,20 +206,73 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
 				globalRow = rowIndex;
-				String first = aTable.getText(rowIndex, 0);
-				String second = aTable.getText(rowIndex, 1);
-				String third = aTable.getText(rowIndex, 2);
-				String fourth = aTable.getText(rowIndex, 3);
-				if (first.isEmpty() == false && second.isEmpty() == false && third.isEmpty() == false
-						&& fourth.isEmpty() == false) {
-					editTb1.setText(first);
-					editTb2.setText(second);
-					editTb3.setText(third);
-					editTb4.setText(fourth);
-					aTable.setWidget(rowIndex, 0, editTb1);
-					aTable.setWidget(rowIndex, 1, editTb2);
-					aTable.setWidget(rowIndex, 2, editTb3);
-					aTable.setWidget(rowIndex, 3, editTb4);
+			}
+		});
+		cb.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+			public void onValueChange(ValueChangeEvent<Boolean> event) {
+				if (event.getValue() == true) {
+					if (editTb1.getText().isEmpty() == true && editTb2.getText().isEmpty() == true
+							&& editTb3.getText().isEmpty() == true && editTb4.getText().isEmpty() == true) {
+						if (aTable.getText(globalRow, 0).isEmpty() == false
+								&& aTable.getText(globalRow, 1).isEmpty() == false
+								&& aTable.getText(globalRow, 2).isEmpty() == false
+								&& aTable.getText(globalRow, 3).isEmpty() == false) {
+							finalGlobalRow = globalRow;
+							editTb1.setText(aTable.getText(globalRow, 0));
+							editTb2.setText(aTable.getText(globalRow, 1));
+							editTb3.setText(aTable.getText(globalRow, 2));
+							editTb4.setText(aTable.getText(globalRow, 3));
+							aTable.setWidget(globalRow, 0, editTb1);
+							aTable.setWidget(globalRow, 1, editTb2);
+							aTable.setWidget(globalRow, 2, editTb3);
+							aTable.setWidget(globalRow, 3, editTb4);
+						}
+					} else if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
+							&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
+						aTable.clearCell(finalGlobalRow, 0);
+						aTable.clearCell(finalGlobalRow, 1);
+						aTable.clearCell(finalGlobalRow, 2);
+						aTable.clearCell(finalGlobalRow, 3);
+						aTable.setText(finalGlobalRow, 0, editTb1.getText());
+						aTable.setText(finalGlobalRow, 1, editTb2.getText());
+						aTable.setText(finalGlobalRow, 2, editTb3.getText());
+						aTable.setText(finalGlobalRow, 3, editTb4.getText());
+						editTb1.setText(null);
+						editTb2.setText(null);
+						editTb3.setText(null);
+						editTb4.setText(null);
+						aTable.removeCell(finalGlobalRow, 4);
+						if (aTable.getCellCount(finalGlobalRow) == 4) {
+							aTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						}
+						if (aTable.getText(globalRow, 0).isEmpty() == false
+								&& aTable.getText(globalRow, 1).isEmpty() == false
+								&& aTable.getText(globalRow, 2).isEmpty() == false
+								&& aTable.getText(globalRow, 3).isEmpty() == false) {
+							finalGlobalRow = globalRow;
+							editTb1.setText(aTable.getText(globalRow, 0));
+							editTb2.setText(aTable.getText(globalRow, 1));
+							editTb3.setText(aTable.getText(globalRow, 2));
+							editTb4.setText(aTable.getText(globalRow, 3));
+							aTable.setWidget(globalRow, 0, editTb1);
+							aTable.setWidget(globalRow, 1, editTb2);
+							aTable.setWidget(globalRow, 2, editTb3);
+							aTable.setWidget(globalRow, 3, editTb4);
+						}
+					}
+				} else {
+					aTable.clearCell(globalRow, 0);
+					aTable.clearCell(globalRow, 1);
+					aTable.clearCell(globalRow, 2);
+					aTable.clearCell(globalRow, 3);
+					aTable.setText(globalRow, 0, editTb1.getText());
+					aTable.setText(globalRow, 1, editTb2.getText());
+					aTable.setText(globalRow, 2, editTb3.getText());
+					aTable.setText(globalRow, 3, editTb4.getText());
+					editTb1.setText(null);
+					editTb2.setText(null);
+					editTb3.setText(null);
+					editTb4.setText(null);
 				}
 			}
 		});
