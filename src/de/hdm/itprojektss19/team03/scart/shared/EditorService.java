@@ -363,6 +363,14 @@ public interface EditorService extends RemoteService {
 	 */
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException;
 	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#findAllRetailer();
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
+	
 //UNIT===========================================================================
 	
 //	/**

@@ -106,6 +106,8 @@ public interface EditorServiceAsync {
 	void getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
+	
+	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
 
 //UNIT===========================================================================
 	
