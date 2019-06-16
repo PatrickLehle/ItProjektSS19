@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
@@ -119,6 +120,9 @@ public interface EditorServiceAsync {
 	void deleteEntry(Entry e, AsyncCallback<Void> asyncCallback);
 
 //GroceryListArticle===========================================================================
+	void addArticleToGroceryList(GroceryList gl, Article a, AsyncCallback<GroceryListArticle> asyncCallback);
+	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);
+	
 	void findAllArticleByGroceryList(int groceryListId, AsyncCallback<Vector<Article>> asyncCallback);
-
+	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
 }

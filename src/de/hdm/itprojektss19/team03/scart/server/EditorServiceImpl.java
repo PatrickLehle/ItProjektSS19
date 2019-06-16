@@ -10,6 +10,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
@@ -488,7 +489,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	// GroceryListArticleMapper Methoden
+//GroceryListArticle===========================================================================
+	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
+		try {
+			return this.glaMapper.addArticleToGroceryList(gl, a);
+		}catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	public void removeArticleFromGroceryList(GroceryList gl, Article a) {
+		try {
+			this.glaMapper.removeArticleFromGroceryList(gl, a);
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public Vector<Article> findAllArticleByGroceryList(int groceryListId) {
 		try {
 			return this.glaMapper.findAllArticleByGroceryList(groceryListId);
@@ -499,7 +516,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 
 	}
-
+	
+	public void deleteArticleFromAllLists(Article a) {
+		try {
+			this.glaMapper.deleteArticleFromAllLists(a);
+		}catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+	}
+	
 //UNIT===========================================================================
 
 //	public Unit createUnit(Unit u) throws IllegalArgumentException{

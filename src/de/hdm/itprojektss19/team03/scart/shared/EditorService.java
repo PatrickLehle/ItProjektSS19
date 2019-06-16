@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
@@ -413,6 +414,10 @@ public interface EditorService extends RemoteService {
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
 	
 //GroceryListArticle===========================================================================
+	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
+	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
 	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
+	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
+	
 	
 }
