@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.List;
 
+import java.util.Vector;
+
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -90,7 +92,9 @@ public class GroceryListForm extends VerticalPanel {
 		aTable.setText(0, 1, "Menge");
 		aTable.setText(0, 2, "Mengeneinheit");
 		aTable.setText(0, 3, "Laden");
-
+		
+		Vector<Article> articleVec = new Vector<Article>();
+		int vecLength = articleVec.size();
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
 		
@@ -132,6 +136,8 @@ public class GroceryListForm extends VerticalPanel {
 		
 		for (int aNum = 1; aNum <= 10; aNum++) {
 			aTable.setText(aNum, 0, "TEST" + aNum); //Erstellt die erste Spalte und fuellt diese mit Daten wie "TEST1", "TEST2", etc.
+		for (int aNum = 1; aNum <= vecLength; aNum++) {
+			aTable.setText(aNum, 0, "TEST" + aNum);
 			aTable.setText(aNum, 1, "100" + aNum);
 			aTable.setText(aNum, 2, "UNITS" + aNum);
 			aTable.setText(aNum, 3, "BESTBUY" + aNum);
