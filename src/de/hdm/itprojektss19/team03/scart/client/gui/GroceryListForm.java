@@ -272,6 +272,10 @@ public class GroceryListForm extends VerticalPanel {
 
 	public int globalRow;
 	public int finalGlobalRow;
+	public String first;
+	public String second;
+	public String third;
+	public String fourth;
 
 	public CheckBox getCbEdit() {
 
@@ -287,20 +291,19 @@ public class GroceryListForm extends VerticalPanel {
 				if (event.getValue() == true) {
 					if (editTb1.getText().isEmpty() == true && editTb2.getText().isEmpty() == true
 							&& editTb3.getText().isEmpty() == true && editTb4.getText().isEmpty() == true) {
-						if (aTable.getText(globalRow, 0).isEmpty() == false
-								&& aTable.getText(globalRow, 1).isEmpty() == false
-								&& aTable.getText(globalRow, 2).isEmpty() == false
-								&& aTable.getText(globalRow, 3).isEmpty() == false) {
-							finalGlobalRow = globalRow;
-							editTb1.setText(aTable.getText(globalRow, 0));
-							editTb2.setText(aTable.getText(globalRow, 1));
-							editTb3.setText(aTable.getText(globalRow, 2));
-							editTb4.setText(aTable.getText(globalRow, 3));
-							aTable.setWidget(globalRow, 0, editTb1);
-							aTable.setWidget(globalRow, 1, editTb2);
-							aTable.setWidget(globalRow, 2, editTb3);
-							aTable.setWidget(globalRow, 3, editTb4);
-						}
+						finalGlobalRow = globalRow;
+						first = aTable.getText(globalRow, 0);
+						second = aTable.getText(globalRow, 1);
+						third = aTable.getText(globalRow, 2);
+						fourth = aTable.getText(globalRow, 3);
+						editTb1.setText(aTable.getText(globalRow, 0));
+						editTb2.setText(aTable.getText(globalRow, 1));
+						editTb3.setText(aTable.getText(globalRow, 2));
+						editTb4.setText(aTable.getText(globalRow, 3));
+						aTable.setWidget(globalRow, 0, editTb1);
+						aTable.setWidget(globalRow, 1, editTb2);
+						aTable.setWidget(globalRow, 2, editTb3);
+						aTable.setWidget(globalRow, 3, editTb4);
 					} else if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 							&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
 						aTable.clearCell(finalGlobalRow, 0);
@@ -315,10 +318,50 @@ public class GroceryListForm extends VerticalPanel {
 						editTb2.setText(null);
 						editTb3.setText(null);
 						editTb4.setText(null);
+						first = aTable.getText(globalRow, 0);
+						second = aTable.getText(globalRow, 1);
+						third = aTable.getText(globalRow, 2);
+						fourth = aTable.getText(globalRow, 3);
 						aTable.removeCell(finalGlobalRow, 4);
-						if (aTable.getCellCount(finalGlobalRow) == 4) {
-							aTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						if (aTable.getText(globalRow, 0).isEmpty() == false
+								&& aTable.getText(globalRow, 1).isEmpty() == false
+								&& aTable.getText(globalRow, 2).isEmpty() == false
+								&& aTable.getText(globalRow, 3).isEmpty() == false) {
+							finalGlobalRow = globalRow;
+							first = aTable.getText(globalRow, 0);
+							second = aTable.getText(globalRow, 1);
+							third = aTable.getText(globalRow, 2);
+							fourth = aTable.getText(globalRow, 3);
+							editTb1.setText(aTable.getText(globalRow, 0));
+							editTb2.setText(aTable.getText(globalRow, 1));
+							editTb3.setText(aTable.getText(globalRow, 2));
+							editTb4.setText(aTable.getText(globalRow, 3));
+							aTable.setWidget(globalRow, 0, editTb1);
+							aTable.setWidget(globalRow, 1, editTb2);
+							aTable.setWidget(globalRow, 2, editTb3);
+							aTable.setWidget(globalRow, 3, editTb4);
 						}
+					} else {
+						aTable.clearCell(finalGlobalRow, 0);
+						aTable.clearCell(finalGlobalRow, 1);
+						aTable.clearCell(finalGlobalRow, 2);
+						aTable.clearCell(finalGlobalRow, 3);
+						aTable.removeCell(finalGlobalRow, 4);
+						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						aTable.setText(finalGlobalRow, 0, first);
+						aTable.setText(finalGlobalRow, 1, second);
+						aTable.setText(finalGlobalRow, 2, third);
+						aTable.setText(finalGlobalRow, 3, fourth);
+						first = aTable.getText(globalRow, 0);
+						second = aTable.getText(globalRow, 1);
+						third = aTable.getText(globalRow, 2);
+						fourth = aTable.getText(globalRow, 3);
+						editTb1.setText(null);
+						editTb2.setText(null);
+						editTb3.setText(null);
+						editTb4.setText(null);
+						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
 						if (aTable.getText(globalRow, 0).isEmpty() == false
 								&& aTable.getText(globalRow, 1).isEmpty() == false
 								&& aTable.getText(globalRow, 2).isEmpty() == false
@@ -333,20 +376,39 @@ public class GroceryListForm extends VerticalPanel {
 							aTable.setWidget(globalRow, 2, editTb3);
 							aTable.setWidget(globalRow, 3, editTb4);
 						}
+						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				} else {
-					aTable.clearCell(globalRow, 0);
-					aTable.clearCell(globalRow, 1);
-					aTable.clearCell(globalRow, 2);
-					aTable.clearCell(globalRow, 3);
-					aTable.setText(globalRow, 0, editTb1.getText());
-					aTable.setText(globalRow, 1, editTb2.getText());
-					aTable.setText(globalRow, 2, editTb3.getText());
-					aTable.setText(globalRow, 3, editTb4.getText());
-					editTb1.setText(null);
-					editTb2.setText(null);
-					editTb3.setText(null);
-					editTb4.setText(null);
+					if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
+							&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
+						aTable.clearCell(globalRow, 0);
+						aTable.clearCell(globalRow, 1);
+						aTable.clearCell(globalRow, 2);
+						aTable.clearCell(globalRow, 3);
+						aTable.setText(globalRow, 0, editTb1.getText());
+						aTable.setText(globalRow, 1, editTb2.getText());
+						aTable.setText(globalRow, 2, editTb3.getText());
+						aTable.setText(globalRow, 3, editTb4.getText());
+						editTb1.setText(null);
+						editTb2.setText(null);
+						editTb3.setText(null);
+						editTb4.setText(null);
+					} else {
+						aTable.remove(editTb1);
+						aTable.remove(editTb2);
+						aTable.remove(editTb3);
+						aTable.remove(editTb4);
+						aTable.setText(globalRow, 0, first);
+						aTable.setText(globalRow, 1, second);
+						aTable.setText(globalRow, 2, third);
+						aTable.setText(globalRow, 3, fourth);
+						editTb1.setText(null);
+						editTb2.setText(null);
+						editTb3.setText(null);
+						editTb4.setText(null);
+						aTable.setWidget(globalRow, 4, getCbEdit());
+						Window.alert("Änderung wurde nicht gespeichert");
+					}
 				}
 			}
 		});
@@ -381,6 +443,20 @@ public class GroceryListForm extends VerticalPanel {
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
+				} else {
+					aTable.remove(editTb1);
+					aTable.remove(editTb2);
+					aTable.remove(editTb3);
+					aTable.remove(editTb4);
+					aTable.setText(globalRow, 0, first);
+					aTable.setText(globalRow, 1, second);
+					aTable.setText(globalRow, 2, third);
+					aTable.setText(globalRow, 3, fourth);
+					editTb1.setText(null);
+					editTb2.setText(null);
+					editTb3.setText(null);
+					editTb4.setText(null);
+					Window.alert("Änderung wurde nicht gespeichert");
 				}
 				for (int i = 1; i <= aTable.getRowCount(); i++) {
 					aTable.removeCell(i, 4);
@@ -392,6 +468,7 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
+
 
 	public CheckBox getCbDel() {
 		CheckBox cb = new CheckBox();
