@@ -25,6 +25,12 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
+/**
+ * 
+ * @author tom
+ * @author bastiantilk
+ *
+ */
 public class GroceryListForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
@@ -186,7 +192,7 @@ public class GroceryListForm extends VerticalPanel {
 				}
 			}
 		});
-		cb.setValue(false);
+		cb.setValue(true);
 		return cb;
 	}
 
@@ -200,13 +206,17 @@ public class GroceryListForm extends VerticalPanel {
 				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
 					aTable.setWidget(aNum, 4, getCbCheck());
 				}
-			} else if (checkBtnBoolean == true) {
-				for (int i = 1; i < aTable.getRowCount(); i++) {
-					if (aTable.getText(i, 4).isEmpty() == true) {
-						aTable.removeCell(i, 4);
-					}
+				for (int bNum = 1; bNum < bTable.getRowCount(); bNum++) {
+					bTable.setWidget(bNum, 4, getCbReturn());
 				}
+			} else if (checkBtnBoolean == true) {
 				checkBtnBoolean = false;
+				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
+						aTable.removeCell(aNum, 4);
+				}
+				for (int bNum = 1; bNum < aTable.getRowCount(); bNum++) {
+					bTable.removeCell(bNum, 4);
+				}
 			} else if (editBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte den anderen Button deaktivieren.");
 			} else {
