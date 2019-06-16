@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
-
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -26,10 +26,10 @@ public interface ReportGenerator extends RemoteService{
 	
 	void init();
 	
-	  public CompositeReport getReport(Vector<String> cUsers, 
-		  		Timestamp cStartDate, Timestamp cEndDate, 
-		  		Timestamp cStartDatePl1TS, Timestamp cEndDatePl1TS,
-		  		Vector<SimpleReport> choosenReports, User user) throws IllegalArgumentException;
+//	  public CompositeReport getReport(Vector<String> cUsers, 
+//		  		Timestamp cStartDate, Timestamp cEndDate, 
+//		  		Timestamp cStartDatePl1TS, Timestamp cEndDatePl1TS,
+//		  		Vector<SimpleReport> choosenReports, User user) throws IllegalArgumentException;
 	
 	public ArticleReport createStatisticA(User u) throws IllegalArgumentException;
 	
@@ -37,6 +37,7 @@ public interface ReportGenerator extends RemoteService{
 	
 	public ArticleRetailerReport createStatisticAR(int UID, Article a, Retailer r) throws IllegalArgumentException;
 	
-	public ArticleDateRetailerReport createStatisticADR(int UID, Article a, Date start, Date end, Retailer r) throws IllegalArgumentException;
+	public ArticleDateRetailerReport createStatisticADR(Vector<String> choosenUsers, Timestamp choosenStartDate, Timestamp choosenEndDate, 
+			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS,Vector<SimpleReport> choosenReports, User clientUser) throws IllegalArgumentException;
 	
 }
