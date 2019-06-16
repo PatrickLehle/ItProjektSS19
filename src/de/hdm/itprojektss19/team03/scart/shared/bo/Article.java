@@ -20,6 +20,7 @@ public class Article extends BusinessObject {
 	private int retailerId;
 	private Timestamp creationDat;
 	private Timestamp modDat;
+	private Boolean checkBoolean;
 	
 	
 //CONSTRUCTORS==========================================================
@@ -30,6 +31,7 @@ public class Article extends BusinessObject {
 		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
+		setCheckBoolean(false);
 	}
 	
 //Default Constructor
@@ -38,6 +40,14 @@ public class Article extends BusinessObject {
 	}
 	
 //METHODS===============================================================
+	
+	public void setCheckBoolean(Boolean checkBoolean) {
+		this.checkBoolean = checkBoolean;
+	}
+	
+	public Boolean getCheckBoolean() {
+		return this.checkBoolean;
+	}
 	
 	public void setUnit(String unit) {
 		this.unit = unit;
