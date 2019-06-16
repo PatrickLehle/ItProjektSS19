@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss19.team03.scart.client.gui.NavigationReport;
 import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
-import de.hdm.itprojektss19.team03.scart.client.gui.ReportGroupFilterForm;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
