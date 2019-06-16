@@ -7,7 +7,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -17,7 +16,7 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.client.gui.EditGroup;
-import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
+
 
 /**
  * 
@@ -68,8 +67,8 @@ public class GroupForm extends VerticalPanel {
 			}
 
 			public void onSuccess(Vector<Group> groups) {
-				Vector<Group> gV = new Vector<Group>();
 				createGroupPanels(groups);
+				
 			}
 		});
 
@@ -107,7 +106,10 @@ public class GroupForm extends VerticalPanel {
 	}
 	
 	public void createGroupPanels(Vector<Group> groups) {
-		for (int i = 0; i < 10; i++) {
+		
+		Vector<Group> gV = new Vector<Group>();
+		
+		for (int i = 0; i < gV.size(); i++) {
 			Label groupNameLabel = new Label(groups.elementAt(i).getGroupName());
 			groupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
 			groupNamePanel.add(groupNameLabel);
