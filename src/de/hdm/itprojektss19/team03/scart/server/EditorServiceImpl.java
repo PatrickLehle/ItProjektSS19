@@ -18,6 +18,7 @@ import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
+import de.hdm.itprojektss19.team03.scart.server.db.GroceryListArticleMapper;
 //import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 
@@ -78,6 +79,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Datenbank vergleicht.
 	 */
 	private GroceryListMapper glMapper = null;
+	
+	private GroceryListArticleMapper glaMapper= null;
 
 //INITIALIZATION===========================================================================
 
@@ -494,6 +497,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	
+	
+	//GroceryListArticleMapper Methoden
+	public Vector<Article> findAllArticleByGroceryList(int groceryListId) {
+		try {
+			return this.glaMapper.findAllArticleByGroceryList(groceryListId);
+
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	
+	
+	
+	
 //UNIT===========================================================================
 	
 //	public Unit createUnit(Unit u) throws IllegalArgumentException{

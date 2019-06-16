@@ -412,5 +412,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
 	
+//GroceryListArticle===========================================================================
+	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
 	
 }

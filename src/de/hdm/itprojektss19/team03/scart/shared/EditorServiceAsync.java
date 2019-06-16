@@ -118,7 +118,7 @@ public interface EditorServiceAsync {
 	
 	void deleteEntry(Entry e, AsyncCallback<Void> asyncCallback);
 
-	
-	
+//GroceryListArticle===========================================================================
+	void findAllArticleByGroceryList(int groceryListId, AsyncCallback<Vector<Article>> asyncCallback);
 
 }
