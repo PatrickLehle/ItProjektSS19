@@ -74,7 +74,7 @@ public interface EditorServiceAsync {
 	
 	void createArticle(Article a, AsyncCallback<Article> asyncCallback);
 	
-	void saveArticle(Article a, AsyncCallback<Void> asyncCallback);
+	void saveArticle(Article a, AsyncCallback<Article> asyncCallback);
 	
 	void deleteArticle(Article a, AsyncCallback<Void> asyncCallback);
 	

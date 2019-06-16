@@ -107,10 +107,9 @@ public class GroceryListForm extends VerticalPanel {
 		aTable.setText(0, 3, "Laden");
 		bTable.setText(0, 0, "Gekauft");
 
-		int vecLength = articleVec.size();
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		for (int aNum = 1; aNum <= vecLength; aNum++) {
+		for (int aNum = 1; aNum <= articleVec.size(); aNum++) {
 			/**
 			 * for(int falseCount = 1; articleVec().getCheckBoolean() == false;
 			 * falseCount++) { aTable.setText(falseCount, 0, articleVec().getName());
@@ -204,6 +203,14 @@ public class GroceryListForm extends VerticalPanel {
 				if (bTable.getRowCount() >= 2) {
 					bTable.setVisible(true);
 				}
+				ev.saveArticle(a, new AsyncCallback<Article>() {
+					public void onFailure(Throwable caught) {
+					}
+
+					public void onSuccess(Article arg0) {
+						
+					}
+				});
 				aTable.removeRow(rowIndex);
 			}
 		});
@@ -449,10 +456,18 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(addRow, 1, editTb2.getText());
 					aTable.setText(addRow, 2, editTb3.getText());
 					aTable.setText(addRow, 3, editTb4.getText());
-					a.setName(editTb1.getText());
-					// a.setQuantity(editTb2.getText());
-					a.setUnit(editTb3.getText());
-					r.setRetailerName(editTb4.getText());
+					ev.createArticle(a, new AsyncCallback<Article>() {
+						public void onFailure(Throwable caught) {
+						}
+
+						public void onSuccess(Article arg0) {
+							arg0.setId(articleVec.size() + 1);
+							arg0.setName(aTable.getText(addRow, 0));
+							arg0.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
+							arg0.setUnit(aTable.getText(addRow, 2));
+							arg0.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
+						}
+					});
 					editTb1.setText(null);
 					editTb2.setText(null);
 					editTb3.setText(null);
