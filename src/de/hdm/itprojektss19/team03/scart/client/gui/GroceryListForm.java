@@ -68,7 +68,7 @@ public class GroceryListForm extends VerticalPanel {
 	FlexTable bTable = new FlexTable();
 	Article a = new Article();
 	Retailer r = new Retailer();
-	Vector<Article> articleVec = new Vector<Article>();
+	Vector<Article> articleVec = new Vector<Article>(); 
 
 	Label titelLabel = new Label();
 

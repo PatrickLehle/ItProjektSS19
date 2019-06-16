@@ -5,6 +5,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RootPanel;
+
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -16,13 +19,15 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class ArticleForm extends VerticalPanel {
 
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 
-	private GroceryList groceryList = null;
+	private GroceryList groceryList = null; //Muss bei Aufruf der ArticleForm-Seite uebergeben werden
 	VerticalPanel vt = new VerticalPanel();
 	HorizontalPanel hp = new HorizontalPanel();
 	HorizontalPanel hp1 = new HorizontalPanel();
@@ -31,7 +36,7 @@ public class ArticleForm extends VerticalPanel {
 	HorizontalPanel hp4 = new HorizontalPanel();
 	Article articleToDisplay = null;
 	Button cancelBtn = new Button("Abbrechen");
-	Button addBtn = new Button("Hinzufügen");
+	Button addBtn = new Button("Hinzufï¿½gen");
 
 	Label newArticle = new Label("Artikel: ");
 	Label newQuantity = new Label("Menge: ");
@@ -76,6 +81,26 @@ public class ArticleForm extends VerticalPanel {
 
 		// ClientsideSettings.getEditorVerwaltung();
 	}
+	
+	public void fillRetailerLb() {
+		Vector<Retailer> vRetailer = new Vector<Retailer>();
+		
+		ev.findAllRetailer(new AsyncCallback<Vector<Retailer>>() {
+			
+		public void onFailure(Throwable caught) {
+				Window.alert("Liste der Retailer konnte nicht geladen werden");
+		}
+		@Override
+		public void onSuccess(Vector<Retailer> arg0) {
+			// TODO Auto-generated method stub
+			for(int i=0; i< vRetailer.size(); i++) {
+				retailerLb.addItem(vRetailer.elementAt(i).getRetailerName());
+			}
+		}
+});
+		
+		
+	}
 
 	/**
 	 * ClickHandler fuer das Abbrechen beim Hinzufuegen eines neuen Artikels in
@@ -97,13 +122,41 @@ public class ArticleForm extends VerticalPanel {
 		public void onClick(ClickEvent e) {
 			if (articleTb != null && quantityTb != null && unitTb != null && retailerLb != null) {
 				Article a = new Article();
+				GroceryListArticle aGl = new GroceryListArticle(a.getId(), groceryList.getId());
+				
 				AsyncCallback<Article> asyncCallback = null;
+				
 				a.setName(articleTb.getText());
 				a.setQuantity(Integer.parseInt(quantityTb.getText()));
 				a.setUnit(unitTb.getText());
 				a.setRetailerId(retailerLb.getItemCount());
-				ev.createArticle(a, asyncCallback);
+				
+				
+				ev.createArticle(a, new AsyncCallback<Article>() {
+					public void onFailure(Throwable caught) {
+						Window.alert("Artikel konnte nicht erstellt werden");
+					}
+					public void onSuccess(Article arg0) {
+						a = arg0;
+						
+						ev.addArticleToGroceryList(groceryList, a, new AsyncCallback<GroceryListArticle>() {
+							
+							public void onFailure(Throwable caught) {
+								Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
+						}
+						public void onSuccess(GroceryListArticle arg0) {
+							aGl = arg0;
+							Window.alert("Artikel "+a.getName()+" wurde  der Einkaufsliste "+groceryList.getGroceryListName()+" hinzugefÃ¼gt");
+						}
+				});
+					}
+				});
+				
+				
+				
+
 				RootPanel.get("content").clear();
+				
 				new GroceryListForm(groceryList);
 			} else {
 				Window.alert("Bitte alle Angaben eintragen.");

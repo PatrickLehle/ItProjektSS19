@@ -91,6 +91,8 @@ public interface EditorServiceAsync {
 	
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 	
+	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
+	
 	void getAllArticleByRetailer(Retailer r, AsyncCallback <Vector<Article>> asyncCallback);
 	
 	void getAllArticleByDate(Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
