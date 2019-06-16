@@ -212,7 +212,7 @@ public class GroceryListForm extends VerticalPanel {
 			} else if (checkBtnBoolean == true) {
 				checkBtnBoolean = false;
 				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-						aTable.removeCell(aNum, 4);
+					aTable.removeCell(aNum, 4);
 				}
 				for (int bNum = 1; bNum < aTable.getRowCount(); bNum++) {
 					bTable.removeCell(bNum, 4);
@@ -401,9 +401,10 @@ public class GroceryListForm extends VerticalPanel {
 				aTable.setWidget(i, 2, editTb3);
 				aTable.setWidget(i, 3, editTb4);
 			} else if (addBtnBoolean == true) {
-				int addRow = aTable.getRowCount() - 1;
 				if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 						&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
+					addBtnBoolean = false;
+					int addRow = aTable.getRowCount() - 1;
 					aTable.clearCell(addRow, 0);
 					aTable.clearCell(addRow, 1);
 					aTable.clearCell(addRow, 2);
@@ -413,22 +414,24 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(addRow, 2, editTb3.getText());
 					aTable.setText(addRow, 3, editTb4.getText());
 					a.setName(editTb1.getText());
-					//a.setQuantity(editTb2.getText());
+					// a.setQuantity(editTb2.getText());
 					a.setUnit(editTb3.getText());
 					r.setRetailerName(editTb4.getText());
 					editTb1.setText(null);
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
+				} else if (editTb1.getText().isEmpty() == false || editTb2.getText().isEmpty() == false
+						|| editTb3.getText().isEmpty() == false || editTb4.getText().isEmpty() == false) {
+					Window.alert("Es wurde kein Artikel hinzugefügt da die Angaben nicht vollständig waren");
 				} else {
+					addBtnBoolean = false;
+					aTable.removeRow(aTable.getRowCount() - 1);
 					editTb1.setText(null);
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
-					aTable.removeRow(aTable.getRowCount() - 1);
-					Window.alert("Es wurde kein Artikel hinzugefügt da die Angaben nicht vollständig waren");
 				}
-				addBtnBoolean = false;
 			} else if (checkBtnBoolean == true || editBtnBoolean == true || deleteBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
