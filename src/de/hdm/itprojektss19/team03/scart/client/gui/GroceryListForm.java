@@ -1,5 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.List;
+
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -7,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -18,6 +21,9 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.view.client.AsyncDataProvider;
+import com.google.gwt.view.client.HasData;
+import com.google.gwt.view.client.Range;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -87,8 +93,45 @@ public class GroceryListForm extends VerticalPanel {
 
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
+		
+		
+		
+		 AsyncDataProvider<Article> dataProvider = new AsyncDataProvider<Article>() {
+			@Override
+			protected void onRangeChanged(HasData<Article> arg0) {
+				// TODO Auto-generated method stub
+				
+				Vector<Article> allArticles = ev.findAllArticleByGroceryList(int GroceryListId);
+				
+				final Range range = display.getVisibleRange();
+
+		        // This timer is here to illustrate the asynchronous nature of this data
+		        // provider. In practice, you would use an asynchronous RPC call to
+		        // request data in the specified range.
+		        new Timer() {
+		          @Override
+		          public void run() {
+		            int start = range.getStart();
+		            int end = start + range.getLength();
+		            List<Article> dataInRange = DAYS.subList(start, end);
+
+		            // Push the data back into the list.
+		            aTable.setText(row, column, text);
+		            cellList.setRowData(start, dataInRange);
+		          }
+		        }.schedule(2000);
+			}
+		    };
+		
+		
+		
+		
+		
+		
+		
+		
 		for (int aNum = 1; aNum <= 10; aNum++) {
-			aTable.setText(aNum, 0, "TEST" + aNum);
+			aTable.setText(aNum, 0, "TEST" + aNum); //Erstellt die erste Spalte und fuellt diese mit Daten wie "TEST1", "TEST2", etc.
 			aTable.setText(aNum, 1, "100" + aNum);
 			aTable.setText(aNum, 2, "UNITS" + aNum);
 			aTable.setText(aNum, 3, "BESTBUY" + aNum);
@@ -423,7 +466,7 @@ public class GroceryListForm extends VerticalPanel {
 					editTb4.setText(null);
 				} else if (editTb1.getText().isEmpty() == false || editTb2.getText().isEmpty() == false
 						|| editTb3.getText().isEmpty() == false || editTb4.getText().isEmpty() == false) {
-					Window.alert("Es wurde kein Artikel hinzugefügt da die Angaben nicht vollständig waren");
+					Window.alert("Es wurde kein Artikel hinzugefï¿½gt da die Angaben nicht vollstï¿½ndig waren");
 				} else {
 					addBtnBoolean = false;
 					aTable.removeRow(aTable.getRowCount() - 1);
