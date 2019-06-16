@@ -68,6 +68,7 @@ public class GroceryListForm extends VerticalPanel {
 	FlexTable bTable = new FlexTable();
 	Article a = new Article();
 	Retailer r = new Retailer();
+	Vector<Article> articleVec = new Vector<Article>();
 
 	Label titelLabel = new Label();
 
@@ -88,63 +89,49 @@ public class GroceryListForm extends VerticalPanel {
 
 		vt.add(hpTitle);
 
+		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
+		int groceryListId = 0;
+
+		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
+			public void onFailure(Throwable caught) {
+			}
+
+			public void onSuccess(Vector<Article> arg0) {
+				articleVec = arg0;
+			}
+		});
+
 		aTable.setText(0, 0, "Artikel");
 		aTable.setText(0, 1, "Menge");
 		aTable.setText(0, 2, "Mengeneinheit");
 		aTable.setText(0, 3, "Laden");
-		
-		Vector<Article> articleVec = new Vector<Article>();
+		bTable.setText(0, 0, "Gekauft");
+
 		int vecLength = articleVec.size();
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		
-		
-		
-		 AsyncDataProvider<Article> dataProvider = new AsyncDataProvider<Article>() {
-			@Override
-			protected void onRangeChanged(HasData<Article> arg0) {
-				// TODO Auto-generated method stub
-				
-				Vector<Article> allArticles = ev.findAllArticleByGroceryList(int GroceryListId);
-				
-				final Range range = display.getVisibleRange();
-
-		        // This timer is here to illustrate the asynchronous nature of this data
-		        // provider. In practice, you would use an asynchronous RPC call to
-		        // request data in the specified range.
-		        new Timer() {
-		          @Override
-		          public void run() {
-		            int start = range.getStart();
-		            int end = start + range.getLength();
-		            List<Article> dataInRange = DAYS.subList(start, end);
-
-		            // Push the data back into the list.
-		            aTable.setText(row, column, text);
-		            cellList.setRowData(start, dataInRange);
-		          }
-		        }.schedule(2000);
-			}
-		    };
-		
-		
-		
-		
-		
-		
-		
-		
-		for (int aNum = 1; aNum <= 10; aNum++) {
-			aTable.setText(aNum, 0, "TEST" + aNum); //Erstellt die erste Spalte und fuellt diese mit Daten wie "TEST1", "TEST2", etc.
 		for (int aNum = 1; aNum <= vecLength; aNum++) {
-			aTable.setText(aNum, 0, "TEST" + aNum);
-			aTable.setText(aNum, 1, "100" + aNum);
-			aTable.setText(aNum, 2, "UNITS" + aNum);
-			aTable.setText(aNum, 3, "BESTBUY" + aNum);
+			/**
+			 * for(int falseCount = 1; articleVec().getCheckBoolean() == false;
+			 * falseCount++) { aTable.setText(falseCount, 0, articleVec().getName());
+			 * aTable.setText(falseCount, 1, Integer.toString(articleVec().getQuantity());
+			 * aTable.setText(falseCount, 2, articleVec().getUnit());
+			 * aTable.setText(falseCount, 3, articleVec().getRetailerById()); }
+			 */
+			/**
+			 * for(int trueCount = 1; articleVec().getCheckBoolean() == true; trueCount++) {
+			 * int visibleNum = trueCount; bTable.setText(trueCount, 0,
+			 * articleVec().getName()); bTable.setText(trueCount, 1,
+			 * Integer.toString(articleVec().getQuantity()); bTable.setText(trueCount, 2,
+			 * articleVec().getUnit()); bTable.setText(trueCount, 3,
+			 * articleVec().getRetailerById()); }
+			 */
+
 		}
 		vt.add(aTable);
-		bTable.setText(0, 0, "Gekauft");
-		bTable.setVisible(false);
+		/**
+		 * if(visibleNum > 1) { bTable.setVisible(false); }
+		 */
 		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
