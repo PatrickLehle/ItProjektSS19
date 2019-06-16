@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * Die ReportForm beinhaltet alle notwendigen GUI-GWT-Elemente,
@@ -28,6 +29,7 @@ public class ReportForm extends VerticalPanel{
 	EditorServiceAsync editorV = ClientsideSettings.getEditorVerwaltung();
 	
 	Group group = null;
+	User user = null;
 	
 //CONSTRUCTORS========================================================
 	
@@ -80,7 +82,7 @@ public class ReportForm extends VerticalPanel{
 	//ADD=========================================
 		header.add(editor);
 		scroll.add(reportHTML);
-		ReportFilterForm reportFForm = new ReportFilterForm(group, this);
+		ReportFilterForm reportFForm = new ReportFilterForm(user);
 		filter.add(reportFForm);
 		main.add(filter);
 		main.add(scroll);

@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.DateBox;
@@ -27,8 +28,9 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-import de.hdm.itprojektss19.team03.scart.shared.report.CompositeReport;
+import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.HTMLReportWriter;
 import de.hdm.itprojektss19.team03.scart.shared.report.SimpleReport;
 
@@ -49,15 +51,16 @@ public class ReportFilterForm extends VerticalPanel {
 	
 	Group group = new Group();
 	User user = new User();
+	Retailer retailer = new Retailer();
 	ReportForm rForm = new ReportForm();
 	Vector<Group> allGroups = null;
+	Vector<Retailer> allRetailer = null;
 	Vector<User> allUsers = null;
 	
 	Vector<String> allGroupsS = new Vector<String>();
-	Vector<String> choosenGroupS  =new Vector<String>();
-	
-	Vector<String> allUsersS = new Vector<String>();
-	Vector<String> choosenUserS  =new Vector<String>();
+	Vector<String> allRetailerS = new Vector<String>();
+	Vector<String> choosenGroupsS  =new Vector<String>();
+	Vector<String> choosenRetailerS = new Vector<String>();
 	
 	Date cStartDate = null;
 	Date cEndDate = null;
@@ -84,47 +87,40 @@ public class ReportFilterForm extends VerticalPanel {
 	public ReportFilterForm() {
 	}
 	
-	public ReportFilterForm(Group cGroup, ReportForm cReport) {
-		this.group = cGroup;
-		this.rForm = cReport;
+	public ReportFilterForm(final User cUser) {
+		this.user = cUser;
+//		this.rForm = cReport;
 	}
 	
 //PANELS-LABELS-BUTTONS=============================================================	
-
-	//FIRST=======================
+	
+	//GROUPS-FILTER=======================
 	VerticalPanel pickGroup = new VerticalPanel();
-	Label chooseGroup = new Label("Gruppe auswählen");
+	Label chooseGroupLbl = new Label("Gruppe auswählen:");
+	VerticalPanel checkBoxesGroup = new VerticalPanel();
 	
-	VerticalPanel selectSpecificGroupPanel = new VerticalPanel();
-	
-	VerticalPanel radioButtonsContainer = new VerticalPanel();
-	RadioButton selectOneGroupBtn = new RadioButton("Für mich");
-	RadioButton selectSpecGroupBtn = new RadioButton("Für spezifische Gruppe");
-	RadioButton selectAllGroupsBtn = new RadioButton("Für all deine Gruppen");
-	
-	VerticalPanel selectSpecGroupPanel = new VerticalPanel();
-	VerticalPanel sSGSP = new VerticalPanel();
-	
+	//TIME-FRAME-PICKER===================
 	VerticalPanel pickPeriod = new VerticalPanel();
-	Label cPeriodLbl = new Label("Zeitraum auswählen");
+	Button disabledPeriodBtn = new Button("Deaktivieren");
+	Label cPeriodLbl = new Label("Zeitraum auswählen:");
 	HorizontalPanel startEndPnl = new HorizontalPanel();
 	
 	DateBox start = new DateBox();
-	Label dash = new Label("-");
+	Label dash = new Label(" _ ");
 	DateBox end = new DateBox();
-	
-	//THIRD===========================
+
 	HorizontalPanel periodTimePickerH = new HorizontalPanel();
-	Button last3DaysBtn = new Button("Letzten 3 Tage");
 	Button lastWeekBtn = new Button("Letzte Woche");
 	Button lastMonthBtn = new Button("Letzter Monat");
 	
-	VerticalPanel checkBoxes = new VerticalPanel();
+	//RETAILER-PICKER===========================
+	VerticalPanel pickRetailer = new VerticalPanel();
+	Button disabledRetailerBtn = new Button("Deaktivieren");
+	Label retailerLbl = new Label("Retailer auswählen:");
+	VerticalPanel checkBoxesRetailer = new VerticalPanel();
 	
-	VerticalPanel pickReportType = new VerticalPanel();
-	RadioButton pickReportLbl = new RadioButton("Show All");
-	RadioButton specReportBtn = new RadioButton("parametisierbare Auswahl");
-	
+	//REPORT-BUTTON=============================
+	VerticalPanel reportBtnVP = new VerticalPanel();
 	Button getReportBtn = new Button("Report generieren");
 	
 //METHODS===========================================================================
@@ -138,47 +134,68 @@ public class ReportFilterForm extends VerticalPanel {
 		lastImpossibleDate.setSeconds(59);
 		
 	//STYLE-NAMES========================
+		reportBtnVP.addStyleName("reportBtnVP");
+		lastWeekBtn.addStyleName("LastWeekBtn");
+		lastMonthBtn.addStyleName("LastMonthBtn");
 		pickGroup.addStyleName("PickGroupVPanel");
-		chooseGroup.addStyleName("ChooseGroupLabel");
-		selectSpecificGroupPanel.addStyleName("SpecificGroupVPanel");
+		chooseGroupLbl.addStyleName("ChooseGroupLabel");
+		disabledPeriodBtn.addStyleName("DisabledPeriodBtn");
+		periodTimePickerH.addStyleName("PeriodTimePickerH");
 		pickPeriod.addStyleName("PickPeriodVPanel");
 		cPeriodLbl.addStyleName("periodLabel");
 		start.addStyleName("StartPanel");
 		end.addStyleName("EndPanel");
-		checkBoxes.addStyleName("CheckBoxesVPanel");
+		checkBoxesGroup.addStyleName("CheckBoxesGroupVPanel");
+		checkBoxesRetailer.addStyleName("CheckBoxesRetailerVP");
+		disabledRetailerBtn.addStyleName("DisabledRetailerBtn");
+		pickRetailer.addStyleName("RetailerVP");
+		retailerLbl.addStyleName("RetailerLabel");
 		getReportBtn.addStyleName("GetReportBtn");
+
 		
 	//GRUPPE==========================
-		radioButtonsContainer.add(selectOneGroupBtn);
-		radioButtonsContainer.add(selectSpecGroupBtn);
-		radioButtonsContainer.add(sSGSP);
-		radioButtonsContainer.add(selectAllGroupsBtn);
-		pickGroup.add(chooseGroup);
-		pickGroup.add(radioButtonsContainer);
+		pickGroup.add(chooseGroupLbl);
+		pickGroup.add(checkBoxesGroup);
+		
 	//ZEITRAUM========================
+		pickPeriod.add(disabledPeriodBtn);
 		pickPeriod.add(cPeriodLbl);
 		pickPeriod.add(startEndPnl);
 		
 		startEndPnl.add(start);
 		startEndPnl.add(dash);
 		startEndPnl.add(end);
-		
-		periodTimePickerH.add(last3DaysBtn);
+	
 		periodTimePickerH.add(lastWeekBtn);
 		periodTimePickerH.add(lastMonthBtn);
 		
 		pickPeriod.add(periodTimePickerH);
 		
-		this.add(pickGroup);
-		this.add(pickPeriod);
-		this.add(getReportBtn);
+	//RETAILER=========================
+		pickRetailer.add(disabledRetailerBtn);
+		pickRetailer.add(retailerLbl);
+		pickRetailer.add(checkBoxesRetailer);
 	
+		reportBtnVP.add(getReportBtn);
+		
+		
+		//ROOTPANELS===================
+		RootPanel.get("navigator").add(pickGroup);
+		RootPanel.get("navigator").add(pickPeriod);
+		RootPanel.get("navigator").add(pickRetailer);
+		
+		//ROOT-BUTTONS=================
+		RootPanel.get("navigator").add(reportBtnVP);
+//		RootPanel.get("navigator").add(getReportBtn);
+//END=========================================================================================================
 		editorVerwaltung.findAllGroups(new AllGroupsCallback());
+		editorVerwaltung.findAllRetailer(new AllRetailersCallback());
 		
 		//TIMEFRAME-CHECK-FOR-CHANGE===================
 		Timer refresh = new Timer() {
 			public void run() {
 				editorVerwaltung.findAllGroups(new AllGroupsCallback());
+				editorVerwaltung.findAllRetailer(new AllRetailersCallback());
 			}
 		};
 		refresh.scheduleRepeating(1000);
@@ -209,14 +226,6 @@ public class ReportFilterForm extends VerticalPanel {
 
 		lastWeekBtn.addClickHandler(new TimePickHandler(lastWeekBtn));
 		lastMonthBtn.addClickHandler(new TimePickHandler(lastMonthBtn));
-		last3DaysBtn.addClickHandler(new TimePickHandler(last3DaysBtn));
-
-
-		//SET-REPORT===============================
-		//TO-DO: Implement 2 clickhandler for checking checkboxes/ SelectAllReportGroupsHandler/SelectSpecReportGroupHandler
-//		allReportBtn.addClickHandler(new SelectAllReportGroupsHandler(allReportBtn));
-//		specificReportButton.addClickHandler(new SelectSpecReportGroupHandler(specificReportButton));
-
 
 		//GET-REPORT======================
 		getReportBtn.addClickHandler(new getReportClickHandler());
@@ -230,47 +239,64 @@ public class ReportFilterForm extends VerticalPanel {
 				allGroups = result;
 
 				if (allGroupsS.size() != result.size()) {
-					selectSpecificGroupPanel.clear();
+					//selectSpecificGroupPanel.clear();
 					allGroupsS.clear();
 
 					for (int g = 0; g < result.size(); g++) {
 						allGroupsS.add(result.elementAt(g).getGroupName());
 						CheckBox temp = new CheckBox(allGroupsS.elementAt(g));
 						temp.addClickHandler(new GroupCheckBoxClickHandler(temp));
-						selectSpecificGroupPanel.add(temp);
+						checkBoxesGroup.add(temp);
 					}
 				}
 			}
 		}
 		
-		class SelectUserGroupHandler implements ClickHandler {
-			RadioButton radioButton = null;
-
-			public SelectUserGroupHandler(RadioButton rb) {
-				this.radioButton = rb;
+		class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
+			
+			public void onFailure(Throwable caught) {
 			}
+			
+			public void onSuccess(Vector<Retailer> result) {
+				allRetailer = result;
 
-			public void onClick(ClickEvent event) {
-				if (this.radioButton == selectOneGroupBtn) {
-					sSGSP.remove(selectSpecificGroupPanel);
+				if (allRetailerS.size() != result.size()) {
+					allRetailerS.clear();
 
-					choosenGroupS.clear();
-					choosenGroupS.add(group.getGroupName());
-				}
-				if (this.radioButton == selectSpecGroupBtn) {
-
-					choosenGroupS.clear();
-					sSGSP.add(selectSpecificGroupPanel);
-				}else if (this.radioButton == selectAllGroupsBtn) {
-					sSGSP.remove(selectSpecificGroupPanel);
-
-					choosenGroupS.clear();
-					for (int i = 0; i < allUsers.size(); i++) {
-						choosenGroupS.add(allGroups.elementAt(i).getGroupName());
+					for (int g = 0; g < result.size(); g++) {
+						allRetailerS.add(result.elementAt(g).getRetailerName());
+						CheckBox temp = new CheckBox(allRetailerS.elementAt(g));
+						temp.addClickHandler(new RetailerCheckBoxClickHandler(temp));
+						checkBoxesRetailer.add(temp);
 					}
 				}
 			}
 		}
+		
+		//Muss noch sauber implementiert werden
+//		class SelectUserGroupHandler implements ClickHandler {
+//			RadioButton radioButton = null;
+//
+//			public SelectUserGroupHandler(RadioButton rb) {
+//				this.radioButton = rb;
+//			}
+//
+//			public void onClick(ClickEvent event) {
+//			
+//				if (this.radioButton == selectSpecGroupBtn) {
+//					choosenGroupsS.clear();
+//					sSGSP.add(selectSpecificGroupPanel);
+//				
+//				}else if (this.radioButton == selectAllGroupsBtn) {
+//					sSGSP.remove(selectSpecificGroupPanel);
+//					choosenGroupsS.clear();
+//					
+//					for (int i = 0; i < allUsers.size(); i++) {
+//						choosenGroupsS.add(allGroups.elementAt(i).getGroupName());
+//					}
+//				}
+//			}
+//		}
 		
 		public class TimePickHandler implements ClickHandler {
 			Button timePickBtn;
@@ -314,20 +340,6 @@ public class ReportFilterForm extends VerticalPanel {
 					start.setValue(monthAgo);
 					end.setValue(today);
 				}
-				if (this.timePickBtn == last3DaysBtn) {
-					Date yearAgo = new Date();
-					yearAgo.setHours(1);
-					yearAgo.setMinutes(0);
-					yearAgo.setSeconds(0);
-					CalendarUtil.addDaysToDate(yearAgo, -3);
-
-					if (yearAgo.before(lastImpossibleDate)) {
-						yearAgo = new Date(119, 0, 1);
-						Window.alert("Das Startdatum ist der 1. Januar 2019. Ihre Auswahl wurde angepasst.");
-					}
-					start.setValue(yearAgo);
-					end.setValue(today);
-				}
 			}
 		}
 		
@@ -335,19 +347,20 @@ public class ReportFilterForm extends VerticalPanel {
 				@SuppressWarnings("deprecation")
 				public void onClick(ClickEvent event) {
 
+					User u = new User();
 					cStartDate = start.getValue();
 					cStartDate.setHours(1);
 
 					cEndDate = end.getValue();
 					cEndDate.setHours(1);
 
-					if (choosenGroupS == null || cStartDate == null || cEndDate == null
+					if (choosenGroupsS == null || cStartDate == null || cEndDate == null
 							|| choosenReports == null) {
 						Window.alert("Bitte alle Felder ausfüllen.");
 						return;
 					}
 
-					if (choosenGroupS.size() == 0 || cStartDate == null || cEndDate == null
+					if (choosenGroupsS.size() == 0 || cStartDate == null || cEndDate == null
 							|| choosenReports.size() == 0) {
 						Window.alert("Bitte alle Felder ausfüllen.");
 						return;
@@ -358,7 +371,7 @@ public class ReportFilterForm extends VerticalPanel {
 						return;
 					}
 
-					else if (choosenGroupS.size() != 0 && cStartDate != null && cEndDate != null
+					else if (choosenGroupsS.size() != 0 && cStartDate != null && cEndDate != null
 							&& choosenReports.size() != 0) {
 
 						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
@@ -372,7 +385,7 @@ public class ReportFilterForm extends VerticalPanel {
 						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
 						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
 
-						reportVerwaltung.getReport(choosenGroupS, cStartDateTS, cEndDateTS,
+						reportVerwaltung.createStatisticADR(choosenGroupsS, cStartDateTS, cEndDateTS,
 								choosenStartDatePl1TS, choosenEndDatePl1TS, choosenReports, user,
 								new DisplayReportCallback());
 					}
@@ -387,19 +400,41 @@ public class ReportFilterForm extends VerticalPanel {
 			}
 
 			public void onClick(ClickEvent event) {
-				if (choosenGroupS.contains(checkBox.getText())) {
+				if (choosenGroupsS.contains(checkBox.getText())) {
 
-					for (int i = 0; i < choosenGroupS.size(); i++) {
-						if (choosenGroupS.elementAt(i) == checkBox.getText()) {
-							choosenGroupS.removeElementAt(i);
+					for (int i = 0; i < choosenGroupsS.size(); i++) {
+						if (choosenGroupsS.elementAt(i) == checkBox.getText()) {
+							choosenGroupsS.removeElementAt(i);
 						}
 					}
 				}
-				else if (choosenGroupS.contains(checkBox.getText()) == false) {
-					choosenGroupS.add(checkBox.getText());
+				else if (choosenGroupsS.contains(checkBox.getText()) == false) {
+					choosenGroupsS.add(checkBox.getText());
 				}
 			}
 		}	
+		
+		class RetailerCheckBoxClickHandler implements ClickHandler {
+			CheckBox checkBox = null;
+
+			public RetailerCheckBoxClickHandler(CheckBox cB) {
+				this.checkBox = cB;
+			}
+
+			public void onClick(ClickEvent event) {
+				if (choosenRetailerS.contains(checkBox.getText())) {
+
+					for (int i = 0; i < choosenRetailerS.size(); i++) {
+						if (choosenRetailerS.elementAt(i) == checkBox.getText()) {
+							choosenRetailerS.removeElementAt(i);
+						}
+					}
+				}
+				else if (choosenRetailerS.contains(checkBox.getText()) == false) {
+					choosenRetailerS.add(checkBox.getText());
+				}
+			}
+		}
 		
 		class StartDateChangeHandler implements ValueChangeHandler<Date> {
 			public StartDateChangeHandler() {
@@ -473,12 +508,12 @@ public class ReportFilterForm extends VerticalPanel {
 				}
 			}	
 		}
-		class DisplayReportCallback implements AsyncCallback<CompositeReport> {
+		class DisplayReportCallback implements AsyncCallback<ArticleDateRetailerReport> {
 
 			public void onFailure(Throwable caught) {
 				}
 
-			public void onSuccess(CompositeReport result) {
+			public void onSuccess(ArticleDateRetailerReport result) {
 
 				HTMLReportWriter htmlWriter = new HTMLReportWriter();
 				htmlWriter.process(result);
