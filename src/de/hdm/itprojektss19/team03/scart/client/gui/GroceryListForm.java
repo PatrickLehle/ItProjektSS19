@@ -30,6 +30,8 @@ import com.google.gwt.view.client.Range;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -59,10 +61,10 @@ public class GroceryListForm extends VerticalPanel {
 	Boolean deleteBtnBoolean = false;
 	Boolean checkBtnBoolean = false;
 
-	TextBox editTb1 = new TextBox();
-	TextBox editTb2 = new TextBox();
-	TextBox editTb3 = new TextBox();
-	TextBox editTb4 = new TextBox();
+	TextBox editTb1 = new TextBox(); //Artikel
+	TextBox editTb2 = new TextBox(); //Menge
+	TextBox editTb3 = new TextBox(); //Mengeneinheit
+	TextBox editTb4 = new TextBox(); //RetailerId
 
 	FlexTable aTable = new FlexTable();
 	FlexTable bTable = new FlexTable();
@@ -73,6 +75,11 @@ public class GroceryListForm extends VerticalPanel {
 	Label titelLabel = new Label();
 
 	ScrollPanel sc = new ScrollPanel();
+	
+	GroceryList groceryList = new GroceryList();  //Muss bei dem Aufruf der GUI-Seite uebergeben werden
+	
+	GroceryListArticle aGl = new GroceryListArticle();
+	//GroceryListArticle aGl = new GroceryListArticle(a.getId(), groceryList.getId());
 
 	public void onLoad() {
 		super.onLoad();
@@ -398,7 +405,7 @@ public class GroceryListForm extends VerticalPanel {
 							aTable.setWidget(globalRow, 2, editTb3);
 							aTable.setWidget(globalRow, 3, editTb4);
 						}
-						Window.alert("Änderung wurde nicht gespeichert");
+						Window.alert("ï¿½nderung wurde nicht gespeichert");
 					}
 				} else {
 					if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
@@ -442,7 +449,7 @@ public class GroceryListForm extends VerticalPanel {
 						editTb3.setText(null);
 						editTb4.setText(null);
 						aTable.setWidget(globalRow, 4, getCbEdit());
-						Window.alert("Änderung wurde nicht gespeichert");
+						Window.alert("ï¿½nderung wurde nicht gespeichert");
 					}
 				}
 			}
@@ -504,7 +511,7 @@ public class GroceryListForm extends VerticalPanel {
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
-					Window.alert("Änderung wurde nicht gespeichert");
+					Window.alert("ï¿½nderung wurde nicht gespeichert");
 				}
 				for (int i = 1; i <= aTable.getRowCount(); i++) {
 					aTable.removeCell(i, 4);
@@ -566,10 +573,14 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	// Oeffnet ArticleForm Panel zum Hinzufuegen eines Artikels
+	//Fuegt einen Artikel hinzu
 	public class AddClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
+			
+			
+			
 			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
 					&& addBtnBoolean == false) {
 				addBtnBoolean = true;
@@ -592,16 +603,41 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(addRow, 2, editTb3.getText());
 					aTable.setText(addRow, 3, editTb4.getText());
 					
+					a.setName(aTable.getText(addRow, 0));
+					a.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
+					a.setUnit(aTable.getText(addRow, 2));
+					a.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
+					
+					//Artikel-Object muss chon erstellt sein, bevor es an die DB zur speicherung weitergegeben wird
+				
 					ev.createArticle(a, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
+							Window.alert("Artikel konnte nicht erstellt werden");
 						}
 
 						public void onSuccess(Article arg0) {
+							a = arg0;
+							
+							ev.addArticleToGroceryList(groceryList, a, new AsyncCallback<GroceryListArticle>() { //groceryList muss bei dem Aufruf der Seite uebergeben werden
+								
+								public void onFailure(Throwable caught) {
+									Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
+									//FEHLT NOCH: Article in ev.createArticle() erstellt muss bei fehlgeschlagener addArticleToGroceryList() wieder aus der DB entfernt werden
+							}
+							public void onSuccess(GroceryListArticle arg0) {
+								aGl = arg0;
+								Window.alert("Artikel "+a.getName()+" wurde  der Einkaufsliste "+groceryList.getGroceryListName()+" hinzugefÃ¼gt");
+								//FEHLT NOCH: Tabelle muss neu geladen werden
+							}
+					});
+							
+							/*
 							arg0.setId(articleVec.size() + 1);
-							arg0.setName(aTable.getText(addRow, 0));
+							arg0.setName(Ã§);
 							arg0.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
 							arg0.setUnit(aTable.getText(addRow, 2));
 							arg0.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
+							*/
 						}
 					});
 					
