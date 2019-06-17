@@ -1,9 +1,12 @@
 @charset "UTF-8";
 
+/* REPORT CSS FILE */
+
 #top{
 	border-radius: 10px;
 	margin: 10px;
-}  	
+} 
+ 	
 #navigator{
 	align: center;
 	width: auto;
@@ -13,8 +16,10 @@
 	position: sticky;
 	box-shadow: 0px 5px 9px 3px #999999;
 	float: left;
+	margin: 10px;
 
-}				
+}
+				
 #content{
 	float: right;
 	background: #c8c7c9;
@@ -27,12 +32,14 @@
 	padding: 10px;
 	margin: 10px;
 }
+
 .PickGroupVPanel{
 	width: 95%;
 	background: #d5d8da;
 	margin: 10px;
 	border-radius: 10px;
 }
+
 .ChooseGroupLabel{
 	border: none;
 	font-family: sans-serif;
@@ -44,6 +51,7 @@
 	padding: 15px;
 	background: #88d1f4;
 }
+
 .PickPeriodVPanel{
 	width: 90%;
 	background: #dfe2e4;
@@ -60,12 +68,14 @@
 	padding: 15px;
 	background: #88d1f4;
 }
+
 .StartPanel{
 	margin: 10px;
 	border-size: 5px;
 	padding: 10px;
 	border-radius: 3px;
 }
+
 .EndPanel{
 	margin: 10px;
 	border-size: 5px;
@@ -80,6 +90,7 @@
 	margin: 10px;
 	border-radius: 10px;
 }
+
 .RetailerLabel{
 		border: none;
 	font-family: sans-serif;
@@ -96,6 +107,7 @@
 	margin: 10px;
 	border-radius: 10px;
 }
+
 .CheckBoxesRetailerVP{
 	background: #d5d8da;
 	border-size: 5px;
@@ -114,6 +126,7 @@
 	border-bottom-left-radius: 10px;
 	width: 100%;
 }
+
 .reportBtnVP{
 	border: none;
 	padding: 5px;
@@ -127,6 +140,7 @@
 	border-bottom-left-radius: 10px;
 	width: 100%;
 }
+
 button.gwt-Button {
 	border: none;
 	padding: 7px;
@@ -139,9 +153,63 @@ button.gwt-Button {
 	border-top-left-radius: 10px;
 	width: 100%;
 }   
+
 .gwt-Label{
 	font-size: 15px;
 }
-.LstWeekBtn{
 
+.DisabledPeriodBtn{
+	border: none;
+	padding: 7px;
+	background: #404040; !important
+	color: #ffffff ;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+	width: auto;
 }
+
+.DisabledPeriodVPonClick{
+	opacity: 0.2;
+	width: 90%;
+	background: #dfe2e4;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.DisabledRetailerVPonClick{
+	opacity: 0.2;
+	width: 95%;
+	background: #d5d8da;
+	border-size: 5px;
+	margin: 10px;
+	border-radius: 10px;
+}
+.DisabledRetailerBtn{
+	border: none;
+	padding: 7px;
+	background: #404040; !important
+	color: #ffffff;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+	width: auto;
+}
+
+.gwt-ToggleButton {
+	border: none;
+	padding: 7px !important;
+	background: #404040 !important;
+	color: #ffffff !important; 
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 10px !important;
+	border-top-left-radius: 10px !important;
+	width: auto;
+}
+

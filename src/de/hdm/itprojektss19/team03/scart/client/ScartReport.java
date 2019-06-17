@@ -101,11 +101,11 @@ public class ScartReport implements EntryPoint {
 				
 				RootPanel.get("navigator").add(new ReportFilterForm());
 				HTML welcome = new HTML(
-						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp; Welcome to the Report Generator &nbsp; &nbsp; </b></h8> </div>");
+						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp;Report Generator &nbsp; &nbsp; </b></h8> </div>");
 
 				RootPanel.get("top").add(welcome);
 				RootPanel.get("top").add(new HTML(
-						"<div align=\"center\"> <image src='/images/reportStart.png' width='100px' height='100px' align='center' /></div>"));
+						"<div align=\"center\"> <image src='/images/reportStart.png' width='50px' height='50px' align='center' /></div>"));
 
 				/**
 				 * Hinzufuegen der ScartReport.html und Scart.html in den Footer.
