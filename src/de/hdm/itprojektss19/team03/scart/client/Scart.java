@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -45,6 +46,7 @@ public class Scart implements EntryPoint {
 	
 //	private GroceryListForm glf = new GroceryListForm();
 	private GroupForm gf = new GroupForm();
+	private ProfilForm pf = new ProfilForm();
 	
 	public void onModuleLoad() {
 		button1.addClickHandler(new ClickHandler() {
@@ -61,7 +63,7 @@ public class Scart implements EntryPoint {
 			
 			public void onClick(ClickEvent evt) {
 				RootPanel.get("content").clear();
-//				RootPanel.get("content").add();
+				RootPanel.get("content").add(pf);
 				
 			}
 		});
