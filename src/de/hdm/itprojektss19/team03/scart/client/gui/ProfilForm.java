@@ -51,7 +51,7 @@ public class ProfilForm extends VerticalPanel {
 
 	private Label info;
 
-	private EditorServiceAsync editorServiceA = ClientsideSettings.getEditor();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	private FindUserCallBack finduserCallback;
 	private VerifyFieldCallBack verifyFieldCallback;
@@ -77,7 +77,7 @@ public class ProfilForm extends VerticalPanel {
 		this.user = u;
 		this.parentForm = parent;
 
-		// finduserCallback = new FindUserCallBack();
+		//finduserCallback = new FindUserCallBack();
 
 	}
 
@@ -88,14 +88,14 @@ public class ProfilForm extends VerticalPanel {
 	 */
 
 	public void onLoad() {
+		//onLoad();
 		buildProfil();
-		// onLoad();
-		// buildProfil();
 		info = new Label("Bitte füllen Sie jedes Feld aus!");
 
 		info.addStyleName("infoProfilLabel");
 
-		editorServiceA.getUserById(user.getId(), finduserCallback);
+		ev.getUserById(user.getId(), finduserCallback);
+		
 		/*
 		 * Timer refreshProfil = new Timer() {
 		 * 
@@ -122,13 +122,13 @@ public class ProfilForm extends VerticalPanel {
 		Label emailAdress = new Label("E-Mail");
 		emailAdressPanel.add(emailAdress);
 
-		// editButton = new Button("Profil bearbeiten", new
-		// EditButtonClickHandler(profilForm));
+		editButton = new Button("Profil bearbeiten", new
+		EditButtonClickHandler(this, parentForm));
 
 		VerticalPanel contentPanel = new VerticalPanel();
 		contentPanel.add(userName);
 		contentPanel.add(emailAdress);
-		// contentPanel.add(editButton);
+		contentPanel.add(editButton);
 
 	}
 }
@@ -154,30 +154,30 @@ class EditButtonClickHandler implements ClickHandler {
 
 	public void onClick(ClickEvent event) {
 
-		// userNamePanel.remove(userName);
-		TextBox userName = new TextBox();
-		// userName.setText(user.getUsername());
-		// userNamePanel.add(userName);
+		//userNamePanel.remove(userName);
+		//TextBox userName = new TextBox();
+		//userName.setText(user.getUsername());
+		//userNamePanel.add(userName);
 
-		// emailAdressPanel.remove(emailAdress);
-		TextBox emailAdress = new TextBox();
-		// emailAdress.setText(user.getEmail());
-		// emailAdressPanel.add(emailAdress);
+		//emailAdressPanel.remove(emailAdress);
+		//TextBox emailAdress = new TextBox();
+		//emailAdress.setText(user.getEmail());
+		//emailAdressPanel.add(emailAdress);
 
-		// profilForm.remove(editButton);
+		//profilForm.remove(editButton);
 
-		// Button deleteButton = new Button("Profil löschen", new
-		// DeleteButtonClickHandler(user, parentForm));
-		// deleteButton.addStyleName("DeleteProfilButton");
-		// profilForm.add(deleteButton);
+		//Button deleteButton = new Button("Profil löschen", new
+		//DeleteButtonClickHandler(user, parentForm));
+		//deleteButton.addStyleName("DeleteProfilButton");
+		//profilForm.add(deleteButton);
 
-		// Button saveButton = new Button("Änderungen speichern", new
-		// SaveButtonClickHandler(userName, emailAdress, profilForm));
-		// profilForm.add(saveButton);
+		//Button saveButton = new Button("Änderungen speichern", new
+		//SaveButtonClickHandler(userName, emailAdress, profilForm));
+		//profilForm.add(saveButton);
 
-		userName.setFocus(true);
-		userName.addKeyPressHandler(new SaveButtonClickHandler(userName, emailAdress, profilForm));
-		emailAdress.addKeyPressHandler(new SaveButtonClickHandler(userName, emailAdress, profilForm));
+		//userName.setFocus(true);
+		//userName.addKeyPressHandler(new SaveButtonClickHandler(userName, emailAdress, profilForm));
+		//emailAdress.addKeyPressHandler(new SaveButtonClickHandler(userName, emailAdress, profilForm));
 
 	}
 
@@ -201,8 +201,8 @@ class EditButtonClickHandler implements ClickHandler {
 				if (this.emailAdress.getText().length() > 20) {
 					Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 					return;
-				} else { // ev.getUserByGMail(new FindAllUserCallBack(this.profilForm, this.userName,
-							// this.emailAdress));
+				} else { //ev.getUserByGMail(new FindAllUserCallBack(this.profilForm, this.userName,
+							//this.emailAdress));
 
 				}
 
@@ -280,7 +280,7 @@ class EditButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
 
-			// ev.deleteUser(user.getId(), new DeleteUserCallBack(parentForm, this.user));
+			//ev.deleteUser(user.getId(), new DeleteUserCallBack(parentForm, this.user));
 
 			diabox.hide();
 			diabox.clear();
@@ -411,7 +411,7 @@ class EditButtonClickHandler implements ClickHandler {
 			Window.alert("updateuser onsuccess");
 			if (result != null) {
 				// user = result;
-//				buildProfil();
+				// buildProfil();
 
 			}
 
