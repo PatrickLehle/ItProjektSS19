@@ -98,8 +98,10 @@ public class GroceryListForm extends VerticalPanel {
 		vt.add(hpTitle);
 
 		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
-		int groceryListId = 0;
+		int groceryListId = groceryList.getId();
 
+		
+		/* Jetzt in loadTable()
 		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 			public void onFailure(Throwable caught) {
 				Window.alert("Einkaufsliste konnte nicht geladen werden");
@@ -109,13 +111,15 @@ public class GroceryListForm extends VerticalPanel {
 				articleVec = arg0;
 			}
 		});
+		*/
 
 		aTable.setText(0, 0, "Artikel");
 		aTable.setText(0, 1, "Menge");
 		aTable.setText(0, 2, "Mengeneinheit");
 		aTable.setText(0, 3, "Laden");
 		bTable.setText(0, 0, "Gekauft");
-
+		
+		/* Jetzt in der loadTableMethod()
 		int vecNum = 0;
 		int trueCount = 1;
 		int falseCount = 1;
@@ -143,12 +147,13 @@ public class GroceryListForm extends VerticalPanel {
 			}
 			vecNum++;
 		}
-
+		*/
+		
+		loadTable(); //Ruft Metode zum laden/fuellen der Tabelle auf
+		
 		vt.add(aTable);
-
-		if (visibleNum > 1) {
-			bTable.setVisible(false);
-		}
+		
+		//if(visibleNum > 1) { bTable.setVisible(false);} jetzt in loadTable
 		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
@@ -176,6 +181,53 @@ public class GroceryListForm extends VerticalPanel {
 		vt.add(hpButtons);
 
 		RootPanel.get("content").add(vt);
+	}
+	
+	/* Metjode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer Aktualisierung der Daten
+	 * 
+	 */
+	public void loadTable() {
+		
+		int groceryListId = groceryList.getId();
+
+		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Einkaufsliste konnte nicht geladen werden");
+			}
+
+			public void onSuccess(Vector<Article> arg0) {
+				articleVec = arg0;
+				
+				int vecNum = 0;
+				int trueCount = 1;
+				int falseCount = 1;
+				int visibleNum = 0;
+
+				// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
+				// aufgelistet werden im Panel.
+				for (int aNum = 0; aNum <= articleVec.size(); aNum++) {
+					
+					  if (articleVec.get(vecNum).getCheckBoolean() == false) { 
+						  aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
+						  aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
+						  aTable.setText(falseCount, 2, articleVec.get(vecNum).getUnit());
+						  aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+						  falseCount++;
+					 	} else {
+						  bTable.setText(trueCount, 0, articleVec.get(vecNum).getName()); 
+						  bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity())); 
+						  bTable.setText(trueCount, 2, articleVec.get(vecNum).getUnit()); 
+						  bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+						  trueCount++;
+						  visibleNum = trueCount; 
+					 	}
+					  vecNum++;
+				}
+				if(visibleNum > 1) { bTable.setVisible(false);}
+			}
+		});
+		
+		
 	}
 
 	/**
