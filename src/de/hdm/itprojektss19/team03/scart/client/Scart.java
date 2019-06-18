@@ -44,7 +44,7 @@ public class Scart implements EntryPoint {
 	private Button button2 = new Button("profile ");
 	private Button button3 = new Button("group ");
 	
-//	private GroceryListForm glf = new GroceryListForm();
+	private GroceryListForm glf = new GroceryListForm();
 	private GroupForm gf = new GroupForm();
 	private ProfilForm pf = new ProfilForm();
 	
@@ -54,7 +54,7 @@ public class Scart implements EntryPoint {
 			@Override
 			public void onClick(ClickEvent evt) {
 				RootPanel.get("content").clear();
-//				RootPanel.get("content").add(glf);
+				RootPanel.get("content").add(glf);
 				
 			}
 		});
