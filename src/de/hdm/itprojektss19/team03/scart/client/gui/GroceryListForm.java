@@ -101,6 +101,7 @@ public class GroceryListForm extends VerticalPanel {
 
 		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 			public void onFailure(Throwable caught) {
+				Window.alert("Einkaufsliste konnte nicht geladen werden");
 			}
 
 			public void onSuccess(Vector<Article> arg0) {
@@ -340,6 +341,7 @@ public class GroceryListForm extends VerticalPanel {
 								arg0.setQuantity(Integer.parseInt(editTb2.getText()));
 								arg0.setUnit(editTb3.getText());
 								arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
+								
 							}
 						});
 						
@@ -614,6 +616,7 @@ public class GroceryListForm extends VerticalPanel {
 					ev.createArticle(a, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Artikel konnte nicht erstellt werden");
+							//Article Object a existiert dennoch mit den zugewiesenen Attributen
 						}
 
 						public void onSuccess(Article arg0) {
@@ -622,8 +625,17 @@ public class GroceryListForm extends VerticalPanel {
 							ev.addArticleToGroceryList(groceryList, a, new AsyncCallback<GroceryListArticle>() { //groceryList muss bei dem Aufruf der Seite uebergeben werden
 								
 								public void onFailure(Throwable caught) {
-									Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
-									//FEHLT NOCH: Article in ev.createArticle() erstellt muss bei fehlgeschlagener addArticleToGroceryList() wieder aus der DB entfernt werden
+									//Artikel konnte nicht mit der GroceryList verbunden werden. Das Article-Objekt wird jetzt auch aus der DB geloescht
+									ev.deleteArticle(a, new AsyncCallback<Void>() {
+										public void onFailure(Throwable caught) {
+											Window.alert("Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
+										}
+										@Override
+										public void onSuccess(Void arg0) {
+											
+											Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
+										}
+									});
 							}
 							public void onSuccess(GroceryListArticle arg0) {
 								aGl = arg0;
