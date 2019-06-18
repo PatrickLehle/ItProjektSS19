@@ -68,7 +68,9 @@ public class GroceryListForm extends VerticalPanel {
 
 	FlexTable aTable = new FlexTable();
 	FlexTable bTable = new FlexTable();
-	Article a = new Article();
+	Article tempArticle = new Article(); //temporaerer Artikel wenn ein Artikel 
+	//geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
+	
 	Retailer r = new Retailer();
 	Vector<Article> articleVec = new Vector<Article>();
 
@@ -161,30 +163,30 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(0, 3, "Laden");
 					bTable.setText(0, 0, "Gekauft");
 
-					int vecNum = 0;
-					int trueCount = 1;
-					int falseCount = 1;
+					int vectorNumber = 0; //temporaerer Zaehler um durch den Artikel-Vektor durchzugehen
+					int trueCount = 1; //Checkbox gleich true. Artikel wurd gekauft
+					int falseCount = 1; //Checkbox gleich false. Artikel noch nicht gekauft
 					int visibleNum = 0;
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
 					for (int aNum = 0; aNum <= articleVec.size(); aNum++) {
 
-						if (articleVec.get(vecNum).getCheckBoolean() == false) {
-							aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
-							aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
-							aTable.setText(falseCount, 2, articleVec.get(vecNum).getUnit());
-							aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId()));
+						if (articleVec.get(vectorNumber).getCheckBoolean() == false) {
+							aTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
+							aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
+							aTable.setText(falseCount, 2, articleVec.get(vectorNumber).getUnit());
+							aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							bTable.setText(trueCount, 0, articleVec.get(vecNum).getName());
-							bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
-							bTable.setText(trueCount, 2, articleVec.get(vecNum).getUnit());
-							bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId()));
+							bTable.setText(trueCount, 0, articleVec.get(vectorNumber).getName());
+							bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
+							bTable.setText(trueCount, 2, articleVec.get(vectorNumber).getUnit());
+							bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
-						vecNum++;
+						vectorNumber++;
 					}
 					if (visibleNum > 1) {
 						bTable.setVisible(false);
@@ -243,16 +245,16 @@ public class GroceryListForm extends VerticalPanel {
 				final int rowIndex = aTable.getCellForEvent(event).getRowIndex();
 				final int rowCount = bTable.getRowCount();
 
-				a.setName(aTable.getText(rowIndex, 0));
-				a.setQuantity(Integer.parseInt(aTable.getText(rowIndex, 1)));
-				a.setUnit(aTable.getText(rowIndex, 2));
-				a.setRetailerId(Integer.parseInt(aTable.getText(rowIndex, 3)));
-				a.setCheckBoolean(true);
+				tempArticle.setName(aTable.getText(rowIndex, 0));
+				tempArticle.setQuantity(Integer.parseInt(aTable.getText(rowIndex, 1)));
+				tempArticle.setUnit(aTable.getText(rowIndex, 2));
+				tempArticle.setRetailerId(Integer.parseInt(aTable.getText(rowIndex, 3)));
+				tempArticle.setCheckBoolean(true);
 
-				ev.saveArticle(a, new AsyncCallback<Article>() {
+				ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht hinzugefügt werden");
-						a = null; // Article-Objekt wird geleert, da Artikel nicht hinzugefuegt werdn konnte
+						tempArticle = null; // Article-Objekt wird geleert, da Artikel nicht hinzugefuegt werdn konnte
 					}
 
 					public void onSuccess(Article arg0) {
@@ -266,7 +268,7 @@ public class GroceryListForm extends VerticalPanel {
 						if (bTable.getRowCount() >= 2) {
 							bTable.setVisible(true);
 						}
-						a = null; //Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt werden konnte
+						tempArticle = null; //Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt werden konnte
 						loadTable();
 					}
 				});
@@ -288,17 +290,19 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				final int rowIndex = bTable.getCellForEvent(event).getRowIndex();
 				final int rowCount = aTable.getRowCount();
+				
+				tempArticle = null;
+				
+				tempArticle.setName(bTable.getText(rowIndex, 0));
+				tempArticle.setQuantity(Integer.parseInt(bTable.getText(rowIndex, 1)));
+				tempArticle.setUnit(bTable.getText(rowIndex, 2));
+				tempArticle.setRetailerId(Integer.parseInt(bTable.getText(rowIndex, 3)));
+				tempArticle.setCheckBoolean(false);
 
-				a.setName(bTable.getText(rowIndex, 0));
-				a.setQuantity(Integer.parseInt(bTable.getText(rowIndex, 1)));
-				a.setUnit(bTable.getText(rowIndex, 2));
-				a.setRetailerId(Integer.parseInt(bTable.getText(rowIndex, 3)));
-				a.setCheckBoolean(false);
-
-				ev.saveArticle(a, new AsyncCallback<Article>() {
+				ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht von der gekauft Tabelle entfernt werden");
-						a = null;
+						tempArticle = null;
 					}
 
 					public void onSuccess(Article arg0) {
@@ -312,12 +316,10 @@ public class GroceryListForm extends VerticalPanel {
 						if (bTable.getRowCount() < 2) {
 							bTable.setVisible(false);
 						}
-
-						a = null;
-						
 						loadTable();
 						//Vektor der alle Artikel speichert muss aktualisiert werden
 						//Neu Laden der gesamten Tabelle ? (notwendig)
+						tempArticle = null;
 					}
 				});
 			}
@@ -422,18 +424,18 @@ public class GroceryListForm extends VerticalPanel {
 						aTable.setText(finalGlobalRow, 3, editTb4.getText());
 						
 						
-						a.setName(editTb1.getText());
-						a.setQuantity(Integer.parseInt(editTb2.getText()));
-						a.setUnit(editTb3.getText());
-						a.setRetailerId(Integer.parseInt(editTb4.getText()));
+						tempArticle.setName(editTb1.getText());
+						tempArticle.setQuantity(Integer.parseInt(editTb2.getText()));
+						tempArticle.setUnit(editTb3.getText());
+						tempArticle.setRetailerId(Integer.parseInt(editTb4.getText()));
 						
-						ev.saveArticle(a, new AsyncCallback<Article>() {
+						ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
 								Window.alert("Artikel konnte nicht editiert werden");
 							}
 
 							public void onSuccess(Article arg0) {
-								loadTable();
+								//loadTable(); Tabelle wird neu geladen
 								
 								//Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden konnte
 								//und die Tabelle neu geladen wird?
@@ -502,7 +504,7 @@ public class GroceryListForm extends VerticalPanel {
 							aTable.setWidget(globalRow, 2, editTb3);
 							aTable.setWidget(globalRow, 3, editTb4);
 						}
-						Window.alert("�nderung wurde nicht gespeichert");
+						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				} else {
 					if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
@@ -515,19 +517,17 @@ public class GroceryListForm extends VerticalPanel {
 						aTable.setText(globalRow, 1, editTb2.getText());
 						aTable.setText(globalRow, 2, editTb3.getText());
 						aTable.setText(globalRow, 3, editTb4.getText());
-
-						ev.saveArticle(a, new AsyncCallback<Article>() {
+						
+						tempArticle.setName(editTb1.getText());
+						tempArticle.setQuantity(Integer.parseInt(editTb2.getText()));
+						tempArticle.setUnit(editTb3.getText());
+						tempArticle.setRetailerId(Integer.parseInt(editTb4.getText()));
+						
+						ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
 							}
 
 							public void onSuccess(Article arg0) {
-								/*
-								 * FEHLT NOCH: arg0. sollte nicht mehr lokal veraendert werden, da dies das
-								 * Artikel-Objekt aus der DB ist arg0.setName(editTb1.getText());
-								 * arg0.setQuantity(Integer.parseInt(editTb2.getText()));
-								 * arg0.setUnit(editTb3.getText());
-								 * arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
-								 */
 
 								// FEHLT NOCH: Aktualisieren des Artikel-Vektors und erneuern der gesamten
 								// Tabelle
@@ -553,7 +553,7 @@ public class GroceryListForm extends VerticalPanel {
 						editTb3.setText(null);
 						editTb4.setText(null);
 						aTable.setWidget(globalRow, 4, getCbEdit());
-						Window.alert("�nderung wurde nicht gespeichert");
+						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				}
 			}
@@ -591,19 +591,17 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(globalRow, 1, editTb2.getText());
 					aTable.setText(globalRow, 2, editTb3.getText());
 					aTable.setText(globalRow, 3, editTb4.getText());
-
-					ev.saveArticle(a, new AsyncCallback<Article>() {
+					
+					tempArticle.setName(editTb1.getText());
+					tempArticle.setQuantity(Integer.parseInt(editTb2.getText()));
+					tempArticle.setUnit(editTb3.getText());
+					tempArticle.setRetailerId(Integer.parseInt(editTb4.getText()));
+					
+					ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 						}
 
 						public void onSuccess(Article arg0) {
-							/*
-							 * FEHLT NOCH: arg0. sollte nicht mehr lokal veraendert werden, da dies das
-							 * Artikel-Objekt aus der DB ist arg0.setName(editTb1.getText());
-							 * arg0.setQuantity(Integer.parseInt(editTb2.getText()));
-							 * arg0.setUnit(editTb3.getText());
-							 * arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
-							 */
 
 							// FEHLT NOCH: Aktualisieren des Artikel-Vektors und erneuern der gesamten
 							// Tabelle
@@ -628,7 +626,7 @@ public class GroceryListForm extends VerticalPanel {
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
-					Window.alert("�nderung wurde nicht gespeichert");
+					Window.alert("Änderung wurde nicht gespeichert");
 				}
 				for (int i = 1; i <= aTable.getRowCount(); i++) {
 					aTable.removeCell(i, 4);
@@ -652,16 +650,15 @@ public class GroceryListForm extends VerticalPanel {
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				final int rowIndex = aTable.getCellForEvent(event).getRowIndex();
-				ev.deleteArticle(a, new AsyncCallback<Void>() {
+				ev.deleteArticle(tempArticle, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
 					}
 
 					public void onSuccess(Void arg0) {
-						// FEHLT NOCH: Verarbeitung in der DB
-
-						// FEHLT NOCH: Aktualisieren des Artikel-Vektors und erneuern der gesamten
-						// Tabelle
-
+						// FEHLT NOCH: Connection zwischen GroceryList 
+						// 	und Article loesen und dann den Artikel aus der DB loeschen
+						
+						// FEHLT NOCH: Aktualisieren des Artikel-Vektors und erneuern der gesamten Tabelle
 					}
 				});
 				aTable.removeRow(rowIndex);
@@ -739,25 +736,26 @@ public class GroceryListForm extends VerticalPanel {
 					aTable.setText(addRow, 3, editTb4.getText());
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
-					a.setId(articleVec.size() + 1);
-					a.setName(editTb1.getText());
-					a.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
-					a.setUnit(editTb3.getText());
-					a.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
-					ev.createArticle(a, new AsyncCallback<Article>() {
+					tempArticle.setId(articleVec.size() + 1);
+					tempArticle.setName(editTb1.getText());
+					tempArticle.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
+					tempArticle.setUnit(editTb3.getText());
+					tempArticle.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
+					
+					 ev.createArticle(tempArticle, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Artikel konnte nicht erstellt werden");
 							// Article Object a existiert dennoch mit den zugewiesenen Attributen
 						}
 
 						public void onSuccess(Article arg0) {
-							a = arg0;
+							tempArticle = arg0; //tempArticle bekommt die korrekte Id aus der DB
 
-							ev.addArticleToGroceryList(groceryList, a, new AsyncCallback<GroceryListArticle>() { 
+							ev.addArticleToGroceryList(groceryList, tempArticle, new AsyncCallback<GroceryListArticle>() { 
 								public void onFailure(Throwable caught) {
 									// Artikel konnte nicht mit der GroceryList verbunden werden. Das Article-Objekt
 									// wird jetzt auch aus der DB geloescht
-									ev.deleteArticle(a, new AsyncCallback<Void>() {
+									ev.deleteArticle(tempArticle, new AsyncCallback<Void>() {
 										public void onFailure(Throwable caught) {
 											Window.alert(
 													"Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
@@ -765,20 +763,21 @@ public class GroceryListForm extends VerticalPanel {
 
 										@Override
 										public void onSuccess(Void arg0) {
-
-											Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
+											Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden. Artikel aus der Datenbank gelöscht");
+											
 										}
 									});
 								}
 
 								public void onSuccess(GroceryListArticle arg0) {
 									aGl = arg0;
-									Window.alert("Artikel " + a.getName() + " wurde  der Einkaufsliste "
+									Window.alert("Artikel " + tempArticle.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
-									// FEHLT NOCH: Tabelle muss neu geladen werden
+									
+									loadTable(); //Tabelle frage alle Artikel neu an und wir neu geladen
+									
 								}
 							});
-							arg0 = a;
 						}
 					});
 
