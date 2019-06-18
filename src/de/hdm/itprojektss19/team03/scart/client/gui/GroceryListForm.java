@@ -241,20 +241,6 @@ public class GroceryListForm extends VerticalPanel {
 				int rowIndex = aTable.getCellForEvent(event).getRowIndex();
 				int rowCount = bTable.getRowCount();
 				
-				/* Auskommentiert, da diese Aenderungen von der erfolgreichen DB-Connection abhaengt. Aenderungen werden in der onSuccess-Methode nun verarbeitet
-				bTable.setText(rowCount, 0, aTable.getText(rowIndex, 0));
-				bTable.setText(rowCount, 1, aTable.getText(rowIndex, 1));
-				bTable.setText(rowCount, 2, aTable.getText(rowIndex, 2));
-				bTable.setText(rowCount, 3, aTable.getText(rowIndex, 3));
-				bTable.setWidget(rowCount, 4, getCbReturn());
-				*/
-				
-				/* Auskommentiert, da dies erst in der onSuccess-Methode behandelt werden sollte
-				if (bTable.getRowCount() >= 2) {
-					bTable.setVisible(true);
-				}
-				*/
-				
 				a.setName(aTable.getText(rowIndex, 0));
 				a.setQuantity(Integer.parseInt(aTable.getText(rowIndex, 1)));
 				a.setUnit(aTable.getText(rowIndex, 2));
@@ -285,7 +271,6 @@ public class GroceryListForm extends VerticalPanel {
 						//Neu Laden der gesamten Tabelle ? (notwendig)
 					}
 				});
-				//aTable.removeRow(rowIndex); auskommentiert, da Zeile nur entfernt werden sollte, wenn der Artikel auch in der DB als gekauft markiert werden konnte
 			}
 		});
 		cb.setValue(false);
@@ -304,22 +289,6 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				int rowIndex = bTable.getCellForEvent(event).getRowIndex();
 				int rowCount = aTable.getRowCount();
-				
-				/* Aenderungen werden nun in der onSuccess-Methode verarbeitet
-				aTable.setText(rowCount, 0, bTable.getText(rowIndex, 0));
-				aTable.setText(rowCount, 1, bTable.getText(rowIndex, 1));
-				aTable.setText(rowCount, 2, bTable.getText(rowIndex, 2));
-				aTable.setText(rowCount, 3, bTable.getText(rowIndex, 3));
-				aTable.setWidget(rowCount, 4, getCbCheck());
-				bTable.removeRow(rowIndex);
-				*/
-				
-				
-				/* Auskommentiert, da dies erst in der onSuccess-Methode behandelt werden sollte
-				if (bTable.getRowCount() < 2) {
-					bTable.setVisible(false);
-				}
-				*/
 				
 				a.setName(bTable.getText(rowIndex, 0));
 				a.setQuantity(Integer.parseInt(bTable.getText(rowIndex, 1)));
@@ -344,9 +313,7 @@ public class GroceryListForm extends VerticalPanel {
 						if (bTable.getRowCount() < 2) {
 							bTable.setVisible(false);
 						}
-						
 						a = null;
-						
 						//Vektor der alle Artikel speichert muss aktualisiert werden
 						//Neu Laden der gesamten Tabelle ? (notwendig)
 					}
