@@ -71,8 +71,8 @@ public class GroceryListForm extends VerticalPanel {
 	Article article = new Article(); //temporaerer Artikel wenn ein Artikel 
 	//geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 	
-	Retailer r = new Retailer();
-	Vector<Article> articleVec = new Vector<Article>();
+	Retailer retailer = new Retailer();
+	Vector<Article> articleVector = new Vector<Article>();
 
 	Label titelLabel = new Label();
 
@@ -80,7 +80,7 @@ public class GroceryListForm extends VerticalPanel {
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 
-	GroceryListArticle aGl = new GroceryListArticle();
+	GroceryListArticle groceryListArticle = new GroceryListArticle();
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
 
@@ -124,6 +124,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	/*
+	 * @author bastiantilk
 	 * Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer
 	 * Aktualisierung der Daten
 	 * 
@@ -138,7 +139,7 @@ public class GroceryListForm extends VerticalPanel {
 				}
 
 				public void onSuccess(Vector<Article> arg0) {
-					articleVec = arg0;
+					articleVector = arg0;
 
 					// Loescht alle Zeilen der FlexTables
 					articleTable.removeAllRows();
@@ -158,7 +159,11 @@ public class GroceryListForm extends VerticalPanel {
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
+<<<<<<< Updated upstream
 					for (int i = 0; i <= articleVec.size(); i++) {
+=======
+					for (int aNum = 0; aNum <= articleVector.size(); aNum++) {
+>>>>>>> Stashed changes
 
 						if (articleVec.get(vectorNumber).getCheckBoolean() == false) {
 							articleTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
@@ -190,7 +195,7 @@ public class GroceryListForm extends VerticalPanel {
 	/**
 	 * @param node
 	 * @return https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
-	 *         Liest aus welche Reihe ausgewaehlt wurde durch einen ClickHandler.
+	 *         Liest aus, welche Reihe ausgewaehlt wurde durch einen ClickHandler.
 	 */
 	public static TableRowElement findNearestParentRow(Node node) {
 		Node element = findNearestParentNodeByType(node, "tr");
@@ -220,9 +225,9 @@ public class GroceryListForm extends VerticalPanel {
 	/**
 	 * @author tom
 	 * 
-	 *         getCbCheck: CheckBox und ClickHandler die das beim kaufen eines
+	 *         getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
 	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
-	 *         Ausgewaehlte Reihe wird gel�scht und in die zweite Tabele kopiert und
+	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert und
 	 *         eine neue CheckBox wird kreiert getCbReturn.
 	 * 
 	 */
@@ -411,6 +416,7 @@ public class GroceryListForm extends VerticalPanel {
 						articleTable.setText(finalGlobalRow, 2, editTb3.getText());
 						articleTable.setText(finalGlobalRow, 3, editTb4.getText());
 						
+						tempArticle = null;
 						
 						article.setName(editTb1.getText());
 						article.setQuantity(Integer.parseInt(editTb2.getText()));
@@ -750,8 +756,8 @@ public class GroceryListForm extends VerticalPanel {
 								}
 
 								public void onSuccess(GroceryListArticle arg0) {
-									aGl = arg0;
-									Window.alert("Artikel " + article.getName() + " wurde  der Einkaufsliste "
+									groceryListArticle = arg0;
+									Window.alert("Artikel " + tempArticle.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
 									loadTable();								}
 							});
