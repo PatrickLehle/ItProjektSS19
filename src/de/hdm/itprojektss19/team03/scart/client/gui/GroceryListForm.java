@@ -266,12 +266,8 @@ public class GroceryListForm extends VerticalPanel {
 						if (bTable.getRowCount() >= 2) {
 							bTable.setVisible(true);
 						}
-
-						a = null; // Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt
-									// werden konnte
-
-						// Vektor der alle Artikel speichert muss aktualisiert werden
-						// Neu Laden der gesamten Tabelle ? (notwendig)
+						a = null; //Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt werden konnte
+						loadTable();
 					}
 				});
 			}
@@ -318,9 +314,10 @@ public class GroceryListForm extends VerticalPanel {
 						}
 
 						a = null;
-
-						// Vektor der alle Artikel speichert muss aktualisiert werden
-						// Neu Laden der gesamten Tabelle ? (notwendig)
+						
+						loadTable();
+						//Vektor der alle Artikel speichert muss aktualisiert werden
+						//Neu Laden der gesamten Tabelle ? (notwendig)
 					}
 				});
 			}
@@ -423,19 +420,23 @@ public class GroceryListForm extends VerticalPanel {
 						aTable.setText(finalGlobalRow, 1, editTb2.getText());
 						aTable.setText(finalGlobalRow, 2, editTb3.getText());
 						aTable.setText(finalGlobalRow, 3, editTb4.getText());
-
+						
+						
+						a.setName(editTb1.getText());
+						a.setQuantity(Integer.parseInt(editTb2.getText()));
+						a.setUnit(editTb3.getText());
+						a.setRetailerId(Integer.parseInt(editTb4.getText()));
+						
 						ev.saveArticle(a, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
+								Window.alert("Artikel konnte nicht editiert werden");
 							}
 
 							public void onSuccess(Article arg0) {
-								// Tabelle neu laden
-
-								arg0.setName(editTb1.getText());
-								arg0.setQuantity(Integer.parseInt(editTb2.getText()));
-								arg0.setUnit(editTb3.getText());
-								arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
-
+								loadTable();
+								
+								//Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden konnte
+								//und die Tabelle neu geladen wird?
 							}
 						});
 
