@@ -84,6 +84,7 @@ public class GroceryListForm extends VerticalPanel {
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
+		
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
@@ -256,7 +257,7 @@ public class GroceryListForm extends VerticalPanel {
 				article.setUnit(articleTable.getText(rowIndex, 2));
 				article.setRetailerId(Integer.parseInt(articleTable.getText(rowIndex, 3)));
 				article.setCheckBoolean(true);
-
+				
 				ev.saveArticle(article, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht hinzugefügt werden");
@@ -390,7 +391,7 @@ public class GroceryListForm extends VerticalPanel {
 	 * 
 	 *         CheckBox fuer Editieren ClickHandler um die ausgewaehlte Reihe global
 	 *         zu speichern ValueChangeHandler um den Text in TextBoxen zu
-	 *         �bertragen und den Text aus TextBoxen zu speichern.
+	 *         uebertragen und den Text aus TextBoxen zu speichern.
 	 */
 	public CheckBox getCbEdit() {
 		CheckBox cb = new CheckBox();
@@ -441,11 +442,11 @@ public class GroceryListForm extends VerticalPanel {
 							}
 
 							public void onSuccess(Article arg0) {
-								// loadTable(); Tabelle wird neu geladen
-
-								// Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden
-								// konnte
-								// und die Tabelle neu geladen wird?
+								article = arg0;
+								//loadTable(); Tabelle wird neu geladen
+								
+								//Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden konnte
+								//und die Tabelle neu geladen wird?
 							}
 						});
 
@@ -533,6 +534,7 @@ public class GroceryListForm extends VerticalPanel {
 
 						ev.saveArticle(article, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
+								Window.alert("Artikel konnte nicht editiert werden");
 							}
 
 							public void onSuccess(Article arg0) {
@@ -605,9 +607,11 @@ public class GroceryListForm extends VerticalPanel {
 
 					ev.saveArticle(article, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
+							Window.alert("Artikel konnte nicht erditiert werden");
 						}
 
 						public void onSuccess(Article arg0) {
+							article = arg0;
 							//loadTable(); FEHLT NOCH: Tabelle muss neu geladen werden.
 							// wie verhaelt sich das mit folgendem Code?
 						}
@@ -656,15 +660,18 @@ public class GroceryListForm extends VerticalPanel {
 				final int rowIndex = articleTable.getCellForEvent(event).getRowIndex();
 				ev.deleteArticle(article, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
+						Window.alert("Artikel konnte nicht gelöscht werden");
 					}
 
 					public void onSuccess(Void arg0) {
+						articleTable.removeRow(rowIndex);
 						loadTable();
+						
 						// FEHLT NOCH: Korrekte Verarbeitung bei dem Loeschen einer Artikels
 						// und loesen der Verknupfung mit GroceryListArticle Objekten
 					}
 				});
-				articleTable.removeRow(rowIndex);
+				
 			}
 		});
 		cb.setValue(false);
@@ -784,7 +791,7 @@ public class GroceryListForm extends VerticalPanel {
 								}
 							});
 							//loadTable();
-							article = null;
+							
 						}
 					});
 
