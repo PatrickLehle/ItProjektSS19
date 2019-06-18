@@ -17,7 +17,6 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	private String loginUrl = "";
 	private String logoutUrl = " ";
 	private String emailAddress = "";
-	private User user = null;
 	
 	public LoginInfo() {
 		
@@ -108,14 +107,6 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 }

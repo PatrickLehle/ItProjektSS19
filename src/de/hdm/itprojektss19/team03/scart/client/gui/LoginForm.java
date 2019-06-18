@@ -6,7 +6,8 @@ public class LoginForm extends VerticalPanel {
 
 	private Anchor signInLink;
 
-	public LoginForm() {}
+	public LoginForm() {
+	}
 
 	public LoginForm(String str) {
 		signInLink = new Anchor();
@@ -16,7 +17,7 @@ public class LoginForm extends VerticalPanel {
 
 	public void onLoad() {
 		super.onLoad();
-		
+
 		Label header = new Label("Shop smart, with SCart!");
 		Image logo = new Image("/images/ScartLogo.png");
 		VerticalPanel loginPanel = new VerticalPanel();
@@ -29,8 +30,8 @@ public class LoginForm extends VerticalPanel {
 		header.setStyleName("login-text");
 		googleSignIn.setStylePrimaryName("signinwithgoogle");
 		signInLink.getElement().appendChild(googleSignIn.getElement());
-		
-		loginPanel.add(logo);
+
+		// loginPanel.add(logo);
 		loginPanel.add(header);
 		loginPanel.add(signInLink);
 
