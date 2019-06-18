@@ -116,13 +116,13 @@ public class GroceryListForm extends VerticalPanel {
 		bTable.setText(0, 0, "Gekauft");
 		
 		int vecNum = 0;
-		int trueCount = 0;
-		int falseCount = 0;
+		int trueCount = 1;
+		int falseCount = 1;
 		int visibleNum = 0;
 
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		for (int aNum = 1; aNum <= articleVec.size(); aNum++) {
+		for (int aNum = 0; aNum <= articleVec.size(); aNum++) {
 			//a ist ein einzelnes Article-Object 
 			  if (articleVec.get(vecNum).getCheckBoolean() == false) { 
 				  aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
@@ -131,19 +131,19 @@ public class GroceryListForm extends VerticalPanel {
 				  aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
 				  falseCount++;
 			 	} else {
-			 		visibleNum = trueCount; 
 				  bTable.setText(trueCount, 0, articleVec.get(vecNum).getName()); 
 				  bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity())); 
 				  bTable.setText(trueCount, 2, articleVec.get(vecNum).getUnit()); 
 				  bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
 				  trueCount++;
+				  visibleNum = trueCount; 
 			 	}
 			  vecNum++;
 		}
 		
 		vt.add(aTable);
 		
-		if(visibleNum > 0) { bTable.setVisible(false);}
+		if(visibleNum > 1) { bTable.setVisible(false);}
 		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
