@@ -20,9 +20,10 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.client.gui.EditButtonClickHandler.SaveButtonClickHandler.FindUserCallBack;
+import de.hdm.itprojektss19.team03.scart.client.gui.EditButtonClickHandler.SaveButtonClickHandler.FindUserCallBack.VerifyFieldCallBack;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-import src.de.hdm.itprojekt.client.gui.ProfilForm.EnterSaveChangesPressHandler;
 
 
 
@@ -54,8 +55,8 @@ public class ProfilForm {
 	
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	
-	//private FindUserCallBack finduserCallback;
-	//private VerifyFieldCallBack verifyFieldCallback; 
+	private FindUserCallBack finduserCallback;
+	private VerifyFieldCallBack verifyFieldCallback; 
 	
 	/**
 	 * 
@@ -97,13 +98,13 @@ public class ProfilForm {
 		info.addStyleName("infoProfilLabel");
 		info.addStyleName("Profil");
 		
-		//ev.getUserById(user.getId(), finduserCallback);
+		ev.getUserById(user.getId(), finduserCallback);
 		
 		Timer refreshProfil = new Timer() {
 
 			public void run() {
 
-				//ev.getUserById(user.getId(), finduserCallback);
+				ev.getUserById(user.getId(), finduserCallback);
 
 			}
 		};
@@ -135,15 +136,15 @@ public class ProfilForm {
 	
 	public void onClick(ClickEvent event) {
 		
-		userNamePanel.remove(userName);
+		//userNamePanel.remove(userName);
 		TextBox userName = new TextBox();
-		userName.setText(user.getUsername());
-		userNamePanel.add(userName);
+		//userName.setText(user.getUsername());
+		//userNamePanel.add(userName);
 		
-		emailAdressPanel.remove(emailAdress);
+		//emailAdressPanel.remove(emailAdress);
 		TextBox emailAdress = new TextBox();
-		emailAdress.setText(user.getEmail());
-		emailAdressPanel.add(emailAdress);
+		//emailAdress.setText(user.getEmail());
+		//emailAdressPanel.add(emailAdress);
 		
 		//profilForm.remove(editButton);
 		
@@ -159,7 +160,7 @@ public class ProfilForm {
 				new SaveButtonClickHandler(userName, emailAdress, profilForm));
 		emailAdress.addKeyPressHandler(
 				new SaveButtonClickHandler(userName, emailAdress, profilForm));
-		
+	
 	}
 	
 	
@@ -184,7 +185,7 @@ public class ProfilForm {
 					Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 					return;
 				}
-				else { //ev.getUserByGMail(this.emailAdress, AsyncCallBack <user>);
+				else { //ev.getUserByGMail(new FindAllUserCallBack(this.profilForm, this.userName, this.emailAdress));
 					
 		}
 		
@@ -261,7 +262,7 @@ public class ProfilForm {
 			
 			public void onClick(ClickEvent event) {
 				
-				ev.deleteUser(this.user, null);
+				//ev.deleteUser(user.getId(), new DeleteUserCallBack(parentForm, this.user));
 				
 				diabox.hide();
 				diabox.clear();
@@ -335,7 +336,7 @@ public class ProfilForm {
 		private TextBox emailAdress = null;
 		private ProfilForm profilForm = null;
 
-		private SaveChangesClickHandler(TextBox name, TextBox email, ProfilForm pf) {
+		public SaveChangesClickHandler(TextBox name, TextBox email, ProfilForm pf) {
 
 			this.userName = name;
 			this.emailAdress = email;
@@ -351,7 +352,7 @@ public class ProfilForm {
 			}
 			else{ 
 
-				//editorAdministration.findAllUserNickNames(new FindAllUserCallback(this.profilForm, this.txtFirstName, this.txtLastName, this.txtNickName));
+				//ev.getUserByGMail(new FindAllUserCallback(this.profilForm, this.txtFirstName, this.txtLastName, this.txtNickName));
 			
 			}
 		}
@@ -362,7 +363,7 @@ public class ProfilForm {
 
 		DialogBox errBox = null;
 
-		private CloseErrBoxClickHandler(DialogBox db) {
+		public CloseErrBoxClickHandler(DialogBox db) {
 
 			this.errBox = db;
 
@@ -385,14 +386,16 @@ public class ProfilForm {
 		public void onFailure(Throwable caught) {
 			
 			//if (caught instanceof NotLoggedInException) {
+				
 				//Window.Location.reload();
+			
 			//}
 		}
 
 		public void onSuccess(User result) {
 
 			if (result != null) {
-				user = result;
+				//user = result;
 				buildProfil();
 
 			}
@@ -415,12 +418,12 @@ public class ProfilForm {
 			Label emailAdress = new Label("E-Mail");
 			emailAdressPanel.add(emailAdress);
 			
-			editButton = new Button("Profil bearbeiten", new EditButtonClickHandler(profilForm));
+			//editButton = new Button("Profil bearbeiten", new EditButtonClickHandler(profilForm));
 			
 			VerticalPanel contentPanel = new VerticalPanel();
 			contentPanel.add(userName);
 			contentPanel.add(emailAdress);
-			contentPanel.add(editButton);
+			//contentPanel.add(editButton);
 			
 		}
 		
@@ -432,12 +435,12 @@ public class ProfilForm {
 			
 			public void onSuccess(User result) {
 				
-				if (user.getUsername() != result.getUsername() || user.getEmail() != result.getEmail()) {
+				//if (user.getUsername() != result.getUsername() || user.getEmail() != result.getEmail()) {
 					
-					user = result;
-					buildProfil();
+					//user = result;
+					//buildProfil();
 					
-				}
+				//}
 				
 			}
 			
@@ -466,8 +469,8 @@ public class ProfilForm {
 				
 				if (result != null) {
 					
-					user.setUsername(result[0]);
-					user.setEmail(result[1]);
+					//user.setUsername(result[0]);
+					//user.setEmail(result[1]);
 					
 					//ev.createUser(this.userName, this.emailAdress, AsyncCallback <void>);;
 					
@@ -517,7 +520,7 @@ public class ProfilForm {
 				String newName = userName.getText();
 				String newEmail = emailAdress.getText();
 				
-				//ev.verifyField(new String[] { newName, newEmail},
+				//ev.verifyField(new String[] { newName, newEmail },
 						//new VerifyFieldCallback(this.profilForm, this.userName, this.emailAdress));
 
 				
@@ -543,7 +546,7 @@ public class ProfilForm {
 		
 	}
 	
-	}
+	
 
 
 
