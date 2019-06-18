@@ -1,5 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
+import java.util.Date;
+
 import de.hdm.itprojektss19.team03.scart.shared.bo.BusinessObject;
 
 /**
@@ -24,7 +26,19 @@ public class GroceryListArticle extends BusinessObject {
 		private int groceryListId = 0; 
 		private int articleId = 0;
 		
+//CONSTRUCTORS==========================================================
+		public GroceryListArticle(int groceryListId, int articleId) {
+			this.groceryListId = groceryListId;
+			this.articleId = articleId;
+		}
 		
+//Default Constructor
+		public GroceryListArticle() {
+			
+		}
+		
+//METHODS===============================================================
+
 		/**
 		 * Auslesen der groceryListId
 		 * @return groceryListId -Eindeutige Id der GroceryList
