@@ -451,19 +451,20 @@ public class GroceryListForm extends VerticalPanel {
 						aTable.setText(finalGlobalRow, 1, editTb2.getText());
 						aTable.setText(finalGlobalRow, 2, editTb3.getText());
 						aTable.setText(finalGlobalRow, 3, editTb4.getText());
-
+						
+						
 						ev.saveArticle(a, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
 							}
 
 							public void onSuccess(Article arg0) {
-								
-								/* FEHLT NOCH: arg0. sollte nicht mehr lokal veraendert werden, da dies das Artikel-Objekt aus der DB ist
+								//Tabelle neu laden
+								 
 								arg0.setName(editTb1.getText());
 								arg0.setQuantity(Integer.parseInt(editTb2.getText()));
 								arg0.setUnit(editTb3.getText());
 								arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
-
+								
 							}
 						});
 
