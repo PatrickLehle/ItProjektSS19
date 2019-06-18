@@ -26,6 +26,7 @@ public class Test {
 	public static void main (String[]args) {
 //	
 //	User u = new User();
+		
 //	u.setId(1);
 //	u.setEmail("test@hotmail.de");
 //	u.setUsername("Franz");

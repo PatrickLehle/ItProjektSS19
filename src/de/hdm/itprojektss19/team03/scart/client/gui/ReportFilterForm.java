@@ -49,7 +49,7 @@ public class ReportFilterForm extends VerticalPanel {
 //INITIALISATION===========================================================
 	
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
-	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
+	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
 	ReportGeneratorAsync reportVerwaltung = ClientsideSettings.getReportGeneratorService();
 	
 	Group group = new Group();

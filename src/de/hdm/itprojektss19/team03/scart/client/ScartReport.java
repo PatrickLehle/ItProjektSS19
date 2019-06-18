@@ -42,7 +42,7 @@ public class ScartReport implements EntryPoint {
 
 	ClientsideSettings clientSettings = new ClientsideSettings();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
-	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditorVerwaltung();
+	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
 	
 	/**
 	 * ReportService und EditorService werden auf null gesetzt. Dient zur Absicherung.

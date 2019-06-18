@@ -30,7 +30,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class CreateGroup extends VerticalPanel {
 
-	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 	//Aufruf durch ev.createGroup(g, asyncCallback);
 	
 	
