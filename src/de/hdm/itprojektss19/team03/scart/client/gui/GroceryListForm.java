@@ -176,6 +176,7 @@ public class GroceryListForm extends VerticalPanel {
 	/**
 	 * @param node
 	 * @return https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
+	 * Lies aus welche Reihe ausgewaehlt wurde durch einen ClickHandler.
 	 */
 	public static TableRowElement findNearestParentRow(Node node) {
 		Node element = findNearestParentNodeByType(node, "tr");
@@ -201,7 +202,13 @@ public class GroceryListForm extends VerticalPanel {
 		}
 		return null;
 	}
-
+	
+	/**
+	 * getCbCheck: CheckBox und ClickHandler die das beim kaufen eines Artikels aufgerufen werden.
+	 * CheckBox wird im letzem Column generiert 
+	 * Ausgewaehlte Reihe wird in zweite 
+	 * 
+	 */
 	public CheckBox getCbCheck() {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
