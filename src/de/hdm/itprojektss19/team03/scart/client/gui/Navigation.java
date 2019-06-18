@@ -39,7 +39,7 @@ public Navigation (final User user) {
 		public void onClick(ClickEvent event) {
 			// Wird instanziiert wenn eine neue Group erstellt werden soll.
 			RootPanel.get("navigator").clear();
-			RootPanel.get("content").add(new GroupForm(user));
+			RootPanel.get("content").add(new CreateGroup(user));
 		}
 	});
 

@@ -19,7 +19,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author Marco Dell'Oso, PatrickLehle, BastianTilk(findAllArticleByDateRetailer)
+ * @author Marco Dell'Oso, PatrickLehle, BastianTilk
  *
  */
 public class ArticleMapper {
@@ -73,6 +73,7 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
 				
 				return article;
 			}
@@ -109,6 +110,7 @@ public class ArticleMapper {
 				a.setUnit(rs.getString("unit"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
 	
 				articles.addElement(a);
 			}
@@ -144,6 +146,7 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
 
 				result.addElement(a);
 			}
@@ -179,6 +182,8 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
+
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -200,7 +205,7 @@ public class ArticleMapper {
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM article";
 
-		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat) VALUES (?,?,?,?,?,?,?)";
+		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat, boolean) VALUES (?,?,?,?,?,?,?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -224,6 +229,7 @@ public class ArticleMapper {
 			stmt.setInt(5, article.getRetailerId());
 			stmt.setTimestamp(6, article.getCreationDat());
 			stmt.setTimestamp(7, article.getModDat());
+			stmt.setBoolean(8, article.getCheckBoolean());
 			
 			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
@@ -245,7 +251,7 @@ public class ArticleMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=? WHERE id=?";
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=? WHERE id=?";
 
 		try {
 			con = DBConnection.connection();
@@ -257,6 +263,7 @@ public class ArticleMapper {
 			stmt.setInt(4, article.getRetailerId());
 			stmt.setTimestamp(5, article.getModDat());
 			stmt.setInt(6, article.getId());
+			stmt.setBoolean(7, article.getCheckBoolean());
 			
 			stmt.executeUpdate();
 		}
@@ -306,7 +313,7 @@ public class ArticleMapper {
 				a.setRetailerId(rs.getInt("retailerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
-				
+				a.setCheckBoolean(rs.getBoolean("boolean"));
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -345,6 +352,7 @@ public class ArticleMapper {
 				a.setRetailerId(rs.getInt("retailerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
 				
 				result.addElement(a);
 			}

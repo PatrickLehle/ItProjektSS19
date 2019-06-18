@@ -10,6 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
@@ -270,7 +271,7 @@ public interface EditorService extends RemoteService {
 	 * @param a
 	 * @throws IllegalArgumentException
 	 */
-	public void saveArticle(Article a) throws IllegalArgumentException;
+	public Article saveArticle(Article a) throws IllegalArgumentException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -442,6 +443,12 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
+	
+//GroceryListArticle===========================================================================
+	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
+	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
+	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
+	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
 	
 	
 }
