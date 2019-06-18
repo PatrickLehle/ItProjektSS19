@@ -466,6 +466,7 @@ public class GroceryListForm extends VerticalPanel {
 			if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean == false
 					&& addBtnBoolean == false) {
 				editBtnBoolean = true;
+				globalRow = 0;
 				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
 					aTable.setWidget(aNum, 4, getCbEdit());
 				}
@@ -498,7 +499,7 @@ public class GroceryListForm extends VerticalPanel {
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
-				} else {
+				} else if(globalRow != 0){
 					aTable.remove(editTb1);
 					aTable.remove(editTb2);
 					aTable.remove(editTb3);
