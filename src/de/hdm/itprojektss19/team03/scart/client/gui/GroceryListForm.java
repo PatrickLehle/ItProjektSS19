@@ -114,31 +114,35 @@ public class GroceryListForm extends VerticalPanel {
 		aTable.setText(0, 3, "Laden");
 		bTable.setText(0, 0, "Gekauft");
 		
+		int vecNum = 0;
+		int trueCount = 0;
+		int falseCount = 0;
 		int visibleNum = 0;
 
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
 		for (int aNum = 1; aNum <= articleVec.size(); aNum++) {
 			
-			  for(int falseCount = 1; a.getCheckBoolean() == false; falseCount++) { 
-				  aTable.setText(falseCount, 0, a.getName());
-				  aTable.setText(falseCount, 1, Integer.toString(a.getQuantity()));
-				  aTable.setText(falseCount, 2, a.getUnit());
-				  aTable.setText(falseCount, 3, Integer.toString(a.getRetailerId())); 
+			  if (articleVec.get(vecNum).getCheckBoolean() == false) { 
+				  aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
+				  aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
+				  aTable.setText(falseCount, 2, articleVec.get(vecNum).getUnit());
+				  aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+				  falseCount++;
+			 	} else {
+			 		visibleNum = trueCount; 
+				  bTable.setText(trueCount, 0, articleVec.get(vecNum).getName()); 
+				  bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity())); 
+				  bTable.setText(trueCount, 2, articleVec.get(vecNum).getUnit()); 
+				  bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+				  trueCount++;
 			 	}
-			 
-			  for(int trueCount = 1; a.getCheckBoolean() == true; trueCount++) {
-				  visibleNum = trueCount; 
-				  bTable.setText(trueCount, 0, a.getName()); 
-				  bTable.setText(trueCount, 1, Integer.toString(a.getQuantity())); 
-				  bTable.setText(trueCount, 2, a.getUnit()); 
-				  bTable.setText(trueCount, 3, Integer.toString(a.getRetailerId())); 
-			  }
+			  vecNum++;
 		}
 		
 		vt.add(aTable);
 		
-		if(visibleNum > 1) { bTable.setVisible(false);}
+		if(visibleNum > 0) { bTable.setVisible(false);}
 		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
