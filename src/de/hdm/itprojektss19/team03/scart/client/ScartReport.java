@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
 import de.hdm.itprojektss19.team03.scart.client.gui.NavigationReport;
+import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
@@ -67,10 +68,10 @@ public class ScartReport implements EntryPoint {
 				if(loginInfo.isLoggedIn() == true) {
 					//User wird fuer die session erstellt
 					User u = new User();
-					u.setId(Integer.valueOf(Cookies.getCookie("userId")));
-					u.setEmail(Cookies.getCookie("userGMail"));
+//					u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+//					u.setEmail(Cookies.getCookie("userGMail"));
 					
-					//Report wird geladen
+//					//Report wird geladen
 					loadReport(u);
 				} else {
 					loadLogin();
@@ -90,21 +91,21 @@ public class ScartReport implements EntryPoint {
 				loginPanel.addStyleName("login");
 
 				// Footer wird geclesred fuer unseren Container fuer den Login
-				RootPanel.get("footerR").clear();
+				RootPanel.get("footer").clear();
 				// LoginPanels in den <div> Container "content" hinzufuegen
-				RootPanel.get("contentR").add(loginPanel);
+				RootPanel.get("content").add(loginPanel);
 				
 			}
 
 			private void loadReport(final User u) {
 				
-				RootPanel.get("navigatorR").add(new NavigationReport(u));
+				RootPanel.get("navigator").add(new ReportFilterForm());
 				HTML welcome = new HTML(
-						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp; Welcome to the Report Generator &nbsp; &nbsp; </b></h8> </div>");
+						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp;Report Generator &nbsp; &nbsp; </b></h8> </div>");
 
-				RootPanel.get("contentR").add(welcome);
-				RootPanel.get("contentR").add(new HTML(
-						"<div align=\"center\"> <image src='/images/reportStart.png' width='256px' height='256px' align='center' /></div>"));
+				RootPanel.get("top").add(welcome);
+				RootPanel.get("top").add(new HTML(
+						"<div align=\"center\"> <image src='/images/reportStart.png' width='50px' height='50px' align='center' /></div>"));
 
 				/**
 				 * Hinzufuegen der ScartReport.html und Scart.html in den Footer.
@@ -115,6 +116,7 @@ public class ScartReport implements EntryPoint {
 				Anchor editorLink = new Anchor("Back 2 Scart", "Scart.html");
 				HTML TextTwo = new HTML(" | 2019 Scart | ");
 				
+				
 
 				footer.add(homepage);
 				footer.add(TextOne);
@@ -122,9 +124,9 @@ public class ScartReport implements EntryPoint {
 				footer.add(TextTwo);
 
 				// FooterPanel wird dem <div> Footer hinzugefuegt
-				RootPanel.get("footerR").add(footer);
+				RootPanel.get("footer").add(footer);
 				
 			}
 		});
-	}
+	}	
 }

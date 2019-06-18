@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -360,4 +361,31 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+	
+	public Vector<Article> findAllArticleByGroup(User u, Group g){
+		Connection con = DBConnection.connection();
+		
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat FROM article, groups WHERE userId=" + u.getId() + "AND groupId=" + g.getId());
+			
+			while(rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				
+				result.addElement(a);
+			}
+			}catch(SQLException e2){
+				e2.printStackTrace();
+		}
+		return result;
+	}
+	
 }

@@ -14,6 +14,10 @@ import java.util.Vector;
  * @author Thies
  */
 	public abstract class SimpleReport extends Report {
+		
+		public SimpleReport() {
+			
+		}
 
 
 			  /**

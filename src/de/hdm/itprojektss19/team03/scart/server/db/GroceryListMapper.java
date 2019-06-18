@@ -227,5 +227,35 @@ public class GroceryListMapper {
 		}
 		return result;
 	}
+	
+	public Vector<GroceryList> findAllGroceryListByGroupId(int id){
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum auslesen der Tupel aus der DB
+		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat FROM grocerylist, groups WHERE groups.id= " + id;
+
+		Vector<GroceryList> result = new Vector<GroceryList>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				GroceryList gl = new GroceryList();
+				gl.setId(rs.getInt("id"));
+				gl.setGroceryListName(rs.getString("name"));
+				gl.setCreationDat(rs.getTimestamp("creationDat"));
+				gl.setModDat(rs.getTimestamp("modDat"));
+				result.addElement(gl);
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return result;
+	}
 
 }

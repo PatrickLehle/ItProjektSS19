@@ -131,4 +131,40 @@ public class GroupUserMapper {
 			e2.printStackTrace();
 		}
 	}
+	
+	public Vector<Group> findAllGroupsByUserId(int userId) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum auslesen der Tupel aus der DB
+		String selectByKey = "SELECT groupuser.groupId, groups.name, user.id, user.name, "
+				+ "user.email FROM groupuser, groups, user "
+				+ "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
+				+ "ON groupuser.groupId = groups.id "
+				+ "WHERE groupuser.userId= " + userId;
+
+		Vector<Group> result = new Vector<Group>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+
+			ResultSet rs = stmt.executeQuery();
+			Group group = new Group();
+			group.setGroupName("name");
+
+			while (rs.next()) {
+				Group g = new Group();
+				g.setId(rs.getInt("id"));
+				g.setGroupName(rs.getString("name"));
+			
+				result.addElement(g);
+			}
+		}
+		catch (SQLException e2) {
+			e2.printStackTrace();
+		}
+		return result;
+	}
 }

@@ -17,6 +17,7 @@ CREATE TABLE `article` (
   `quantity` int(100) NOT NULL,
   `unit` varchar(100) NOT NULL,
   `retailerId` int(11) NOT NULL,
+  `ownerId` int(11) NOT NULL,
   `creationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -32,7 +33,8 @@ CREATE TABLE `grocerylist` (
   `name` varchar(100) NOT NULL,
   `creationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `groupId` int(11) NOT NULL
+  `groupId` int(11) NOT NULL,
+  `ownerId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -100,14 +102,16 @@ CREATE TABLE `user` (
 --
 ALTER TABLE `article`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `retailerId` (`retailerId`);
+  ADD KEY `retailerId` (`retailerId`),
+  ADD KEY `article_ibfk_2` (`ownerId`);
 
 --
 -- Indexes for table `grocerylist`
 --
 ALTER TABLE `grocerylist`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `groupId` (`groupId`);
+  ADD KEY `groupId` (`groupId`),
+  ADD KEY `grocerylist_ibfk_2` (`ownerId`);
 
 --
 -- Indexes for table `grocerylistarticle`
@@ -183,13 +187,15 @@ ALTER TABLE `user`
 -- Constraints for table `article`
 --
 ALTER TABLE `article`
-  ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`retailerId`) REFERENCES `retailer` (`id`);
+  ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`retailerId`) REFERENCES `retailer` (`id`),
+  ADD CONSTRAINT `article_ibfk_2` FOREIGN KEY (`ownerId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`);
+  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
+  ADD CONSTRAINT `grocerylist_ibfk_2` FOREIGN KEY (`ownerId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `grocerylistarticle`
