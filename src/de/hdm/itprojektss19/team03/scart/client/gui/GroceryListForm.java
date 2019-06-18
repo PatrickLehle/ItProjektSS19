@@ -69,7 +69,7 @@ public class GroceryListForm extends VerticalPanel {
 	//geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 	
 	Retailer r = new Retailer();
-	Vector<Article> articleVec = new Vector<Article>();
+	Vector<Article> articleVector = new Vector<Article>();
 
 	Label titelLabel = new Label();
 
@@ -174,26 +174,26 @@ public class GroceryListForm extends VerticalPanel {
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
 
-						if (articleVec.get(vectorNumber).getCheckBoolean() == false) {
-							articleTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
+						if (articleVector.get(vectorNumber).getCheckBoolean() == false) {
+							articleTable.setText(falseCount, 0, articleVector.get(vectorNumber).getName());
 							articleTable.setText(falseCount, 1,
-									Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							articleTable.setText(falseCount, 2, articleVec.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
+							articleTable.setText(falseCount, 2, articleVector.get(vectorNumber).getUnit());
 							articleTable.setText(falseCount, 3,
-									Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							boughtTable.setText(trueCount, 0, articleVec.get(vectorNumber).getName());
+							boughtTable.setText(trueCount, 0, articleVector.get(vectorNumber).getName());
 							boughtTable.setText(trueCount, 1,
-									Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							boughtTable.setText(trueCount, 2, articleVec.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
+							boughtTable.setText(trueCount, 2, articleVector.get(vectorNumber).getUnit());
 							boughtTable.setText(trueCount, 3,
-									Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
 						vectorNumber++;
-					}
+					
 					if (visibleNum > 1) {
 						boughtTable.setVisible(true);
 					}
@@ -203,7 +203,8 @@ public class GroceryListForm extends VerticalPanel {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
 		}
 
-	}
+}
+
 
 	/**
 	 * @param node
@@ -742,7 +743,7 @@ public class GroceryListForm extends VerticalPanel {
 					retailerTextBox.setText(null);
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
-					article.setId(articleVec.size() + 1);
+					article.setId(articleVector.size() + 1);
 					article.setName(articleTextBox.getText());
 					article.setQuantity(Integer.parseInt(articleTable.getText(addRow, 1)));
 					article.setUnit(unitTextBox.getText());
@@ -805,5 +806,4 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
 }
