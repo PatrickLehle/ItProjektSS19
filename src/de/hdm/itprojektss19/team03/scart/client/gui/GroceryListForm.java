@@ -124,9 +124,6 @@ public class GroceryListForm extends VerticalPanel {
 		// aufgelistet werden im Panel.
 		for (int aNum = 1; aNum <= articleVec.size(); aNum++) {
 			//a ist ein einzelnes Article-Object 
-			int falseCount = 1;
-			int trueCount = 1;
-			
 			  if (articleVec.get(vecNum).getCheckBoolean() == false) { 
 				  aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
 				  aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
