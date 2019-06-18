@@ -110,8 +110,6 @@ public interface EditorServiceAsync {
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 	
-	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
-
 //UNIT===========================================================================
 	
 //	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
