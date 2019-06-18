@@ -179,7 +179,7 @@ public class GroceryListForm extends VerticalPanel {
 						vectorNumber++;
 					}
 					if (visibleNum > 1) {
-						boughtTable.setVisible(false);
+						boughtTable.setVisible(true);
 					}
 				}
 			});
@@ -307,8 +307,7 @@ public class GroceryListForm extends VerticalPanel {
 							boughtTable.setVisible(false);
 						}
 						loadTable();
-						//Vektor der alle Artikel speichert muss aktualisiert werden
-						//Neu Laden der gesamten Tabelle ? (notwendig)
+						
 						article = null;
 					}
 				});
@@ -323,7 +322,7 @@ public class GroceryListForm extends VerticalPanel {
 	 * 
 	 *         Button ClickHandler fuer gekaufte Artikel. Setzt den Boolean des
 	 *         Buttons true und false und schaut ob andere Buttons aktiv sind. Setzt
-	 *         und l�scht CheckBoxen aus der dem letzten Column.
+	 *         und loescht CheckBoxen aus der dem letzten Column.
 	 *
 	 */
 	public class CheckClickHandler implements ClickHandler {
@@ -519,8 +518,8 @@ public class GroceryListForm extends VerticalPanel {
 							}
 
 							public void onSuccess(Article arg0) {
-								arg0 = article;
 								loadTable();
+								article = null;
 							}
 						});
 
@@ -591,7 +590,8 @@ public class GroceryListForm extends VerticalPanel {
 						}
 
 						public void onSuccess(Article arg0) {
-							loadTable();
+							//loadTable(); FEHLT NOCH: Tabelle muss neu geladen werden.
+							// wie verhaelt sich das mit folgendem Code?
 						}
 					});
 
@@ -642,7 +642,8 @@ public class GroceryListForm extends VerticalPanel {
 
 					public void onSuccess(Void arg0) {
 						loadTable();
-						// FEHLT NOCH: Verarbeitung in der DB
+						// FEHLT NOCH: Korrekte Verarbeitung bei dem Loeschen einer Artikels
+						// und loesen der Verknupfung mit GroceryListArticle Objekten
 					}
 				});
 				articleTable.removeRow(rowIndex);
@@ -733,15 +734,15 @@ public class GroceryListForm extends VerticalPanel {
 						}
 
 						public void onSuccess(Article arg0) {
-
+							article = arg0;
 							ev.addArticleToGroceryList(groceryList, article, new AsyncCallback<GroceryListArticle>() { 
 								public void onFailure(Throwable caught) {
 									// Artikel konnte nicht mit der GroceryList verbunden werden. Das Article-Objekt
-									// wird jetzt auch aus der DB geloescht
+									// wird in der Datenbank als geloescht markiert mit deleteDat
 									ev.deleteArticle(article, new AsyncCallback<Void>() {
 										public void onFailure(Throwable caught) {
-											Window.alert(
-													"Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
+											Window.alert("Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
+											
 										}
 
 										@Override
@@ -758,8 +759,8 @@ public class GroceryListForm extends VerticalPanel {
 											+ groceryList.getGroceryListName() + " hinzugefügt");
 									loadTable();								}
 							});
-							arg0 = article;
-							loadTable();
+							//loadTable();
+							article = null;
 						}
 					});
 
