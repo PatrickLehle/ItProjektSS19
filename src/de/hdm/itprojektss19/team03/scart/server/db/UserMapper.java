@@ -23,7 +23,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class UserMapper {
 
 	private static UserMapper userMapper = null;
-	
+
 	/**
 	 * Beugt mehrfach Instanzierung vor.
 	 */
@@ -59,18 +59,21 @@ public class UserMapper {
 				user.setEmail(rs.getString("email"));
 				users.addElement(user);
 			}
+			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 		return users;
 	}
+
 	/**
 	 * Gibt einen Vecotr aller User mit dem selben Namen zurueck
+	 * 
 	 * @param name
 	 * @param u
 	 * @return Vecotr mit allen Usern die den selben Namen tragen
 	 */
-	public Vector<User> findUserByName(String name, User u){
+	public Vector<User> findUserByName(String name, User u) {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -85,7 +88,7 @@ public class UserMapper {
 
 			ResultSet rs = stmt.executeQuery();
 
-				while (rs.next()) {
+			while (rs.next()) {
 				User user = new User();
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("name"));
@@ -93,17 +96,19 @@ public class UserMapper {
 
 				result.addElement(u);
 			}
+			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Sucht einen User anhand der eindeutigen ID
 	 * 
-	 * @param Die ID des Users
+	 * @param Die
+	 *            ID des Users
 	 * @return User mit der entsprechenden ID
 	 */
 	public User findbyUserId(int userId) {
@@ -136,18 +141,19 @@ public class UserMapper {
 
 				return u;
 			}
+			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
 		return null;
 	}
-	
-	
+
 	/**
 	 * Sucht alle User anhand der Email
 	 * 
-	 * @param Die Email des Users
+	 * @param Die
+	 *            Email des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
 	 */
 	public User findUserByEmail(String userEmail) {
@@ -176,17 +182,19 @@ public class UserMapper {
 				con.close();
 				return u;
 			}
+			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 			return null;
 		}
 		return null;
 	}
-	
+
 	/**
 	 * F�gt in der Datenbank einen neuen User ein
 	 * 
-	 * @param User-Objekt das in die DB eingef�gt werden soll
+	 * @param User-Objekt
+	 *            das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte User mit aktueller ID
 	 */
 	public User insert(User user) {
@@ -222,7 +230,7 @@ public class UserMapper {
 
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
-
+			con.close();
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			e2.printStackTrace();
@@ -230,10 +238,12 @@ public class UserMapper {
 
 		return user;
 	}
+
 	/**
 	 * Ein user wird in der DB nachträglich auf den neusten Stand gebracht
 	 * 
-	 * @param Zu �ndernder User
+	 * @param Zu
+	 *            �ndernder User
 	 * @return Ge�nderter User
 	 */
 	public User update(User user) {
@@ -251,9 +261,10 @@ public class UserMapper {
 			stmt.setString(1, user.getEmail());
 			stmt.setString(2, user.getUsername());
 			stmt.setInt(3, user.getId());
-	
+
 			// Ausfuehren des SQL-Statements
 			stmt.executeUpdate();
+			con.close();
 		}
 		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		catch (SQLException e2) {
@@ -261,11 +272,12 @@ public class UserMapper {
 		}
 		return user;
 	}
-	
+
 	/**
 	 * L�scht einen User aus der Datenbank
 	 * 
-	 * @param Zu l�schender User
+	 * @param Zu
+	 *            l�schender User
 	 */
 	public void delete(User user) {
 		Connection con = DBConnection.connection();
@@ -274,11 +286,10 @@ public class UserMapper {
 			Statement stmt = con.createStatement();
 
 			stmt.executeUpdate("DELETE FROM user " + "WHERE id=" + user.getId());
-
+			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
 	}
-	
 
 }

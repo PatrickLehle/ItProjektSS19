@@ -1,5 +1,10 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -13,68 +18,60 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-
 /**
- * Die RegistryForm wird zum Login aufgerufen, wenn der User
- * die Applikation zum ersten mal verwendet.
+ * Die RegistryForm wird zum Login aufgerufen, wenn der User die Applikation zum
+ * ersten mal verwendet.
  * 
- * @author PatrickLehle
+ * @author PatrickLehle, Marco Dell'Oso
  */
 public class RegistryForm extends VerticalPanel {
 	
-	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
-	
-	
-//TEXTBOXEN=======================================================
-	TextBox FnameTxtBox = new TextBox();
-	TextBox LnameTxtBox = new TextBox();
-	TextBox gmailTb = new TextBox();
-	TextBox email = new TextBox();
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
-//LABELS==========================================================
 	Label welcome = new Label("Please fill in the required fields");
-	Label gmail = new Label("Google-Mail");
-	Label fname = new Label("Lastname");
-	Label lname = new Label("Firstname");
-	Label emaillb = new Label("Email");
-
-//BUTTONS=========================================================
+	TextBox nameTb = new TextBox();
 	Button save = new Button("Save");
+
 	
-//PANELS==========================================================
+	
+	protected void onLoad() {
+		save.setEnabled(false);
+		save.addClickHandler(new ClickHandler() {
 
+			public void onClick(ClickEvent e) {
+				// TODO Auto-generated method stub
 
-	HorizontalPanel hp = new HorizontalPanel();
-	HorizontalPanel hp2 = new HorizontalPanel();
-
-	VerticalPanel hauptPanel = new VerticalPanel();
-	VerticalPanel hauptPanel2 = new VerticalPanel();
-
+			}
+		});
+		
+		nameTb.addChangeHandler(new ChangeHandler() {
+			
+			public void onChange(ChangeEvent e) {
+				Window.alert(e.toString());
+			}
+		});
+	}
+	
 	/**
 	 * Konstruktor fuer die RegistryForm-Klasse.
 	 * 
-	 * @param u user der eigenloggt ist
+	 * @param u
+	 *            user der eigenloggt ist
 	 */
 	public RegistryForm(User u) {
+		nameTb.setTitle("Name Eingeben");
+		
 
-		
-		RootPanel.get("content").clear();
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("footer").clear();
-		
-		RootPanel.get("contentHeader").add(new HTML("Welcome to Scart"));
-		RootPanel.get("content").add(welcome);
-		
-		welcome.setStylePrimaryName("labelReg");
-		
+		this.add(welcome);
+		this.add(nameTb);
 		this.add(save);
 
-		onLoad(u);
 
 	}
 	
-	protected void onLoad(User u) {
-		//Hier passiert etwas... wird spaeter implementiert <3
-	}
+	public void saveUser(User u) {
+		
+	};
+
 
 }

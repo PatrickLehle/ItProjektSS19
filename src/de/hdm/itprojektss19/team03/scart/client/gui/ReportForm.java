@@ -25,7 +25,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
  */
 public class ReportForm extends VerticalPanel{
 	
-	EditorServiceAsync editorV = ClientsideSettings.getEditorVerwaltung();
+	EditorServiceAsync editorV = ClientsideSettings.getEditor();
 	
 	Group group = null;
 	
