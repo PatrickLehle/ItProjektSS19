@@ -66,9 +66,9 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox editTb3 = new TextBox(); // Mengeneinheit
 	TextBox editTb4 = new TextBox(); // RetailerId
 
-	FlexTable aTable = new FlexTable();
-	FlexTable bTable = new FlexTable();
-	Article tempArticle = new Article(); //temporaerer Artikel wenn ein Artikel 
+	FlexTable articleTable = new FlexTable();
+	FlexTable boughtTable = new FlexTable();
+	Article article = new Article(); //temporaerer Artikel wenn ein Artikel 
 	//geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 	
 	Retailer r = new Retailer();
@@ -104,9 +104,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		loadTable(); // Ruft Metode zum laden/fuellen der Tabelle auf
 
-		this.add(aTable);
+		this.add(articleTable);
 
-		this.add(bTable);
+		this.add(boughtTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
 		hpButtons.add(addBtn);
@@ -141,15 +141,15 @@ public class GroceryListForm extends VerticalPanel {
 					articleVec = arg0;
 
 					// Loescht alle Zeilen der FlexTables
-					aTable.removeAllRows();
-					bTable.removeAllRows();
+					articleTable.removeAllRows();
+					boughtTable.removeAllRows();
 
 					// Header der Flextable werden gesetzt
-					aTable.setText(0, 0, "Artikel");
-					aTable.setText(0, 1, "Menge");
-					aTable.setText(0, 2, "Mengeneinheit");
-					aTable.setText(0, 3, "Laden");
-					bTable.setText(0, 0, "Gekauft");
+					articleTable.setText(0, 0, "Artikel");
+					articleTable.setText(0, 1, "Menge");
+					articleTable.setText(0, 2, "Mengeneinheit");
+					articleTable.setText(0, 3, "Laden");
+					boughtTable.setText(0, 0, "Gekauft");
 
 					int vectorNumber = 0; //temporaerer Zaehler um durch den Artikel-Vektor durchzugehen
 					int trueCount = 1; //Checkbox gleich true. Artikel wurd gekauft
@@ -161,23 +161,23 @@ public class GroceryListForm extends VerticalPanel {
 					for (int i = 0; i <= articleVec.size(); i++) {
 
 						if (articleVec.get(vectorNumber).getCheckBoolean() == false) {
-							aTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
-							aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							aTable.setText(falseCount, 2, articleVec.get(vectorNumber).getUnit());
-							aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+							articleTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
+							articleTable.setText(falseCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
+							articleTable.setText(falseCount, 2, articleVec.get(vectorNumber).getUnit());
+							articleTable.setText(falseCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							bTable.setText(trueCount, 0, articleVec.get(vectorNumber).getName());
-							bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							bTable.setText(trueCount, 2, articleVec.get(vectorNumber).getUnit());
-							bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+							boughtTable.setText(trueCount, 0, articleVec.get(vectorNumber).getName());
+							boughtTable.setText(trueCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
+							boughtTable.setText(trueCount, 2, articleVec.get(vectorNumber).getUnit());
+							boughtTable.setText(trueCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
 						vectorNumber++;
 					}
 					if (visibleNum > 1) {
-						bTable.setVisible(false);
+						boughtTable.setVisible(false);
 					}
 				}
 			});
@@ -230,33 +230,33 @@ public class GroceryListForm extends VerticalPanel {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				final int rowIndex = aTable.getCellForEvent(event).getRowIndex();
-				final int rowCount = bTable.getRowCount();
+				final int rowIndex = articleTable.getCellForEvent(event).getRowIndex();
+				final int rowCount = boughtTable.getRowCount();
 
-				tempArticle.setName(aTable.getText(rowIndex, 0));
-				tempArticle.setQuantity(Integer.parseInt(aTable.getText(rowIndex, 1)));
-				tempArticle.setUnit(aTable.getText(rowIndex, 2));
-				tempArticle.setRetailerId(Integer.parseInt(aTable.getText(rowIndex, 3)));
-				tempArticle.setCheckBoolean(true);
+				article.setName(articleTable.getText(rowIndex, 0));
+				article.setQuantity(Integer.parseInt(articleTable.getText(rowIndex, 1)));
+				article.setUnit(articleTable.getText(rowIndex, 2));
+				article.setRetailerId(Integer.parseInt(articleTable.getText(rowIndex, 3)));
+				article.setCheckBoolean(true);
 
-				ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
+				ev.saveArticle(article, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht hinzugefügt werden");
-						tempArticle = null; // Article-Objekt wird geleert, da Artikel nicht hinzugefuegt werdn konnte
+						article = null; // Article-Objekt wird geleert, da Artikel nicht hinzugefuegt werdn konnte
 					}
 
 					public void onSuccess(Article arg0) {
-						bTable.setText(rowCount, 0, arg0.getName());
-						bTable.setText(rowCount, 1, Integer.toString(arg0.getQuantity()));
-						bTable.setText(rowCount, 2, arg0.getUnit());
-						bTable.setText(rowCount, 3, Integer.toString(arg0.getRetailerId()));
-						bTable.setWidget(rowCount, 4, getCbReturn());
-						aTable.removeRow(rowIndex);
+						boughtTable.setText(rowCount, 0, arg0.getName());
+						boughtTable.setText(rowCount, 1, Integer.toString(arg0.getQuantity()));
+						boughtTable.setText(rowCount, 2, arg0.getUnit());
+						boughtTable.setText(rowCount, 3, Integer.toString(arg0.getRetailerId()));
+						boughtTable.setWidget(rowCount, 4, getCbReturn());
+						articleTable.removeRow(rowIndex);
 
-						if (bTable.getRowCount() >= 2) {
-							bTable.setVisible(true);
+						if (boughtTable.getRowCount() >= 2) {
+							boughtTable.setVisible(true);
 						}
-						tempArticle = null; //Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt werden konnte
+						article = null; //Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt werden konnte
 						loadTable();
 					}
 				});
@@ -276,38 +276,38 @@ public class GroceryListForm extends VerticalPanel {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				final int rowIndex = bTable.getCellForEvent(event).getRowIndex();
-				final int rowCount = aTable.getRowCount();
+				final int rowIndex = boughtTable.getCellForEvent(event).getRowIndex();
+				final int rowCount = articleTable.getRowCount();
 				
-				tempArticle = null;
+				article = null;
 				
-				tempArticle.setName(bTable.getText(rowIndex, 0));
-				tempArticle.setQuantity(Integer.parseInt(bTable.getText(rowIndex, 1)));
-				tempArticle.setUnit(bTable.getText(rowIndex, 2));
-				tempArticle.setRetailerId(Integer.parseInt(bTable.getText(rowIndex, 3)));
-				tempArticle.setCheckBoolean(false);
+				article.setName(boughtTable.getText(rowIndex, 0));
+				article.setQuantity(Integer.parseInt(boughtTable.getText(rowIndex, 1)));
+				article.setUnit(boughtTable.getText(rowIndex, 2));
+				article.setRetailerId(Integer.parseInt(boughtTable.getText(rowIndex, 3)));
+				article.setCheckBoolean(false);
 
-				ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
+				ev.saveArticle(article, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht von der gekauft Tabelle entfernt werden");
-						tempArticle = null;
+						article = null;
 					}
 
 					public void onSuccess(Article arg0) {
-						aTable.setText(rowCount, 0, arg0.getName());
-						aTable.setText(rowCount, 1, Integer.toString(arg0.getQuantity()));
-						aTable.setText(rowCount, 2, arg0.getUnit());
-						aTable.setText(rowCount, 3, Integer.toString(arg0.getRetailerId()));
-						aTable.setWidget(rowCount, 4, getCbCheck());
-						bTable.removeRow(rowIndex);
+						articleTable.setText(rowCount, 0, arg0.getName());
+						articleTable.setText(rowCount, 1, Integer.toString(arg0.getQuantity()));
+						articleTable.setText(rowCount, 2, arg0.getUnit());
+						articleTable.setText(rowCount, 3, Integer.toString(arg0.getRetailerId()));
+						articleTable.setWidget(rowCount, 4, getCbCheck());
+						boughtTable.removeRow(rowIndex);
 
-						if (bTable.getRowCount() < 2) {
-							bTable.setVisible(false);
+						if (boughtTable.getRowCount() < 2) {
+							boughtTable.setVisible(false);
 						}
 						loadTable();
 						//Vektor der alle Artikel speichert muss aktualisiert werden
 						//Neu Laden der gesamten Tabelle ? (notwendig)
-						tempArticle = null;
+						article = null;
 					}
 				});
 			}
@@ -331,19 +331,19 @@ public class GroceryListForm extends VerticalPanel {
 			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false
 					&& addBtnBoolean == false) {
 				checkBtnBoolean = true;
-				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					aTable.setWidget(aNum, 4, getCbCheck());
+				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+					articleTable.setWidget(aNum, 4, getCbCheck());
 				}
-				for (int bNum = 1; bNum < bTable.getRowCount(); bNum++) {
-					bTable.setWidget(bNum, 4, getCbReturn());
+				for (int bNum = 1; bNum < boughtTable.getRowCount(); bNum++) {
+					boughtTable.setWidget(bNum, 4, getCbReturn());
 				}
 			} else if (checkBtnBoolean == true) {
 				checkBtnBoolean = false;
-				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					aTable.removeCell(aNum, 4);
+				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+					articleTable.removeCell(aNum, 4);
 				}
-				for (int bNum = 1; bNum < aTable.getRowCount(); bNum++) {
-					bTable.removeCell(bNum, 4);
+				for (int bNum = 1; bNum < articleTable.getRowCount(); bNum++) {
+					boughtTable.removeCell(bNum, 4);
 				}
 			} else if (editBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte den anderen Button deaktivieren.");
@@ -378,7 +378,7 @@ public class GroceryListForm extends VerticalPanel {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				final int rowIndex = aTable.getCellForEvent(event).getRowIndex();
+				final int rowIndex = articleTable.getCellForEvent(event).getRowIndex();
 				globalRow = rowIndex;
 			}
 		});
@@ -388,36 +388,36 @@ public class GroceryListForm extends VerticalPanel {
 					if (editTb1.getText().isEmpty() == true && editTb2.getText().isEmpty() == true
 							&& editTb3.getText().isEmpty() == true && editTb4.getText().isEmpty() == true) {
 						finalGlobalRow = globalRow;
-						first = aTable.getText(globalRow, 0);
-						second = aTable.getText(globalRow, 1);
-						third = aTable.getText(globalRow, 2);
-						fourth = aTable.getText(globalRow, 3);
-						editTb1.setText(aTable.getText(globalRow, 0));
-						editTb2.setText(aTable.getText(globalRow, 1));
-						editTb3.setText(aTable.getText(globalRow, 2));
-						editTb4.setText(aTable.getText(globalRow, 3));
-						aTable.setWidget(globalRow, 0, editTb1);
-						aTable.setWidget(globalRow, 1, editTb2);
-						aTable.setWidget(globalRow, 2, editTb3);
-						aTable.setWidget(globalRow, 3, editTb4);
+						first = articleTable.getText(globalRow, 0);
+						second = articleTable.getText(globalRow, 1);
+						third = articleTable.getText(globalRow, 2);
+						fourth = articleTable.getText(globalRow, 3);
+						editTb1.setText(articleTable.getText(globalRow, 0));
+						editTb2.setText(articleTable.getText(globalRow, 1));
+						editTb3.setText(articleTable.getText(globalRow, 2));
+						editTb4.setText(articleTable.getText(globalRow, 3));
+						articleTable.setWidget(globalRow, 0, editTb1);
+						articleTable.setWidget(globalRow, 1, editTb2);
+						articleTable.setWidget(globalRow, 2, editTb3);
+						articleTable.setWidget(globalRow, 3, editTb4);
 					} else if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 							&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
-						aTable.clearCell(finalGlobalRow, 0);
-						aTable.clearCell(finalGlobalRow, 1);
-						aTable.clearCell(finalGlobalRow, 2);
-						aTable.clearCell(finalGlobalRow, 3);
-						aTable.setText(finalGlobalRow, 0, editTb1.getText());
-						aTable.setText(finalGlobalRow, 1, editTb2.getText());
-						aTable.setText(finalGlobalRow, 2, editTb3.getText());
-						aTable.setText(finalGlobalRow, 3, editTb4.getText());
+						articleTable.clearCell(finalGlobalRow, 0);
+						articleTable.clearCell(finalGlobalRow, 1);
+						articleTable.clearCell(finalGlobalRow, 2);
+						articleTable.clearCell(finalGlobalRow, 3);
+						articleTable.setText(finalGlobalRow, 0, editTb1.getText());
+						articleTable.setText(finalGlobalRow, 1, editTb2.getText());
+						articleTable.setText(finalGlobalRow, 2, editTb3.getText());
+						articleTable.setText(finalGlobalRow, 3, editTb4.getText());
 						
 						
-						tempArticle.setName(editTb1.getText());
-						tempArticle.setQuantity(Integer.parseInt(editTb2.getText()));
-						tempArticle.setUnit(editTb3.getText());
-						tempArticle.setRetailerId(Integer.parseInt(editTb4.getText()));
+						article.setName(editTb1.getText());
+						article.setQuantity(Integer.parseInt(editTb2.getText()));
+						article.setUnit(editTb3.getText());
+						article.setRetailerId(Integer.parseInt(editTb4.getText()));
 						
-						ev.saveArticle(tempArticle, new AsyncCallback<Article>() {
+						ev.saveArticle(article, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
 								Window.alert("Artikel konnte nicht editiert werden");
 							}
@@ -434,89 +434,89 @@ public class GroceryListForm extends VerticalPanel {
 						editTb2.setText(null);
 						editTb3.setText(null);
 						editTb4.setText(null);
-						first = aTable.getText(globalRow, 0);
-						second = aTable.getText(globalRow, 1);
-						third = aTable.getText(globalRow, 2);
-						fourth = aTable.getText(globalRow, 3);
-						aTable.removeCell(finalGlobalRow, 4);
-						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
-						if (aTable.getText(globalRow, 0).isEmpty() == false
-								&& aTable.getText(globalRow, 1).isEmpty() == false
-								&& aTable.getText(globalRow, 2).isEmpty() == false
-								&& aTable.getText(globalRow, 3).isEmpty() == false) {
+						first = articleTable.getText(globalRow, 0);
+						second = articleTable.getText(globalRow, 1);
+						third = articleTable.getText(globalRow, 2);
+						fourth = articleTable.getText(globalRow, 3);
+						articleTable.removeCell(finalGlobalRow, 4);
+						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						if (articleTable.getText(globalRow, 0).isEmpty() == false
+								&& articleTable.getText(globalRow, 1).isEmpty() == false
+								&& articleTable.getText(globalRow, 2).isEmpty() == false
+								&& articleTable.getText(globalRow, 3).isEmpty() == false) {
 							finalGlobalRow = globalRow;
-							first = aTable.getText(globalRow, 0);
-							second = aTable.getText(globalRow, 1);
-							third = aTable.getText(globalRow, 2);
-							fourth = aTable.getText(globalRow, 3);
-							editTb1.setText(aTable.getText(globalRow, 0));
-							editTb2.setText(aTable.getText(globalRow, 1));
-							editTb3.setText(aTable.getText(globalRow, 2));
-							editTb4.setText(aTable.getText(globalRow, 3));
-							aTable.setWidget(globalRow, 0, editTb1);
-							aTable.setWidget(globalRow, 1, editTb2);
-							aTable.setWidget(globalRow, 2, editTb3);
-							aTable.setWidget(globalRow, 3, editTb4);
+							first = articleTable.getText(globalRow, 0);
+							second = articleTable.getText(globalRow, 1);
+							third = articleTable.getText(globalRow, 2);
+							fourth = articleTable.getText(globalRow, 3);
+							editTb1.setText(articleTable.getText(globalRow, 0));
+							editTb2.setText(articleTable.getText(globalRow, 1));
+							editTb3.setText(articleTable.getText(globalRow, 2));
+							editTb4.setText(articleTable.getText(globalRow, 3));
+							articleTable.setWidget(globalRow, 0, editTb1);
+							articleTable.setWidget(globalRow, 1, editTb2);
+							articleTable.setWidget(globalRow, 2, editTb3);
+							articleTable.setWidget(globalRow, 3, editTb4);
 						}
 					} else {
-						aTable.clearCell(finalGlobalRow, 0);
-						aTable.clearCell(finalGlobalRow, 1);
-						aTable.clearCell(finalGlobalRow, 2);
-						aTable.clearCell(finalGlobalRow, 3);
-						aTable.removeCell(finalGlobalRow, 4);
-						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
-						aTable.setText(finalGlobalRow, 0, first);
-						aTable.setText(finalGlobalRow, 1, second);
-						aTable.setText(finalGlobalRow, 2, third);
-						aTable.setText(finalGlobalRow, 3, fourth);
-						first = aTable.getText(globalRow, 0);
-						second = aTable.getText(globalRow, 1);
-						third = aTable.getText(globalRow, 2);
-						fourth = aTable.getText(globalRow, 3);
+						articleTable.clearCell(finalGlobalRow, 0);
+						articleTable.clearCell(finalGlobalRow, 1);
+						articleTable.clearCell(finalGlobalRow, 2);
+						articleTable.clearCell(finalGlobalRow, 3);
+						articleTable.removeCell(finalGlobalRow, 4);
+						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						articleTable.setText(finalGlobalRow, 0, first);
+						articleTable.setText(finalGlobalRow, 1, second);
+						articleTable.setText(finalGlobalRow, 2, third);
+						articleTable.setText(finalGlobalRow, 3, fourth);
+						first = articleTable.getText(globalRow, 0);
+						second = articleTable.getText(globalRow, 1);
+						third = articleTable.getText(globalRow, 2);
+						fourth = articleTable.getText(globalRow, 3);
 						editTb1.setText(null);
 						editTb2.setText(null);
 						editTb3.setText(null);
 						editTb4.setText(null);
-						aTable.setWidget(finalGlobalRow, 4, getCbEdit());
-						if (aTable.getText(globalRow, 0).isEmpty() == false
-								&& aTable.getText(globalRow, 1).isEmpty() == false
-								&& aTable.getText(globalRow, 2).isEmpty() == false
-								&& aTable.getText(globalRow, 3).isEmpty() == false) {
+						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
+						if (articleTable.getText(globalRow, 0).isEmpty() == false
+								&& articleTable.getText(globalRow, 1).isEmpty() == false
+								&& articleTable.getText(globalRow, 2).isEmpty() == false
+								&& articleTable.getText(globalRow, 3).isEmpty() == false) {
 							finalGlobalRow = globalRow;
-							editTb1.setText(aTable.getText(globalRow, 0));
-							editTb2.setText(aTable.getText(globalRow, 1));
-							editTb3.setText(aTable.getText(globalRow, 2));
-							editTb4.setText(aTable.getText(globalRow, 3));
-							aTable.setWidget(globalRow, 0, editTb1);
-							aTable.setWidget(globalRow, 1, editTb2);
-							aTable.setWidget(globalRow, 2, editTb3);
-							aTable.setWidget(globalRow, 3, editTb4);
+							editTb1.setText(articleTable.getText(globalRow, 0));
+							editTb2.setText(articleTable.getText(globalRow, 1));
+							editTb3.setText(articleTable.getText(globalRow, 2));
+							editTb4.setText(articleTable.getText(globalRow, 3));
+							articleTable.setWidget(globalRow, 0, editTb1);
+							articleTable.setWidget(globalRow, 1, editTb2);
+							articleTable.setWidget(globalRow, 2, editTb3);
+							articleTable.setWidget(globalRow, 3, editTb4);
 						}
 						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				} else {
 					if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 							&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
-						aTable.clearCell(globalRow, 0);
-						aTable.clearCell(globalRow, 1);
-						aTable.clearCell(globalRow, 2);
-						aTable.clearCell(globalRow, 3);
-						aTable.setText(globalRow, 0, editTb1.getText());
-						aTable.setText(globalRow, 1, editTb2.getText());
-						aTable.setText(globalRow, 2, editTb3.getText());
-						aTable.setText(globalRow, 3, editTb4.getText());
+						articleTable.clearCell(globalRow, 0);
+						articleTable.clearCell(globalRow, 1);
+						articleTable.clearCell(globalRow, 2);
+						articleTable.clearCell(globalRow, 3);
+						articleTable.setText(globalRow, 0, editTb1.getText());
+						articleTable.setText(globalRow, 1, editTb2.getText());
+						articleTable.setText(globalRow, 2, editTb3.getText());
+						articleTable.setText(globalRow, 3, editTb4.getText());
 						
-						a.setName(editTb1.getText());
-						a.setQuantity(Integer.parseInt(editTb2.getText()));
-						a.setUnit(editTb3.getText());
-						a.setRetailerId(Integer.parseInt(editTb4.getText()));
+						article.setName(editTb1.getText());
+						article.setQuantity(Integer.parseInt(editTb2.getText()));
+						article.setUnit(editTb3.getText());
+						article.setRetailerId(Integer.parseInt(editTb4.getText()));
 						
-						ev.saveArticle(a, new AsyncCallback<Article>() {
+						ev.saveArticle(article, new AsyncCallback<Article>() {
 							public void onFailure(Throwable caught) {
 							}
 
 							public void onSuccess(Article arg0) {
-								arg0 = a;
+								arg0 = article;
 								loadTable();
 							}
 						});
@@ -526,19 +526,19 @@ public class GroceryListForm extends VerticalPanel {
 						editTb3.setText(null);
 						editTb4.setText(null);
 					} else {
-						aTable.remove(editTb1);
-						aTable.remove(editTb2);
-						aTable.remove(editTb3);
-						aTable.remove(editTb4);
-						aTable.setText(globalRow, 0, first);
-						aTable.setText(globalRow, 1, second);
-						aTable.setText(globalRow, 2, third);
-						aTable.setText(globalRow, 3, fourth);
+						articleTable.remove(editTb1);
+						articleTable.remove(editTb2);
+						articleTable.remove(editTb3);
+						articleTable.remove(editTb4);
+						articleTable.setText(globalRow, 0, first);
+						articleTable.setText(globalRow, 1, second);
+						articleTable.setText(globalRow, 2, third);
+						articleTable.setText(globalRow, 3, fourth);
 						editTb1.setText(null);
 						editTb2.setText(null);
 						editTb3.setText(null);
 						editTb4.setText(null);
-						aTable.setWidget(globalRow, 4, getCbEdit());
+						articleTable.setWidget(globalRow, 4, getCbEdit());
 						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				}
@@ -562,28 +562,28 @@ public class GroceryListForm extends VerticalPanel {
 					&& addBtnBoolean == false) {
 				editBtnBoolean = true;
 				globalRow = 0;
-				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					aTable.setWidget(aNum, 4, getCbEdit());
+				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+					articleTable.setWidget(aNum, 4, getCbEdit());
 				}
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
 				if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 						&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
-					aTable.clearCell(globalRow, 0);
-					aTable.clearCell(globalRow, 1);
-					aTable.clearCell(globalRow, 2);
-					aTable.clearCell(globalRow, 3);
-					aTable.setText(globalRow, 0, editTb1.getText());
-					aTable.setText(globalRow, 1, editTb2.getText());
-					aTable.setText(globalRow, 2, editTb3.getText());
-					aTable.setText(globalRow, 3, editTb4.getText());
+					articleTable.clearCell(globalRow, 0);
+					articleTable.clearCell(globalRow, 1);
+					articleTable.clearCell(globalRow, 2);
+					articleTable.clearCell(globalRow, 3);
+					articleTable.setText(globalRow, 0, editTb1.getText());
+					articleTable.setText(globalRow, 1, editTb2.getText());
+					articleTable.setText(globalRow, 2, editTb3.getText());
+					articleTable.setText(globalRow, 3, editTb4.getText());
 
-					a.setName(editTb1.getText());
-					a.setQuantity(Integer.parseInt(editTb2.getText()));
-					a.setUnit(editTb3.getText());
-					a.setRetailerId(Integer.parseInt(editTb4.getText()));
+					article.setName(editTb1.getText());
+					article.setQuantity(Integer.parseInt(editTb2.getText()));
+					article.setUnit(editTb3.getText());
+					article.setRetailerId(Integer.parseInt(editTb4.getText()));
 					 
-					ev.saveArticle(a, new AsyncCallback<Article>() {
+					ev.saveArticle(article, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 						}
 
@@ -597,22 +597,22 @@ public class GroceryListForm extends VerticalPanel {
 					editTb3.setText(null);
 					editTb4.setText(null);
 				} else if (globalRow != 0) {
-					aTable.remove(editTb1);
-					aTable.remove(editTb2);
-					aTable.remove(editTb3);
-					aTable.remove(editTb4);
-					aTable.setText(globalRow, 0, first);
-					aTable.setText(globalRow, 1, second);
-					aTable.setText(globalRow, 2, third);
-					aTable.setText(globalRow, 3, fourth);
+					articleTable.remove(editTb1);
+					articleTable.remove(editTb2);
+					articleTable.remove(editTb3);
+					articleTable.remove(editTb4);
+					articleTable.setText(globalRow, 0, first);
+					articleTable.setText(globalRow, 1, second);
+					articleTable.setText(globalRow, 2, third);
+					articleTable.setText(globalRow, 3, fourth);
 					editTb1.setText(null);
 					editTb2.setText(null);
 					editTb3.setText(null);
 					editTb4.setText(null);
 					Window.alert("Änderung wurde nicht gespeichert");
 				}
-				for (int i = 1; i <= aTable.getRowCount(); i++) {
-					aTable.removeCell(i, 4);
+				for (int i = 1; i <= articleTable.getRowCount(); i++) {
+					articleTable.removeCell(i, 4);
 				}
 			} else if (checkBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
@@ -632,8 +632,8 @@ public class GroceryListForm extends VerticalPanel {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				final int rowIndex = aTable.getCellForEvent(event).getRowIndex();
-				ev.deleteArticle(tempArticle, new AsyncCallback<Void>() {
+				final int rowIndex = articleTable.getCellForEvent(event).getRowIndex();
+				ev.deleteArticle(article, new AsyncCallback<Void>() {
 					public void onFailure(Throwable caught) {
 					}
 
@@ -642,7 +642,7 @@ public class GroceryListForm extends VerticalPanel {
 						// FEHLT NOCH: Verarbeitung in der DB
 					}
 				});
-				aTable.removeRow(rowIndex);
+				articleTable.removeRow(rowIndex);
 			}
 		});
 		cb.setValue(false);
@@ -663,13 +663,13 @@ public class GroceryListForm extends VerticalPanel {
 			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
 					&& addBtnBoolean == false) {
 				deleteBtnBoolean = true;
-				for (int aNum = 1; aNum < aTable.getRowCount(); aNum++) {
-					aTable.setWidget(aNum, 4, getCbDel());
+				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+					articleTable.setWidget(aNum, 4, getCbDel());
 				}
 			} else if (deleteBtnBoolean == true) {
-				for (int i = 1; i < aTable.getRowCount(); i++) {
-					if (aTable.getText(i, 4).isEmpty() == true) {
-						aTable.removeCell(i, 4);
+				for (int i = 1; i < articleTable.getRowCount(); i++) {
+					if (articleTable.getText(i, 4).isEmpty() == true) {
+						articleTable.removeCell(i, 4);
 					}
 				}
 				deleteBtnBoolean = false;
@@ -697,33 +697,33 @@ public class GroceryListForm extends VerticalPanel {
 			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
 					&& addBtnBoolean == false) {
 				addBtnBoolean = true;
-				int i = aTable.getRowCount();
-				aTable.setWidget(i, 0, editTb1);
-				aTable.setWidget(i, 1, editTb2);
-				aTable.setWidget(i, 2, editTb3);
-				aTable.setWidget(i, 3, editTb4);
+				int i = articleTable.getRowCount();
+				articleTable.setWidget(i, 0, editTb1);
+				articleTable.setWidget(i, 1, editTb2);
+				articleTable.setWidget(i, 2, editTb3);
+				articleTable.setWidget(i, 3, editTb4);
 			} else if (addBtnBoolean == true) {
 				if (editTb1.getText().isEmpty() == false && editTb2.getText().isEmpty() == false
 						&& editTb3.getText().isEmpty() == false && editTb4.getText().isEmpty() == false) {
 					addBtnBoolean = false;
-					int addRow = aTable.getRowCount() - 1;
-					aTable.clearCell(addRow, 0);
-					aTable.clearCell(addRow, 1);
-					aTable.clearCell(addRow, 2);
-					aTable.clearCell(addRow, 3);
-					aTable.setText(addRow, 0, editTb1.getText());
-					aTable.setText(addRow, 1, editTb2.getText());
-					aTable.setText(addRow, 2, editTb3.getText());
-					aTable.setText(addRow, 3, editTb4.getText());
+					int addRow = articleTable.getRowCount() - 1;
+					articleTable.clearCell(addRow, 0);
+					articleTable.clearCell(addRow, 1);
+					articleTable.clearCell(addRow, 2);
+					articleTable.clearCell(addRow, 3);
+					articleTable.setText(addRow, 0, editTb1.getText());
+					articleTable.setText(addRow, 1, editTb2.getText());
+					articleTable.setText(addRow, 2, editTb3.getText());
+					articleTable.setText(addRow, 3, editTb4.getText());
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
-					tempArticle.setId(articleVec.size() + 1);
-					tempArticle.setName(editTb1.getText());
-					tempArticle.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
-					tempArticle.setUnit(editTb3.getText());
-					tempArticle.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
+					article.setId(articleVec.size() + 1);
+					article.setName(editTb1.getText());
+					article.setQuantity(Integer.parseInt(articleTable.getText(addRow, 1)));
+					article.setUnit(editTb3.getText());
+					article.setRetailerId(Integer.parseInt(articleTable.getText(addRow, 3)));
 					
-					 ev.createArticle(tempArticle, new AsyncCallback<Article>() {
+					 ev.createArticle(article, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Artikel konnte nicht erstellt werden");
 							// Article Object a existiert dennoch mit den zugewiesenen Attributen
@@ -731,11 +731,11 @@ public class GroceryListForm extends VerticalPanel {
 
 						public void onSuccess(Article arg0) {
 
-							ev.addArticleToGroceryList(groceryList, tempArticle, new AsyncCallback<GroceryListArticle>() { 
+							ev.addArticleToGroceryList(groceryList, article, new AsyncCallback<GroceryListArticle>() { 
 								public void onFailure(Throwable caught) {
 									// Artikel konnte nicht mit der GroceryList verbunden werden. Das Article-Objekt
 									// wird jetzt auch aus der DB geloescht
-									ev.deleteArticle(tempArticle, new AsyncCallback<Void>() {
+									ev.deleteArticle(article, new AsyncCallback<Void>() {
 										public void onFailure(Throwable caught) {
 											Window.alert(
 													"Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
@@ -751,11 +751,11 @@ public class GroceryListForm extends VerticalPanel {
 
 								public void onSuccess(GroceryListArticle arg0) {
 									aGl = arg0;
-									Window.alert("Artikel " + tempArticle.getName() + " wurde  der Einkaufsliste "
+									Window.alert("Artikel " + article.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
 									loadTable();								}
 							});
-							arg0 = a;
+							arg0 = article;
 							loadTable();
 						}
 					});
@@ -769,7 +769,7 @@ public class GroceryListForm extends VerticalPanel {
 					Window.alert("Es wurde kein Artikel hinzugef�gt da die Angaben nicht vollst�ndig waren");
 				} else {
 					addBtnBoolean = false;
-					aTable.removeRow(aTable.getRowCount() - 1);
+					articleTable.removeRow(articleTable.getRowCount() - 1);
 					editTb1.setText(null);
 					editTb2.setText(null);
 					editTb3.setText(null);
