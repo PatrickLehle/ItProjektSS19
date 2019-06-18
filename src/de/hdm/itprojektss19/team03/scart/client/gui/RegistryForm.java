@@ -1,5 +1,8 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
@@ -11,16 +14,21 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.DateBox;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+
 
 
 /**
  * Die RegistryForm wird zum Login aufgerufen, wenn der User
  * die Applikation zum ersten mal verwendet.
  * 
- * @author PatrickLehle
+ * @author PatrickLehle, vanduyho
  */
 public class RegistryForm extends VerticalPanel {
+	
+	private User clientBoUser =null;
+	private LoginServiceAsync loginService;
 	
 	private EditorServiceAsync ev = ClientsideSettings.getEditorVerwaltung();
 	
@@ -75,6 +83,39 @@ public class RegistryForm extends VerticalPanel {
 	
 	protected void onLoad(User u) {
 		//Hier passiert etwas... wird spaeter implementiert <3
+	}
+	
+	class RegisterClickHandler implements ClickHandler {
+
+		private TextBox textbox1;
+		private TextBox textbox2;
+
+		public RegisterClickHandler(TextBox tb1, TextBox tb2, TextBox tb3) {
+			
+			this.textbox1 = tb1;
+			this.textbox2 = tb2;
+			
+		}
+
+		public void onClick(ClickEvent event) {
+			
+			if (textbox2.getText().length() > 20) {
+				Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
+				return;
+			}
+
+			if (textbox1.getText() == "" || textbox2.getText() == "") {
+				Window.alert("Bitte füllen Sie alle Felder aus!");
+				return;
+			}
+			
+			clientBoUser.setUsername(textbox1.getText());
+			clientBoUser.setEmail(textbox2.getText());
+
+			
+			//loginService.registerUser(clientBoUser, new RegisterUser());
+		}
+
 	}
 
 }
