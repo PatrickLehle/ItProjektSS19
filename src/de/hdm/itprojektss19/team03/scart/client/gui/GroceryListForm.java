@@ -101,6 +101,7 @@ public class GroceryListForm extends VerticalPanel {
 
 		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 			public void onFailure(Throwable caught) {
+				Window.alert("Einkaufsliste konnte nicht geladen werden");
 			}
 
 			public void onSuccess(Vector<Article> arg0) {
@@ -114,31 +115,35 @@ public class GroceryListForm extends VerticalPanel {
 		aTable.setText(0, 3, "Laden");
 		bTable.setText(0, 0, "Gekauft");
 		
+		int vecNum = 0;
+		int trueCount = 0;
+		int falseCount = 0;
 		int visibleNum = 0;
 
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
 		for (int aNum = 1; aNum <= articleVec.size(); aNum++) {
-			
-			  for(int falseCount = 1; a.getCheckBoolean() == false; falseCount++) { 
-				  aTable.setText(falseCount, 0, a.getName());
-				  aTable.setText(falseCount, 1, Integer.toString(a.getQuantity()));
-				  aTable.setText(falseCount, 2, a.getUnit());
-				  aTable.setText(falseCount, 3, Integer.toString(a.getRetailerId())); 
+			//a ist ein einzelnes Article-Object 
+			  if (articleVec.get(vecNum).getCheckBoolean() == false) { 
+				  aTable.setText(falseCount, 0, articleVec.get(vecNum).getName());
+				  aTable.setText(falseCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity()));
+				  aTable.setText(falseCount, 2, articleVec.get(vecNum).getUnit());
+				  aTable.setText(falseCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+				  falseCount++;
+			 	} else {
+			 		visibleNum = trueCount; 
+				  bTable.setText(trueCount, 0, articleVec.get(vecNum).getName()); 
+				  bTable.setText(trueCount, 1, Integer.toString(articleVec.get(vecNum).getQuantity())); 
+				  bTable.setText(trueCount, 2, articleVec.get(vecNum).getUnit()); 
+				  bTable.setText(trueCount, 3, Integer.toString(articleVec.get(vecNum).getRetailerId())); 
+				  trueCount++;
 			 	}
-			 
-			  for(int trueCount = 1; a.getCheckBoolean() == true; trueCount++) {
-				  visibleNum = trueCount; 
-				  bTable.setText(trueCount, 0, a.getName()); 
-				  bTable.setText(trueCount, 1, Integer.toString(a.getQuantity())); 
-				  bTable.setText(trueCount, 2, a.getUnit()); 
-				  bTable.setText(trueCount, 3, Integer.toString(a.getRetailerId())); 
-			  }
+			  vecNum++;
 		}
 		
 		vt.add(aTable);
 		
-		if(visibleNum > 1) { bTable.setVisible(false);}
+		if(visibleNum > 0) { bTable.setVisible(false);}
 		vt.add(bTable);
 
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
@@ -340,6 +345,7 @@ public class GroceryListForm extends VerticalPanel {
 								arg0.setQuantity(Integer.parseInt(editTb2.getText()));
 								arg0.setUnit(editTb3.getText());
 								arg0.setRetailerId(Integer.parseInt(editTb4.getText()));
+								
 							}
 						});
 						
@@ -614,6 +620,7 @@ public class GroceryListForm extends VerticalPanel {
 					ev.createArticle(a, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
 							Window.alert("Artikel konnte nicht erstellt werden");
+							//Article Object a existiert dennoch mit den zugewiesenen Attributen
 						}
 
 						public void onSuccess(Article arg0) {
@@ -622,8 +629,17 @@ public class GroceryListForm extends VerticalPanel {
 							ev.addArticleToGroceryList(groceryList, a, new AsyncCallback<GroceryListArticle>() { //groceryList muss bei dem Aufruf der Seite uebergeben werden
 								
 								public void onFailure(Throwable caught) {
-									Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
-									//FEHLT NOCH: Article in ev.createArticle() erstellt muss bei fehlgeschlagener addArticleToGroceryList() wieder aus der DB entfernt werden
+									//Artikel konnte nicht mit der GroceryList verbunden werden. Das Article-Objekt wird jetzt auch aus der DB geloescht
+									ev.deleteArticle(a, new AsyncCallback<Void>() {
+										public void onFailure(Throwable caught) {
+											Window.alert("Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
+										}
+										@Override
+										public void onSuccess(Void arg0) {
+											
+											Window.alert("Artikel konnte nicht mit Einkaufsliste verbunden werden");
+										}
+									});
 							}
 							public void onSuccess(GroceryListArticle arg0) {
 								aGl = arg0;
