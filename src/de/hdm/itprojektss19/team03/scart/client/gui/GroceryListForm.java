@@ -113,11 +113,15 @@ public class GroceryListForm extends VerticalPanel {
 		});
 		*/
 
+		
+		/* Jetzt in loadTable
 		aTable.setText(0, 0, "Artikel");
 		aTable.setText(0, 1, "Menge");
 		aTable.setText(0, 2, "Mengeneinheit");
 		aTable.setText(0, 3, "Laden");
 		bTable.setText(0, 0, "Gekauft");
+		*/
+		
 		
 		/* Jetzt in der loadTableMethod()
 		int vecNum = 0;
@@ -125,10 +129,7 @@ public class GroceryListForm extends VerticalPanel {
 		int falseCount = 1;
 		int visibleNum = 0;
 
-		/**
-		 * for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
-		 * aufgelistet werden im Panel.
-		 */
+		
 		for (int aNum = 0; aNum <= articleVec.size(); aNum++) {
 			// a ist ein einzelnes Article-Object
 			if (articleVec.get(vecNum).getCheckBoolean() == false) {
@@ -149,7 +150,9 @@ public class GroceryListForm extends VerticalPanel {
 		}
 		*/
 		
+		
 		loadTable(); //Ruft Metode zum laden/fuellen der Tabelle auf
+		
 		
 		vt.add(aTable);
 		
@@ -186,17 +189,28 @@ public class GroceryListForm extends VerticalPanel {
 	/* Metjode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer Aktualisierung der Daten
 	 * 
 	 */
-	public void loadTable() {
-		
+	public void loadTable(){
+		try {
 		int groceryListId = groceryList.getId();
 
 		ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 			public void onFailure(Throwable caught) {
-				Window.alert("Einkaufsliste konnte nicht geladen werden");
+				throw new IllegalArgumentException("Einkaufsliste konnte nicht geladen werden");
 			}
 
 			public void onSuccess(Vector<Article> arg0) {
 				articleVec = arg0;
+				
+				//Leert alle Zeilen der FlexTables
+				aTable.removeAllRows();
+				bTable.removeAllRows();
+				
+				//Header der Flextable werden geloescht
+				aTable.setText(0, 0, "Artikel");
+				aTable.setText(0, 1, "Menge");
+				aTable.setText(0, 2, "Mengeneinheit");
+				aTable.setText(0, 3, "Laden");
+				bTable.setText(0, 0, "Gekauft");
 				
 				int vecNum = 0;
 				int trueCount = 1;
@@ -226,7 +240,9 @@ public class GroceryListForm extends VerticalPanel {
 				if(visibleNum > 1) { bTable.setVisible(false);}
 			}
 		});
-		
+		} catch (IllegalArgumentException e) {
+			Window.alert("Einkaufsliste konnte nicht geladen werden");
+		}
 		
 	}
 
@@ -831,13 +847,13 @@ public class GroceryListForm extends VerticalPanel {
 									// FEHLT NOCH: Tabelle muss neu geladen werden
 								}
 							});
-
+							/*
 							arg0.setId(articleVec.size() + 1);
 							arg0.setName(editTb1.getText());
 							arg0.setQuantity(Integer.parseInt(aTable.getText(addRow, 1)));
 							arg0.setUnit(editTb3.getText());
 							arg0.setRetailerId(Integer.parseInt(aTable.getText(addRow, 3)));
-							
+							*/
 						}
 					});
 
