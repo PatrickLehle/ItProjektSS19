@@ -10,5 +10,4 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 public interface LoginServiceAsync{
 
 	public void login(String requestUri, AsyncCallback<LoginInfo> callback);
-
 }

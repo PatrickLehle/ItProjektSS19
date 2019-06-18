@@ -14,8 +14,7 @@ public class DBConnection {
 
 	private static Connection con = null;
 	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
-	private static String localUrl = "jdbc:mysql://localhost:8000/ITPROJEKTSS19?user=test&password=test";
-
+	private static String localUrl = "jdbc:mysql://localhost:3306/itprojektss19?user=test&password=test";
 
 	private static final String username = "test";
 	private static final String password = "test";
@@ -26,16 +25,16 @@ public class DBConnection {
 	 * @return con
 	 */
 	public static Connection connection() {
-		
-		String user = "";
-		String pass = "";
+
+		String user = "test";
+		String pass = "test";
 
 		/**
 		 * Wenn es bisher keine Connection zur DB gab, ...
 		 */
 		if (con == null) {
 			String url = null;
-			
+
 			try {
 				if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) {
 					Class.forName("com.mysql.jdbc.GoogleDriver");
@@ -45,8 +44,8 @@ public class DBConnection {
 				} else {
 					Class.forName("com.mysql.jdbc.Driver");
 					url = localUrl;
-					user = "patrick";
-					pass = "patrick";
+					user = "test";
+					pass = "test";
 				}
 
 				con = DriverManager.getConnection(url, user, pass);
@@ -64,8 +63,8 @@ public class DBConnection {
 			} catch (Exception e) {
 				con = null;
 				e.printStackTrace();
-				throw new RuntimeException("Does not work!" + e.getMessage().toString()
-						+ "Infos: " + user + ", " + pass + ", " + url);
+				throw new RuntimeException(
+						"Does not work!" + e.getMessage().toString() + "Infos: " + user + ", " + pass + ", " + url);
 			}
 		}
 		return con;

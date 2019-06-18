@@ -88,7 +88,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 		 * @author Peter Thies
 		 * @since 28.02.2012
 		 */
-		public static EditorServiceAsync getEditorVerwaltung() {
+		public static EditorServiceAsync getEditor() {
 
 			//Gab es bislang noch keine Verwaltung-Instanz, wird eine erstellt.
 			if (editorVerwaltung == null) {
