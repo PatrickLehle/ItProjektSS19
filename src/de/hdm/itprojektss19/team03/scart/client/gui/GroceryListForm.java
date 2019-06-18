@@ -159,23 +159,20 @@ public class GroceryListForm extends VerticalPanel {
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
-<<<<<<< Updated upstream
-					for (int i = 0; i <= articleVec.size(); i++) {
-=======
-					for (int aNum = 0; aNum <= articleVector.size(); aNum++) {
->>>>>>> Stashed changes
 
-						if (articleVec.get(vectorNumber).getCheckBoolean() == false) {
-							articleTable.setText(falseCount, 0, articleVec.get(vectorNumber).getName());
-							articleTable.setText(falseCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							articleTable.setText(falseCount, 2, articleVec.get(vectorNumber).getUnit());
-							articleTable.setText(falseCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+					for (int aNum = 0; aNum <= articleVector.size(); aNum++) {
+
+						if (articleVector.get(vectorNumber).getCheckBoolean() == false) {
+							articleTable.setText(falseCount, 0, articleVector.get(vectorNumber).getName());
+							articleTable.setText(falseCount, 1, Integer.toString(articleVector.get(vectorNumber).getQuantity()));
+							articleTable.setText(falseCount, 2, articleVector.get(vectorNumber).getUnit());
+							articleTable.setText(falseCount, 3, Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							boughtTable.setText(trueCount, 0, articleVec.get(vectorNumber).getName());
-							boughtTable.setText(trueCount, 1, Integer.toString(articleVec.get(vectorNumber).getQuantity()));
-							boughtTable.setText(trueCount, 2, articleVec.get(vectorNumber).getUnit());
-							boughtTable.setText(trueCount, 3, Integer.toString(articleVec.get(vectorNumber).getRetailerId()));
+							boughtTable.setText(trueCount, 0, articleVector.get(vectorNumber).getName());
+							boughtTable.setText(trueCount, 1, Integer.toString(articleVector.get(vectorNumber).getQuantity()));
+							boughtTable.setText(trueCount, 2, articleVector.get(vectorNumber).getUnit());
+							boughtTable.setText(trueCount, 3, Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
@@ -416,7 +413,7 @@ public class GroceryListForm extends VerticalPanel {
 						articleTable.setText(finalGlobalRow, 2, editTb3.getText());
 						articleTable.setText(finalGlobalRow, 3, editTb4.getText());
 						
-						tempArticle = null;
+						article = null;
 						
 						article.setName(editTb1.getText());
 						article.setQuantity(Integer.parseInt(editTb2.getText()));
@@ -723,7 +720,7 @@ public class GroceryListForm extends VerticalPanel {
 					articleTable.setText(addRow, 3, editTb4.getText());
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
-					article.setId(articleVec.size() + 1);
+					article.setId(articleVector.size() + 1);
 					article.setName(editTb1.getText());
 					article.setQuantity(Integer.parseInt(articleTable.getText(addRow, 1)));
 					article.setUnit(editTb3.getText());
@@ -757,7 +754,7 @@ public class GroceryListForm extends VerticalPanel {
 
 								public void onSuccess(GroceryListArticle arg0) {
 									groceryListArticle = arg0;
-									Window.alert("Artikel " + tempArticle.getName() + " wurde  der Einkaufsliste "
+									Window.alert("Artikel " + article.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
 									loadTable();								}
 							});
