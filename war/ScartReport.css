@@ -23,7 +23,7 @@
 } 
  	
 #navigator{
-	align: center;
+	text-align: center;
 	width: auto;
 	background-color: #fdfbfe;
 	border-radius: 10px;
@@ -87,14 +87,14 @@
 
 .StartPanel{
 	margin: 10px;
-	border-size: 5px;
+	/* border-size: 5px; */
 	padding: 10px;
 	border-radius: 3px;
 }
 
 .EndPanel{
 	margin: 10px;
-	border-size: 5px;
+	/* border-size: 5px; */
 	padding: 10px;
 	border-radius: 3px;
 }
@@ -102,13 +102,13 @@
 .RetailerVP{
 	width: 95%;
 	background: #d5d8da;
-	border-size: 5px;
+	/* border-size: 5px; */
 	margin: 10px;
 	border-radius: 10px;
 }
 
 .RetailerLabel{
-		border: none;
+	border: none;
 	font-family: sans-serif;
 	font-weight: bold;
 	border-radius: 0px;
@@ -119,14 +119,14 @@
 
 .CheckBoxesGroupVPanel{
 	background: #d5d8da;
-	border-size: 5px;
+	/* border-size: 5px; */
 	margin: 10px;
 	border-radius: 10px;
 }
 
 .CheckBoxesRetailerVP{
 	background: #d5d8da;
-	border-size: 5px;
+	/* border-size: 5px; */
 	margin: 10px;
 	border-radius: 10px;
 }
@@ -177,7 +177,7 @@ button.gwt-Button {
 .DisabledPeriodBtn{
 	border: none;
 	padding: 7px;
-	background: #404040; !important
+	background: #404040 !important;
 	color: #ffffff ;
 	font-family: sans-serif;
 	text-align: center;
@@ -199,14 +199,14 @@ button.gwt-Button {
 	opacity: 0.2;
 	width: 95%;
 	background: #d5d8da;
-	border-size: 5px;
+	/* border-size: 5px; */
 	margin: 10px;
 	border-radius: 10px;
 }
 .DisabledRetailerBtn{
 	border: none;
 	padding: 7px;
-	background: #404040; !important
+	background: #404040 !important;
 	color: #ffffff;
 	font-family: sans-serif;
 	text-align: center;
