@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -155,8 +156,9 @@ public class UserMapper {
 	 * @param Die
 	 *            Email des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
+	 * @throws SQLException 
 	 */
-	public User findUserByEmail(String userEmail) {
+	public User findUserByEmail(String userEmail) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -185,7 +187,9 @@ public class UserMapper {
 			con.close();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe("findUserByEmail for " + userEmail + " failed: " + e2.getMessage());
+			con.close();
+			throw e2;
 		}
 		return null;
 	}
