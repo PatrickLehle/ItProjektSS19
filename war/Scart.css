@@ -1,4 +1,5 @@
 body {
+	background: black !important;
 	height: 100%;
 	width: 100%;
 	top: 0;
@@ -54,7 +55,7 @@ body {
 }
 
 .toolbar {
-	background: url(/images/scartbannerwhite.jpg);
+	background: url(/images/scartbannerdarkblank.jpg);
 	background-size: cover;
 	-moz-box-shadow: inset 0 0 10px #000000;
 	-webkit-box-shadow: inset 0 0 10px #000000;
@@ -66,6 +67,9 @@ body {
 
 .footer {
 	position: absolute;
+	background: url(/images/scartbannerdarkblank.jpg) !important;
+	background-size: cover !important;
+	border-radius: 3px;
 	bottom: 0;
 	width: 100%;
 	height: 60px;
