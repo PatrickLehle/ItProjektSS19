@@ -419,7 +419,7 @@ public class ArticleMapper {
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat FROM article, groups WHERE userId=" + u.getId() + "AND groupId=" + g.getId());
+			ResultSet rs = stmt.executeQuery("SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat, article.delDat FROM article, groups WHERE userId=" + u.getId() + "AND groupId=" + g.getId());
 			
 			while(rs.next()) {
 				Article a = new Article();
