@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
@@ -74,6 +75,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setDelDat(rs.getTimestamp("delDat"));
 				
 				return article;
 			}
@@ -111,7 +113,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
-	
+				a.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(a);
 			}
 		}
@@ -147,6 +149,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
 			}
@@ -183,7 +186,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
-
+				article.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
@@ -230,6 +233,7 @@ public class ArticleMapper {
 			stmt.setTimestamp(6, article.getCreationDat());
 			stmt.setTimestamp(7, article.getModDat());
 			stmt.setBoolean(8, article.getCheckBoolean());
+			//DelDat wird bei dem anlegen eines Artikels nicht hinterlegt
 			
 			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
@@ -251,7 +255,7 @@ public class ArticleMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=? WHERE id=?";
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
 
 		try {
 			con = DBConnection.connection();
@@ -264,8 +268,11 @@ public class ArticleMapper {
 			stmt.setTimestamp(5, article.getModDat());
 			stmt.setInt(6, article.getId());
 			stmt.setBoolean(7, article.getCheckBoolean());
+			stmt.setTimestamp(8, article.getDelDat()); //Mit der Update-Methode sollte kein Artikel als geloescht markiert werden, denn 
+													// das lokale Artikel-Objekt wird dadurch aber nicht veraendert. 
 			
 			stmt.executeUpdate();
+			
 		}
 		catch (SQLException e2) {
 			e2.printStackTrace();
@@ -278,16 +285,57 @@ public class ArticleMapper {
 	 * 
 	 * @param Zu l�schender Artikel
 	 */
-	public void delete(Article article) {
-		Connection con = DBConnection.connection();
+	public Article delete(Article article) {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
 
 		try {
+			/* alte delete Mthode
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
+			*/
+				article.setDelDat(new Timestamp(new Date().getTime()));
+				con = DBConnection.connection();
+				stmt = con.prepareStatement(update);
+			
+				stmt.setString(1, article.getName());
+				stmt.setInt(2, article.getQuantity());
+				stmt.setString(3, article.getUnit());
+				stmt.setInt(4, article.getRetailerId());
+				stmt.setTimestamp(5, article.getModDat());
+				stmt.setInt(6, article.getId());
+				stmt.setBoolean(7, article.getCheckBoolean());
+				stmt.setTimestamp(8, article.getDelDat());
+				
+				stmt.executeUpdate();
+
+				Statement statement = con.createStatement();
+				ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + article.getId());
+
+				//Nur EIN Ergebnis, da id =PRIMARY-KEY
+				if (rs.next()) {
+					Article returnArticle = new Article();
+					returnArticle.setId(rs.getInt("id"));
+					returnArticle.setName(rs.getString("name"));
+					returnArticle.setQuantity(rs.getInt("quantity"));
+					returnArticle.setUnit(rs.getString("unit"));
+					returnArticle.setRetailerId(rs.getInt("retailerId"));
+					returnArticle.setCreationDat(rs.getTimestamp("creationDat"));
+					returnArticle.setModDat(rs.getTimestamp("modDat"));
+					returnArticle.setCheckBoolean(rs.getBoolean("boolean"));
+					returnArticle.setDelDat(rs.getTimestamp("delDat"));
+					
+					return returnArticle;
+			}
+			
 
 		} catch (SQLException e2) {
 			e2.printStackTrace();
 		}
+		return null;
 	}
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
@@ -314,6 +362,8 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -353,7 +403,8 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
-				
+				a.setDelDat(rs.getTimestamp("delDat"));
+
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -379,7 +430,9 @@ public class ArticleMapper {
 				a.setRetailerId(rs.getInt("retailerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
-				
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
 				result.addElement(a);
 			}
 			}catch(SQLException e2){
