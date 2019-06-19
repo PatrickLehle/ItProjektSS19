@@ -1,23 +1,39 @@
 @charset "UTF-8";
 
 /* REPORT CSS FILE */
+.welcomeReportText{
+	font-size: 10pt; 
+   font-weight: bold;
+   padding: 15px;
+
+}
 
 #top{
-	border-radius: 10px;
-	margin: 10px;
+	position: justify;
+	background: url(/images/scartbannerreportwhite.jpg);
+	background-size: cover;
+	-moz-box-shadow: inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
+	width: 100%;
+	height: 100px;
+	border-radius: 3px;
+	padding: 0px;
+	margin: 0px !important;
 } 
  	
 #navigator{
 	align: center;
 	width: auto;
-	background-color: #f5f3f6;
+	background-color: #fdfbfe;
 	border-radius: 10px;
 	border-radius: 10px;
 	position: sticky;
-	box-shadow: 0px 5px 9px 3px #999999;
+	-moz-box-shadow: inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
 	float: left;
-	margin: 10px;
-
+	margin: 10px 10px 10px 0px;
 }
 				
 #content{
@@ -212,4 +228,5 @@ button.gwt-Button {
 	border-top-left-radius: 10px !important;
 	width: auto;
 }
+
 
