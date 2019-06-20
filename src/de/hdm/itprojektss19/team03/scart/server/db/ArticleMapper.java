@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -55,8 +56,9 @@ public class ArticleMapper {
 	 * 
 	 * @param zu Suchende id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
+	 * @throws SQLException 
 	 */
-	public Article findByKey(int id) {
+	public Article findByKey(int id) throws SQLException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -78,8 +80,8 @@ public class ArticleMapper {
 				return article;
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return null;
 	}
@@ -88,8 +90,9 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
+	 * @throws SQLException 
 	 */
-	public Vector<Article> findAll() {
+	public Vector<Article> findAll() throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -116,13 +119,13 @@ public class ArticleMapper {
 			}
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return articles;
 	}
 	
-	public Vector<Article> findArticleByName(String name, Article a){
+	public Vector<Article> findArticleByName(String name, Article a) throws SQLException{
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -151,8 +154,8 @@ public class ArticleMapper {
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
@@ -162,8 +165,9 @@ public class ArticleMapper {
 	 * 
 	 * @param Die ID des Retailers
 	 * @return Vector mit allen gefunden Artikeln des Retailers
+	 * @throws SQLException 
 	 */
-	public Vector<Article> findArticleByRetailerId(int retailerId) {
+	public Vector<Article> findArticleByRetailerId(int retailerId) throws SQLException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> articles = new Vector<Article>();
@@ -187,7 +191,8 @@ public class ArticleMapper {
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		//Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
 		return articles;
@@ -198,8 +203,9 @@ public class ArticleMapper {
 	 * 
 	 * @param Artikel-Objekt das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte Artikel mit aktueller ID
+	 * @throws SQLException 
 	 */
-	public Article insert(Article article) {
+	public Article insert(Article article) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -235,7 +241,8 @@ public class ArticleMapper {
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return article;
 	}
@@ -245,8 +252,9 @@ public class ArticleMapper {
 	 * 
 	 * @param Zu �ndernder Artikel
 	 * @return Ge�nderter Artikel
+	 * @throws SQLException 
 	 */
-	public Article update(Article article) {
+	public Article update(Article article) throws SQLException {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -268,7 +276,8 @@ public class ArticleMapper {
 			stmt.executeUpdate();
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return article;
 	}
@@ -277,8 +286,9 @@ public class ArticleMapper {
 	 * L�scht einen Artikel aus der Datenbank
 	 * 
 	 * @param Zu l�schender Artikel
+	 * @throws SQLException 
 	 */
-	public void delete(Article article) {
+	public void delete(Article article) throws SQLException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -286,7 +296,8 @@ public class ArticleMapper {
 			stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
 	/**
@@ -294,8 +305,9 @@ public class ArticleMapper {
 	 * @param start
 	 * @param end
 	 * @return
+	 * @throws SQLException 
 	 */
-	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end){
+	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws SQLException{
 		Connection con = DBConnection.connection();
 		
 		Vector<Article> result = new Vector<Article>();
@@ -317,7 +329,8 @@ public class ArticleMapper {
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
@@ -328,8 +341,9 @@ public class ArticleMapper {
 	 * @param end
 	 * @param r
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
+	 * @throws SQLException 
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end){
+	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws SQLException{
 		//DB Connection aufbauen
 		Connection con = DBConnection.connection();
 		
@@ -357,12 +371,13 @@ public class ArticleMapper {
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
 	
-	public Vector<Article> findAllArticleByGroup(User u, Group g){
+	public Vector<Article> findAllArticleByGroup(User u, Group g) throws SQLException{
 		Connection con = DBConnection.connection();
 		
 		Vector<Article> result = new Vector<Article>();
@@ -383,7 +398,8 @@ public class ArticleMapper {
 				result.addElement(a);
 			}
 			}catch(SQLException e2){
-				e2.printStackTrace();
+				ServersideSettings.getLogger().severe(e2.getMessage());
+				throw e2;
 		}
 		return result;
 	}

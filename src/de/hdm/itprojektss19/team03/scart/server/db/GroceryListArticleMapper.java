@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
@@ -52,8 +53,9 @@ public class GroceryListArticleMapper {
 	 * 		fuer das Articleobjekt
 	 * 
 	 * @return null
+	 * @throws SQLException 
 	 */
-	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
+	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -67,7 +69,8 @@ public class GroceryListArticleMapper {
 			stmt.executeUpdate();
 			
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return null;
 	}
@@ -79,8 +82,9 @@ public class GroceryListArticleMapper {
 	 * 		GroceryList-Objekt
 	 * @param a
 	 * 		Article-Objekt
+	 * @throws SQLException 
 	 */
-	public void removeArticleFromGroceryList(GroceryList gl, Article a) {
+	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -96,11 +100,12 @@ public class GroceryListArticleMapper {
 			stmt.executeUpdate();
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
 
-	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) {
+	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -133,7 +138,8 @@ public class GroceryListArticleMapper {
 			}
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
@@ -143,8 +149,9 @@ public class GroceryListArticleMapper {
 	 * 
 	 * @param a
 	 * 		das zu loeschende Objekt von allen existierenden Listen
+	 * @throws SQLException 
 	 */
-	public void deleteArticleFromAllLists(Article a) {
+	public void deleteArticleFromAllLists(Article a) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -157,7 +164,8 @@ public class GroceryListArticleMapper {
 			stmt.executeUpdate();
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
 }

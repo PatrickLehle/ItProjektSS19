@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 
@@ -39,7 +40,7 @@ public class GroupUserMapper {
 	}
 	
 	
-	public GroupUser addUserToGroup(User u, Group g) {
+	public GroupUser addUserToGroup(User u, Group g) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -53,13 +54,14 @@ public class GroupUserMapper {
 			stmt.executeUpdate();
 			
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return null;
 	}
 
 
-	public void removeUserFromGroup(User u, Group g) {
+	public void removeUserFromGroup(User u, Group g) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -74,11 +76,12 @@ public class GroupUserMapper {
 			stmt.executeUpdate();
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
 
-	public Vector<User> findAllUserByGroup(int groupId) {
+	public Vector<User> findAllUserByGroup(int groupId) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -110,12 +113,13 @@ public class GroupUserMapper {
 			}
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
 
-	public void deleteUserFromAllGroups(User u) {
+	public void deleteUserFromAllGroups(User u) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -128,11 +132,12 @@ public class GroupUserMapper {
 			stmt.executeUpdate();
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
 	
-	public Vector<Group> findAllGroupsByUserId(int userId) {
+	public Vector<Group> findAllGroupsByUserId(int userId) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -163,7 +168,8 @@ public class GroupUserMapper {
 			}
 		}
 		catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
