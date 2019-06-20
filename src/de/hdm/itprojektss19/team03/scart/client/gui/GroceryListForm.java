@@ -198,6 +198,7 @@ public class GroceryListForm extends VerticalPanel {
 					if (visibleNum > 1) {
 						boughtTable.setVisible(true);
 					}
+					loadTable();
 				}
 			});
 		} catch (IllegalArgumentException e) {
@@ -443,7 +444,7 @@ public class GroceryListForm extends VerticalPanel {
 
 							public void onSuccess(Article arg0) {
 								article = arg0;
-								//loadTable(); Tabelle wird neu geladen
+								loadTable();
 								
 								//Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden konnte
 								//und die Tabelle neu geladen wird?
@@ -538,8 +539,8 @@ public class GroceryListForm extends VerticalPanel {
 							}
 
 							public void onSuccess(Article arg0) {
-								loadTable();
 								article = null;
+								loadTable();
 							}
 						});
 
@@ -612,8 +613,7 @@ public class GroceryListForm extends VerticalPanel {
 
 						public void onSuccess(Article arg0) {
 							article = arg0;
-							//loadTable(); FEHLT NOCH: Tabelle muss neu geladen werden.
-							// wie verhaelt sich das mit folgendem Code?
+							loadTable();
 						}
 					});
 
@@ -778,7 +778,6 @@ public class GroceryListForm extends VerticalPanel {
 										public void onSuccess(Void arg0) {
 											Window.alert(
 													"Artikel konnte nicht mit Einkaufsliste verbunden werden. Artikel aus der Datenbank gelöscht");
-
 										}
 									});
 								}
@@ -787,10 +786,9 @@ public class GroceryListForm extends VerticalPanel {
 									groceryListArticle = arg0;
 									Window.alert("Artikel " + article.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
-									loadTable();
 								}
 							});
-							//loadTable();
+							loadTable();
 							
 						}
 					});
