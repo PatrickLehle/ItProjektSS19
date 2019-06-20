@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-
 
 /**
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
@@ -24,20 +24,21 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class GroupMapper {
 
 	private static GroupMapper groupMapper = null;
-	
+
 	public static GroupMapper groupMapper() {
 		if (groupMapper == null) {
 			groupMapper = new GroupMapper();
 		}
 		return groupMapper;
 	}
-	
+
 	/**
 	 * Sucht alle Gruppen
 	 * 
 	 * @return Vector mit allen gefundenen Gruppen
+	 * @throws SQLException
 	 */
-	public Vector<Group> findAll() {
+	public Vector<Group> findAll() throws SQLException {
 		Connection con = DBConnection.connection();
 
 		Vector<Group> groups = new Vector<Group>();
@@ -45,8 +46,8 @@ public class GroupMapper {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM groups");
-		
-			//fuer jede Gruppe die gefunden wird, wird ein neues G-Object erstellt
+
+			// fuer jede Gruppe die gefunden wird, wird ein neues G-Object erstellt
 			while (rs.next()) {
 				Group group = new Group();
 				group.setId(rs.getInt("id"));
@@ -55,19 +56,22 @@ public class GroupMapper {
 				groups.addElement(group);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return groups;
 	}
-	
+
 	/**
 	 * Sucht alle Groups anhand der ID
 	 * 
-	 * @param Die ID der Group
+	 * @param Die
+	 *            ID der Group
 	 * @return Vector mit allen gefunden Groups mit entsprechender Id
+	 * @throws SQLException
 	 */
-	
-	public Group findByGroupId(int groupId) {
+
+	public Group findByGroupId(int groupId) throws SQLException {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
@@ -82,13 +86,13 @@ public class GroupMapper {
 				return group;
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
-		return null;	
+		return null;
 	}
-	
-	public Vector<Group> findGroupByName(String name, Group g) {
+
+	public Vector<Group> findGroupByName(String name, Group g) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -104,7 +108,7 @@ public class GroupMapper {
 
 			ResultSet rs = stmt.executeQuery();
 
-				while (rs.next()) {
+			while (rs.next()) {
 				Group group = new Group();
 				group.setId(rs.getInt("id"));
 				group.setGroupName(rs.getString("name"));
@@ -112,23 +116,25 @@ public class GroupMapper {
 				result.addElement(g);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
-		
+
 	/**
 	 * Fuegt in der Datenbank eine neue Gruppe ein
 	 * 
-	 * @param Group-Objekt das in die DB eingefuegt werden soll
+	 * @param Group-Objekt
+	 *            das in die DB eingefuegt werden soll
 	 * @return Die Eingefuegte Gruppe mit aktueller ID
+	 * @throws SQLException
 	 */
-	public Group insert(Group group) {
+	public Group insert(Group group) throws SQLException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		String maxId = "SELECT MAX(id) AS maxid FROM groups";
 		String insert = "INSERT INTO groups (id, name) VALUES (?,?)";
 
@@ -146,21 +152,24 @@ public class GroupMapper {
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return group;
-	}			
-		
+	}
+
 	/**
 	 * Aendert einen Geruppe in der Datenbank
 	 * 
-	 * @param Zu aendernde Gruppe
+	 * @param Zu
+	 *            aendernde Gruppe
 	 * @return Geaenderte Gruppe
+	 * @throws SQLException
 	 */
-	public Group update(Group group) {
+	public Group update(Group group) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
-		
+
 		String updateSQL = "UPDATE groups SET name=? WHERE id=?";
 
 		try {
@@ -169,21 +178,23 @@ public class GroupMapper {
 
 			stmt.setString(1, group.getGroupName());
 			stmt.setInt(2, group.getId());
-			
+
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return group;
 	}
-	
+
 	/**
 	 * Loescht eine Gruppe aus der Datenbank
 	 * 
-	 * @param Zu loeschende Gruppe
+	 * @param Zu
+	 *            loeschende Gruppe
+	 * @throws SQLException
 	 */
-	public void delete(Group group) {
+	public void delete(Group group) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -193,13 +204,12 @@ public class GroupMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(delete);
 			stmt.setInt(1, group.getId());
-			
+
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 	}
-	
-	
+
 }

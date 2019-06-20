@@ -1,11 +1,12 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
-
 import java.util.Vector;
 
-
-
+/**
+ * Ein zusammengesetzter Report. Dieser Report kann aus einer Menge von 
+ * Teil-Reports (vgl. Attribut <code>subReports</code>) bestehen.
+ */
 public abstract class CompositeReport extends Report implements Serializable {
 
 private static final long serialVersionUID = 1L;
@@ -13,13 +14,13 @@ private static final long serialVersionUID = 1L;
 /**
  * Die Menge der Teil-Reports.
  */
-private Vector<SimpleReport> subReports = new Vector<SimpleReport>();
+private Vector<Report> subReports = new Vector<Report>();
 
 /**
  * Hinzufuegen eines Teil-Reports.
  * @param r der hinzuzufuegende Teil-Report.
  */
-public void addSubReport(SimpleReport r) {
+public void addSubReport(Report r) {
 	this.subReports.addElement(r);
 }
 

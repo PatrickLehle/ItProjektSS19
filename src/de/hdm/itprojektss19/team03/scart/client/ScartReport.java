@@ -13,7 +13,6 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
-import de.hdm.itprojektss19.team03.scart.client.gui.NavigationReport;
 import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -101,27 +100,18 @@ public class ScartReport implements EntryPoint {
 				
 				RootPanel.get("navigator").add(new ReportFilterForm());
 				HTML welcome = new HTML(
-						"<div align=\"center\"> <h8> <b> &nbsp; &nbsp;Report Generator &nbsp; &nbsp; </b></h8> </div>");
+						"<div align=\"center\"> <h1> <b> &nbsp; &nbsp;Report Generator &nbsp; &nbsp; </b></h1> </div>");
 
+				welcome.setStyleName("welcomeReportText");
 				RootPanel.get("top").add(welcome);
-				RootPanel.get("top").add(new HTML(
-						"<div align=\"center\"> <image src='/images/reportStart.png' width='50px' height='50px' align='center' /></div>"));
 
 				/**
 				 * Hinzufuegen der ScartReport.html und Scart.html in den Footer.
 				 */
 				HorizontalPanel footer = new HorizontalPanel();
-				Anchor homepage = new Anchor("Homepage", "ScartReport.html");
-				HTML TextOne = new HTML(" | ");
 				Anchor editorLink = new Anchor("Back 2 Scart", "Scart.html");
-				HTML TextTwo = new HTML(" | 2019 Scart | ");
-				
-				
 
-				footer.add(homepage);
-				footer.add(TextOne);
 				footer.add(editorLink);
-				footer.add(TextTwo);
 
 				// FooterPanel wird dem <div> Footer hinzugefuegt
 				RootPanel.get("footer").add(footer);
