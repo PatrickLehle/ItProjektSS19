@@ -14,8 +14,8 @@ import de.hdm.itprojektss19.team03.scart.shared.report.ArticleRetailerReport;
 
 
 @RemoteServiceRelativePath("reportgenerator")
-public interface ReportGenerator extends RemoteService{
-	
+public interface ReportGenerator extends RemoteService {
+
 	void init();
 	
 	public ArticleReport createStatisticA(User u) throws IllegalArgumentException;

@@ -1,16 +1,17 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Date;
+import java.util.Vector;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl;
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
@@ -35,7 +36,7 @@ import de.hdm.itprojektss19.team03.scart.shared.report.SimpleReport;
  */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportGenerator {
 
-//INITIALIZATION========================================================
+	// INITIALIZATION========================================================
 	private static final long serialVersionUID = 1L;
 	private EditorService editorService = null;
 	private LoginService loginInfo = null;
@@ -75,6 +76,10 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	public ReportGeneratorImpl() throws IllegalArgumentException {
 
 	}
+	
+//METHODS===============================================================
+	public void init() throws IllegalArgumentException{
+		
 
 //METHODS===============================================================
 	public void init() throws IllegalArgumentException {
@@ -96,6 +101,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	}
 
 	@Override
+	public ArticleReport createStatisticA(User u) throws IllegalArgumentException, DatabaseException {
+		if (this.getEditorService() == null) {
 	public ArticleReport createStatisticA(User u) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;

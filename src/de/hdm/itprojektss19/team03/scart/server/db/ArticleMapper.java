@@ -10,10 +10,9 @@ import java.util.Date;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -58,9 +57,9 @@ public class ArticleMapper {
 	 * @param zu
 	 *            Suchende id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Article findByKey(int id) throws SQLException {
+	public Article findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -84,7 +83,7 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -93,9 +92,9 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAll() throws SQLException {
+	public Vector<Article> findAll() throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -122,12 +121,12 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return articles;
 	}
 
-	public Vector<Article> findArticleByName(String name, Article a) throws SQLException {
+	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -158,7 +157,7 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -169,9 +168,9 @@ public class ArticleMapper {
 	 * @param Die
 	 *            ID des Retailers
 	 * @return Vector mit allen gefunden Artikeln des Retailers
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findArticleByRetailerId(int retailerId) throws SQLException {
+	public Vector<Article> findArticleByRetailerId(int retailerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> articles = new Vector<Article>();
@@ -196,7 +195,7 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		// Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
 		return articles;
@@ -208,9 +207,9 @@ public class ArticleMapper {
 	 * @param Artikel-Objekt
 	 *            das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte Artikel mit aktueller ID
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Article insert(Article article) throws SQLException {
+	public Article insert(Article article) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -248,7 +247,7 @@ public class ArticleMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return article;
 	}
@@ -259,9 +258,9 @@ public class ArticleMapper {
 	 * @param Zu
 	 *            �ndernder Artikel
 	 * @return Ge�nderter Artikel
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Article update(Article article) throws SQLException {
+	public Article update(Article article) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -287,7 +286,7 @@ public class ArticleMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return article;
 	}
@@ -297,9 +296,9 @@ public class ArticleMapper {
 	 * 
 	 * @param Zu
 	 *            l�schender Artikel
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Article delete(Article article) throws SQLException {
+	public Article delete(Article article) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		PreparedStatement stmt = null;
@@ -347,7 +346,7 @@ public class ArticleMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -358,9 +357,9 @@ public class ArticleMapper {
 	 * @param start
 	 * @param end
 	 * @return
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws SQLException {
+	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> result = new Vector<Article>();
@@ -386,7 +385,7 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -399,9 +398,10 @@ public class ArticleMapper {
 	 * @param end
 	 * @param r
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws SQLException {
+	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end)
+			throws DatabaseException {
 		// DB Connection aufbauen
 		Connection con = DBConnection.connection();
 
@@ -432,12 +432,12 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
 
-	public Vector<Article> findAllArticleByGroup(User u, Group g) throws SQLException {
+	public Vector<Article> findAllArticleByGroup(User u, Group g) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> result = new Vector<Article>();
@@ -463,7 +463,7 @@ public class ArticleMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
