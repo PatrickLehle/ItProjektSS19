@@ -11,14 +11,12 @@ import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
-import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
@@ -26,8 +24,6 @@ import de.hdm.itprojektss19.team03.scart.shared.report.ArticleReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleRetailerReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.Column;
 import de.hdm.itprojektss19.team03.scart.shared.report.Row;
-
-import de.hdm.itprojektss19.team03.scart.shared.report.SimpleReport;
 
 /**
  * 
@@ -71,17 +67,13 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 */
 	private GroceryListMapper glMapper = null;
 
-//CONSTRUCTORS==========================================================
+	// CONSTRUCTORS==========================================================
 
 	public ReportGeneratorImpl() throws IllegalArgumentException {
 
 	}
-	
-//METHODS===============================================================
-	public void init() throws IllegalArgumentException{
-		
 
-//METHODS===============================================================
+	// METHODS===============================================================
 	public void init() throws IllegalArgumentException {
 
 		this.aMapper = ArticleMapper.articleMapper();
@@ -100,9 +92,6 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return this.editorService;
 	}
 
-	@Override
-	public ArticleReport createStatisticA(User u) throws IllegalArgumentException, DatabaseException {
-		if (this.getEditorService() == null) {
 	public ArticleReport createStatisticA(User u) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
@@ -129,24 +118,23 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Group> groupsByUser = this.editorService.findAllGroupsByUserId(u.getId());
 		Vector<GroceryList> allGroceryLists = this.editorService.findAllGroceryLists();
 		Vector<Article> allArticles = this.editorService.findAllArticle();
-	
-	
-		
+
 		Vector<Article> receiver = new Vector<Article>();
-		
-		for(int i=0; i< groupsByUser.size();i++) {
-			for(int j=0; j< allGroceryLists.size();j++) {
-				for(int k=0; k< allArticles.size();k++) {
-					if(groupsByUser.elementAt(i).getId() == allGroceryLists.elementAt(j).getGroupId()) {
-						receiver.addAll(getEditorService().findAllArticleByGroceryList(allGroceryLists.elementAt(k).getId()));
+
+		for (int i = 0; i < groupsByUser.size(); i++) {
+			for (int j = 0; j < allGroceryLists.size(); j++) {
+				for (int k = 0; k < allArticles.size(); k++) {
+					if (groupsByUser.elementAt(i).getId() == allGroceryLists.elementAt(j).getGroupId()) {
+						receiver.addAll(
+								getEditorService().findAllArticleByGroceryList(allGroceryLists.elementAt(k).getId()));
 					}
 					Row row = new Row();
-					row.addColumn(new Column(receiver.elementAt(k).getName()));		
+					row.addColumn(new Column(receiver.elementAt(k).getName()));
 					row.addColumn(new Column(receiver.elementAt(k).getRetailer()));
 					row.addColumn(new Column(receiver.elementAt(k).getCreationDat().toString()));
-					row.addColumn(new Column(receiver.elementAt(k).getModDat().toString()));	
+					row.addColumn(new Column(receiver.elementAt(k).getModDat().toString()));
 					row.addColumn(new Column(""));
-					
+
 					report.addRow(row);
 				}
 			}
@@ -154,7 +142,8 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
+	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate,
+			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
@@ -168,13 +157,12 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return null;
 	}
 
-	public ArticleDateRetailerReport createStatisticADR(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException {
+	public ArticleDateRetailerReport createStatisticADR(User user, Timestamp choosenStartDate, Timestamp choosenEndDate,
+			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}
 		return null;
 	}
 
-
 }
-
