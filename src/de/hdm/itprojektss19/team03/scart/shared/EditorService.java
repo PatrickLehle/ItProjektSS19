@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
@@ -39,8 +40,9 @@ public interface EditorService extends RemoteService {
 	 * @param username, emailAddress 
 	 * 						Email Adresse des Users
 	 * @return angelegter/ erstellter User
+	 * @throws Exception 
 	 */
-	public User createUser( String username, String emailAdress) throws IllegalArgumentException;
+	public User createUser( String username, String emailAdress) throws IllegalArgumentException, Exception;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -48,17 +50,19 @@ public interface EditorService extends RemoteService {
 	 * @param emailAddress 
 	 * 						Email Adresse des Users
 	 * @return angelegter/ erstellter User
+	 * @throws SQLException 
 	 */
-	public User createUser(String emailAdress) throws IllegalArgumentException;
+	public User createUser(String emailAdress) throws IllegalArgumentException, SQLException;
 	
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteUser(User u);
 	 * @param n - aktuell eingeloggter User
+	 * @throws SQLException 
 	 * 
 	 */
-	public void deleteUser(User u) throws IllegalArgumentException;
+	public void deleteUser(User u) throws IllegalArgumentException, SQLException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -66,9 +70,10 @@ public interface EditorService extends RemoteService {
 	 * @param userId 
 	 * 				UserId des Users
 	 * @return nutzer
+	 * @throws SQLException 
 	 * 
 	 */
-	public User getUserById(int userId) throws IllegalArgumentException;
+	public User getUserById(int userId) throws IllegalArgumentException, SQLException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -76,9 +81,10 @@ public interface EditorService extends RemoteService {
 	 * @param email 
 	 * 				Email des Email Users
 	 * @return user
+	 * @throws SQLException 
 	 * 
 	 */
-	public User getUserByGMail(String email) throws IllegalArgumentException;
+	public User getUserByGMail(String email) throws IllegalArgumentException, SQLException;
 	
 	/**
 	 * 
@@ -157,8 +163,9 @@ public interface EditorService extends RemoteService {
 	 *      #findAllGroups()
 	 * @return
 	 * @throws IllegalArgumentException
+	 * @throws SQLException 
 	 */
-	public Vector<Group> findAllGroups() throws IllegalArgumentException;
+	public Vector<Group> findAllGroups() throws IllegalArgumentException, SQLException;
 	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

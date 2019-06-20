@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
@@ -36,7 +37,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-//SERIALIZATION===========================================================================
+	// SERIALIZATION===========================================================================
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,8 +66,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	private ArticleMapper aMapper = null;
 
 	/**
-	 *  Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und <code>User</code>
-	 *  mit der Datenbank vergleicht.
+	 * Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und
+	 * <code>User</code> mit der Datenbank vergleicht.
 	 */
 	private GroupUserMapper guMapper = null;
 
@@ -75,14 +76,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * Datenbank vergleicht.
 	 */
 	private GroceryListMapper glMapper = null;
-	
-	/**
-	 *  Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und <code>Article</code>
-	 *  mit der Datenbank vergleicht.
-	 */
-	private GroceryListArticleMapper glaMapper= null;
 
-//INITIALIZATION===========================================================================
+	/**
+	 * Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und
+	 * <code>Article</code> mit der Datenbank vergleicht.
+	 */
+	private GroceryListArticleMapper glaMapper = null;
+
+	// INITIALIZATION===========================================================================
 
 	public void init() throws IllegalArgumentException {
 
@@ -93,12 +94,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		this.rMapper = RetailerMapper.retailerMapper();
 		this.guMapper = GroupUserMapper.groupUserMapper();
 		this.glaMapper = GroceryListArticleMapper.groceryListArticleMapper();
-		
-	}
-	
-//USER====================================================================================
 
-	public User createUser(String username, String emailAdress) throws IllegalArgumentException {
+	}
+
+	// USER====================================================================================
+
+	public User createUser(String username, String emailAdress) throws Exception {
 		// E-Mail und Username muss zunaechst ueber GUI abgefragt werden
 
 		try {
@@ -115,15 +116,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 				// Ausgabe der Rueckgabe aus der insert Funktion fehlt
 			}
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
-			return null;
+			throw e;
 		}
 
 	}
 
 	@Override
-	public User createUser(String emailAdress) throws IllegalArgumentException {
+	public User createUser(String emailAdress) throws IllegalArgumentException, SQLException  {
 
 		User user = new User();
 		user.setEmail(emailAdress);
@@ -136,7 +137,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			uMapper.delete(u);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -146,7 +147,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			User foundUser = uMapper.findbyUserId(userId);
 			return foundUser;
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -157,7 +158,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			User foundUser = uMapper.findUserByEmail(email);
 			return foundUser;
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -169,19 +170,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.uMapper.findbyUserId(user.getId());
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-//GROUP===========================================================================
+	// GROUP===========================================================================
 
 	public Group createGroup(Group g) throws IllegalArgumentException {
 		try {
 			return this.gMapper.insert(g);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 
@@ -193,7 +194,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.gMapper.update(g);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 
 		}
@@ -204,7 +205,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.gMapper.delete(g);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -214,7 +215,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.gMapper.findByGroupId(groupId);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -226,7 +227,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.gMapper.findAll();
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -237,7 +238,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.gMapper.update(g);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -247,12 +248,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.gMapper.update(g);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Vector<Group> findAllGroups() throws IllegalArgumentException {
+	public Vector<Group> findAllGroups() throws IllegalArgumentException, SQLException {
 		return gMapper.findAll();
 	}
 
@@ -261,27 +262,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-//GROUP-USER============================================================================
-	
-	public Vector<Group> findAllGroupsByUserId(int id)throws IllegalArgumentException{
-		try{
+
+	// GROUP-USER============================================================================
+
+	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException {
+		try {
 			return guMapper.findAllGroupsByUserId(id);
-			
-		} catch (IllegalArgumentException e) {
+
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-//GROCERYLIST===========================================================================
+	// GROCERYLIST===========================================================================
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
 		try {
 
 			return this.glMapper.insert(gl);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -292,7 +293,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.glMapper.update(gl);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -302,7 +303,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.glMapper.delete(gl);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -317,20 +318,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.glMapper.findByKey(groceryListId);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListByGroupId(id);
-			
-		}catch (IllegalArgumentException e) {
-					e.printStackTrace();
-					return null;
-				}
+
+		} catch (IllegalArgumentException | SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
@@ -345,25 +346,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return gMapper.findByGroupId(glMapper.findByKey(groceryListId).getGroupId());
 
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-//GROCERYLIST-ARTICLE===============================================================
-	
-	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException {
-		try {
-			return this.glaMapper.findAllArticleByGroceryListId(id);
-			
-		}catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-//ARTICLE===========================================================================
+	// GROCERYLIST-ARTICLE===============================================================
+
+	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException {
+		try {
+			return this.glaMapper.findAllArticleByGroceryListId(id);
+
+		} catch (IllegalArgumentException | SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	// ARTICLE===========================================================================
 
 	public Article createArticle(Article a) throws IllegalArgumentException {
 		// Input fuer Article Attribute muss noch erledigt werden
@@ -374,7 +375,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			this.aMapper.insert(temp);
 			// Ausgabe der Rueckgabe aus der insert Funktion fehlt
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -386,7 +387,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.aMapper.update(a);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 		return a;
@@ -397,7 +398,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			aMapper.delete(a);
 			// Erfolgts Message fuer erfolgreiches Loeschen
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 
@@ -408,7 +409,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -419,7 +420,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			return this.aMapper.findAllArticleByDateRetailer(id, start, end);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -428,20 +429,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Article> findAllArticle() throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAll();
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-//RETAILER===========================================================================
+	// RETAILER===========================================================================
 
 	public Retailer createRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
 			return this.rMapper.insert(r); // Retailer Objekt in der DB speichern
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -452,7 +453,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.rMapper.update(r); // Speichert Retailer
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -462,7 +463,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.rMapper.delete(r); // Löscht Retailer
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
@@ -472,7 +473,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.aMapper.findArticleByRetailerId(r.getRetailerId());
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -484,7 +485,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.aMapper.findAllArticleByDate(start, end);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -496,7 +497,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			return this.aMapper.findAllArticleByDateRetailer(id, start, end);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -508,7 +509,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			return this.rMapper.findById(retailerId);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
@@ -518,90 +519,91 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Retailer> findAllRetailer() {
 		try {
 			return this.rMapper.findAll();
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-//GroceryListArticle===========================================================================
+	// GroceryListArticle===========================================================================
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
 		try {
 			return this.glaMapper.addArticleToGroceryList(gl, a);
-		}catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) {
 		try {
 			this.glaMapper.removeArticleFromGroceryList(gl, a);
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Vector<Article> findAllArticleByGroceryList(int groceryListId) {
 		try {
 			return this.glaMapper.findAllArticleByGroceryListId(groceryListId);
 
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 			return null;
 		}
 
 	}
-	
+
 	public void deleteArticleFromAllLists(Article a) {
 		try {
 			this.glaMapper.deleteArticleFromAllLists(a);
-		}catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			e.printStackTrace();
 		}
 	}
-	
-//UNIT===========================================================================
 
-//	public Unit createUnit(Unit u) throws IllegalArgumentException{
-//		try {
-//			int temp1=0;
-//			
-//			for(int i=0; i<= unMapper.findAll().size(); i++) {
-//				if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
-//					temp1++;
-//				}
-//			}
-//				if(temp1 ==0) {
-//					unMapper.insert(u);
-//				}	
-//				return u; //Rueckgabewert vom Mapper wird noch nicht verarbeitet
-//		}catch(IllegalArgumentException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
-//				
-//			
-//	
-//	public void saveUnit(Unit u) throws IllegalArgumentException{
-//		this.unMapper.update(u);
-//	}
-//
-//	public void deleteUnit(Unit u) throws IllegalArgumentException {
-//		this.unMapper.delete(u);
-//	}
-//
-//	public Unit getUnitById(int unitId) throws IllegalArgumentException {
-//		return this.unMapper.findByKey(unitId);
-//
-//	}
-//
-//	public Unit getUnitByName(String unitName) throws IllegalArgumentException {
-//		return this.unMapper.findUnitByName(unitName);
-//
-//	}
+	// UNIT===========================================================================
 
-//ENTRY===========================================================================
+	// public Unit createUnit(Unit u) throws IllegalArgumentException{
+	// try {
+	// int temp1=0;
+	//
+	// for(int i=0; i<= unMapper.findAll().size(); i++) {
+	// if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
+	// temp1++;
+	// }
+	// }
+	// if(temp1 ==0) {
+	// unMapper.insert(u);
+	// }
+	// return u; //Rueckgabewert vom Mapper wird noch nicht verarbeitet
+	// }catch(IllegalArgumentException e) {
+	// e.printStackTrace();
+	// return null;
+	// }
+	// }
+	//
+	//
+	//
+	// public void saveUnit(Unit u) throws IllegalArgumentException{
+	// this.unMapper.update(u);
+	// }
+	//
+	// public void deleteUnit(Unit u) throws IllegalArgumentException {
+	// this.unMapper.delete(u);
+	// }
+	//
+	// public Unit getUnitById(int unitId) throws IllegalArgumentException {
+	// return this.unMapper.findByKey(unitId);
+	//
+	// }
+	//
+	// public Unit getUnitByName(String unitName) throws IllegalArgumentException {
+	// return this.unMapper.findUnitByName(unitName);
+	//
+	// }
+
+	// ENTRY===========================================================================
 
 	public Entry createEntry(Entry e) throws IllegalArgumentException {
 		try {
@@ -639,9 +641,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 *           null; } }
 	 */
 
-//	@Override
-//	public GroceryList getGroceryListById(Object groceryListId) throws IllegalArgumentException {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	// @Override
+	// public GroceryList getGroceryListById(Object groceryListId) throws
+	// IllegalArgumentException {
+	// // TODO Auto-generated method stub
+	// return null;
+	// }
 }

@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -118,7 +119,7 @@ ReportGenerator{
 	
 	
 	@Override
-	public ArticleReport createStatisticA(User u) throws IllegalArgumentException {
+	public ArticleReport createStatisticA(User u) throws IllegalArgumentException, SQLException {
 		if(this.getEditorService() == null) {
 			return null;
 		}
@@ -127,7 +128,11 @@ ReportGenerator{
 		ArticleReport report = new ArticleReport();
 		
 		//Nun legen wir den Titel und unser Erstellungsdatum des Reports
-		report.setTitle("Alle Artikel von"+ this.getUserByGMail(u) + " ");
+		try {
+			report.setTitle("Alle Artikel von"+ this.getUserByGMail(u) + " ");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		report.setCreated(new Date());
 		
 	//Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
@@ -377,7 +382,7 @@ ReportGenerator{
 	
 //HELPING-METHODS=========================================================
 	
-	private String getUserByGMail(User u) throws IllegalArgumentException {
+	private String getUserByGMail(User u) throws IllegalArgumentException, SQLException {
 
 //		Group g = editorService.
 		String name = "";
@@ -386,7 +391,7 @@ ReportGenerator{
 
 		return name;
 	}
-	private Vector<Group> getGroupByUser(int userId) throws IllegalArgumentException {
+	private Vector<Group> getGroupByUser(int userId) throws IllegalArgumentException, SQLException {
 
 		Vector<Group> groupsByUser = new Vector<Group>();
 		Vector<Group> receive = new Vector<Group>();
