@@ -9,26 +9,25 @@ body {
 	font-family: 'Raleway', sans-serif !important;
 }
 
+* {
+    font-family: 'Raleway', sans-serif !important;
+}
+
 .content {
-	height: 100%;
-	width: 100%;
-	padding: 0px;
-	margin: 0px;
-	margin-top: 80px;
+    height: 100%;
+    width: 100%;
+    padding: 0px;
+    margin: 0px;
+    margin-top: 80px;
 }
 
-.header1 {
-	
-}
+.header1 {}
 
-.header2 {
-	
-}
-
+.header2 {}
 
 .logo {
-	height: 250px;
-	width: 250px;
+    height: 250px;
+    width: 250px;
 }
 
 .logo-toolbar {
@@ -38,20 +37,20 @@ body {
 }
 
 .signinwithgoogle {
-	margin-top: 1em;
-	height: 50px;
+    margin-top: 1em;
+    height: 50px;
 }
 
 .login-text {
-	font-size: 2em;
+    font-size: 2em;
 }
 
 .login-panel {
-	border: 1px solid #BBBBBB;
-	margin: 3em;
-	padding: auto;
-	width: 50%;
-	height: 50%;
+    border: 1px solid #BBBBBB;
+    margin: 3em;
+    padding: auto;
+    width: 50%;
+    height: 50%;
 }
 
 .toolbar {

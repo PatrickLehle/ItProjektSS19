@@ -15,10 +15,14 @@ import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
+import de.hdm.itprojektss19.team03.scart.shared.EditorService;
+import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * Die Scart classe implementiert EntryPoint, d.h. sie wird als erstes
@@ -31,6 +35,9 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 public class Scart implements EntryPoint {
 
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);
+	private EditorServiceAsync editorService = GWT.create(EditorService.class);
+
+	private User user = new User();
 
 	private ToolbarForm toolbar = new ToolbarForm();
 	private FooterForm footer = new FooterForm();
@@ -61,7 +68,8 @@ public class Scart implements EntryPoint {
 				 * Check if the user is logged in
 				 */
 				if (logInfo.isLoggedIn()) {
-					loadPage();
+					user.setEmail(logInfo.getEmailAddress());
+					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
 				} else {
 					login(logInfo.getLoginUrl());
 				}
@@ -91,6 +99,7 @@ public class Scart implements EntryPoint {
 	 * Add content to content panel
 	 */
 	private void loadPage() {
+
 		contentPanel.add(groupForm);
 		contentPanel.add(button1);
 		contentPanel.add(button2);
@@ -116,5 +125,22 @@ public class Scart implements EntryPoint {
 			}
 		});
 	}
+
+	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("fail get user" + t.getMessage());
+			User u = new User();
+			user.setEmail("test@t.de");
+			RegistryForm registerForm = new RegistryForm(u);
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(registerForm);
+
+		}
+
+		public void onSuccess(User u) {
+			loadPage();
+		}
+	};
 
 }
