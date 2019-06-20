@@ -388,6 +388,7 @@ public class ReportFilterForm extends VerticalPanel {
 						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
 
 						return;
+						//TODO
 					}
 
 					//Gruppe mit Zeitraum und Retailer (Check)
