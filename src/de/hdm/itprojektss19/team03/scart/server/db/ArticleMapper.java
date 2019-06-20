@@ -55,9 +55,10 @@ public class ArticleMapper {
 	 * 
 	 * Sucht einen Artikel anhand seiner ID
 	 * 
-	 * @param zu Suchende id
+	 * @param zu
+	 *            Suchende id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public Article findByKey(int id) throws SQLException {
 		Connection con = DBConnection.connection();
@@ -66,7 +67,7 @@ public class ArticleMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + id);
 
-			//Nur EIN Ergebnis, da id =PRIMARY-KEY
+			// Nur EIN Ergebnis, da id =PRIMARY-KEY
 			if (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -78,7 +79,7 @@ public class ArticleMapper {
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
 				article.setDelDat(rs.getTimestamp("delDat"));
-				
+
 				return article;
 			}
 		} catch (SQLException e2) {
@@ -92,14 +93,14 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public Vector<Article> findAll() throws SQLException {
-		
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String all = "SELECT * FROM article";
-		
+
 		Vector<Article> articles = new Vector<Article>();
 
 		try {
@@ -119,15 +120,14 @@ public class ArticleMapper {
 				a.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(a);
 			}
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw e2;
 		}
 		return articles;
 	}
-	
-	public Vector<Article> findArticleByName(String name, Article a) throws SQLException{
+
+	public Vector<Article> findArticleByName(String name, Article a) throws SQLException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -142,7 +142,7 @@ public class ArticleMapper {
 
 			ResultSet rs = stmt.executeQuery();
 
-				while (rs.next()) {
+			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
@@ -166,9 +166,10 @@ public class ArticleMapper {
 	/**
 	 * Sucht alle Artikel, die einem bestimmten Retailer haben, anhand der ID
 	 * 
-	 * @param Die ID des Retailers
+	 * @param Die
+	 *            ID des Retailers
 	 * @return Vector mit allen gefunden Artikeln des Retailers
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public Vector<Article> findArticleByRetailerId(int retailerId) throws SQLException {
 		Connection con = DBConnection.connection();
@@ -179,7 +180,7 @@ public class ArticleMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE retailerId=" + retailerId);
 
-			//Hier wird fuer jeden gefundenen Article immer ein neues Object erstellt
+			// Hier wird fuer jeden gefundenen Article immer ein neues Object erstellt
 			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -197,16 +198,17 @@ public class ArticleMapper {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw e2;
 		}
-		//Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
+		// Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
 		return articles;
 	}
-	
+
 	/**
 	 * F�gt in der Datenbank einen neuen Artikel ein
 	 * 
-	 * @param Artikel-Objekt das in die DB eingef�gt werden soll
+	 * @param Artikel-Objekt
+	 *            das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte Artikel mit aktueller ID
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public Article insert(Article article) throws SQLException {
 
@@ -239,8 +241,8 @@ public class ArticleMapper {
 			stmt.setTimestamp(6, article.getCreationDat());
 			stmt.setTimestamp(7, article.getModDat());
 			stmt.setBoolean(8, article.getCheckBoolean());
-			//DelDat wird bei dem anlegen eines Artikels nicht hinterlegt
-			
+			// DelDat wird bei dem anlegen eines Artikels nicht hinterlegt
+
 			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
 
@@ -254,12 +256,13 @@ public class ArticleMapper {
 	/**
 	 * �ndert einen Artikel in der Datenbank
 	 * 
-	 * @param Zu �ndernder Artikel
+	 * @param Zu
+	 *            �ndernder Artikel
 	 * @return Ge�nderter Artikel
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public Article update(Article article) throws SQLException {
-		
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -268,7 +271,7 @@ public class ArticleMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
-		
+
 			stmt.setString(1, article.getName());
 			stmt.setInt(2, article.getQuantity());
 			stmt.setString(3, article.getUnit());
@@ -276,72 +279,71 @@ public class ArticleMapper {
 			stmt.setTimestamp(5, article.getModDat());
 			stmt.setInt(6, article.getId());
 			stmt.setBoolean(7, article.getCheckBoolean());
-			stmt.setTimestamp(8, article.getDelDat()); //Mit der Update-Methode sollte kein Artikel als geloescht markiert werden, denn 
-													// das lokale Artikel-Objekt wird dadurch aber nicht veraendert. 
-			
+			stmt.setTimestamp(8, article.getDelDat()); // Mit der Update-Methode sollte kein Artikel als geloescht
+														// markiert werden, denn
+														// das lokale Artikel-Objekt wird dadurch aber nicht veraendert.
+
 			stmt.executeUpdate();
-			
-		}
-		catch (SQLException e2) {
+
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw e2;
 		}
 		return article;
 	}
-	
+
 	/**
 	 * L�scht einen Artikel aus der Datenbank
 	 * 
-	 * @param Zu l�schender Artikel
-	 * @throws SQLException 
+	 * @param Zu
+	 *            l�schender Artikel
+	 * @throws SQLException
 	 */
-	public void delete(Article article) throws SQLException {
+	public Article delete(Article article) throws SQLException {
 		Connection con = DBConnection.connection();
 
-		Connection con = null;
 		PreparedStatement stmt = null;
 
 		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
 
 		try {
-			/* alte delete Mthode
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
-			*/
-				article.setDelDat(new Timestamp(new Date().getTime()));
-				con = DBConnection.connection();
-				stmt = con.prepareStatement(update);
-			
-				stmt.setString(1, article.getName());
-				stmt.setInt(2, article.getQuantity());
-				stmt.setString(3, article.getUnit());
-				stmt.setInt(4, article.getRetailerId());
-				stmt.setTimestamp(5, article.getModDat());
-				stmt.setInt(6, article.getId());
-				stmt.setBoolean(7, article.getCheckBoolean());
-				stmt.setTimestamp(8, article.getDelDat());
-				
-				stmt.executeUpdate();
+			/*
+			 * alte delete Mthode Statement stmt = con.createStatement();
+			 * stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
+			 */
+			article.setDelDat(new Timestamp(new Date().getTime()));
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(update);
 
-				Statement statement = con.createStatement();
-				ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + article.getId());
+			stmt.setString(1, article.getName());
+			stmt.setInt(2, article.getQuantity());
+			stmt.setString(3, article.getUnit());
+			stmt.setInt(4, article.getRetailerId());
+			stmt.setTimestamp(5, article.getModDat());
+			stmt.setInt(6, article.getId());
+			stmt.setBoolean(7, article.getCheckBoolean());
+			stmt.setTimestamp(8, article.getDelDat());
 
-				//Nur EIN Ergebnis, da id =PRIMARY-KEY
-				if (rs.next()) {
-					Article returnArticle = new Article();
-					returnArticle.setId(rs.getInt("id"));
-					returnArticle.setName(rs.getString("name"));
-					returnArticle.setQuantity(rs.getInt("quantity"));
-					returnArticle.setUnit(rs.getString("unit"));
-					returnArticle.setRetailerId(rs.getInt("retailerId"));
-					returnArticle.setCreationDat(rs.getTimestamp("creationDat"));
-					returnArticle.setModDat(rs.getTimestamp("modDat"));
-					returnArticle.setCheckBoolean(rs.getBoolean("boolean"));
-					returnArticle.setDelDat(rs.getTimestamp("delDat"));
-					
-					return returnArticle;
+			stmt.executeUpdate();
+
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + article.getId());
+
+			// Nur EIN Ergebnis, da id =PRIMARY-KEY
+			if (rs.next()) {
+				Article returnArticle = new Article();
+				returnArticle.setId(rs.getInt("id"));
+				returnArticle.setName(rs.getString("name"));
+				returnArticle.setQuantity(rs.getInt("quantity"));
+				returnArticle.setUnit(rs.getString("unit"));
+				returnArticle.setRetailerId(rs.getInt("retailerId"));
+				returnArticle.setCreationDat(rs.getTimestamp("creationDat"));
+				returnArticle.setModDat(rs.getTimestamp("modDat"));
+				returnArticle.setCheckBoolean(rs.getBoolean("boolean"));
+				returnArticle.setDelDat(rs.getTimestamp("delDat"));
+
+				return returnArticle;
 			}
-			
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -349,22 +351,25 @@ public class ArticleMapper {
 		}
 		return null;
 	}
+
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
+	 * 
 	 * @param start
 	 * @param end
 	 * @return
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws SQLException{
+	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws SQLException {
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Article> result = new Vector<Article>();
-		
+
 		try {
 			Statement stmt = con.createStatement();
-			//Query das zwei Timestamps als interval aller Article darin zurueck gibt
-			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+ "' AND '"+end+"'");
+			// Query das zwei Timestamps als interval aller Article darin zurueck gibt
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '" + start + "' AND '" + end + "'");
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
@@ -385,29 +390,32 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+
 	/**
-	 * @bastiantilk, PatrickLehle
-	 * Gibt alle Artikel eines Retailers in einem Zeitraum zurueck
+	 * @bastiantilk, PatrickLehle Gibt alle Artikel eines Retailers in einem
+	 * Zeitraum zurueck
+	 * 
 	 * @param start
 	 * @param end
 	 * @param r
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws SQLException{
-		//DB Connection aufbauen
+	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws SQLException {
+		// DB Connection aufbauen
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Article> result = new Vector<Article>();
-		
+
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
 			stmt.setInt(1, id);
-//			Statement stmt = con.createStatement();
-			
+			// Statement stmt = con.createStatement();
+
 			ResultSet rs = stmt.executeQuery();
-			
-//			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
+
+			// ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat
+			// BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
@@ -428,16 +436,18 @@ public class ArticleMapper {
 		}
 		return result;
 	}
-	
-	public Vector<Article> findAllArticleByGroup(User u, Group g) throws SQLException{
+
+	public Vector<Article> findAllArticleByGroup(User u, Group g) throws SQLException {
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat, article.delDat FROM article, groups WHERE userId=" + u.getId() + "AND groupId=" + g.getId());
-			
-			while(rs.next()) {
+			ResultSet rs = stmt.executeQuery(
+					"SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat, article.delDat FROM article, groups WHERE userId="
+							+ u.getId() + "AND groupId=" + g.getId());
+
+			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
 				a.setName(rs.getString("name"));
@@ -451,11 +461,11 @@ public class ArticleMapper {
 
 				result.addElement(a);
 			}
-			}catch(SQLException e2){
-				ServersideSettings.getLogger().severe(e2.getMessage());
-				throw e2;
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw e2;
 		}
 		return result;
 	}
-	
+
 }
