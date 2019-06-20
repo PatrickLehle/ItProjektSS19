@@ -4,6 +4,10 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
+import com.google.gwt.event.dom.client.KeyPressHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -27,33 +31,12 @@ public class RegistryForm extends VerticalPanel {
 	private final User user;
 
 	Label welcome = new Label("Wie es scheint bist du neu hier bei SCart, herzlich Wilkommen!");
+	Label infoLabel = new Label("Wähle einen Nutzernamen");
 	TextBox nameTextbox = new TextBox();
 	TextBox emailTextbox = new TextBox();
 	Button save = new Button("Registrieren");
 
 	protected void onLoad() {
-		nameTextbox.addChangeHandler(new ChangeHandler() {
-
-			/**
-			 * Der ChangeHandler des Namen Textfeldes prueft, ob der Name den richtlinien
-			 * entspricht
-			 */
-			public void onChange(ChangeEvent e) {
-				// \w -> nur Buchstaben oder Zahlen
-				if (nameTextbox.getValue().matches("^[a-zA-Z]*$") == false) {
-					nameTextbox.setValue("");
-					save.setEnabled(false);
-					Window.alert("Es sind nur Buchstaben erlaubt!");
-				} else if (nameTextbox.getValue().length() > 10) {
-					nameTextbox.setValue("");
-					save.setEnabled(false);
-					Window.alert("Es sind maximal 10 Zeichen erlaubt!");
-				} else {
-					save.setEnabled(true);
-				}
-
-			}
-		});
 	}
 
 	/**
@@ -64,13 +47,17 @@ public class RegistryForm extends VerticalPanel {
 	 */
 	public RegistryForm(User u) {
 		user = u;
+		welcome.setStyleName("h1");
 		nameTextbox.setFocus(true);
-		nameTextbox.setTitle("Wähle einen Nutzernamen");
+		nameTextbox.setStyleName("textbox");
 		emailTextbox.setValue(user.getEmail());
 		emailTextbox.setReadOnly(true);
-		save.setEnabled(false);
+		emailTextbox.setStyleName("textbox");
 
+		this.setVerticalAlignment(ALIGN_TOP);
+		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.add(welcome);
+		this.add(infoLabel);
 		this.add(emailTextbox);
 		this.add(nameTextbox);
 		this.add(save);
@@ -78,7 +65,12 @@ public class RegistryForm extends VerticalPanel {
 		save.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent e) {
-				saveUser(user);
+				if (checkName(nameTextbox.getValue())) {
+					saveUser(user);
+				} else {
+					infoLabel.setText(
+							"Der Name darf keine Sonderzeichen enthalten und muss aus 3 bis 10 Zeichen bestehen");
+				}
 			}
 		});
 
@@ -99,4 +91,22 @@ public class RegistryForm extends VerticalPanel {
 		});
 	};
 
+	/**
+	 * UEberprueft korrekte syntax der Eingabe
+	 * 
+	 * @param str
+	 * @return true, wenn der Name passt
+	 */
+	private Boolean checkName(String str) {
+		// \w -> nur Buchstaben oder Zahlen
+		if (str.matches("^[a-zA-Z]*$") == false) {
+			return false;
+		} else if (str.length() > 10) {
+			return false;
+		} else if (str.length() < 2) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 }
