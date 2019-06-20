@@ -244,8 +244,7 @@ public class GroceryListMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat FROM grocerylist, groups WHERE groups.id= "
-				+ id;
+		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat, groups.id, groups.name FROM grocerylist, groups WHERE groups.id= " + id;
 
 		Vector<GroceryList> result = new Vector<GroceryList>();
 
