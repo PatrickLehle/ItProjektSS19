@@ -339,13 +339,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException {
+		try {
+			return glMapper.findAll();
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 
 		try {
 

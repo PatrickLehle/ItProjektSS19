@@ -246,6 +246,8 @@ public interface EditorService extends RemoteService {
 
 	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException;
 
+	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException;
+
 	// GROCERYLIST-ARTICLE===============================================================
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
