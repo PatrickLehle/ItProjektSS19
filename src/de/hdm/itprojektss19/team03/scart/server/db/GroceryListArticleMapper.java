@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
@@ -18,20 +18,20 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
  *
  */
 public class GroceryListArticleMapper {
-	
+
 	public static GroceryListArticleMapper groceryListArticleMapper = null;
-	
+
 	/**
-	 * Geschützer Konstruktor der dafuer sorgt , dass es nicht mehrere
-	 * Instanzen dieser Klasse gibt - Singleton
+	 * Geschützer Konstruktor der dafuer sorgt , dass es nicht mehrere Instanzen
+	 * dieser Klasse gibt - Singleton
 	 */
 	protected GroceryListArticleMapper() {
-		
+
 	}
-	
+
 	/**
-	 * Pruefung ob eine Instanz der Klasse schon existiert. Methoden dieser Klasse sollen
-	 * nur ueber diese statische Methode aufgerufen werden
+	 * Pruefung ob eine Instanz der Klasse schon existiert. Methoden dieser Klasse
+	 * sollen nur ueber diese statische Methode aufgerufen werden
 	 * 
 	 * @return Das <code>GroceryListArticleMapper</code>-Objekt.
 	 */
@@ -41,21 +41,21 @@ public class GroceryListArticleMapper {
 		}
 		return groceryListArticleMapper;
 	}
-	
+
 	/**
 	 * Zuordnen eines <code>Article</code> Objekts zu einer
-	 * <code>GroceryList</code>. DIe ZUordnung wird durch einen
-	 * zusammengesetzten Primaerschluessel realisiert 
+	 * <code>GroceryList</code>. DIe ZUordnung wird durch einen zusammengesetzten
+	 * Primaerschluessel realisiert
 	 * 
 	 * @param gl
-	 * 		fuer das GroceryListobjekt
+	 *            fuer das GroceryListobjekt
 	 * @param a
-	 * 		fuer das Articleobjekt
+	 *            fuer das Articleobjekt
 	 * 
 	 * @return null
-	 * @throws SQLException 
+	 * @throws DatabaseException
 	 */
-	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws SQLException {
+	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -67,10 +67,10 @@ public class GroceryListArticleMapper {
 			stmt.setInt(1, gl.getId());
 			stmt.setInt(2, a.getId());
 			stmt.executeUpdate();
-			
+
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -79,12 +79,12 @@ public class GroceryListArticleMapper {
 	 * Loeschen eines Articles zu einer zugewiesenen GroceryList.
 	 * 
 	 * @param gl
-	 * 		GroceryList-Objekt
+	 *            GroceryList-Objekt
 	 * @param a
-	 * 		Article-Objekt
-	 * @throws SQLException 
+	 *            Article-Objekt
+	 * @throws DatabaseException
 	 */
-	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws SQLException {
+	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -98,14 +98,13 @@ public class GroceryListArticleMapper {
 			stmt.setInt(1, gl.getId());
 			stmt.setInt(2, a.getId());
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
 
-	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) throws SQLException {
+	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -114,8 +113,8 @@ public class GroceryListArticleMapper {
 		String selectByKey = "SELECT grocerylistarticle.grocerylistId, grocerylist.name, article.id, article.name, "
 				+ "article.creationDat, article.modDat, article.boolean FROM grocerylistarticle "
 				+ "JOIN article ON grocerylistarticle.articleId = article.id " + "JOIN grocerylist "
-				+ "ON grocerylistarticle.grocerylistId = grocerylist.id "
-				+ "WHERE grocerylistarticle.grocerylistId= " + grocerylistId;
+				+ "ON grocerylistarticle.grocerylistId = grocerylist.id " + "WHERE grocerylistarticle.grocerylistId= "
+				+ grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -136,10 +135,9 @@ public class GroceryListArticleMapper {
 				a.setCheckBoolean(rs.getBoolean("boolean"));
 				result.addElement(a);
 			}
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -148,10 +146,10 @@ public class GroceryListArticleMapper {
 	 * Entfernt einen ausgewaehlten Article aus allen GroceryLists
 	 * 
 	 * @param a
-	 * 		das zu loeschende Objekt von allen existierenden Listen
-	 * @throws SQLException 
+	 *            das zu loeschende Objekt von allen existierenden Listen
+	 * @throws DatabaseException
 	 */
-	public void deleteArticleFromAllLists(Article a) throws SQLException {
+	public void deleteArticleFromAllLists(Article a) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -162,10 +160,9 @@ public class GroceryListArticleMapper {
 			stmt = con.prepareStatement(deleteSQL);
 			stmt.setInt(1, a.getId());
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
 }

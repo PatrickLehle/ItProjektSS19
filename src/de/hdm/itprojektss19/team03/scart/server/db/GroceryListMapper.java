@@ -8,8 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 
 /**
@@ -55,9 +54,9 @@ public class GroceryListMapper {
 	 * @param zu
 	 *            Suchende id
 	 * @return Das GroceryList-Objekt, falls ein passendes gefunden wurde.
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public GroceryList findByKey(int id) throws SQLException {
+	public GroceryList findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -76,7 +75,7 @@ public class GroceryListMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -85,9 +84,9 @@ public class GroceryListMapper {
 	 * Sucht alle groceryLists
 	 * 
 	 * @return Vector mit allen gefundenen groceryLists
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<GroceryList> findAll() throws SQLException {
+	public Vector<GroceryList> findAll() throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<GroceryList> groceryLists = new Vector<GroceryList>();
@@ -109,7 +108,7 @@ public class GroceryListMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return groceryLists;
 	}
@@ -120,9 +119,9 @@ public class GroceryListMapper {
 	 * @param GL-Objekt
 	 *            das in die DB eingefuegt werden soll
 	 * @return Die Eingefuegte GL mit aktueller ID
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public GroceryList insert(GroceryList gl) throws SQLException {
+	public GroceryList insert(GroceryList gl) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -151,7 +150,7 @@ public class GroceryListMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return gl;
 	}
@@ -162,9 +161,9 @@ public class GroceryListMapper {
 	 * @param Zu
 	 *            aendernde GL
 	 * @return Geaenderte GL
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public GroceryList update(GroceryList gl) throws SQLException {
+	public GroceryList update(GroceryList gl) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -181,7 +180,7 @@ public class GroceryListMapper {
 			stmt.executeUpdate();
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return gl;
 	}
@@ -191,9 +190,9 @@ public class GroceryListMapper {
 	 * 
 	 * @param Zu
 	 *            loeschende GL
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public void delete(GroceryList gl) throws SQLException {
+	public void delete(GroceryList gl) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -203,11 +202,11 @@ public class GroceryListMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
 
-	public Vector<GroceryList> findGroceryListByName(String name, GroceryList gl) throws SQLException {
+	public Vector<GroceryList> findGroceryListByName(String name, GroceryList gl) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -234,18 +233,17 @@ public class GroceryListMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
 
-	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws SQLException {
+	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat FROM grocerylist, groups WHERE groups.id= "
-				+ id;
+		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat, groups.id, groups.name FROM grocerylist, groups WHERE groups.id= " + id;
 
 		Vector<GroceryList> result = new Vector<GroceryList>();
 
@@ -265,7 +263,7 @@ public class GroceryListMapper {
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}

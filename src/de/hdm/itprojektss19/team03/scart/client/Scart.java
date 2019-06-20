@@ -129,7 +129,6 @@ public class Scart implements EntryPoint {
 	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
 
 		public void onFailure(Throwable t) {
-			Window.alert("fail get user" + t.getMessage());
 			User u = new User();
 			user.setEmail("test@t.de");
 			RegistryForm registerForm = new RegistryForm(u);

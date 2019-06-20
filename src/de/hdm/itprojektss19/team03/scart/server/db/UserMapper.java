@@ -8,7 +8,7 @@ import java.sql.Statement;
 import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -41,9 +41,9 @@ public class UserMapper {
 	 * Sucht alle User
 	 * 
 	 * @return Vector mit allen gefundenen Usern
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<User> findAll() throws SQLException {
+	public Vector<User> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
@@ -63,7 +63,7 @@ public class UserMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return users;
 	}
@@ -74,9 +74,9 @@ public class UserMapper {
 	 * @param name
 	 * @param u
 	 * @return Vecotr mit allen Usern die den selben Namen tragen
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public Vector<User> findUserByName(String name, User u) throws SQLException {
+	public Vector<User> findUserByName(String name, User u) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -102,7 +102,7 @@ public class UserMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -113,9 +113,9 @@ public class UserMapper {
 	 * @param Die
 	 *            ID des Users
 	 * @return User mit der entsprechenden ID
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public User findbyUserId(int userId) throws SQLException {
+	public User findbyUserId(int userId) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -148,7 +148,7 @@ public class UserMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -159,9 +159,9 @@ public class UserMapper {
 	 * @param Die
 	 *            Email des Users
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
-	 * @throws SQLException 
+	 * @throws DatabaseException
 	 */
-	public User findUserByEmail(String userEmail) throws SQLException {
+	public User findUserByEmail(String userEmail) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -187,10 +187,8 @@ public class UserMapper {
 				return u;
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			ServersideSettings.getLogger().severe("findUserByEmail for " + userEmail + " failed: " + e2.getMessage());
-			con.close();
-			throw e2;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -201,9 +199,9 @@ public class UserMapper {
 	 * @param User-Objekt
 	 *            das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte User mit aktueller ID
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public User insert(User user) throws SQLException {
+	public User insert(User user) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -240,7 +238,7 @@ public class UserMapper {
 			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 
 		return user;
@@ -252,9 +250,9 @@ public class UserMapper {
 	 * @param Zu
 	 *            �ndernder User
 	 * @return Ge�nderter User
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public User update(User user) throws SQLException {
+	public User update(User user) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -273,11 +271,9 @@ public class UserMapper {
 			// Ausfuehren des SQL-Statements
 			stmt.executeUpdate();
 
-		}
-		// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return user;
 	}
@@ -287,9 +283,9 @@ public class UserMapper {
 	 * 
 	 * @param Zu
 	 *            l�schender User
-	 * @throws SQLException
+	 * @throws DatabaseException
 	 */
-	public void delete(User user) throws SQLException {
+	public void delete(User user) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		try {
@@ -299,7 +295,7 @@ public class UserMapper {
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
 
