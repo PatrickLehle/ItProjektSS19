@@ -6,30 +6,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
-import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class GroupUserMapper {
 
-//INSTANTIATION===============================================================================
+	// INSTANTIATION===============================================================================
 	public static GroupUserMapper groupUserMapper = null;
-	
-	
-//CONSTRUCTOR=================================================================================
+
+	// CONSTRUCTOR=================================================================================
 	/**
-	 * Der Geschuetzte Konstruktor dient zur Absicherung. 
-	 * Nur eine Instanz darf erzeugt werden
+	 * Der Geschuetzte Konstruktor dient zur Absicherung. Nur eine Instanz darf
+	 * erzeugt werden
 	 */
 	protected GroupUserMapper() {
-	
+
 	}
-	
-//METHODS=====================================================================================
+
+	// METHODS=====================================================================================
 	/**
-	 * Hier wird geprueft ob eine Klasse schon vorhanden ist. 
-	 * Methoden werden nur ueber diese statische Methode aufgerufen
+	 * Hier wird geprueft ob eine Klasse schon vorhanden ist. Methoden werden nur
+	 * ueber diese statische Methode aufgerufen
+	 * 
 	 * @return
 	 */
 	public static GroupUserMapper groupUserMapper() {
@@ -38,9 +39,8 @@ public class GroupUserMapper {
 		}
 		return groupUserMapper;
 	}
-	
-	
-	public GroupUser addUserToGroup(User u, Group g) throws SQLException {
+
+	public GroupUser addUserToGroup(User u, Group g) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -52,16 +52,15 @@ public class GroupUserMapper {
 			stmt.setInt(1, u.getId());
 			stmt.setInt(2, g.getId());
 			stmt.executeUpdate();
-			
+
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
 
-
-	public void removeUserFromGroup(User u, Group g) throws SQLException {
+	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -74,24 +73,21 @@ public class GroupUserMapper {
 			stmt.setInt(1, u.getId());
 			stmt.setInt(2, g.getId());
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
 
-	public Vector<User> findAllUserByGroup(int groupId) throws SQLException {
+	public Vector<User> findAllUserByGroup(int groupId) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
 		String selectByKey = "SELECT groupuser.groupId, groups.name, user.id, user.name, "
-				+ "user.email FROM groupuser "
-				+ "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
-				+ "ON groupuser.groupId = groups.id "
-				+ "WHERE groupuser.groupId= " + groupId;
+				+ "user.email FROM groupuser " + "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
+				+ "ON groupuser.groupId = groups.id " + "WHERE groupuser.groupId= " + groupId;
 
 		Vector<User> result = new Vector<User>();
 
@@ -108,18 +104,17 @@ public class GroupUserMapper {
 				user.setId(rs.getInt("id"));
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
-			
+
 				result.addElement(u);
 			}
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
 
-	public void deleteUserFromAllGroups(User u) throws SQLException {
+	public void deleteUserFromAllGroups(User u) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -130,24 +125,21 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(delete);
 			stmt.setInt(1, u.getId());
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 	}
-	
-	public Vector<Group> findAllGroupsByUserId(int userId) throws SQLException {
+
+	public Vector<Group> findAllGroupsByUserId(int userId) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
 		String selectByKey = "SELECT groupuser.groupId, groups.name, user.id, user.name, "
-				+ "user.email FROM groupuser, groups, user "
-				+ "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
-				+ "ON groupuser.groupId = groups.id "
-				+ "WHERE groupuser.userId= " + userId;
+				+ "user.email FROM groupuser, groups, user " + "JOIN user ON groupuser.userId = user.id "
+				+ "JOIN groups " + "ON groupuser.groupId = groups.id " + "WHERE groupuser.userId= " + userId;
 
 		Vector<Group> result = new Vector<Group>();
 
@@ -163,13 +155,12 @@ public class GroupUserMapper {
 				Group g = new Group();
 				g.setId(rs.getInt("id"));
 				g.setGroupName(rs.getString("name"));
-			
+
 				result.addElement(g);
 			}
-		}
-		catch (SQLException e2) {
+		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw e2;
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
