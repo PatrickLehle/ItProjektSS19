@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
@@ -31,7 +32,7 @@ public interface ReportGenerator extends RemoteService{
 //		  		Timestamp cStartDatePl1TS, Timestamp cEndDatePl1TS,
 //		  		Vector<SimpleReport> choosenReports, User user) throws IllegalArgumentException;
 	
-	public ArticleReport createStatisticA(User u) throws IllegalArgumentException;
+	public ArticleReport createStatisticA(User u) throws IllegalArgumentException, SQLException;
 	
 	public ArticleDateReport createStatisticAD(int UID,Article a, Date start, Date end) throws IllegalArgumentException;
 	
