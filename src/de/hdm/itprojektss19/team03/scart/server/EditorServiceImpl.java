@@ -83,7 +83,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 */
 	private GroceryListArticleMapper glaMapper = null;
 
-	// INITIALIZATION===========================================================================
+
+//INITIALIZATION===========================================================================
 
 	public void init() throws IllegalArgumentException {
 
@@ -333,6 +334,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return null;
 		}
 	}
+	
+	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException{
+		try {
+			return glMapper.findAll();
+		}catch (IllegalArgumentException | SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
 		// TODO Auto-generated method stub
@@ -340,7 +350,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 
 		try {
 

@@ -75,6 +75,8 @@ public interface EditorServiceAsync {
 	void statusSharingGroceryList(Vector<GroceryList> result, AsyncCallback<Vector<GroceryList>> asyncCallback);
 	
 	void findAllGroceryListByGroupId(int id, AsyncCallback<Vector<GroceryList>> asyncCallback);
+	
+	void findAllGroceryLists(AsyncCallback<Vector<GroceryList>> asyncCallback);
 
 //GROCERYLIST-ARTICLE=================================================================
 	
@@ -110,6 +112,7 @@ public interface EditorServiceAsync {
 	
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 	
+
 //UNIT===========================================================================
 	
 //	void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
