@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Diese Klasse stellt einzelne Absaetze dar. Der Absatzinhalt wird als String
  * gespeichert. Der Anwender sollte in diesem Strinig keinerlei
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * 
  * @author Thies
  */
-public class SimpleParagraph extends Paragraph implements Serializable {
+public class SimpleParagraph extends Paragraph implements IsSerializable {
 
 	private static final long serialVersionUID = 1L;
 
