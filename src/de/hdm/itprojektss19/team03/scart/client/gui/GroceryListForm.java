@@ -21,6 +21,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -63,13 +64,15 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
 	TextBox retailerTextBox = new TextBox(); // RetailerId
 
+	ListBox retailerListBox = new ListBox();
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
-	Article article = new Article(); //temporaerer Artikel wenn ein Artikel 
-	//geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
-	
+	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
+	// geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
+
 	Retailer r = new Retailer();
 	Vector<Article> articleVector = new Vector<Article>();
+	Vector<Retailer> retailerVector = new Vector<Retailer>();
 
 	Label titelLabel = new Label();
 
@@ -84,7 +87,6 @@ public class GroceryListForm extends VerticalPanel {
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
-		
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
@@ -106,6 +108,15 @@ public class GroceryListForm extends VerticalPanel {
 		this.add(boughtTable);
 		boughtTable.setVisible(false);
 
+		// add stylenames
+		addBtn.setStyleName("button");
+		editBtn.setStyleName("button");
+		deleteBtn.setStyleName("button");
+		checkBtn.setStyleName("button");
+		articleTextBox.setStyleName("textbox");
+		quantityTextBox.setStyleName("textbox");
+		unitTextBox.setStyleName("textbox");
+
 		// Buttons werden dem untersten horizontal Panel hinzugefuegt
 		hpButtons.add(addBtn);
 		hpButtons.add(editBtn);
@@ -116,32 +127,34 @@ public class GroceryListForm extends VerticalPanel {
 		editBtn.addClickHandler(new EditClickHandler());
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		checkBtn.addClickHandler(new CheckClickHandler());
-		
+
 		quantityTextBox.addClickHandler(new ClickHandler() {
-				public void onClick(ClickEvent event) {
-					quantityTextBox.addChangeHandler(new ChangeHandler(){
-						public void onChange(ChangeEvent event) {
-							String input = quantityTextBox.getText();
-							if (!input.matches("[0-9]*")) {
-								quantityTextBox.setText(null);
-								quantityTextBox.addStyleName("wrong-input");
-					        	Window.alert("TO-DO CSS CLASS worng-input");
-					        	return;
-					        } else {
-					        	quantityTextBox.removeStyleName("wrong-input");
-					        }
+			public void onClick(ClickEvent event) {
+				quantityTextBox.addChangeHandler(new ChangeHandler() {
+					public void onChange(ChangeEvent event) {
+						String input = quantityTextBox.getText();
+						if (!input.matches("[0-9]*")) {
+							quantityTextBox.setText(null);
+							quantityTextBox.addStyleName("wrong-input");
+							Window.alert("TO-DO CSS CLASS worng-input");
+							return;
+						} else {
+							quantityTextBox.removeStyleName("wrong-input");
 						}
-					});
-				}
+					}
+				});
+			}
 		});
 
 		this.add(hpButtons);
 	}
 
-	/*
+	/**
 	 * @author bastiantilk
-	 * Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer
-	 * Aktualisierung der Daten
+	 * @author tom
+	 * 
+	 *         Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden
+	 *         bei einer Aktualisierung der Daten
 	 * 
 	 */
 	public void loadTable() {
@@ -174,7 +187,7 @@ public class GroceryListForm extends VerticalPanel {
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
-
+					for (int articleNumber = 1; articleNumber <= articleVector.size(); articleNumber++) {
 						if (articleVector.get(vectorNumber).getCheckBoolean() == false) {
 							articleTable.setText(falseCount, 0, articleVector.get(vectorNumber).getName());
 							articleTable.setText(falseCount, 1,
@@ -194,18 +207,31 @@ public class GroceryListForm extends VerticalPanel {
 							visibleNum = trueCount;
 						}
 						vectorNumber++;
-					
+					}
 					if (visibleNum > 1) {
 						boughtTable.setVisible(true);
 					}
+					loadTable();
 				}
 			});
 		} catch (IllegalArgumentException e) {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
 		}
 
-}
+	}
 
+	public ListBox getRetailerListBox() {
+		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
+			retailerListBox.addItem(retailerVector.get(listNumber).toString());
+		}
+		retailerListBox.setVisibleItemCount(retailerVector.size() + 1);
+		retailerListBox.addChangeHandler(new ChangeHandler() {
+			public void onChange(ChangeEvent event) {
+				event.getRelativeElement();
+			}
+		});
+		return getRetailerListBox();
+	}
 
 	/**
 	 * @param node
@@ -241,8 +267,8 @@ public class GroceryListForm extends VerticalPanel {
 	 * 
 	 *         getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
 	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
-	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert und
-	 *         eine neue CheckBox wird kreiert getCbReturn.
+	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
+	 *         und eine neue CheckBox wird kreiert getCbReturn.
 	 * 
 	 */
 	public CheckBox getCbCheck() {
@@ -257,7 +283,7 @@ public class GroceryListForm extends VerticalPanel {
 				article.setUnit(articleTable.getText(rowIndex, 2));
 				article.setRetailerId(Integer.parseInt(articleTable.getText(rowIndex, 3)));
 				article.setCheckBoolean(true);
-				
+
 				ev.saveArticle(article, new AsyncCallback<Article>() {
 					public void onFailure(Throwable caught) {
 						Window.alert("Artikel konnte nicht hinzugefügt werden");
@@ -325,7 +351,7 @@ public class GroceryListForm extends VerticalPanel {
 							boughtTable.setVisible(false);
 						}
 						loadTable();
-						
+
 						article = null;
 					}
 				});
@@ -443,10 +469,11 @@ public class GroceryListForm extends VerticalPanel {
 
 							public void onSuccess(Article arg0) {
 								article = arg0;
-								//loadTable(); Tabelle wird neu geladen
-								
-								//Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden konnte
-								//und die Tabelle neu geladen wird?
+								loadTable();
+
+								// Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden
+								// konnte
+								// und die Tabelle neu geladen wird?
 							}
 						});
 
@@ -538,8 +565,8 @@ public class GroceryListForm extends VerticalPanel {
 							}
 
 							public void onSuccess(Article arg0) {
-								loadTable();
 								article = null;
+								loadTable();
 							}
 						});
 
@@ -547,6 +574,7 @@ public class GroceryListForm extends VerticalPanel {
 						quantityTextBox.setText(null);
 						unitTextBox.setText(null);
 						retailerTextBox.setText(null);
+						globalRow = 0;
 					} else {
 						articleTable.remove(articleTextBox);
 						articleTable.remove(quantityTextBox);
@@ -562,6 +590,7 @@ public class GroceryListForm extends VerticalPanel {
 						retailerTextBox.setText(null);
 						articleTable.setWidget(globalRow, 4, getCbEdit());
 						Window.alert("Änderung wurde nicht gespeichert");
+						globalRow = 0;
 					}
 				}
 			}
@@ -612,8 +641,7 @@ public class GroceryListForm extends VerticalPanel {
 
 						public void onSuccess(Article arg0) {
 							article = arg0;
-							//loadTable(); FEHLT NOCH: Tabelle muss neu geladen werden.
-							// wie verhaelt sich das mit folgendem Code?
+							loadTable();
 						}
 					});
 
@@ -666,12 +694,12 @@ public class GroceryListForm extends VerticalPanel {
 					public void onSuccess(Void arg0) {
 						articleTable.removeRow(rowIndex);
 						loadTable();
-						
+
 						// FEHLT NOCH: Korrekte Verarbeitung bei dem Loeschen einer Artikels
 						// und loesen der Verknupfung mit GroceryListArticle Objekten
 					}
 				});
-				
+
 			}
 		});
 		cb.setValue(false);
@@ -770,15 +798,15 @@ public class GroceryListForm extends VerticalPanel {
 									// wird in der Datenbank als geloescht markiert mit deleteDat
 									ev.deleteArticle(article, new AsyncCallback<Void>() {
 										public void onFailure(Throwable caught) {
-											Window.alert("Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
-											
+											Window.alert(
+													"Artikel konnte nicht mit der GroceryListe verbunden werden. Außerdem konnte der fehlerhafte Artikel konnte nicht gelöscht werden");
+
 										}
 
 										@Override
 										public void onSuccess(Void arg0) {
 											Window.alert(
 													"Artikel konnte nicht mit Einkaufsliste verbunden werden. Artikel aus der Datenbank gelöscht");
-
 										}
 									});
 								}
@@ -787,11 +815,10 @@ public class GroceryListForm extends VerticalPanel {
 									groceryListArticle = arg0;
 									Window.alert("Artikel " + article.getName() + " wurde  der Einkaufsliste "
 											+ groceryList.getGroceryListName() + " hinzugefügt");
-									loadTable();
 								}
 							});
-							//loadTable();
-							
+							loadTable();
+
 						}
 					});
 
