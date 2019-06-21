@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 	/**
 	 * Diese Klasse stellt eine Menge einzelner Absätze (
@@ -12,7 +14,7 @@ import java.util.Vector;
 	 * 
 	 * @author Thies
 	 */
-	public class CompositeParagraph extends Paragraph implements Serializable {
+	public class CompositeParagraph extends Paragraph implements IsSerializable {
 
 	  /**
 	   * 

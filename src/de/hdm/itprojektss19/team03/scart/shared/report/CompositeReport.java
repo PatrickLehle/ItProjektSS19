@@ -3,11 +3,13 @@ package de.hdm.itprojektss19.team03.scart.shared.report;
 import java.io.Serializable;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Ein zusammengesetzter Report. Dieser Report kann aus einer Menge von 
  * Teil-Reports (vgl. Attribut <code>subReports</code>) bestehen.
  */
-public abstract class CompositeReport extends Report implements Serializable {
+public abstract class CompositeReport extends Report implements IsSerializable {
 
 private static final long serialVersionUID = 1L;
 
