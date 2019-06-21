@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -18,7 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * Die Mapper Klasse bildet ein Objekt bidirektional auf eine reationale
  * Datenbank ab.
  * 
- * @author Marco Dell'Oso, PatrickLehle, BastianTilk(findAllArticleByDateRetailer)
+ * @author Marco Dell'Oso, PatrickLehle, BastianTilk
  *
  */
 public class ArticleMapper {
@@ -52,17 +54,19 @@ public class ArticleMapper {
 	 * 
 	 * Sucht einen Artikel anhand seiner ID
 	 * 
-	 * @param zu Suchende id
+	 * @param zu
+	 *            Suchende id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
+	 * @throws DatabaseException
 	 */
-	public Article findByKey(int id) {
+	public Article findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + id);
 
-			//Nur EIN Ergebnis, da id =PRIMARY-KEY
+			// Nur EIN Ergebnis, da id =PRIMARY-KEY
 			if (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -72,12 +76,14 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
-				
+				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setDelDat(rs.getTimestamp("delDat"));
+
 				return article;
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
@@ -86,13 +92,14 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAll() {
-		
+	public Vector<Article> findAll() throws DatabaseException {
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String all = "SELECT * FROM article";
-		
+
 		Vector<Article> articles = new Vector<Article>();
 
 		try {
@@ -108,18 +115,18 @@ public class ArticleMapper {
 				a.setUnit(rs.getString("unit"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
-	
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(a);
 			}
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return articles;
 	}
-	
-	public Vector<Article> findArticleByName(String name, Article a){
+
+	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -134,7 +141,7 @@ public class ArticleMapper {
 
 			ResultSet rs = stmt.executeQuery();
 
-				while (rs.next()) {
+			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
 				article.setName(rs.getString("name"));
@@ -143,12 +150,14 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -156,10 +165,12 @@ public class ArticleMapper {
 	/**
 	 * Sucht alle Artikel, die einem bestimmten Retailer haben, anhand der ID
 	 * 
-	 * @param Die ID des Retailers
+	 * @param Die
+	 *            ID des Retailers
 	 * @return Vector mit allen gefunden Artikeln des Retailers
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findArticleByRetailerId(int retailerId) {
+	public Vector<Article> findArticleByRetailerId(int retailerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> articles = new Vector<Article>();
@@ -168,7 +179,7 @@ public class ArticleMapper {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE retailerId=" + retailerId);
 
-			//Hier wird fuer jeden gefundenen Article immer ein neues Object erstellt
+			// Hier wird fuer jeden gefundenen Article immer ein neues Object erstellt
 			while (rs.next()) {
 				Article article = new Article();
 				article.setId(rs.getInt("id"));
@@ -178,28 +189,33 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(article);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
-		//Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
+		// Hier wird ein Vector mit allen Articlen die gefunden wurden zurueck gegeben
 		return articles;
 	}
-	
+
 	/**
 	 * F�gt in der Datenbank einen neuen Artikel ein
 	 * 
-	 * @param Artikel-Objekt das in die DB eingef�gt werden soll
+	 * @param Artikel-Objekt
+	 *            das in die DB eingef�gt werden soll
 	 * @return Der Eingef�gte Artikel mit aktueller ID
+	 * @throws DatabaseException
 	 */
-	public Article insert(Article article) {
+	public Article insert(Article article) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM article";
 
-		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat) VALUES (?,?,?,?,?,?,?)";
+		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat, boolean) VALUES (?,?,?,?,?,?,?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -223,12 +239,15 @@ public class ArticleMapper {
 			stmt.setInt(5, article.getRetailerId());
 			stmt.setTimestamp(6, article.getCreationDat());
 			stmt.setTimestamp(7, article.getModDat());
-			
+			stmt.setBoolean(8, article.getCheckBoolean());
+			// DelDat wird bei dem anlegen eines Artikels nicht hinterlegt
+
 			// INSERT-Query ausfuehren
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return article;
 	}
@@ -236,66 +255,120 @@ public class ArticleMapper {
 	/**
 	 * �ndert einen Artikel in der Datenbank
 	 * 
-	 * @param Zu �ndernder Artikel
+	 * @param Zu
+	 *            �ndernder Artikel
 	 * @return Ge�nderter Artikel
+	 * @throws DatabaseException
 	 */
-	public Article update(Article article) {
-		
+	public Article update(Article article) throws DatabaseException {
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=? WHERE id=?";
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
 
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
-		
+
 			stmt.setString(1, article.getName());
 			stmt.setInt(2, article.getQuantity());
 			stmt.setString(3, article.getUnit());
 			stmt.setInt(4, article.getRetailerId());
 			stmt.setTimestamp(5, article.getModDat());
 			stmt.setInt(6, article.getId());
-			
+			stmt.setBoolean(7, article.getCheckBoolean());
+			stmt.setTimestamp(8, article.getDelDat()); // Mit der Update-Methode sollte kein Artikel als geloescht
+														// markiert werden, denn
+														// das lokale Artikel-Objekt wird dadurch aber nicht veraendert.
+
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
+
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return article;
 	}
-	
+
 	/**
 	 * L�scht einen Artikel aus der Datenbank
 	 * 
-	 * @param Zu l�schender Artikel
+	 * @param Zu
+	 *            l�schender Artikel
+	 * @throws DatabaseException
 	 */
-	public void delete(Article article) {
+	public Article delete(Article article) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
+		PreparedStatement stmt = null;
+
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
+
 		try {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
+			/*
+			 * alte delete Mthode Statement stmt = con.createStatement();
+			 * stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
+			 */
+			article.setDelDat(new Timestamp(new Date().getTime()));
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(update);
+
+			stmt.setString(1, article.getName());
+			stmt.setInt(2, article.getQuantity());
+			stmt.setString(3, article.getUnit());
+			stmt.setInt(4, article.getRetailerId());
+			stmt.setTimestamp(5, article.getModDat());
+			stmt.setInt(6, article.getId());
+			stmt.setBoolean(7, article.getCheckBoolean());
+			stmt.setTimestamp(8, article.getDelDat());
+
+			stmt.executeUpdate();
+
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + article.getId());
+
+			// Nur EIN Ergebnis, da id =PRIMARY-KEY
+			if (rs.next()) {
+				Article returnArticle = new Article();
+				returnArticle.setId(rs.getInt("id"));
+				returnArticle.setName(rs.getString("name"));
+				returnArticle.setQuantity(rs.getInt("quantity"));
+				returnArticle.setUnit(rs.getString("unit"));
+				returnArticle.setRetailerId(rs.getInt("retailerId"));
+				returnArticle.setCreationDat(rs.getTimestamp("creationDat"));
+				returnArticle.setModDat(rs.getTimestamp("modDat"));
+				returnArticle.setCheckBoolean(rs.getBoolean("boolean"));
+				returnArticle.setDelDat(rs.getTimestamp("delDat"));
+
+				return returnArticle;
+			}
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
+		return null;
 	}
+
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
+	 * 
 	 * @param start
 	 * @param end
 	 * @return
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end){
+	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws DatabaseException {
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Article> result = new Vector<Article>();
-		
+
 		try {
 			Statement stmt = con.createStatement();
-			//Query das zwei Timestamps als interval aller Article darin zurueck gibt
-			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+ "' AND '"+end+"'");
+			// Query das zwei Timestamps als interval aller Article darin zurueck gibt
+			ResultSet rs = stmt
+					.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '" + start + "' AND '" + end + "'");
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
@@ -305,36 +378,44 @@ public class ArticleMapper {
 				a.setRetailerId(rs.getInt("retailerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
-				
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
+
 	/**
-	 * @bastiantilk, PatrickLehle
-	 * Gibt alle Artikel eines Retailers in einem Zeitraum zurueck
+	 * @bastiantilk, PatrickLehle Gibt alle Artikel eines Retailers in einem
+	 * Zeitraum zurueck
+	 * 
 	 * @param start
 	 * @param end
 	 * @param r
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
+	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end){
-		//DB Connection aufbauen
+	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end)
+			throws DatabaseException {
+		// DB Connection aufbauen
 		Connection con = DBConnection.connection();
-		
+
 		Vector<Article> result = new Vector<Article>();
-		
+
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
 			stmt.setInt(1, id);
-//			Statement stmt = con.createStatement();
-			
+			// Statement stmt = con.createStatement();
+
 			ResultSet rs = stmt.executeQuery();
-			
-//			ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
+
+			// ResultSet rs = stmt.executeQuery("SELECT * FROM article WHERE creationDat
+			// BETWEEN '"+start+"' AND '"+end+"' AND retailerId=" + r.getId());
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
@@ -344,12 +425,47 @@ public class ArticleMapper {
 				a.setRetailerId(rs.getInt("retailerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
-				
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
+
+	public Vector<Article> findAllArticleByGroup(User u, Group g) throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(
+					"SELECT article.id, article.name, article.quantity, article.unit, article.creationDat, article.modDat, article.delDat FROM article, groups WHERE userId="
+							+ u.getId() + "AND groupId=" + g.getId());
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+
 }

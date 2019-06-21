@@ -1,6 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
+import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.shared.report.Report;
 

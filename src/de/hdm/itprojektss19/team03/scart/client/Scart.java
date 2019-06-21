@@ -2,17 +2,22 @@ package de.hdm.itprojektss19.team03.scart.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Cookies;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
-import de.hdm.itprojektss19.team03.scart.client.gui.ScartForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
+import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
@@ -20,6 +25,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
+ * Die Scart classe implementiert EntryPoint, d.h. sie wird als erstes
+ * aufgerufen, sobald die Anwendung gestartet wird.
  * 
  * @author PatrickLehle
  * @author Marco Dell'Oso
@@ -27,107 +34,112 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class Scart implements EntryPoint {
 
-	 /**
-	  * Erzeugung des <code>EditorService</code>-Objekts ist fuer die initialisierung der 
-	  * Verwaltung noetig, um die Aktivitaeten der Applikation zu steuern.
-	  */
-	LoginServiceAsync loginService = GWT.create(LoginService.class);
-	EditorServiceAsync editorService = ClientsideSettings.getEditor();
-	ClientsideSettings clientSettings = new ClientsideSettings();
+	private LoginServiceAsync loginService = GWT.create(LoginService.class);
+	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
-	private User ownProfil = null;
-	private LoginInfo loginInfo = null;
-	ToolbarForm toolbar = new ToolbarForm();
-	FooterForm footer = new FooterForm();
+	private User user = new User();
+
+	private ToolbarForm toolbar = new ToolbarForm();
+	private FooterForm footer = new FooterForm();
+	private GroceryListForm groceryListForm = new GroceryListForm();
+	private GroupForm groupForm = new GroupForm();
+	private ProfilForm profilForm = new ProfilForm();
+
+	private HorizontalPanel contentPanel = new HorizontalPanel();
+
+	// @todo: delete test buttons
+	private Button button1 = new Button("grocery list");
+	private Button button2 = new Button("profile ");
 
 	/**
-	 * Die EntryPoint Methode <code>onModuleLoad()</code> ist der Einstiegspunkt,
-	 * die automatisch aufgerufen wird, in dem ein Modul geladen wird. Vergleichbar
-	 * mit der <code>main()</code> Methode.
+	 * startet, sobald das Modul geladen wird.
 	 */
 	public void onModuleLoad() {
-		RootPanel.get("header").add(toolbar);
-		RootPanel.get("footer").add(footer);
-		loginService.login(GWT.getHostPageBaseURL() + "Scart.html", new LoginCallback());
-	}
+		contentPanel.setSpacing(30);
 
-	public class LoginCallback implements AsyncCallback<LoginInfo> {
-		public void onFailure(Throwable e) {
-			Window.alert("Login Failed " + e.getMessage());
-		}
+		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
-		public void onSuccess(LoginInfo logInfo) {
-
-			if (logInfo != null) {
-
-				// falls user eingeloggt ist
-				if (logInfo.isLoggedIn()) {
-
-					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
-
-						public void onFailure(Throwable e) {
-							Window.alert("An error occurred while trying to login: " + e);
-
-						}
-
-						public void onSuccess(User u) {
-
-							// Ist der Nutzer registriert wird er zur Startseite weitergeleitet.
-							if (u != null) {
-								opening(u);
-
-								// Besitzt der user auf Scart noch keinen Account wird er zur RegistryForm
-								// weitergeleitet.
-							} else {
-								RootPanel.get("main").clear();
-								RootPanel.get("main").add(new RegistryForm(u));
-							}
-
-						}
-
-					});
-
-					// falls user nicht eingeloggt, login laden
-				} else {
-					RootPanel.get("main").clear();
-					RootPanel.get("main").add(new LoginForm(logInfo.getLoginUrl()));
-					return;
-				}
-
+			public void onFailure(Throwable err) {
+				Window.alert(err.getMessage());
 			}
-		}
+
+			public void onSuccess(LoginInfo logInfo) {
+				/**
+				 * Check if the user is logged in
+				 */
+				if (logInfo.isLoggedIn()) {
+					user.setEmail(logInfo.getEmailAddress());
+					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
+				} else {
+					login(logInfo.getLoginUrl());
+				}
+			}
+
+		});
 
 		/**
-		 * Initialisierungmethode fuer das Verwaltungssystems.
-		 * 
-		 * @param user
+		 * Add header and footer to the (root-)Panels they belong to
 		 */
-		private void opening(User user) {
+		RootPanel.get("header").clear();
+		RootPanel.get("header").add(toolbar);
+		RootPanel.get("footer").clear();
+		RootPanel.get("footer").add(footer);
+	}
 
-			// Naechster Schritt ist das setzen von Cookies zur identifikation eines Users.
-			Cookies.setCookie("userGMail", user.getEmail());
+	/**
+	 * Load the login Form into content panel
+	 */
+	private void login(String logURL) {
+		LoginForm loginForm = new LoginForm(logURL);
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(loginForm);
+	}
 
-			// Wenn der user bereits existiert, wird zusaetzlich die userID gesetzt.
-			Cookies.setCookie("userID", String.valueOf(user.getId()));
+	/**
+	 * Add content to content panel
+	 */
+	private void loadPage() {
 
-			editorService.getOwnProfile(user, new AsyncCallback<User>() {
+		contentPanel.add(groupForm);
+		contentPanel.add(button1);
+		contentPanel.add(button2);
+		RootPanel.get("content").clear();
+		RootPanel.get("content").add(contentPanel);
 
-				@Override
-				public void onFailure(Throwable e) {
-					Window.alert("fail1" + e.getMessage().toString());
-				}
+		// @todo: delete test buttons
+		button1.addClickHandler(new ClickHandler() {
 
-				@Override
-				public void onSuccess(User result) {
+			public void onClick(ClickEvent evt) {
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(groceryListForm);
 
-					ownProfil = result;
-					RootPanel.get("main").clear();
-					RootPanel.get("main").add(new ScartForm(result));
+			}
+		});
 
-				}
+		button2.addClickHandler(new ClickHandler() {
 
-			});
+			public void onClick(ClickEvent evt) {
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(profilForm);
+
+			}
+		});
+	}
+
+	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
+
+		public void onFailure(Throwable t) {
+			User u = new User();
+			user.setEmail("test@t.de");
+			RegistryForm registerForm = new RegistryForm(u);
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(registerForm);
 
 		}
-	}
+
+		public void onSuccess(User u) {
+			loadPage();
+		}
+	};
+
 }

@@ -17,10 +17,10 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	private String loginUrl = "";
 	private String logoutUrl = " ";
 	private String emailAddress = "";
-	private User user = null;
-	
+	private String username = "";
+
 	public LoginInfo() {
-		
+
 	}
 
 	/**
@@ -34,19 +34,10 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	}
 
 	/**
-	 * Gibt den Login-Status zurueck.
-	 * 
-	 * @return loggedIn
-	 */
-
-	public boolean getLoginIn() {
-		return loggedIn;
-	}
-
-	/**
 	 * Setzt den Login-Status
 	 * 
-	 * @param loggedIn Status setzen fuer den eingeloggten User
+	 * @param loggedIn
+	 *            Status setzen fuer den eingeloggten User
 	 */
 
 	public void setLoginIn(boolean loggedIn) {
@@ -66,7 +57,8 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	/**
 	 * Setzt die LoginUrl
 	 * 
-	 * @param loginUrl die gesetzt werden soll
+	 * @param loginUrl
+	 *            die gesetzt werden soll
 	 */
 	public void setLoginUrl(String loginUrl) {
 		this.loginUrl = loginUrl;
@@ -85,7 +77,8 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	/**
 	 * Setzt die LogoutUrl
 	 * 
-	 * @param logoutUrl fuer den Loggout
+	 * @param logoutUrl
+	 *            fuer den Loggout
 	 */
 	public void setLogoutUrl(String logoutUrl) {
 		this.logoutUrl = logoutUrl;
@@ -104,18 +97,19 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	/**
 	 * Setzt die Email
 	 * 
-	 * @param emailAddress des Users
+	 * @param emailAddress
+	 *            des Users
 	 */
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
 
-	public User getUser() {
-		return user;
+	public String getUsername() {
+		return username;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

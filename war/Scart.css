@@ -2,15 +2,71 @@ body {
 	height: 100%;
 	width: 100%;
 	top: 0;
+	left: 0;
 	padding: 0px;
-	margin: 0px;
+	margin: 0px !important;
+	font-family: 'Raleway', sans-serif !important;
 }
 
-.main {
+* {
+	font-family: 'Raleway', sans-serif !important;
+}
+
+.content {
 	height: 100%;
 	width: 100%;
 	padding: 0px;
 	margin: 0px;
+	margin-top: 80px;
+}
+
+.text {
+	margin-bottom: 0.2em;
+}
+
+.textbox {
+	margin-bottom: 0.2em;
+	
+}
+
+.h1 {
+	display: block;
+	font-size: 2em;
+	margin-top: 0.67em;
+	margin-bottom: 0.67em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+}
+
+.h2 {
+	display: block;
+	font-size: 1.5em;
+	margin-top: 0.83em;
+	margin-bottom: 0.83em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+}
+
+.h3 {
+	display: block;
+	font-size: 1.17em;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
+}
+
+.h4 {
+	display: block;
+	font-size: 1em;
+	margin-top: 1.33em;
+	margin-bottom: 1.33em;
+	margin-left: 0;
+	margin-right: 0;
+	font-weight: bold;
 }
 
 .logo {
@@ -19,8 +75,9 @@ body {
 }
 
 .logo-toolbar {
-	height: 50px;
-	width: 50px;
+	height: 70px;
+	width: 70px;
+	padding: 10px;
 }
 
 .signinwithgoogle {
@@ -41,16 +98,25 @@ body {
 }
 
 .toolbar {
-	top: 0;
+	background: url(/images/scartbannerdarkblank.jpg);
+	background-size: cover;
+	-moz-box-shadow: inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
 	width: 100%;
-	box-shadow: 0px 15px 10px -15px #111
+	height: 100px;
+	border-radius: 3px;
 }
 
 .footer {
-	position: fixed;
-	left: 0;
+	position: absolute;
+	background: url(/images/scartbannerdarkblank.jpg) !important;
+	background-size: cover !important;
+	border-radius: 3px;
 	bottom: 0;
 	width: 100%;
+	height: 60px;
+	background: #6cf;
 	border-top-style: solid;
 	border-top-color: #BBBBBB;
 	border-top-width: 1px;
