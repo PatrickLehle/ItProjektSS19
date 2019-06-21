@@ -65,9 +65,11 @@ public class GroupForm extends VerticalPanel {
 		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
 		// groupNamePanel.addStyleName("");
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
-		groupLabel.addStyleName("h2");
+		groupLabel.addStyleName("h1");
 		groupInfoButton.addClickHandler(new InfoClickHandler());
+		groupInfoButton.addStyleName("button");
 		createGroupButton.addClickHandler(new CreateClickHandler());
+		createGroupButton.addStyleName("button");
 
 		groupFormPanel.add(groupLabel);
 		groupFormPanel.add(groupNamePanel);
@@ -95,7 +97,7 @@ public class GroupForm extends VerticalPanel {
 				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
 
 				groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
-				groupNameLabel.setStyleName("textbox");
+				groupNameLabel.setStyleName("h3");
 				groupNamePanel.add(groupNameLabel);
 
 			}
