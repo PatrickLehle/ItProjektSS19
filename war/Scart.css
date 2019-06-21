@@ -14,11 +14,11 @@ body {
 }
 
 .content {
+    text-align: -webkit-center;
     height: 100%;
     width: 100%;
     padding: 0px;
     margin: 0px;
-    margin-top: 80px;
 }
 
 .text {
@@ -41,26 +41,33 @@ body {
 }
 
 .button {
-    border-radius: 15px;
+    border-radius: 3px 25px;
     margin: 10px;
     width: 180px;
     height: 40px;
     color: rgb(25, 31, 31);
-    font-weight: bold;
+    box-shadow: 0px 0px 5px rgba(242, 210, 37);
+    font-size: 1.2em;
+    border-style: none !important;
+    font-weight: bold !important;
     /* Old browsers */
     background: rgb(242, 210, 37);
     /* FF3.6-15 */
-    background: -moz-linear-gradient(-45deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%);
+    /* background: -moz-linear-gradient(-45deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%); */
     /* Chrome10-25,Safari5.1-6 */
-    background: -webkit-linear-gradient(-45deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%);
+    /* background: -webkit-linear-gradient(-45deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%); */
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-    background: linear-gradient(135deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%);
+    /* background: linear-gradient(135deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%); */
     /* IE6-9 fallback on horizontal gradient */
-    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#a8821a', endColorstr='#f2d225', GradientType=1);
+    /* filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#a8821a', endColorstr='#f2d225', GradientType=1); */
 }
+
+.icon-button {}
 
 .h1 {
     display: block;
+    color: rgba(255, 81, 122, 1);
+    text-shadow: 0px 0px 4px rgba(255, 81, 122, 1);
     font-size: 2em;
     margin-top: 0.67em;
     margin-bottom: 0.67em;
@@ -139,16 +146,12 @@ body {
 }
 
 .footer {
-    position: absolute;
+    position: fixed;
     background: url(/images/scartbannerdarkblank.jpg) !important;
     background-size: cover !important;
-    border-radius: 3px;
     bottom: 0;
     width: 100%;
     height: 60px;
     background: #6cf;
-    border-top-style: solid;
-    border-top-color: #BBBBBB;
-    border-top-width: 1px;
     text-align: center;
 }
