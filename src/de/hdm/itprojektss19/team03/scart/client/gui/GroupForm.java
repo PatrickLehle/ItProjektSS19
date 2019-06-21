@@ -90,15 +90,8 @@ public class GroupForm extends VerticalPanel {
 		this.add(groupFormPanel);
 
 		
-		editorVerwaltung.findAllGroups(new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
 		
-		//TIMEFRAME-CHECK-FOR-CHANGE===================
-		Timer refresh = new Timer() {
-			public void run() {
-				editorVerwaltung.findAllGroups(new AllGroupsCallback());
-			}
-		};
-		// refresh.scheduleRepeating(10000);
 
 	}
 	
