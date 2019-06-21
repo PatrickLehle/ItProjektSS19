@@ -31,6 +31,14 @@ public abstract class BusinessObject implements Serializable, IsSerializable {
 	 */
 	protected int id = 0;
 
+	
+	public BusinessObject() {
+		
+	}
+	
+	public BusinessObject(int id) {
+		this.id = id;
+	}
 	/**
 	 * Auslesen der ID.
 	 * 
