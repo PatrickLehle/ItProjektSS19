@@ -13,6 +13,7 @@ body {
 	background: black !important;
 }
 .gwt-Anchor{
+	positin: fixed;
  	margin: 10px 0px 0px 100px;
 	padding: 7px;
 	color: black;
@@ -72,7 +73,7 @@ body {
 		
 #footer{
 	padding: 7px 0px 0px 0px;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
 	height: 60px;
