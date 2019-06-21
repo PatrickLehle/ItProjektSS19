@@ -38,6 +38,7 @@ public class Scart implements EntryPoint {
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
 	private User user = new User();
+	private String signOutLink;
 
 	private ToolbarForm toolbar = new ToolbarForm();
 	private FooterForm footer = new FooterForm();
@@ -69,6 +70,7 @@ public class Scart implements EntryPoint {
 				 */
 				if (logInfo.isLoggedIn()) {
 					user.setEmail(logInfo.getEmailAddress());
+					signOutLink = logInfo.getLogoutUrl();
 					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
 				} else {
 					login(logInfo.getLoginUrl());
@@ -91,8 +93,9 @@ public class Scart implements EntryPoint {
 	 */
 	private void login(String logURL) {
 		LoginForm loginForm = new LoginForm(logURL);
-		RootPanel.get("content").clear();
-		RootPanel.get("content").add(loginForm);
+		contentPanel.clear();
+		contentPanel.add(loginForm);
+		RootPanel.get("content").add(contentPanel);
 	}
 
 	/**
@@ -129,12 +132,10 @@ public class Scart implements EntryPoint {
 	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
 
 		public void onFailure(Throwable t) {
-			User u = new User();
-			user.setEmail("test@t.de");
-			RegistryForm registerForm = new RegistryForm(u);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(registerForm);
-
+			RegistryForm registerForm = new RegistryForm(user, signOutLink);
+			contentPanel.clear();
+			contentPanel.add(registerForm);
+			RootPanel.get("content").add(contentPanel);
 		}
 
 		public void onSuccess(User u) {
