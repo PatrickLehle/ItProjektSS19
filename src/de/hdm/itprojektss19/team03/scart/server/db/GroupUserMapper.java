@@ -44,7 +44,7 @@ public class GroupUserMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String addString = "INSERT INTO groupuser (userId, groupId) VALUES (?,?)";
+		String addString = "INSERT INTO `groupuser` (`groupId`, `userId`) VALUES (?,?)";
 
 		try {
 			con = DBConnection.connection();

@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import de.hdm.itprojektss19.team03.scart.shared.report.Row;
 import de.hdm.itprojektss19.team03.scart.shared.report.SimpleParagraph;
 
@@ -15,7 +17,7 @@ import de.hdm.itprojektss19.team03.scart.shared.report.SimpleParagraph;
 	 * @see Row
 	 * @author Thies
 	 */
-	public class Column implements Serializable {
+	public class Column implements IsSerializable {
 
 	  /**
 	   * 
