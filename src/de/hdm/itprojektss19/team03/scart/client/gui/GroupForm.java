@@ -14,11 +14,16 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
-import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+import de.hdm.itprojektss19.team03.scart.client.gui.EditGroup;
+import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.AllGroupsCallback;
+import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.AllRetailersCallback;
+import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.GroupCheckBoxClickHandler;
+
 
 /**
  * 
@@ -74,8 +79,9 @@ public class GroupForm extends VerticalPanel {
 		groupLabel.addStyleName("h2");
 		groupInfoButton.addClickHandler(new InfoClickHandler());
 		createGroupButton.addClickHandler(new CreateClickHandler());
-
-		groupFormPanel.add(groupLabel);
+		
+		
+		groupFormPanel.add(groupLabel);		
 		groupFormPanel.add(groupNamePanel);
 		groupFormPanel.add(groupBtnPanel);
 		groupBtnPanel.add(groupInfoButton);
@@ -83,22 +89,28 @@ public class GroupForm extends VerticalPanel {
 		
 		this.add(groupFormPanel);
 
-		// ToDo: durch Group User Mapper ersetzen
-		editorService.getAllGroupsByUser(u, new AsyncCallback<Vector<Group>>() {
-
-			public void onFailure(Throwable e) {
-				Window.alert("Error getting Groups: " + e);
+		
+		editorVerwaltung.findAllGroups(new AllGroupsCallback());
+		
+		//TIMEFRAME-CHECK-FOR-CHANGE===================
+		Timer refresh = new Timer() {
+			public void run() {
+				editorVerwaltung.findAllGroups(new AllGroupsCallback());
 			}
 		};
 		// refresh.scheduleRepeating(10000);
 
-			public void onSuccess(Vector<Group> groups) {
-				createGroupPanels(groups);
-
-			}
-		});
-
 	}
+	
+	
+	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
+		
+		public void onFailure(Throwable e) {
+			Window.alert("Error getting Groups: " + e);
+		}
+		
+		public void onSuccess(Vector<Group> result) {
+			allGroups = result;
 
 			if (allGroupsS.size() != result.size()) {
 				allGroupsS.clear();
@@ -141,16 +153,7 @@ public class GroupForm extends VerticalPanel {
 		}
 
 	}
-
-	public void createGroupPanels(Vector<Group> groups) {
-
-		Vector<Group> gV = new Vector<Group>();
-		Window.alert(gV.get(0).getGroupName());
-		for (int i = 0; i < gV.size(); i++) {
-			Label groupNameLabel = new Label(groups.elementAt(i).getGroupName());
-			groupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
-			groupNamePanel.add(groupNameLabel);
-		}
+	
 
 
 }
