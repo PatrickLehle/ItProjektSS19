@@ -3,6 +3,8 @@ package de.hdm.itprojektss19.team03.scart.shared.report;
 import java.io.Serializable;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * Zeile einer Tabelle eines <code>SimpleReport</code>-Objekts. <code>Row</code>
  * -Objekte implementieren das <code>Serializable</code>-Interface und koennen
@@ -12,7 +14,7 @@ import java.util.Vector;
  * @see Column
  * @author Thies
  */
-public class Row implements Serializable {
+public class Row implements IsSerializable {
 
 	/**
 	 * 

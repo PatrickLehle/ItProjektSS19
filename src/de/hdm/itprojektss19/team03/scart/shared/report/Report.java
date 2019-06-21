@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import java.util.Date;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 /**
  * <p>
  * Basisklasse aller Reports. Reports sind als <code>Serializable</code>
@@ -19,7 +21,7 @@ import java.util.Date;
  * @see Report
  * @author Thies
  */
-public abstract class Report implements Serializable {
+public abstract class Report implements IsSerializable {
 
 	/**
 	 * 
