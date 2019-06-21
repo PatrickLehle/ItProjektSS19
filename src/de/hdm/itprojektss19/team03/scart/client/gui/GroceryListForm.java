@@ -62,7 +62,6 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox articleTextBox = new TextBox(); // Artikel
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
-	TextBox retailerTextBox = new TextBox(); // RetailerId
 	ListBox retailerListBox = new ListBox();
 
 	FlexTable articleTable = new FlexTable();
@@ -70,7 +69,7 @@ public class GroceryListForm extends VerticalPanel {
 	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
 	// geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 
-	Retailer r = new Retailer();
+	Retailer retailer = new Retailer();
 	Vector<Article> articleVector = new Vector<Article>();
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
 
@@ -221,6 +220,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public ListBox getRetailerListBoxDisabled() {
+		//try {
 		ListBox retailerListBox = new ListBox();
 		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
 			retailerListBox.addItem(retailerVector.get(listNumber).toString());
@@ -229,6 +229,20 @@ public class GroceryListForm extends VerticalPanel {
 		retailerListBox.setEnabled(false);
 		return retailerListBox;
 	}
+		
+		/**ev.findAllRetailerByGroup(new AsyncCallback<>( {
+				public void onFailure(Throwable caught) {
+					throw new IllegalArgumentException("Einkaufsliste konnte nicht geladen werden");
+				}
+
+				public void onSuccess(Vector<Retailer> result) {
+					
+		});
+		}catch (IllegalArgumentException e) {
+			Window.alert("RetailerListe konnte nicht geladen werden");
+		}
+	}*/
+
 	public ListBox getRetailerListBoxEnabled() {
 		ListBox retailerListBox = new ListBox();
 		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
@@ -417,13 +431,14 @@ public class GroceryListForm extends VerticalPanel {
 	public String second;
 	public String third;
 	public String fourth;
-	
+
 	// alle Methoden fuer Editieren eines Artikels
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 0);
 		second = articleTable.getText(globalRow, 1);
 		third = articleTable.getText(globalRow, 2);
 	}
+
 	public void setTextBoxesContent() {
 		articleTextBox.setText(articleTable.getText(globalRow, 0));
 		quantityTextBox.setText(articleTable.getText(globalRow, 1));
@@ -433,46 +448,53 @@ public class GroceryListForm extends VerticalPanel {
 		articleTable.setWidget(globalRow, 2, unitTextBox);
 		articleTable.setWidget(globalRow, 3, getRetailerListBoxEnabled());
 	}
+
 	public void clearTextBoxes() {
 		articleTextBox.setText(null);
 		quantityTextBox.setText(null);
 		unitTextBox.setText(null);
 	}
+
 	public void setTableTextFromTextBoxes() {
 		articleTable.setText(globalRow, 0, articleTextBox.getText());
 		articleTable.setText(globalRow, 1, quantityTextBox.getText());
 		articleTable.setText(globalRow, 2, unitTextBox.getText());
 		articleTable.setWidget(globalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public void setTableTextFromFinalTextBox() {
 		articleTable.setText(finalGlobalRow, 0, articleTextBox.getText());
 		articleTable.setText(finalGlobalRow, 1, quantityTextBox.getText());
 		articleTable.setText(finalGlobalRow, 2, unitTextBox.getText());
 		articleTable.setWidget(finalGlobalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public void replaceUnchangedText() {
 		articleTable.setText(globalRow, 0, first);
 		articleTable.setText(globalRow, 1, second);
 		articleTable.setText(globalRow, 2, third);
 		articleTable.setWidget(globalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public String textBoxesEmpty() {
-		if(articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
+		if (articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
 				&& unitTextBox.getText().isEmpty() == true) {
 			return "true";
-		}else if(articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
+		} else if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
 				&& unitTextBox.getText().isEmpty() == false) {
 			return "false";
-		}else {
+		} else {
 			return "else";
 		}
 	}
+
 	public void setArticleAtributes() {
 		article.setName(articleTextBox.getText());
 		article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
 		article.setUnit(unitTextBox.getText());
-		article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
+		article.setRetailerId(getRetailerListBoxEnabled().getSelectedIndex());
 	}
+
 	public void saveChangedOnDb() {
 		ev.saveArticle(article, new AsyncCallback<Article>() {
 			public void onFailure(Throwable caught) {
@@ -485,7 +507,7 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		});
 	}
-	
+
 	/**
 	 * @author tom
 	 * 
@@ -684,31 +706,25 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setWidget(i, 0, articleTextBox);
 				articleTable.setWidget(i, 1, quantityTextBox);
 				articleTable.setWidget(i, 2, unitTextBox);
-				articleTable.setWidget(i, 3, retailerTextBox);
+				articleTable.setWidget(i, 3, getRetailerListBoxEnabled());
 			} else if (addBtnBoolean == true) {
-				if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
-						&& unitTextBox.getText().isEmpty() == false && retailerTextBox.getText().isEmpty() == false) {
+				if (textBoxesEmpty() == "false") {
 					addBtnBoolean = false;
 					int addRow = articleTable.getRowCount() - 1;
-					articleTable.clearCell(addRow, 0);
-					articleTable.clearCell(addRow, 1);
-					articleTable.clearCell(addRow, 2);
-					articleTable.clearCell(addRow, 3);
 					articleTable.setText(addRow, 0, articleTextBox.getText());
 					articleTable.setText(addRow, 1, quantityTextBox.getText());
 					articleTable.setText(addRow, 2, unitTextBox.getText());
-					articleTable.setText(addRow, 3, retailerTextBox.getText());
+					articleTable.setWidget(addRow, 3, getRetailerListBoxDisabled());
 					articleTextBox.setText(null);
 					quantityTextBox.setText(null);
 					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
 					article.setId(articleVector.size() + 1);
 					article.setName(articleTextBox.getText());
 					article.setQuantity(Integer.parseInt(articleTable.getText(addRow, 1)));
 					article.setUnit(unitTextBox.getText());
-					article.setRetailerId(Integer.parseInt(articleTable.getText(addRow, 3)));
+					article.setRetailerId(getRetailerListBoxDisabled().getSelectedIndex());
 
 					ev.createArticle(article, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
@@ -749,7 +765,7 @@ public class GroceryListForm extends VerticalPanel {
 					});
 
 				} else if (articleTextBox.getText().isEmpty() == false || quantityTextBox.getText().isEmpty() == false
-						|| unitTextBox.getText().isEmpty() == false || retailerTextBox.getText().isEmpty() == false) {
+						|| unitTextBox.getText().isEmpty() == false) {
 					Window.alert("Es wurde kein Artikel hinzugef�gt da die Angaben nicht vollst�ndig waren");
 				} else {
 					addBtnBoolean = false;
@@ -757,7 +773,6 @@ public class GroceryListForm extends VerticalPanel {
 					articleTextBox.setText(null);
 					quantityTextBox.setText(null);
 					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
 				}
 			} else if (checkBtnBoolean == true || editBtnBoolean == true || deleteBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
