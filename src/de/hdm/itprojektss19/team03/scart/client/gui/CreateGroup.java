@@ -113,15 +113,18 @@ public class CreateGroup extends VerticalPanel {
 		footer.add(footerReport);
 		
 
-		RootPanel.get("content").clear();
-		RootPanel.get("contentHeader").clear();
-		RootPanel.get("footer").clear();
+//		RootPanel.get("content").clear();
+//		RootPanel.get("contentHeader").clear();
+//		RootPanel.get("footer").clear();
 		
-		RootPanel.get("contentHeader").add(new HTML("Scart"));
+//		RootPanel.get("contentHeader").add(new HTML("Scart"));
+//		
+//		RootPanel.get("content").add(contentBox); //Alle Panels werden in die "Content" div geschoben
+//		
+//		RootPanel.get("footer").add(footer);
 		
-		RootPanel.get("content").add(contentBox); //Alle Panels werden in die "Content" div geschoben
-		
-		RootPanel.get("footer").add(footer);
+		this.add(contentBox);
+		this.add(footer);
 		
 		
 		

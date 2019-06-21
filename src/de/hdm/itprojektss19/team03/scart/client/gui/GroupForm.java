@@ -12,6 +12,7 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -40,6 +41,7 @@ public class GroupForm extends VerticalPanel {
 	User user = new User();
 	Vector<Group> allGroups = null;
 	Vector<String> allGroupsS = new Vector<String>();
+	
 
 	// PANELS
 	VerticalPanel groupFormPanel = new VerticalPanel();
@@ -52,6 +54,10 @@ public class GroupForm extends VerticalPanel {
 	// Buttons
 	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
+	
+	EditGroup editGroup = new EditGroup();
+	CreateGroup createGroup = new CreateGroup(user);
+	
 
 	public GroupForm() {
 
@@ -59,21 +65,6 @@ public class GroupForm extends VerticalPanel {
 
 	public GroupForm (User u) {
 		this.user = u;
-
-	
-//		editorService.getAllGroupsByUser(u, new AsyncCallback<Vector<Group>>() {
-//			
-//			public void onFailure(Throwable e) {
-//				Window.alert("Error getting Groups: " + e);
-//			}
-//
-//			public void onSuccess(Vector<Group> groups) {
-//				createGroupPanels(groups);
-//				
-//			}
-//		});
-		
-
 	
 	}
 	
@@ -85,7 +76,7 @@ public class GroupForm extends VerticalPanel {
 		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
 		//groupNamePanel.addStyleName("");
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
-		groupLabel.addStyleName("h1");
+		groupLabel.addStyleName("h2");
 		groupInfoButton.addClickHandler(new InfoClickHandler());
 		createGroupButton.addClickHandler(new CreateClickHandler());
 		
@@ -97,7 +88,7 @@ public class GroupForm extends VerticalPanel {
 		groupBtnPanel.add(createGroupButton);
 		
 		this.add(groupFormPanel);
-		//RootPanel.get("navigator").add(groupFormPanel);
+
 		
 		editorVerwaltung.findAllGroups(new AllGroupsCallback());
 		
@@ -128,52 +119,23 @@ public class GroupForm extends VerticalPanel {
 					allGroupsS.add(result.elementAt(g).getGroupName());
 					Label groupNameLabel = new Label(allGroupsS.elementAt(g));
 					groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
+					groupNameLabel.setStyleName("textbox");
 					groupNamePanel.add(groupNameLabel);
 				}
 			}
 		}
 	}
 	
-//	class AllGroupsCallback implements AsyncCallback<Vector<Group>>{
-//
-//		@Override
-//		public void onFailure(Throwable e) {
-//			// TODO Auto-generated method stub
-//			Window.alert("Error getting Groups: " + e);
-//		}
-//
-//		@Override
-//		public void onSuccess(Vector<Group> groups) {
-//			
-//			
-//			for (int i = 0; i < allGroups.size(); i++) {
-//				Label groupNameLabel = new Label(groups.elementAt(i).getGroupName());
-//				groupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
-//				groupNamePanel.add(groupNameLabel);
-//			}
-//			
-//		}
-//		
-//	}
-	
-//	public void createGroupPanels(Vector<Group> groups) {
-//		
-//		Vector<Group> gV = new Vector<Group>();
-//		
-//		for (int i = 0; i < gV.size(); i++) {
-//			Label groupNameLabel = new Label(groups.elementAt(i).getGroupName());
-//			groupNameLabel.setHorizontalAlignment(ALIGN_CENTER);
-//			groupNamePanel.add(groupNameLabel);
-//		}
-//
-//	}
+
 	
 
 	class InfoClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			// TODO Auto-generated method stub
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(editGroup);
+			
 
 
 		}
@@ -184,7 +146,8 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			// TODO Auto-generated method stub
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(createGroup);
 
 			
 		}
