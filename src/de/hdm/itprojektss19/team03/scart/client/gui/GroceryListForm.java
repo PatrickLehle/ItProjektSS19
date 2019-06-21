@@ -63,8 +63,8 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
 	TextBox retailerTextBox = new TextBox(); // RetailerId
-
 	ListBox retailerListBox = new ListBox();
+
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
 	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
@@ -411,7 +411,93 @@ public class GroceryListForm extends VerticalPanel {
 	public String second;
 	public String third;
 	public String fourth;
+	
+	// alle Methoden fuer Editieren eines Artikels
+	public void saveRowContent() {
+		first = articleTable.getText(globalRow, 0);
+		second = articleTable.getText(globalRow, 1);
+		third = articleTable.getText(globalRow, 2);
+		//fourth = articleTable.getText(globalRow, 3);
+	}
+	public void setTextBoxesContent() {
+		articleTextBox.setText(articleTable.getText(globalRow, 0));
+		quantityTextBox.setText(articleTable.getText(globalRow, 1));
+		unitTextBox.setText(articleTable.getText(globalRow, 2));
+		//retailerTextBox.setText(articleTable.getText(globalRow, 3));
+		articleTable.setWidget(globalRow, 0, articleTextBox);
+		articleTable.setWidget(globalRow, 1, quantityTextBox);
+		articleTable.setWidget(globalRow, 2, unitTextBox);
+		//articleTable.setWidget(globalRow, 3, retailerTextBox);
+	}
+	public void clearFinalRowContent() {
+		articleTable.clearCell(finalGlobalRow, 0);
+		articleTable.clearCell(finalGlobalRow, 1);
+		articleTable.clearCell(finalGlobalRow, 2);
+		//articleTable.clearCell(finalGlobalRow, 3);
+	}
+	public void clearTextBoxes() {
+		articleTextBox.setText(null);
+		quantityTextBox.setText(null);
+		unitTextBox.setText(null);
+		//retailerTextBox.setText(null);
+	}
+	public void setTableTextFromTextBoxes() {
+		articleTable.clearCell(globalRow, 0);
+		articleTable.clearCell(globalRow, 1);
+		articleTable.clearCell(globalRow, 2);
+		//articleTable.clearCell(globalRow, 3);
+		articleTable.setText(globalRow, 0, articleTextBox.getText());
+		articleTable.setText(globalRow, 1, quantityTextBox.getText());
+		articleTable.setText(globalRow, 2, unitTextBox.getText());
+		//articleTable.setText(globalRow, 3, retailerTextBox.getText());
+	}
+	public void setTableTextFromFinalTextBox() {
+		articleTable.setText(finalGlobalRow, 0, articleTextBox.getText());
+		articleTable.setText(finalGlobalRow, 1, quantityTextBox.getText());
+		articleTable.setText(finalGlobalRow, 2, unitTextBox.getText());
+		//articleTable.setText(finalGlobalRow, 3, retailerTextBox.getText());
+	}
+	public void replaceUnchangedText() {
+		articleTable.remove(articleTextBox);
+		articleTable.remove(quantityTextBox);
+		articleTable.remove(unitTextBox);
+		//articleTable.remove(retailerTextBox);
+		articleTable.setText(globalRow, 0, first);
+		articleTable.setText(globalRow, 1, second);
+		articleTable.setText(globalRow, 2, third);
+		//articleTable.setText(globalRow, 3, fourth);
+	}
+	public String textBoxesEmpty() {
+		if(articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
+				&& unitTextBox.getText().isEmpty() == true && retailerTextBox.getText().isEmpty() == true) {
+			return "true";
+		}else if(articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
+				&& unitTextBox.getText().isEmpty() == false && retailerTextBox.getText().isEmpty() == false) {
+			return "false";
+		}else {
+			//Window.alert("textBoxesEmpty Error");
+			return "else";
+		}
+	}
+	public void setArticleAtributes() {
+		article.setName(articleTextBox.getText());
+		article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
+		article.setUnit(unitTextBox.getText());
+		article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
+	}
+	public void saveChangedOnDb() {
+		ev.saveArticle(article, new AsyncCallback<Article>() {
+			public void onFailure(Throwable caught) {
+				Window.alert("Artikel konnte nicht editiert werden");
+			}
 
+			public void onSuccess(Article arg0) {
+				article = null;
+				loadTable();
+			}
+		});
+	}
+	
 	/**
 	 * @author tom
 	 * 
@@ -430,61 +516,16 @@ public class GroceryListForm extends VerticalPanel {
 		cb.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
 				if (event.getValue() == true) {
-					if (articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
-							&& unitTextBox.getText().isEmpty() == true && retailerTextBox.getText().isEmpty() == true) {
+					if (textBoxesEmpty() == "true") {
 						finalGlobalRow = globalRow;
-						first = articleTable.getText(globalRow, 0);
-						second = articleTable.getText(globalRow, 1);
-						third = articleTable.getText(globalRow, 2);
-						fourth = articleTable.getText(globalRow, 3);
-						articleTextBox.setText(articleTable.getText(globalRow, 0));
-						quantityTextBox.setText(articleTable.getText(globalRow, 1));
-						unitTextBox.setText(articleTable.getText(globalRow, 2));
-						retailerTextBox.setText(articleTable.getText(globalRow, 3));
-						articleTable.setWidget(globalRow, 0, articleTextBox);
-						articleTable.setWidget(globalRow, 1, quantityTextBox);
-						articleTable.setWidget(globalRow, 2, unitTextBox);
-						articleTable.setWidget(globalRow, 3, retailerTextBox);
-					} else if (articleTextBox.getText().isEmpty() == false
-							&& quantityTextBox.getText().isEmpty() == false && unitTextBox.getText().isEmpty() == false
-							&& retailerTextBox.getText().isEmpty() == false) {
-						articleTable.clearCell(finalGlobalRow, 0);
-						articleTable.clearCell(finalGlobalRow, 1);
-						articleTable.clearCell(finalGlobalRow, 2);
-						articleTable.clearCell(finalGlobalRow, 3);
-						articleTable.setText(finalGlobalRow, 0, articleTextBox.getText());
-						articleTable.setText(finalGlobalRow, 1, quantityTextBox.getText());
-						articleTable.setText(finalGlobalRow, 2, unitTextBox.getText());
-						articleTable.setText(finalGlobalRow, 3, retailerTextBox.getText());
-
-						article.setName(articleTextBox.getText());
-						article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
-						article.setUnit(unitTextBox.getText());
-						article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
-
-						ev.saveArticle(article, new AsyncCallback<Article>() {
-							public void onFailure(Throwable caught) {
-								Window.alert("Artikel konnte nicht editiert werden");
-							}
-
-							public void onSuccess(Article arg0) {
-								article = arg0;
-								loadTable();
-
-								// Ist folgender Code noetig, wenn der editierte Artikel hinzugefuegt werden
-								// konnte
-								// und die Tabelle neu geladen wird?
-							}
-						});
-
-						articleTextBox.setText(null);
-						quantityTextBox.setText(null);
-						unitTextBox.setText(null);
-						retailerTextBox.setText(null);
-						first = articleTable.getText(globalRow, 0);
-						second = articleTable.getText(globalRow, 1);
-						third = articleTable.getText(globalRow, 2);
-						fourth = articleTable.getText(globalRow, 3);
+						saveRowContent();
+						setTextBoxesContent();
+					} else if (textBoxesEmpty() == "false") {
+						clearFinalRowContent();
+						setTableTextFromFinalTextBox();
+						setArticleAtributes();
+						saveChangedOnDb();
+						clearTextBoxes();
 						articleTable.removeCell(finalGlobalRow, 4);
 						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
 						if (articleTable.getText(globalRow, 0).isEmpty() == false
@@ -492,18 +533,8 @@ public class GroceryListForm extends VerticalPanel {
 								&& articleTable.getText(globalRow, 2).isEmpty() == false
 								&& articleTable.getText(globalRow, 3).isEmpty() == false) {
 							finalGlobalRow = globalRow;
-							first = articleTable.getText(globalRow, 0);
-							second = articleTable.getText(globalRow, 1);
-							third = articleTable.getText(globalRow, 2);
-							fourth = articleTable.getText(globalRow, 3);
-							articleTextBox.setText(articleTable.getText(globalRow, 0));
-							quantityTextBox.setText(articleTable.getText(globalRow, 1));
-							unitTextBox.setText(articleTable.getText(globalRow, 2));
-							retailerTextBox.setText(articleTable.getText(globalRow, 3));
-							articleTable.setWidget(globalRow, 0, articleTextBox);
-							articleTable.setWidget(globalRow, 1, quantityTextBox);
-							articleTable.setWidget(globalRow, 2, unitTextBox);
-							articleTable.setWidget(globalRow, 3, retailerTextBox);
+							saveRowContent();
+							setTextBoxesContent();
 						}
 					} else {
 						articleTable.clearCell(finalGlobalRow, 0);
@@ -516,78 +547,28 @@ public class GroceryListForm extends VerticalPanel {
 						articleTable.setText(finalGlobalRow, 1, second);
 						articleTable.setText(finalGlobalRow, 2, third);
 						articleTable.setText(finalGlobalRow, 3, fourth);
-						first = articleTable.getText(globalRow, 0);
-						second = articleTable.getText(globalRow, 1);
-						third = articleTable.getText(globalRow, 2);
-						fourth = articleTable.getText(globalRow, 3);
-						articleTextBox.setText(null);
-						quantityTextBox.setText(null);
-						unitTextBox.setText(null);
-						retailerTextBox.setText(null);
+						saveRowContent();
+						clearTextBoxes();
 						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
 						if (articleTable.getText(globalRow, 0).isEmpty() == false
 								&& articleTable.getText(globalRow, 1).isEmpty() == false
 								&& articleTable.getText(globalRow, 2).isEmpty() == false
 								&& articleTable.getText(globalRow, 3).isEmpty() == false) {
 							finalGlobalRow = globalRow;
-							articleTextBox.setText(articleTable.getText(globalRow, 0));
-							quantityTextBox.setText(articleTable.getText(globalRow, 1));
-							unitTextBox.setText(articleTable.getText(globalRow, 2));
-							retailerTextBox.setText(articleTable.getText(globalRow, 3));
-							articleTable.setWidget(globalRow, 0, articleTextBox);
-							articleTable.setWidget(globalRow, 1, quantityTextBox);
-							articleTable.setWidget(globalRow, 2, unitTextBox);
-							articleTable.setWidget(globalRow, 3, retailerTextBox);
+							setTextBoxesContent();
 						}
 						Window.alert("Änderung wurde nicht gespeichert");
 					}
 				} else {
-					if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
-							&& unitTextBox.getText().isEmpty() == false
-							&& retailerTextBox.getText().isEmpty() == false) {
-						articleTable.clearCell(globalRow, 0);
-						articleTable.clearCell(globalRow, 1);
-						articleTable.clearCell(globalRow, 2);
-						articleTable.clearCell(globalRow, 3);
-						articleTable.setText(globalRow, 0, articleTextBox.getText());
-						articleTable.setText(globalRow, 1, quantityTextBox.getText());
-						articleTable.setText(globalRow, 2, unitTextBox.getText());
-						articleTable.setText(globalRow, 3, retailerTextBox.getText());
-
-						article.setName(articleTextBox.getText());
-						article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
-						article.setUnit(unitTextBox.getText());
-						article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
-
-						ev.saveArticle(article, new AsyncCallback<Article>() {
-							public void onFailure(Throwable caught) {
-								Window.alert("Artikel konnte nicht editiert werden");
-							}
-
-							public void onSuccess(Article arg0) {
-								article = null;
-								loadTable();
-							}
-						});
-
-						articleTextBox.setText(null);
-						quantityTextBox.setText(null);
-						unitTextBox.setText(null);
-						retailerTextBox.setText(null);
+					if (textBoxesEmpty() == "false") {
+						setTableTextFromTextBoxes();
+						setArticleAtributes();
+						saveChangedOnDb();
+						clearTextBoxes();
 						globalRow = 0;
 					} else {
-						articleTable.remove(articleTextBox);
-						articleTable.remove(quantityTextBox);
-						articleTable.remove(unitTextBox);
-						articleTable.remove(retailerTextBox);
-						articleTable.setText(globalRow, 0, first);
-						articleTable.setText(globalRow, 1, second);
-						articleTable.setText(globalRow, 2, third);
-						articleTable.setText(globalRow, 3, fourth);
-						articleTextBox.setText(null);
-						quantityTextBox.setText(null);
-						unitTextBox.setText(null);
-						retailerTextBox.setText(null);
+						replaceUnchangedText();
+						clearTextBoxes();
 						articleTable.setWidget(globalRow, 4, getCbEdit());
 						Window.alert("Änderung wurde nicht gespeichert");
 						globalRow = 0;
@@ -618,50 +599,14 @@ public class GroceryListForm extends VerticalPanel {
 				}
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
-				if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
-						&& unitTextBox.getText().isEmpty() == false && retailerTextBox.getText().isEmpty() == false) {
-					articleTable.clearCell(globalRow, 0);
-					articleTable.clearCell(globalRow, 1);
-					articleTable.clearCell(globalRow, 2);
-					articleTable.clearCell(globalRow, 3);
-					articleTable.setText(globalRow, 0, articleTextBox.getText());
-					articleTable.setText(globalRow, 1, quantityTextBox.getText());
-					articleTable.setText(globalRow, 2, unitTextBox.getText());
-					articleTable.setText(globalRow, 3, retailerTextBox.getText());
-
-					article.setName(articleTextBox.getText());
-					article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
-					article.setUnit(unitTextBox.getText());
-					article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
-
-					ev.saveArticle(article, new AsyncCallback<Article>() {
-						public void onFailure(Throwable caught) {
-							Window.alert("Artikel konnte nicht erditiert werden");
-						}
-
-						public void onSuccess(Article arg0) {
-							article = arg0;
-							loadTable();
-						}
-					});
-
-					articleTextBox.setText(null);
-					quantityTextBox.setText(null);
-					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
+				if (textBoxesEmpty() == "false") {
+					setTableTextFromTextBoxes();
+					setArticleAtributes();
+					saveChangedOnDb();
+					clearTextBoxes();
 				} else if (globalRow != 0) {
-					articleTable.remove(articleTextBox);
-					articleTable.remove(quantityTextBox);
-					articleTable.remove(unitTextBox);
-					articleTable.remove(retailerTextBox);
-					articleTable.setText(globalRow, 0, first);
-					articleTable.setText(globalRow, 1, second);
-					articleTable.setText(globalRow, 2, third);
-					articleTable.setText(globalRow, 3, fourth);
-					articleTextBox.setText(null);
-					quantityTextBox.setText(null);
-					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
+					replaceUnchangedText();
+					clearTextBoxes();
 					Window.alert("Änderung wurde nicht gespeichert");
 				}
 				for (int i = 1; i <= articleTable.getRowCount(); i++) {
