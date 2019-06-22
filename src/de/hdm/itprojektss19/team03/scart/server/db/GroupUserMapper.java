@@ -40,24 +40,24 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public GroupUser addUserToGroup(User u, Group g) throws DatabaseException {
-
+	public void addUserToGroup(User user,Group group) throws DatabaseException {
+		
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String addString = "INSERT INTO `groupuser` (`groupId`, `userId`) VALUES (?,?)";
+		String guser = "INSERT INTO groupuser (groupId, userId) VALUES (?,?)";
 
 		try {
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(addString);
-			stmt.setInt(1, u.getId());
-			stmt.setInt(2, g.getId());
+			stmt = con.prepareStatement(guser);
+			stmt.setInt(1, user.getId());
+			stmt.setInt(2, group.getId());
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
+	
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
@@ -65,13 +65,13 @@ public class GroupUserMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String delete = "DELETE FROM groupuser WHERE userId=? AND groupId=?";
+		String delete = "DELETE FROM groupuser WHERE groupId=? AND userId=?";
 
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(delete);
-			stmt.setInt(1, u.getId());
 			stmt.setInt(2, g.getId());
+			stmt.setInt(1, u.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
