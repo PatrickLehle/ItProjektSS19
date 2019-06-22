@@ -40,7 +40,7 @@ public class ProfileForm {
 	//PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
 	
-	HorizontalPanel yourProfilPanel = new HorizontalPanel();
+	HorizontalPanel yourProfilePanel = new HorizontalPanel();
 	HorizontalPanel userNamePanel = new HorizontalPanel();
 	HorizontalPanel emailAdressPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
@@ -60,12 +60,12 @@ public class ProfileForm {
 	public void buildProfile() {
 		
 		
-		yourProfilPanel.add(yourProfileLabel);
+		yourProfilePanel.add(yourProfileLabel);
 		userNamePanel.add(userNameLabel);
 		emailAdressPanel.add(emailAdressLabel);
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
-		contentPanel.add(yourProfilPanel);
+		contentPanel.add(yourProfilePanel);
 		contentPanel.add(userNamePanel);
 		contentPanel.add(emailAdressPanel);
 		contentPanel.add(buttonPanel);
@@ -86,14 +86,12 @@ public class ProfileForm {
 
 		public void onClick(ClickEvent event) {
 
-			//userNamePanel.remove(userName);
 			TextBox userNameTB = new TextBox();
-			userNameTB.setText("");
+			userNameTB.setText(user.getUsername());
 			userNamePanel.add(userNameTB);
 
-			//emailAdressPanel.remove(emailAdress);
 			TextBox emailAdressTB = new TextBox();
-			emailAdressTB.setText("alte E-Mail");
+			emailAdressTB.setText(user.getEmail());
 			emailAdressPanel.add(emailAdressTB);
 			
 			buttonPanel.remove(editButton);
