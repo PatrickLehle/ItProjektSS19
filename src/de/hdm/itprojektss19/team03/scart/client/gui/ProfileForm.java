@@ -3,6 +3,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -11,7 +13,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.client.GUITest2.DeleteButtonClickHandler;
 import de.hdm.client.GUITest2.EditButtonClickHandler;
+import de.hdm.client.GUITest2.NoButtonClickHandler;
 import de.hdm.client.GUITest2.SaveButtonClickHandler;
+import de.hdm.client.GUITest2.YesSaveButtonClickHandler;
 import de.hdm.shared.bo.User;
 
 public class ProfileForm {
@@ -81,5 +85,36 @@ public class ProfileForm {
 		}
 		
 	}
+	
+	class SaveButtonClickHandler implements ClickHandler {
+		
+		public void onClick(ClickEvent event) {
+			
+			DialogBox db = new DialogBox();
+			TextBox t1 = new TextBox();
+			TextBox t2 = new TextBox();
+			VerticalPanel vp = new VerticalPanel();
+			HorizontalPanel hp = new HorizontalPanel();
+			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, t1, t2));
+			Button nB = new Button("Nein", new NoButtonClickHandler(db));
+			Label l = new HTML(
+					"<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
+			
+			vp.add(l);
+			hp.add(yB);
+			hp.add(nB);
+			vp.add(hp);
+
+			db.setGlassEnabled(true);
+			db.setAnimationEnabled(true);
+			db.center();
+			db.show();
+
+			db.add(vp);
+			
+		}
+		
+	}
+	
 	
 }
