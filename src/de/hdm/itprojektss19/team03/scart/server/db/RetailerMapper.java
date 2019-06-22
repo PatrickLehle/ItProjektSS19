@@ -9,7 +9,10 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
+import de.hdm.itprojektss19.team03.scart.shared.bo.BusinessObject;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
@@ -133,6 +136,31 @@ public class RetailerMapper {
 			ResultSet rs = statement.executeQuery("SELECT id, name FROM retailer");
 
 			// Neues retailer Objekt f�r jede gefundene ID
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				retailer.setId(rs.getInt("id"));
+				retailer.setRetailerName(rs.getString("name"));
+
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+	
+	public Vector<Retailer> getAllRetailersByGroupId(User u, Group g) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			// CHANGE
+			ResultSet rs = statement.executeQuery(
+					"SELECT retailer.id, retailer.name FROM retailer, groups WHERE userId="	+ u.getId() + "AND groupId=" + g.getId());
+		
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
