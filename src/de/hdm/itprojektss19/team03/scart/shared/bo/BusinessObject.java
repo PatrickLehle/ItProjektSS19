@@ -45,7 +45,7 @@ public abstract class BusinessObject implements Serializable, IsSerializable {
 	 * @return id des objekts
 	 */
 	public int getId() {
-		return (int) this.serialVersionUID;
+		return this.id;
 	}
 
 	/**
