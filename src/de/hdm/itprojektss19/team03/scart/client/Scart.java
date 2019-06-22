@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
@@ -47,6 +48,8 @@ public class Scart implements EntryPoint {
 	private ProfilForm profilForm = new ProfilForm();
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
+	private HorizontalPanel innerContentPanel = new HorizontalPanel();
+	private ScrollPanel navigationPanel = new ScrollPanel();
 
 	// @todo: delete test buttons
 	private Button button1 = new Button("grocery list");
@@ -56,7 +59,7 @@ public class Scart implements EntryPoint {
 	 * startet, sobald das Modul geladen wird.
 	 */
 	public void onModuleLoad() {
-		contentPanel.setSpacing(30);
+		innerContentPanel.setSpacing(30);
 
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
@@ -93,9 +96,9 @@ public class Scart implements EntryPoint {
 	 */
 	private void login(String logURL) {
 		LoginForm loginForm = new LoginForm(logURL);
-		contentPanel.clear();
-		contentPanel.add(loginForm);
-		RootPanel.get("content").add(contentPanel);
+		innerContentPanel.clear();
+		innerContentPanel.add(loginForm);
+		RootPanel.get("content").add(innerContentPanel);
 	}
 
 	/**
@@ -103,9 +106,16 @@ public class Scart implements EntryPoint {
 	 */
 	private void loadPage() {
 
-		contentPanel.add(groupForm);
-		contentPanel.add(button1);
-		contentPanel.add(button2);
+		innerContentPanel.addStyleName("inner-content");
+		// navigationPanel.addStyleName("navigation");
+		groupForm.addStyleName("navigation");
+		groupForm.setHeight("100%");
+		navigationPanel.add(groupForm);
+		innerContentPanel.add(button1);
+		innerContentPanel.add(button2);
+		contentPanel.add(navigationPanel);
+		contentPanel.add(innerContentPanel);
+
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentPanel);
 
@@ -133,9 +143,9 @@ public class Scart implements EntryPoint {
 
 		public void onFailure(Throwable t) {
 			RegistryForm registerForm = new RegistryForm(user, signOutLink);
-			contentPanel.clear();
-			contentPanel.add(registerForm);
-			RootPanel.get("content").add(contentPanel);
+			innerContentPanel.clear();
+			innerContentPanel.add(registerForm);
+			RootPanel.get("content").add(innerContentPanel);
 		}
 
 		public void onSuccess(User u) {
