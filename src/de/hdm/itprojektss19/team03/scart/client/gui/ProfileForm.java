@@ -1,9 +1,12 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.client.GUITest2.DeleteButtonClickHandler;
@@ -55,6 +58,28 @@ public class ProfileForm {
 		saveButton.addClickHandler(new SaveButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
+	}
+	
+	class EditButtonClickHandler implements ClickHandler {
+
+		public void onClick(ClickEvent event) {
+
+			//userNamePanel.remove(userName);
+			TextBox userNameTB = new TextBox();
+			userNameTB.setText("");
+			userNamePanel.add(userNameTB);
+
+			//emailAdressPanel.remove(emailAdress);
+			TextBox emailAdressTB = new TextBox();
+			emailAdressTB.setText("alte E-Mail");
+			emailAdressPanel.add(emailAdressTB);
+			
+			buttonPanel.remove(editButton);
+			buttonPanel.remove(deleteButton);
+			contentPanel.add(saveButton);
+
+		}
+		
 	}
 	
 }
