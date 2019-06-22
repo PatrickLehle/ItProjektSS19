@@ -7,7 +7,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -67,8 +66,10 @@ public class ProfileForm {
 		yourProfilePanel.add(yourProfileLabel);
 		userNamePanel.add(userNameLabel);
 		emailAdressPanel.add(emailAdressLabel);
+		
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
+		
 		contentPanel.add(yourProfilePanel);
 		contentPanel.add(userNamePanel);
 		contentPanel.add(emailAdressPanel);
@@ -110,11 +111,9 @@ public class ProfileForm {
 		public void onClick(ClickEvent event) {
 			
 			DialogBox db = new DialogBox();
-			TextBox t1 = new TextBox();
-			TextBox t2 = new TextBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
-			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, t1, t2));
+			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
 			Label l = new HTML(
 					"<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
@@ -140,11 +139,9 @@ public class ProfileForm {
 		public void onClick(ClickEvent event) {
 			
 			DialogBox db = new DialogBox();
-			TextBox t1 = new TextBox();
-			TextBox t2 = new TextBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
-			Button yB = new Button("Ja", new YesDeleteButtonClickHandler(db, t1, t2));
+			Button yB = new Button("Ja", new YesDeleteButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
 			Label l = new HTML(
 					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>");
@@ -167,29 +164,14 @@ public class ProfileForm {
 	class YesSaveButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
-		TextBox userName = new TextBox();
-		TextBox emailAdress = new TextBox();
 		
-		public YesSaveButtonClickHandler (DialogBox db, TextBox name, TextBox email) {
+		public YesSaveButtonClickHandler (DialogBox db) {
 		
 			this.dbox = db;
-			this.userName = name;
-			this.emailAdress = email;
 			
 		}
 		
 		public void onClick(ClickEvent event) {
-			
-			
-			userNamePanel.remove(userNameLabel);
-			TextBox userName = new TextBox();
-			userName.setText("neuer Name");
-			userNamePanel.add(userName);
-			
-			emailAdressPanel.remove(emailAdressLabel);
-			TextBox emailAdress = new TextBox();
-			emailAdress.setText("neue E-Mail");
-			emailAdressPanel.add(emailAdress);
 			
 			dbox.hide();
 			dbox.clear();
@@ -203,21 +185,14 @@ public class ProfileForm {
 	class YesDeleteButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
-		TextBox userName = new TextBox();
-		TextBox emailAdress = new TextBox();
 		
-		public YesDeleteButtonClickHandler (DialogBox db, TextBox name, TextBox email) {
+		public YesDeleteButtonClickHandler (DialogBox db) {
 		
 			this.dbox = db;
-			this.userName = name;
-			this.emailAdress = email;
-			
+
 		}
 		
 		public void onClick(ClickEvent event) {
-			
-			this.userName.setText("");
-			this.emailAdress.setText("");
 			
 			dbox.hide();
 			dbox.clear();
