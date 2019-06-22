@@ -24,6 +24,10 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class ProfileForm {
 
 	User user = new User();
+	
+	//TEXTBOXES==============================================
+	TextBox userNameTB = new TextBox();
+	TextBox emailAdressTB = new TextBox();
 
 	//LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
@@ -86,11 +90,10 @@ public class ProfileForm {
 
 		public void onClick(ClickEvent event) {
 
-			TextBox userNameTB = new TextBox();
+			
 			userNameTB.setText(user.getUsername());
 			userNamePanel.add(userNameTB);
 
-			TextBox emailAdressTB = new TextBox();
 			emailAdressTB.setText(user.getEmail());
 			emailAdressPanel.add(emailAdressTB);
 			
