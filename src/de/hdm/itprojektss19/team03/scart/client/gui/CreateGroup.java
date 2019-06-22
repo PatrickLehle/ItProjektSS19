@@ -23,8 +23,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 //"Familien"/Add Group Mockup in Balsamic
 
 /**
- * Die Group-Form wird aufgerufen wenn auf der Homepage
- * eine Gruppe ausgewaehlt wird
+ * Die Group-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
  * 
  * @author bastiantilk
  *
@@ -80,6 +79,7 @@ public class CreateGroup extends VerticalPanel {
 
 	HorizontalPanel footer = new HorizontalPanel();
 
+	//Methode wird bei dem "Aufrufen" der Klasse gestartet
 	public CreateGroup(User user) {
 		// TODO Auto-generated constructor stub
 		
@@ -176,8 +176,8 @@ public class CreateGroup extends VerticalPanel {
 					public void onSuccess(Group arg0) {
 						// TODO Auto-generated method stub
 					final Group tempGroup = arg0;
-						
-						ev.addUserToGroup(user, tempGroup, new AsyncCallback<Void>() {
+					final User tempUser = user;
+						ev.addUserToGroup(tempUser, tempGroup, new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable arg0) {
