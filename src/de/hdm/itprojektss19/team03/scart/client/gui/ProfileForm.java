@@ -212,4 +212,26 @@ public class ProfileForm {
 		}
 	}
 	
+	class NoButtonClickHandler implements ClickHandler {
+
+		DialogBox dbox = new DialogBox();
+		
+		public NoButtonClickHandler (DialogBox db) {
+			
+			this.dbox = db;
+			
+		}
+		
+		public void onClick(ClickEvent event) {
+
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
+
+		}
+	
+	}
+	
 }
