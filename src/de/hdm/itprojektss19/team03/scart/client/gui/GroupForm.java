@@ -109,7 +109,7 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			RootPanel.get("content").clear();
+			//RootPanel.get("content").clear();
 			RootPanel.get("content").add(editGroup);
 
 		}
@@ -120,7 +120,7 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			RootPanel.get("content").clear();
+			//RootPanel.get("content").clear();
 			RootPanel.get("content").add(createGroup);
 
 		}
