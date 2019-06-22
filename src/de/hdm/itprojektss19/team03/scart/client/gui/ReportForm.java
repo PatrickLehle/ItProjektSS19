@@ -91,6 +91,7 @@ public class ReportForm extends VerticalPanel{
 		
 		RootPanel.get().add(headerHP);
 		RootPanel.get().add(mainHP);
+		
 //		this.add(header);
 //		this.add(main);
 	}
@@ -102,6 +103,7 @@ public class ReportForm extends VerticalPanel{
 			this.reportHTML = rHTML;
 			scrollP.clear();
 			scrollP.add(reportHTML);
+			RootPanel.get("content").add(scrollP);
 		}
 	}
 
