@@ -146,5 +146,42 @@ public class ProfileForm {
 		}
 	}
 	
+	class YesSaveButtonClickHandler implements ClickHandler {
+
+		DialogBox dbox = new DialogBox();
+		TextBox userName = new TextBox();
+		TextBox emailAdress = new TextBox();
+		
+		public YesSaveButtonClickHandler (DialogBox db, TextBox name, TextBox email) {
+		
+			this.dbox = db;
+			this.userName = name;
+			this.emailAdress = email;
+			
+		}
+		
+		public void onClick(ClickEvent event) {
+			
+			//this.userName.setText("neuer Name");
+			//this.emailAdress.setText("neue E-Mail");
+			
+			userNamePanel.remove(userNameTB);
+			TextBox userName = new TextBox();
+			userName.setText("neuer Name");
+			userNamePanel.add(userName);
+			
+			emailAdressPanel.remove(emailAdress);
+			TextBox emailAdress = new TextBox();
+			emailAdress.setText("neue E-Mail");
+			emailAdressPanel.add(emailAdress);
+			
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
+
+		}
+	}
 	
 }
