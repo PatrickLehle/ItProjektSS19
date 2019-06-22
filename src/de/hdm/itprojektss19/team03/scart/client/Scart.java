@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -41,7 +42,6 @@ public class Scart implements EntryPoint {
 	private User user = new User();
 	private String signOutLink;
 
-	private ToolbarForm toolbar = new ToolbarForm();
 	private FooterForm footer = new FooterForm();
 	private GroceryListForm groceryListForm = new GroceryListForm();
 	private GroupForm groupForm = new GroupForm();
@@ -50,10 +50,12 @@ public class Scart implements EntryPoint {
 	private HorizontalPanel contentPanel = new HorizontalPanel();
 	private HorizontalPanel innerContentPanel = new HorizontalPanel();
 	private ScrollPanel navigationPanel = new ScrollPanel();
+	private ToolbarForm toolbar = new ToolbarForm(innerContentPanel);
 
 	// @todo: delete test buttons
 	private Button button1 = new Button("grocery list");
-	private Button button2 = new Button("profile ");
+
+	private static Scart articleMapper = null;
 
 	/**
 	 * startet, sobald das Modul geladen wird.
@@ -107,12 +109,10 @@ public class Scart implements EntryPoint {
 	private void loadPage() {
 
 		innerContentPanel.addStyleName("inner-content");
-		// navigationPanel.addStyleName("navigation");
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
 		innerContentPanel.add(button1);
-		innerContentPanel.add(button2);
 		contentPanel.add(navigationPanel);
 		contentPanel.add(innerContentPanel);
 
@@ -123,20 +123,12 @@ public class Scart implements EntryPoint {
 		button1.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent evt) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(groceryListForm);
+				innerContentPanel.clear();
+				innerContentPanel.add(groceryListForm);
 
 			}
 		});
 
-		button2.addClickHandler(new ClickHandler() {
-
-			public void onClick(ClickEvent evt) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(profilForm);
-
-			}
-		});
 	}
 
 	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
@@ -153,4 +145,17 @@ public class Scart implements EntryPoint {
 		}
 	};
 
+	public void setInnerContent(Panel panel) {
+		Window.alert(this.innerContentPanel.getClass().getName());
+		innerContentPanel.clear();
+		innerContentPanel.add(panel);
+	}
+
+	public HorizontalPanel getInnerContentPanel() {
+		return innerContentPanel;
+	}
+
+	public void setInnerContentPanel(HorizontalPanel innerContentPanel) {
+		this.innerContentPanel = innerContentPanel;
+	}
 }

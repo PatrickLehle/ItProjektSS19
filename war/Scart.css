@@ -62,13 +62,13 @@ body {
 	margin: 10px;
 	width: 180px;
 	height: 40px;
-	color: rgb(25, 31, 31);
+	color: rgb(25, 31, 31) !important;
 	box-shadow: 0px 0px 5px rgba(242, 210, 37);
 	font-size: 1.2em;
 	border-style: none !important;
 	font-weight: bold !important;
 	/* Old browsers */
-	background: rgb(242, 210, 37);
+	background: rgb(242, 210, 37) !important;
 	/* FF3.6-15 */
 /* background: -moz-linear-gradient(-45deg, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 0%, rgb(168, 130, 26) 50%, rgb(242, 210, 37) 50%, rgb(242, 210, 37) 100%); */
 /* Chrome10-25,Safari5.1-6 */
