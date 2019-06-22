@@ -83,6 +83,7 @@ public class GroceryListForm extends VerticalPanel {
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
 
+	//Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
@@ -152,9 +153,9 @@ public class GroceryListForm extends VerticalPanel {
 	 * @author bastiantilk
 	 * @author tom
 	 * 
-	 *         Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden
-	 *         bei einer Aktualisierung der Daten
-	 * 
+	 * Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer
+	 * Aktualisierung der Daten. Es werden alle Artikel der aktuellen GroceryList aus der DB abgefregt.
+	 * Dann wird die Tabele geleert und mit dem Vektor der Artikel-Objekte gefuellt.
 	 */
 	public void loadTable() {
 		try {

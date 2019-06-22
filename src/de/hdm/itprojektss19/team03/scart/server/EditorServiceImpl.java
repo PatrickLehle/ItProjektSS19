@@ -425,7 +425,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
 		try {
 
-			return this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
+			return this.aMapper.findByKey(articleId); 
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
