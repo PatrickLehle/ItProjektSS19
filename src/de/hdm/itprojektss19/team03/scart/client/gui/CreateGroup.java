@@ -128,8 +128,8 @@ public class CreateGroup extends VerticalPanel {
 		this.add(footer);
 		
 		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
+			/*
+			 * Wird aufgerufen sobald der User auf den "Erstellen" Button klickt
 			 */
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
@@ -140,9 +140,8 @@ public class CreateGroup extends VerticalPanel {
 					responseLabel.setText("Bitte geben Sie einen Passenden Namen ein");
 				}
 			}
-
-			/**
-			 * Fired when the user types in the nameField.
+			/*
+			 * Wird aufgerufen wenn ENTER gedrueckt wird
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
@@ -155,10 +154,14 @@ public class CreateGroup extends VerticalPanel {
 				}
 			}
 			
+			/** Methode erstellt Gruppe in der DB und fuegt den aktuelen User direkt dazu
+			 * 
+			 * @param groupName (aus der Textbox)
+			 */
 			private void createGroupDB(String groupName) { //Sorgt fuer die Erstellung derr Gruppe in der DB und der verknuepfung von Group und User
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
-				Group createGroup = new Group(groupName);
+				final Group createGroup = new Group(groupName);
 				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
@@ -172,8 +175,9 @@ public class CreateGroup extends VerticalPanel {
 					@Override
 					public void onSuccess(Group arg0) {
 						// TODO Auto-generated method stub
-					
-						ev.addUserToGroup(user, arg0, new AsyncCallback<Void>() {
+					final Group tempGroup = arg0;
+						
+						ev.addUserToGroup(user, tempGroup, new AsyncCallback<Void>() {
 
 							@Override
 							public void onFailure(Throwable arg0) {
