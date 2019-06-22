@@ -31,6 +31,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -83,7 +84,7 @@ public class GroceryListForm extends VerticalPanel {
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
 
-	//Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
+	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
@@ -153,9 +154,10 @@ public class GroceryListForm extends VerticalPanel {
 	 * @author bastiantilk
 	 * @author tom
 	 * 
-	 * Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden bei einer
-	 * Aktualisierung der Daten. Es werden alle Artikel der aktuellen GroceryList aus der DB abgefregt.
-	 * Dann wird die Tabele geleert und mit dem Vektor der Artikel-Objekte gefuellt.
+	 *         Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden
+	 *         bei einer Aktualisierung der Daten. Es werden alle Artikel der
+	 *         aktuellen GroceryList aus der DB abgefregt. Dann wird die Tabele
+	 *         geleert und mit dem Vektor der Artikel-Objekte gefuellt.
 	 */
 	public void loadTable() {
 		try {
@@ -221,36 +223,54 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public ListBox getRetailerListBoxDisabled() {
-		//try {
 		ListBox retailerListBox = new ListBox();
-		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
-			retailerListBox.addItem(retailerVector.get(listNumber).toString());
-		}
-		retailerListBox.setVisibleItemCount(0);
-		retailerListBox.setEnabled(false);
-		return retailerListBox;
-	}
-		
-		/**ev.findAllRetailerByGroup(new AsyncCallback<>( {
+		try {
+			User u = new User();
+			Group g = new Group(null);
+			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
-					throw new IllegalArgumentException("Einkaufsliste konnte nicht geladen werden");
+					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
 				}
 
 				public void onSuccess(Vector<Retailer> result) {
-					
-		});
-		}catch (IllegalArgumentException e) {
-			Window.alert("RetailerListe konnte nicht geladen werden");
+					for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
+						retailerListBox.addItem(retailerVector.get(listNumber).toString());
+					}
+					retailerListBox.setVisibleItemCount(0);
+					retailerListBox.setEnabled(false);
+
+				}
+
+			});
+		} catch (IllegalArgumentException e) {
+			Window.alert("Einkaufsliste konnte nicht geladen werden");
 		}
-	}*/
+		return retailerListBox;
+	}
 
 	public ListBox getRetailerListBoxEnabled() {
 		ListBox retailerListBox = new ListBox();
-		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
-			retailerListBox.addItem(retailerVector.get(listNumber).toString());
+		try {
+			User u = new User();
+			Group g = new Group(null);
+			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
+				public void onFailure(Throwable caught) {
+					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
+				}
+
+				public void onSuccess(Vector<Retailer> result) {
+					for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
+						retailerListBox.addItem(retailerVector.get(listNumber).toString());
+					}
+					retailerListBox.setVisibleItemCount(1);
+					retailerListBox.setEnabled(true);
+
+				}
+
+			});
+		} catch (IllegalArgumentException e) {
+			Window.alert("Einkaufsliste konnte nicht geladen werden");
 		}
-		retailerListBox.setVisibleItemCount(1);
-		retailerListBox.setEnabled(true);
 		return retailerListBox;
 	}
 
