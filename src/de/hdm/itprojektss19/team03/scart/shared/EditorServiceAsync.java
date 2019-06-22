@@ -44,7 +44,7 @@ public interface EditorServiceAsync {
 
 	void getAllGroupsByUser(User u, AsyncCallback<Vector<Group>> asyncCallback);
 
-	void addUserToGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
+	void addUserToGroup(User user, Group group, AsyncCallback<Void> asyncCallback);
 
 	void leaveGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 

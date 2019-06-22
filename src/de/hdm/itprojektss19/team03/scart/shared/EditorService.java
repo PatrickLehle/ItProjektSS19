@@ -143,7 +143,7 @@ public interface EditorService extends RemoteService {
 	 * @param g
 	 * @throws IllegalArgumentException
 	 */
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
+	public void addUserToGroup(User user, Group group) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
