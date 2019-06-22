@@ -6,6 +6,9 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.client.GUITest2.DeleteButtonClickHandler;
+import de.hdm.client.GUITest2.EditButtonClickHandler;
+import de.hdm.client.GUITest2.SaveButtonClickHandler;
 import de.hdm.shared.bo.User;
 
 public class ProfileForm {
@@ -33,6 +36,25 @@ public class ProfileForm {
 		
 		buildProfil();
 		
+	}
+	
+	public void buildProfil() {
+		
+		
+		yourProfilPanel.add(yourProfil);
+		userNamePanel.add(userName);
+		emailAdressPanel.add(emailAdress);
+		buttonPanel.add(editButton);
+		buttonPanel.add(deleteButton);
+		contentPanel.add(yourProfilPanel);
+		contentPanel.add(userNamePanel);
+		contentPanel.add(emailAdressPanel);
+		contentPanel.add(buttonPanel);
+		
+		editButton.addClickHandler(new EditButtonClickHandler());
+		saveButton.addClickHandler(new SaveButtonClickHandler());
+		deleteButton.addClickHandler(new DeleteButtonClickHandler());
+
 	}
 	
 }
