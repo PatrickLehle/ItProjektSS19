@@ -40,24 +40,23 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public GroupUser addUserToGroup(User u, Group g) throws DatabaseException {
+	public void addUserToGroup(User u, Group g) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String addString = "INSERT INTO `groupuser` (`groupId`, `userId`) VALUES (?,?)";
-
+		
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(addString);
 			stmt.setInt(1, u.getId());
 			stmt.setInt(2, g.getId());
 			stmt.executeUpdate();
-
+			
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {

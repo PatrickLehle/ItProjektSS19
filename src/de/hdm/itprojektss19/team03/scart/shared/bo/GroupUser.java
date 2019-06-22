@@ -24,7 +24,18 @@ public class GroupUser extends BusinessObject {
 	private int groupId = 0; 
 	private int userId = 0;
 	
-
+//CONSTRUCTORS==========================================================
+		public GroupUser( int userId, int groupId) {
+			this.userId = userId;
+			this.groupId = groupId;
+		}
+			
+//Default Constructor
+		public GroupUser() {
+				
+		}
+	
+	
 //METHODS=========================================================================
   //GETTER========================================================================
 	/**
