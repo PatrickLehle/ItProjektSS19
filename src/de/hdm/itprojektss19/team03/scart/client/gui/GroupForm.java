@@ -47,8 +47,7 @@ public class GroupForm extends VerticalPanel {
 	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
 
-	EditGroup editGroup = new EditGroup();
-	CreateGroup createGroup = new CreateGroup(user);
+
 
 	public GroupForm() {
 
@@ -79,7 +78,8 @@ public class GroupForm extends VerticalPanel {
 
 		this.add(groupFormPanel);
 
-		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -97,18 +97,21 @@ public class GroupForm extends VerticalPanel {
 				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
 
 				groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
-				groupNameLabel.setStyleName("h3");
+				groupNameLabel.setStyleName("text");
 				groupNamePanel.add(groupNameLabel);
 
 			}
 
 		}
 	}
+	
+	
 
 	class InfoClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
+			EditGroup editGroup = new EditGroup();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(editGroup);
 
@@ -120,6 +123,7 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
+			CreateGroup createGroup = new CreateGroup(user);
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(createGroup);
 
