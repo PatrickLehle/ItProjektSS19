@@ -11,13 +11,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.client.GUITest2.DeleteButtonClickHandler;
-import de.hdm.client.GUITest2.EditButtonClickHandler;
-import de.hdm.client.GUITest2.NoButtonClickHandler;
-import de.hdm.client.GUITest2.SaveButtonClickHandler;
-import de.hdm.client.GUITest2.YesDeleteButtonClickHandler;
-import de.hdm.client.GUITest2.YesSaveButtonClickHandler;
-import de.hdm.shared.bo.User;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * ProfileForm: ...
@@ -32,9 +26,9 @@ public class ProfileForm {
 	User user = new User();
 
 	//LABELS=================================================
-	Label yourProfil = new Label("Dein Profil");
-	Label userName = new Label("Name: ");
-	Label emailAdress = new Label("E-Mail: ");
+	Label yourProfileLabel = new Label("Dein Profil");
+	Label userNameLabel = new Label("Name: ");
+	Label emailAdressLabel = new Label("E-Mail: ");
 	
 	//BUTTONS================================================
 
@@ -59,16 +53,16 @@ public class ProfileForm {
 	
 	public void onLoad() {
 		
-		buildProfil();
+		buildProfile();
 		
 	}
 	
-	public void buildProfil() {
+	public void buildProfile() {
 		
 		
-		yourProfilPanel.add(yourProfil);
-		userNamePanel.add(userName);
-		emailAdressPanel.add(emailAdress);
+		yourProfilPanel.add(yourProfileLabel);
+		userNamePanel.add(userNameLabel);
+		emailAdressPanel.add(emailAdressLabel);
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
 		contentPanel.add(yourProfilPanel);
