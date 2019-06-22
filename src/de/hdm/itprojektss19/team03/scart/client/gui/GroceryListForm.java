@@ -98,7 +98,7 @@ public class GroceryListForm extends VerticalPanel {
 
 		// Titel Label wird in Horitontales Panel eingefuegt
 		hpTitle.add(titelLabel);
-
+		
 		// sc.add(aTable);
 
 		this.add(hpTitle);
@@ -243,8 +243,8 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public ListBox getRetailerListBoxDisabled() {
-		ListBox retailerListBox = new ListBox();
-/**		try {
+		final ListBox retailerListBox = new ListBox();
+		try {
 			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
@@ -262,13 +262,13 @@ public class GroceryListForm extends VerticalPanel {
 			});
 		} catch (IllegalArgumentException e) {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
-		}*/
+		}
 		return retailerListBox;
 	}
 
 	public ListBox getRetailerListBoxEnabled() {
-		ListBox retailerListBox = new ListBox();
-/**		try {
+		final ListBox retailerListBox = new ListBox();
+		try {
 			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
@@ -286,7 +286,7 @@ public class GroceryListForm extends VerticalPanel {
 			});
 		} catch (IllegalArgumentException e) {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
-		}*/
+		}
 		return retailerListBox;
 	}
 
