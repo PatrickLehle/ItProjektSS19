@@ -9,6 +9,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -47,7 +48,7 @@ public class EditGroup extends VerticalPanel{
 	Button manageGroupButton = new Button("Bearbeiten");
 	Button backToGroupButton = new Button("Zurück");
 
-	//GroupForm groupForm = new GroupForm(user);
+	
 
 	public EditGroup() {
 
@@ -81,7 +82,8 @@ public class EditGroup extends VerticalPanel{
 
 		this.add(groupFormPanel);
 
-		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -100,7 +102,7 @@ public class EditGroup extends VerticalPanel{
 				
 				CheckBox groupNames = new CheckBox(allGroupsS.elementAt(g));
 				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
-				groupNames.setStyleName("h3");
+				groupNames.setStyleName("textbox");
 				checkBoxesGroup.add(groupNames);
 
 			}
@@ -132,8 +134,9 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			//RootPanel.get("content").clear();
-			//RootPanel.get("content").add(groupForm);
+			GroupForm groupForm = new GroupForm(user);
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(groupForm);
 
 		}
 
