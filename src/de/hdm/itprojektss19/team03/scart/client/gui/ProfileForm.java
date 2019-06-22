@@ -177,15 +177,13 @@ public class ProfileForm {
 		
 		public void onClick(ClickEvent event) {
 			
-			//this.userName.setText("neuer Name");
-			//this.emailAdress.setText("neue E-Mail");
 			
-			userNamePanel.remove(userNameTB);
+			userNamePanel.remove(userNameLabel);
 			TextBox userName = new TextBox();
 			userName.setText("neuer Name");
 			userNamePanel.add(userName);
 			
-			emailAdressPanel.remove(emailAdress);
+			emailAdressPanel.remove(emailAdressLabel);
 			TextBox emailAdress = new TextBox();
 			emailAdress.setText("neue E-Mail");
 			emailAdressPanel.add(emailAdress);
