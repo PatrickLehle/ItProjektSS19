@@ -44,8 +44,6 @@ public interface EditorServiceAsync {
 
 	void getAllGroupsByUser(User u, AsyncCallback<Vector<Group>> asyncCallback);
 
-	void addUserToGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
-
 	void leaveGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
 	void findAllGroups(AsyncCallback<Vector<Group>> asyncCallback);
@@ -55,6 +53,8 @@ public interface EditorServiceAsync {
 	// GROUP-USER========================================================================
 
 	void findAllGroupsByUserId(int id, AsyncCallback<Vector<Group>> asyncCallback);
+	
+	void addUserToGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
 	// GROCERYLIST===========================================================================
 

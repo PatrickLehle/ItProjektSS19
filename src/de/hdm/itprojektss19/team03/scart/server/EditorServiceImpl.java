@@ -20,6 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -235,16 +236,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
-		try {
 
-			this.gMapper.update(g);
-
-		} catch (IllegalArgumentException | DatabaseException e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException(e);
-		}
-	}
 
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
 		try {
@@ -272,6 +264,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException {
 		try {
 			return guMapper.findAllGroupsByUserId(id);
+
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
+		try {
+
+			this.guMapper.addUserToGroup(u, g);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();

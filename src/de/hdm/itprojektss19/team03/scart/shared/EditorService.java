@@ -138,15 +138,6 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #addUserToGroup(User u, Group g);
-	 * @param u
-	 * @param g
-	 * @throws IllegalArgumentException
-	 */
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
-
-	/**
-	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #leaveGroup(User u, Group g);
 	 * @param u
 	 * @param g
@@ -180,6 +171,15 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #addUserToGroup(User u, Group g);
+	 * @param u
+	 * @param g
+	 * @throws IllegalArgumentException
+	 */
+	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 

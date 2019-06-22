@@ -18,6 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 //"Familien"/Add Group Mockup in Balsamic
 
@@ -126,20 +127,6 @@ public class CreateGroup extends VerticalPanel {
 		this.add(contentBox);
 		this.add(footer);
 		
-		
-		
-		createGroupButton.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
-					return; //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
-				} else {
-					return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
-				}
-		}
-		});
-		
-		
-		
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/**
 			 * Fired when the user clicks on the sendButton.
@@ -147,9 +134,10 @@ public class CreateGroup extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
 				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
-					SendNameToServer(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+					createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
 				} else {
-					return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
+					responseLabel.setVisible(true);
+					responseLabel.setText("Bitte geben Sie einen Passenden Namen ein");
 				}
 			}
 
@@ -159,43 +147,54 @@ public class CreateGroup extends VerticalPanel {
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
-						SendNameToServer(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+						createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroupDB Methode
 					} else {
-						return; //Fehlerverarbeitung bzw. Meldung das Input nicht passend ist
+						responseLabel.setVisible(true);
+						responseLabel.setText("Bitte geben Sie einen Passenden Namen ein");
 					}
 				}
 			}
 			
-			private void SendNameToServer(String groupName) {
+			private void createGroupDB(String groupName) { //Sorgt fuer die Erstellung derr Gruppe in der DB und der verknuepfung von Group und User
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
-				
 				Group createGroup = new Group(groupName);
 				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
 					public void onFailure(Throwable caught) {
-						//Ausgeben einer Fehlermeldung
 						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 						//responseLabel.addStyleName("serverResponseLabel");
 						//responseLabel.setText(SERVER_ERROR);
-						
 					}
 
 					
 					@Override
 					public void onSuccess(Group arg0) {
 						// TODO Auto-generated method stub
-						responseLabel.setText("Erfolg: "+arg0.getGroupName()+" konnte erstellt werden");
-						
-						
+					
+						ev.addUserToGroup(user, arg0, new AsyncCallback<Void>() {
+
+							@Override
+							public void onFailure(Throwable arg0) {
+								responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
+								//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
+							}
+
+							@Override
+							public void onSuccess(Void arg0) {
+								responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
+							}
+							
+						});
+					
+					
 					}
 				});
-				
 			}
-			
 		}
 		
+		createGroupButton.addClickHandler(new MyHandler());
 	}
 
 	public CreateGroup(Group selection) {
