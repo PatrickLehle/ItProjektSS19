@@ -15,6 +15,7 @@ import de.hdm.client.GUITest2.DeleteButtonClickHandler;
 import de.hdm.client.GUITest2.EditButtonClickHandler;
 import de.hdm.client.GUITest2.NoButtonClickHandler;
 import de.hdm.client.GUITest2.SaveButtonClickHandler;
+import de.hdm.client.GUITest2.YesDeleteButtonClickHandler;
 import de.hdm.client.GUITest2.YesSaveButtonClickHandler;
 import de.hdm.shared.bo.User;
 
@@ -114,6 +115,35 @@ public class ProfileForm {
 			
 		}
 		
+	}
+	
+	class DeleteButtonClickHandler implements ClickHandler {
+		
+		public void onClick(ClickEvent event) {
+			
+			DialogBox db = new DialogBox();
+			TextBox t1 = new TextBox();
+			TextBox t2 = new TextBox();
+			VerticalPanel vp = new VerticalPanel();
+			HorizontalPanel hp = new HorizontalPanel();
+			Button yB = new Button("Ja", new YesDeleteButtonClickHandler(db, t1, t2));
+			Button nB = new Button("Nein", new NoButtonClickHandler(db));
+			Label l = new HTML(
+					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>");
+			
+			vp.add(l);
+			hp.add(yB);
+			hp.add(nB);
+			vp.add(hp);
+
+			db.setGlassEnabled(true);
+			db.setAnimationEnabled(true);
+			db.center();
+			db.show();
+
+			db.add(vp);
+			
+		}
 	}
 	
 	
