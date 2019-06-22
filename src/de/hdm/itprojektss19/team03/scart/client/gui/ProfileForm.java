@@ -19,19 +19,31 @@ import de.hdm.client.GUITest2.YesDeleteButtonClickHandler;
 import de.hdm.client.GUITest2.YesSaveButtonClickHandler;
 import de.hdm.shared.bo.User;
 
+/**
+ * ProfileForm: ...
+ * 
+ * 
+ * @author vanduyho
+ *
+ */
+
 public class ProfileForm {
 
 	User user = new User();
 
+	//LABELS=================================================
 	Label yourProfil = new Label("Dein Profil");
 	Label userName = new Label("Name: ");
 	Label emailAdress = new Label("E-Mail: ");
+	
+	//BUTTONS================================================
 
 	Button editButton = new Button("Profil bearbeiten");
 	Button deleteButton = new Button("Profil löschen");
 	Button saveButton = new Button("Änderung speichern");
 	Button nosaveButton = new Button();
 
+	//PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
 	
 	HorizontalPanel yourProfilPanel = new HorizontalPanel();
@@ -39,6 +51,11 @@ public class ProfileForm {
 	HorizontalPanel emailAdressPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 	
+	/**
+	 * 
+	 * onLoad-Methode: ...
+	 *
+	 */
 	
 	public void onLoad() {
 		
@@ -64,6 +81,12 @@ public class ProfileForm {
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
 	}
+	
+	/**
+	 * 
+	 * ClickHandler: ...
+	 *
+	 */
 	
 	class EditButtonClickHandler implements ClickHandler {
 
