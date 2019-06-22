@@ -3,6 +3,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.shared.bo.User;
@@ -26,5 +27,12 @@ public class ProfileForm {
 	HorizontalPanel userNamePanel = new HorizontalPanel();
 	HorizontalPanel emailAdressPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
+	
+	
+	public void onLoad() {
+		
+		buildProfil();
+		
+	}
 	
 }
