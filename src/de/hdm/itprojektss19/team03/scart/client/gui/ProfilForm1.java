@@ -31,7 +31,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  *
  */
 
-public class ProfilForm extends VerticalPanel {
+public class ProfilForm1 extends VerticalPanel {
 
 	Widget parentForm = null;
 	User user = null;
@@ -62,7 +62,7 @@ public class ProfilForm extends VerticalPanel {
 	 * 
 	 */
 
-	public ProfilForm() {
+	public ProfilForm1() {
 
 	}
 
@@ -72,7 +72,7 @@ public class ProfilForm extends VerticalPanel {
 	 * 
 	 */
 
-	public ProfilForm(User u, Widget parent) {
+	public ProfilForm1(User u, Widget parent) {
 
 		this.user = u;
 		this.parentForm = parent;
@@ -141,11 +141,11 @@ public class ProfilForm extends VerticalPanel {
 
 class EditButtonClickHandler implements ClickHandler {
 
-	ProfilForm profilForm = null;
+	ProfilForm1 profilForm = null;
 
 	Widget parentForm = null;
 
-	public EditButtonClickHandler(ProfilForm pf, Widget parent) {
+	public EditButtonClickHandler(ProfilForm1 pf, Widget parent) {
 
 		this.profilForm = pf;
 		this.parentForm = parent;
@@ -185,9 +185,9 @@ class EditButtonClickHandler implements ClickHandler {
 
 		private TextBox userName = null;
 		private TextBox emailAdress = null;
-		private ProfilForm profilForm = null;
+		private ProfilForm1 profilForm = null;
 
-		public SaveButtonClickHandler(TextBox name, TextBox email, ProfilForm pf) {
+		public SaveButtonClickHandler(TextBox name, TextBox email, ProfilForm1 pf) {
 
 			this.userName = name;
 			this.emailAdress = email;
@@ -350,9 +350,9 @@ class EditButtonClickHandler implements ClickHandler {
 
 		private TextBox userName = null;
 		private TextBox emailAdress = null;
-		private ProfilForm profilForm = null;
+		private ProfilForm1 profilForm = null;
 
-		public SaveChangesClickHandler(TextBox name, TextBox email, ProfilForm pf) {
+		public SaveChangesClickHandler(TextBox name, TextBox email, ProfilForm1 pf) {
 
 			this.userName = name;
 			this.emailAdress = email;
@@ -440,11 +440,11 @@ class EditButtonClickHandler implements ClickHandler {
 
 	class VerifyFieldCallBack implements AsyncCallback<String[]> {
 
-		ProfilForm profilForm;
+		ProfilForm1 profilForm;
 		TextBox userName;
 		TextBox emailAdress;
 
-		public VerifyFieldCallBack(ProfilForm pf, TextBox t1, TextBox t2) {
+		public VerifyFieldCallBack(ProfilForm1 pf, TextBox t1, TextBox t2) {
 
 			this.profilForm = pf;
 			this.userName = t1;
@@ -482,11 +482,11 @@ class EditButtonClickHandler implements ClickHandler {
 
 	class FindAllUserCallback implements AsyncCallback<Vector<String>> {
 
-		ProfilForm profilForm;
+		ProfilForm1 profilForm;
 		TextBox userName;
 		TextBox emailAdress;
 
-		public FindAllUserCallback(ProfilForm pf, TextBox t1, TextBox t2) {
+		public FindAllUserCallback(ProfilForm1 pf, TextBox t1, TextBox t2) {
 
 			this.profilForm = pf;
 			this.userName = t1;
