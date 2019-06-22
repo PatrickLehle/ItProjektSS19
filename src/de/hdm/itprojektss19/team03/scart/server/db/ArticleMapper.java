@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
+
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
@@ -217,39 +218,43 @@ public class ArticleMapper {
 	 * @throws DatabaseException
 	 */
 	public Article insert(Article article) throws DatabaseException {
-
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM article";
 
-		String insert = "INSERT INTO article (id, name, quantity, unit, retailerId, creationDat, modDat, boolean) VALUES (?,?,?,?,?,?,?,?)";
+		// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
+		String maxIdSQL = "SELECT MAX(article.id) AS maxid FROM article";
+
+		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
+		String insertSQL = "INSERT INTO article ( name, quantity, unit, retailerId, ownerId, creationDat, modDat, boolean) VALUES (?,?,?,?,?,?,?,?)";
 
 		try {
+			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(maxIdSQL);
 
 			// MAX ID Query ausfuehren
 			ResultSet rs = stmt.executeQuery();
 
-			// ...um diese dann um 1 inkrementiert der ID des BO zuzuweisen
+			// Damit dieser daraufhin um 1 inkrementiert der ID des BO zugewiesen wird
 			if (rs.next()) {
 				article.setId(rs.getInt("maxid") + 1);
 			}
-			// Jetzt erfolgt der Insert
-			stmt = con.prepareStatement(insert);
 
-			// Setzen der ? Platzhalter als Values
-			stmt.setInt(1, article.getId());
-			stmt.setString(2, article.getName());
-			stmt.setInt(3, article.getQuantity());
-			stmt.setString(4, article.getUnit());
-			stmt.setInt(5, article.getRetailerId());
+		
+			// Jetzt erfolgt das Einfuegen des Objekts
+			stmt = con.prepareStatement(insertSQL);
+
+			// Setzen der ? als Platzhalter fuer den Wert
+			stmt.setString(1, article.getName());
+			stmt.setInt(2, article.getQuantity());
+			stmt.setString(3, article.getUnit());
+			stmt.setInt(4, article.getRetailerId());
+			stmt.setInt(5, article.getOwnerId());
 			stmt.setTimestamp(6, article.getCreationDat());
 			stmt.setTimestamp(7, article.getModDat());
 			stmt.setBoolean(8, article.getCheckBoolean());
-			// DelDat wird bei dem anlegen eines Artikels nicht hinterlegt
 
-			// INSERT-Query ausfuehren
+			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
@@ -271,9 +276,11 @@ public class ArticleMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, ownerId=?, modDat=?, boolean=? WHERE id=" + article.getId();
 
 		try {
+			
+			//NullPointerException wenn nicht alles bei der uebergabe des Objektes angegeben wird
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
 
@@ -281,12 +288,9 @@ public class ArticleMapper {
 			stmt.setInt(2, article.getQuantity());
 			stmt.setString(3, article.getUnit());
 			stmt.setInt(4, article.getRetailerId());
-			stmt.setTimestamp(5, article.getModDat());
-			stmt.setInt(6, article.getId());
+			stmt.setInt(5, article.getOwnerId());
+			stmt.setTimestamp(6, article.getModDat());
 			stmt.setBoolean(7, article.getCheckBoolean());
-			stmt.setTimestamp(8, article.getDelDat()); // Mit der Update-Methode sollte kein Artikel als geloescht
-														// markiert werden, denn
-														// das lokale Artikel-Objekt wird dadurch aber nicht veraendert.
 
 			stmt.executeUpdate();
 
@@ -309,54 +313,25 @@ public class ArticleMapper {
 
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, modDat=?, boolean=?, delDat=? WHERE id=?";
+		String update = "UPDATE article SET modDat=?, delDat=? WHERE id=" + article.getId();
 
 		try {
-			/*
-			 * alte delete Mthode Statement stmt = con.createStatement();
-			 * stmt.executeUpdate("DELETE FROM article WHERE id=" + article.getId());
-			 */
+
 			article.setDelDat(new Timestamp(new Date().getTime()));
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
 
-			stmt.setString(1, article.getName());
-			stmt.setInt(2, article.getQuantity());
-			stmt.setString(3, article.getUnit());
-			stmt.setInt(4, article.getRetailerId());
-			stmt.setTimestamp(5, article.getModDat());
-			stmt.setInt(6, article.getId());
-			stmt.setBoolean(7, article.getCheckBoolean());
-			stmt.setTimestamp(8, article.getDelDat());
+			stmt.setTimestamp(1, article.getModDat());
+			stmt.setTimestamp(2, article.getDelDat());
 
 			stmt.executeUpdate();
-
-			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + article.getId());
-
-			// Nur EIN Ergebnis, da id =PRIMARY-KEY
-			if (rs.next()) {
-				Article returnArticle = new Article();
-				returnArticle.setId(rs.getInt("id"));
-				returnArticle.setName(rs.getString("name"));
-				returnArticle.setQuantity(rs.getInt("quantity"));
-				returnArticle.setUnit(rs.getString("unit"));
-				returnArticle.setRetailerId(rs.getInt("retailerId"));
-				returnArticle.setCreationDat(rs.getTimestamp("creationDat"));
-				returnArticle.setModDat(rs.getTimestamp("modDat"));
-				returnArticle.setCheckBoolean(rs.getBoolean("boolean"));
-				returnArticle.setDelDat(rs.getTimestamp("delDat"));
-
-				return returnArticle;
-			}
-
-		} catch (SQLException e2) {
-			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw new DatabaseException(e2);
-		}
-		return null;
+		
+	} catch (SQLException e2) {
+		ServersideSettings.getLogger().severe(e2.getMessage());
+		throw new DatabaseException(e2);
 	}
-
+	return null;
+	}
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
 	 * 

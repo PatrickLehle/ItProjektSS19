@@ -23,8 +23,13 @@ public class User extends BusinessObject implements IsSerializable {
 	private String username = "";
 	private String email = "";
 	
+//CONSTRUCTORS================================================
 	public User() {
 		
+	}
+	
+	public User(int id) {
+		super(id);
 	}
 	
 	public User (String emailAdress) {
@@ -35,6 +40,9 @@ public class User extends BusinessObject implements IsSerializable {
 			this.username = username;
 			this.email = emailAdress;
 	}
+
+//METHODS======================================================
+	
 	public String getEmail() {
 		return email;
 	}
