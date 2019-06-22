@@ -281,7 +281,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
+	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException{
+		try {
+			 return guMapper.getAllUsersByGroupId(id);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 	// GROCERYLIST===========================================================================
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {

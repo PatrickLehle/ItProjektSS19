@@ -48,6 +48,7 @@ public class GroceryListForm extends VerticalPanel {
 	private User user = null;
 
 	HorizontalPanel hpTitle = new HorizontalPanel();
+	HorizontalPanel hpUserRetailer = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
 
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='right'/>");
@@ -63,7 +64,8 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox articleTextBox = new TextBox(); // Artikel
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
-	ListBox retailerListBox = new ListBox();
+	ListBox firstRetailerListBox = new ListBox();
+	ListBox firstUserListBox = new ListBox();
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
@@ -73,13 +75,15 @@ public class GroceryListForm extends VerticalPanel {
 	Retailer retailer = new Retailer();
 	Vector<Article> articleVector = new Vector<Article>();
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
+	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
-
+	Label userRetailerLabel = new Label("zuteilen für");
 	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
-
+	User u = new User();
+	Group g = new Group();
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
@@ -95,10 +99,28 @@ public class GroceryListForm extends VerticalPanel {
 		// Titel Label wird in Horitontales Panel eingefuegt
 		hpTitle.add(titelLabel);
 
-		// CellTable wird in das Scroll Panel hinzugefuegt
 		// sc.add(aTable);
 
 		this.add(hpTitle);
+		//ev.getAllUsersByGroupId(id, asyncCallback);
+		for(int userNumber = 0; userNumber < userVector.size(); userNumber++) {
+			firstUserListBox.addItem(userVector.get(userNumber).getUsername());
+		}
+		ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
+			public void onFailure(Throwable caught) {
+				throw new IllegalArgumentException("First Retailer konnte nicht geladen werden");
+			}
+			public void onSuccess(Vector<Retailer> result) {
+				for(int retailerNumber = 0; retailerNumber < retailerVector.size(); retailerNumber++) {
+					firstRetailerListBox.addItem(retailerVector.get(retailerNumber).getRetailerName());
+				}
+				firstRetailerListBox.setVisibleItemCount(1);
+			}
+		});
+		hpUserRetailer.add(firstUserListBox);
+		hpUserRetailer.add(userRetailerLabel);
+		hpUserRetailer.add(firstRetailerListBox);
+		this.add(hpUserRetailer);
 
 		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
 		int groceryListId = groceryList.getId();
@@ -161,7 +183,7 @@ public class GroceryListForm extends VerticalPanel {
 	 */
 	public void loadTable() {
 		try {
-			int groceryListId = groceryList.getId();
+			final int groceryListId = groceryList.getId();
 
 			ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 				public void onFailure(Throwable caught) {
@@ -182,33 +204,31 @@ public class GroceryListForm extends VerticalPanel {
 					articleTable.setText(0, 3, "Laden");
 					boughtTable.setText(0, 0, "Gekauft");
 
-					int vectorNumber = 0; // temporaerer Zaehler um durch den Artikel-Vektor durchzugehen
 					int trueCount = 1; // Checkbox gleich true. Artikel wurd gekauft
 					int falseCount = 1; // Checkbox gleich false. Artikel noch nicht gekauft
 					int visibleNum = 0;
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
-					for (int articleNumber = 1; articleNumber <= articleVector.size(); articleNumber++) {
-						if (articleVector.get(vectorNumber).getCheckBoolean() == false) {
-							articleTable.setText(falseCount, 0, articleVector.get(vectorNumber).getName());
+					for (int articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
+						if (articleVector.get(articleNumber).getCheckBoolean() == false) {
+							articleTable.setText(falseCount, 0, articleVector.get(articleNumber).getName());
 							articleTable.setText(falseCount, 1,
-									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
-							articleTable.setText(falseCount, 2, articleVector.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(articleNumber).getQuantity()));
+							articleTable.setText(falseCount, 2, articleVector.get(articleNumber).getUnit());
 							articleTable.setText(falseCount, 3,
-									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(articleNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							boughtTable.setText(trueCount, 0, articleVector.get(vectorNumber).getName());
+							boughtTable.setText(trueCount, 0, articleVector.get(articleNumber).getName());
 							boughtTable.setText(trueCount, 1,
-									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
-							boughtTable.setText(trueCount, 2, articleVector.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(articleNumber).getQuantity()));
+							boughtTable.setText(trueCount, 2, articleVector.get(articleNumber).getUnit());
 							boughtTable.setText(trueCount, 3,
-									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(articleNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
-						vectorNumber++;
 					}
 					if (visibleNum > 1) {
 						boughtTable.setVisible(true);
@@ -224,9 +244,7 @@ public class GroceryListForm extends VerticalPanel {
 
 	public ListBox getRetailerListBoxDisabled() {
 		ListBox retailerListBox = new ListBox();
-		try {
-			User u = new User();
-			Group g = new Group(null);
+/**		try {
 			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
@@ -244,15 +262,13 @@ public class GroceryListForm extends VerticalPanel {
 			});
 		} catch (IllegalArgumentException e) {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
-		}
+		}*/
 		return retailerListBox;
 	}
 
 	public ListBox getRetailerListBoxEnabled() {
 		ListBox retailerListBox = new ListBox();
-		try {
-			User u = new User();
-			Group g = new Group(null);
+/**		try {
 			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
@@ -270,7 +286,7 @@ public class GroceryListForm extends VerticalPanel {
 			});
 		} catch (IllegalArgumentException e) {
 			Window.alert("Einkaufsliste konnte nicht geladen werden");
-		}
+		}*/
 		return retailerListBox;
 	}
 

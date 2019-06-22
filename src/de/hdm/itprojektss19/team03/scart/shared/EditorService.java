@@ -180,6 +180,8 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
+	
+	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 
