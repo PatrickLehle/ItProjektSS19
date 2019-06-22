@@ -184,4 +184,32 @@ public class ProfileForm {
 		}
 	}
 	
+	class YesDeleteButtonClickHandler implements ClickHandler {
+
+		DialogBox dbox = new DialogBox();
+		TextBox userName = new TextBox();
+		TextBox emailAdress = new TextBox();
+		
+		public YesDeleteButtonClickHandler (DialogBox db, TextBox name, TextBox email) {
+		
+			this.dbox = db;
+			this.userName = name;
+			this.emailAdress = email;
+			
+		}
+		
+		public void onClick(ClickEvent event) {
+			
+			this.userName.setText("");
+			this.emailAdress.setText("");
+			
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
+
+		}
+	}
+	
 }
