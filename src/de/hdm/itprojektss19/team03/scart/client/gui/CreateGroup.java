@@ -1,10 +1,13 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
@@ -20,53 +23,46 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-//"Familien"/Add Group Mockup in Balsamic
 
 /**
- * Die Group-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
+ * Die createGroup-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
  * 
  * @author bastiantilk
  *
  */
 public class CreateGroup extends VerticalPanel {
-
+//CONNECTION WITH EDITORSERVICE/MAPPER============================
 	private EditorServiceAsync ev = ClientsideSettings.getEditor();
-	//Aufruf durch ev.createGroup(g, asyncCallback);
 	
-	
-	//TEXTBOXEN=======================================================
+//DEFAULT CONSTRUCTOR=============================================
+	public CreateGroup() {
+
+	}
+//CONSTRUCTOR=====================================================
+	/** Konstruktor der createGroup-Seite
+	 * 
+	 * @param u (User-Objekt der die createUser-Seite aufrufen will)
+	 */
+	public CreateGroup(User u) {
+		this.user = u;
+
+	}
+//TEXTBOXEN=======================================================
 	TextBox groupTextbox = new TextBox(); 
 	
-	//LABELS==========================================================
-	Label createGroupLabel = new Label("Gruppe erstellen");
+//LABELS==========================================================
+	Label createGroupLabel = new Label("Gruppe erstellen"); //Ueberschrift
 	Label nameLabel = new Label("Gruppenname: ");
 	Label responseLabel = new Label("");
 	
-	Label footerHome = new Label("Home");
-	Label footerReport = new Label("Report");
+	//Label footerHome = new Label("Home");
+	//Label footerReport = new Label("Report");
 	
-	/**
-	Label groups = new Label("Gruppe");
-	Label SLName = new Label("Einkaufsliste: "); //Muss spaeter "Einkaufsliste: (Gruppenname)" anzeigen
-	Label users = new Label("Benutzer");
-	*/
-	
-	//BUTTONS=========================================================
+//BUTTONS=========================================================
 	Button backButton = new Button("Zurück");
 	Button createGroupButton = new Button("Erstellen");
 	
-	/**
-		Button back = new Button("Zurück");
-		Button removeGroup = new Button("Gruppe entfernen");
-		Button addSL = new Button("EL hinzufügen");
-		Button removeSL = new Button("EL entfernen");
-		Button mySL = new Button("Meine EL");
-		Button userAdd = new Button("Hinzufügen");
-		Button userRemove = new Button("entfernen");
-	*/
-	//PANELS==========================================================
-	
-	
+//PANELS==========================================================
 	HorizontalPanel header = new HorizontalPanel();
 		
 	VerticalPanel contentBox = new VerticalPanel(); //Content Panel
@@ -76,68 +72,83 @@ public class CreateGroup extends VerticalPanel {
 	HorizontalPanel buttonPanel = new HorizontalPanel(); //Buttons
 	HorizontalPanel responsePanel = new HorizontalPanel(); //Server responseLabel
 
+	//HorizontalPanel footer = new HorizontalPanel();
+	
+//VARIABLES==========================================================
+	User user = new User(); //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
 
-	HorizontalPanel footer = new HorizontalPanel();
+//METHODS==========================================================
 
-	//Methode wird bei dem "Aufrufen" der Klasse gestartet
-	public CreateGroup(User user) {
-		// TODO Auto-generated constructor stub
+	//public CreateGroup(User user) {   ALT
+/**
+ * Methode wird bei dem "Aufrufen" der Klasse gestartet
+ */
+public void onLoad() {
+		super.onLoad();
 		
-		//Elemente werden dem Panel hinzugefuegt
+//STYLING==========================================================
+		createGroupLabel.addStyleName("h1");
+		backButton.addStyleName("button");
+		createGroupButton.addStyleName("button");
+		nameLabel.setStyleName("text");
+		responseLabel.setStyleName("text");
+
+//ADDING BUTTONS, LABELS, TEXTBOX TO PANELS========================
+	
+		//Ueberschrift wird dem Panel "createGroupPanel" hinzugefuegt
 		createGroupLabel.setHorizontalAlignment(ALIGN_CENTER);
 		createGroupPanel.add(createGroupLabel);
 		createGroupPanel.setHorizontalAlignment(ALIGN_CENTER);
 
-		
+		//Label und Textbox wird dem Panel "inputPanel" hinzugefuegt
 		inputPanel.add(nameLabel);
 		inputPanel.add(groupTextbox);
 		inputPanel.setHorizontalAlignment(ALIGN_CENTER);
-
 		
+		//Zwei Buttons werden dem Panel "buttonPanel" hinzugefuegt
 		buttonPanel.add(backButton);
 		buttonPanel.add(createGroupButton);
 		buttonPanel.setHorizontalAlignment(ALIGN_CENTER);
 		
-		//Zur Ausgabe der erfolgreichen/fehlgeschlagenen Serverantwort
+		//responseLabel wird dem Panel "responsePanel" hinzugefuegt,
+		//dient zur Ausgabe der erfolgreichen/fehlgeschlagenen Serverantwort
 		responseLabel.setHorizontalAlignment(ALIGN_CENTER);
 		responsePanel.add(responseLabel);
 		responseLabel.setVisible(false);
 		responsePanel.setHorizontalAlignment(ALIGN_CENTER);
 		
-		//Alle Panels werden zur in die ContentBox hinzugefuegt
+		//Alle Panels werden zu dem allgemeinen Panel "ContentBox" hinzugefuegt
 		contentBox.add(createGroupPanel);
 		contentBox.add(inputPanel);
 		contentBox.add(buttonPanel);
 		contentBox.add(responsePanel);
 		
+		/*
 		footer.add(footerHome);
 		footer.add(footerReport);
+		*/
 		
-
-//		RootPanel.get("content").clear();
-//		RootPanel.get("contentHeader").clear();
-//		RootPanel.get("footer").clear();
-		
-//		RootPanel.get("contentHeader").add(new HTML("Scart"));
-//		
-//		RootPanel.get("content").add(contentBox); //Alle Panels werden in die "Content" div geschoben
-//		
-//		RootPanel.get("footer").add(footer);
-		
+		//Diese Seite wird dem RootPanel in "content" auf der HTML-Seite uebergeben
 		this.add(contentBox);
-		this.add(footer);
+		//this.add(footer);
 		
+//CLICKHANDLER TO CREATE A GROUP=============================
+		/** Click/Enter-Handler fuer den createGroup-Button
+		 * 
+		 * @author bastiantilk
+		 *
+		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/*
-			 * Wird aufgerufen sobald der User auf den "Erstellen" Button klickt
+			 * Wird aufgerufen sobald der User auf den createGroup-Button klickt
 			 */
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
-				if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
+				if(groupTextbox.getText() != "") {
 					createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
 				} else {
 					responseLabel.setVisible(true);
-					responseLabel.setText("Bitte geben Sie einen Passenden Namen ein");
+					responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
 				}
 			}
 			/*
@@ -145,16 +156,16 @@ public class CreateGroup extends VerticalPanel {
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					if(groupTextbox.getText() != "") { //ggf. noch bessere Ueberpruefung ob der Input verarbeitet werden kann
+					if(groupTextbox.getText() != "") { 
 						createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroupDB Methode
 					} else {
 						responseLabel.setVisible(true);
-						responseLabel.setText("Bitte geben Sie einen Passenden Namen ein");
+						responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
 					}
 				}
 			}
 			
-			/** Methode erstellt Gruppe in der DB und fuegt den aktuelen User direkt dazu
+			/** Methode erstellt Gruppe in der DB und fuegt den aktuelen User direkt dieser Gruppe dazu
 			 * 
 			 * @param groupName (aus der Textbox)
 			 */
@@ -165,6 +176,7 @@ public class CreateGroup extends VerticalPanel {
 				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
+					//Gruppe konnte nicht in der DB erstellt werden
 					public void onFailure(Throwable caught) {
 						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 						//responseLabel.addStyleName("serverResponseLabel");
@@ -174,13 +186,13 @@ public class CreateGroup extends VerticalPanel {
 					
 					@Override
 					public void onSuccess(Group arg0) {
-						// TODO Auto-generated method stub
-					final Group tempGroup = arg0;
-					final User tempUser = user;
+					final Group tempGroup = arg0; //Verweis auf die gerade erstellte Gruppe
+					final User tempUser = user; //Verweis auf User der die Seite aufgerufen hat
 						ev.addUserToGroup(tempUser, tempGroup, new AsyncCallback<Void>() {
 
 							@Override
-							public void onFailure(Throwable arg0) {
+							//Gruppe konnte erstellt werden, aber aktueller User konnte nicht zur Gruppe hinzugefuegt werden
+							public void onFailure(Throwable arg0) { 
 								responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 								//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
 							}
@@ -197,9 +209,22 @@ public class CreateGroup extends VerticalPanel {
 				});
 			}
 		}
-		
+//CLICKHANDLER FOR CREATE GROUP-BUTTON=============================			
 		createGroupButton.addClickHandler(new MyHandler());
+		
+//CLICKHANDLER FOR BACK-BUTTON=============================		
+		backButton.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				//RootPanel.get("content").clear();
+				//RootPanel.get("content").add()  "Homepage" Seite soll aufgerufen werden
+			
+			}
+		});
+		
+		
+		
 	}
+
 
 	public CreateGroup(Group selection) {
 		// TODO Auto-generated constructor stub
