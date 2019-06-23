@@ -25,7 +25,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
- * Die createGroup-Form um neue Gruppen zu erstellen
+ * Die createGroup-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
  * 
  * @author bastiantilk
  *
@@ -35,16 +35,13 @@ public class CreateGroup extends VerticalPanel {
 	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 	
 //DEFAULT CONSTRUCTOR=============================================
-	/** Default Konstruktor der createGroup-Seite
-	 * 
-	 */
 	public CreateGroup() {
 
 	}
 //CONSTRUCTOR=====================================================
 	/** Konstruktor der createGroup-Seite
 	 * 
-	 * @param u (User-Objekt des Users der die createGroup-Seite aufrufen will)
+	 * @param u (User-Objekt der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
 		this.user = u;
@@ -78,12 +75,11 @@ public class CreateGroup extends VerticalPanel {
 	//HorizontalPanel footer = new HorizontalPanel();
 	
 //VARIABLES==========================================================
-	//User user = new User(); //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
-	User user = null;
+	User user = new User(); //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
+
 //METHODS==========================================================
 
 	//public CreateGroup(User user) {   ALT
-	
 /**
  * Methode wird bei dem "Aufrufen" der Klasse gestartet
  */
@@ -96,7 +92,6 @@ public void onLoad() {
 		createGroupButton.addStyleName("button");
 		nameLabel.setStyleName("text");
 		responseLabel.setStyleName("text");
-		groupTextbox.setStyleName("textbox");
 
 //ADDING BUTTONS, LABELS, TEXTBOX TO PANELS========================
 	
@@ -144,8 +139,8 @@ public void onLoad() {
 		 *
 		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
-			/** Wird aufgerufen sobald der User auf den createGroup-Button klickt
-			 * 
+			/*
+			 * Wird aufgerufen sobald der User auf den createGroup-Button klickt
 			 */
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
@@ -156,13 +151,13 @@ public void onLoad() {
 					responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
 				}
 			}
-			/** Wird aufgerufen wenn ENTER gedrueckt wird
-			 * 
+			/*
+			 * Wird aufgerufen wenn ENTER gedrueckt wird
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
 					if(groupTextbox.getText() != "") { 
-						createGroupDB(groupTextbox.getText()); //Aufruf von createGroupDB Methode
+						createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroupDB Methode
 					} else {
 						responseLabel.setVisible(true);
 						responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
@@ -175,77 +170,75 @@ public void onLoad() {
 			 * @param groupName (aus der Textbox)
 			 */
 			private void createGroupDB(String groupName) { //Sorgt fuer die Erstellung derr Gruppe in der DB und der verknuepfung von Group und User
-				try {
-				
-				if(user == null) {
-					throw new NullPointerException();
-				}
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
 				final Group createGroup = new Group(groupName);
 				
+				user.setUsername("Franz");
+				user.setEmail("test@hotmail.de");
+				user.setId(1);
+				
+				try {
+					if(user == null ) {
+						Window.alert("Der User ist null");
+						throw new NullPointerException();
+					}
+				
+				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
-					/** Gruppe konnte nicht in der DB erstellt werden
-					 * 
-					 */
+					//Gruppe konnte nicht in der DB erstellt werden
 					public void onFailure(Throwable caught) {
 						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 						//responseLabel.addStyleName("serverResponseLabel");
 						//responseLabel.setText(SERVER_ERROR);
 					}
+
 					
 					@Override
-					/** Gruppe konnte in der DB erstellt werden
-					 * 
-					 */
 					public void onSuccess(Group arg0) {
 					final Group tempGroup = arg0; //Verweis auf die gerade erstellte Gruppe
 					final User tempUser = user; //Verweis auf User der die Seite aufgerufen hat
 						ev.addUserToGroup(tempUser, tempGroup, new AsyncCallback<Void>() {
 
 							@Override
-							/** Die Gruppe konnte erstellt werden, aber der aktueller User konnte nicht zu der neuen Gruppe hinzugefuegt werden
-							 * 
-							 */
+							//Gruppe konnte erstellt werden, aber aktueller User konnte nicht zur Gruppe hinzugefuegt werden
 							public void onFailure(Throwable arg0) { 
-								responseLabel.setText("Fehler: Gruppe konnte erstellt werden, aber der aktuellen User nicht der neuen Gruppe hinzugefügt werden");
+								responseLabel.setText("Fehler: Die Gruppe konnte erstellt werden, aber der aktuelle User nicht der neuen Gruppe hinzugefügt werden");
 								//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
 							}
 
 							@Override
-							/** Die Gruppe konnte erstelt werden und der aktuelle User wurde dieser neunen Gruppe hinzugefuegt
-							 * 
-							 */
 							public void onSuccess(Void arg0) {
-								//responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
-								Window.alert("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt.");
-								Window.Location.replace("/Scart.html");
+								responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
 							}
+							
 						});
+					
+					
 					}
 				});
-			} catch(NullPointerException e) {
-				Window.alert(e.toString() +"\n"+ "User-Objekt wurde bei Seitenaufruf nicht uebergeben. Es konnte keine Gruppe erstellt werden.");
+			} catch (NullPointerException e) {
+				Window.alert(e.toString()+ "\n"+ "User-Objekt wurde nicht gesetzt");
 			}
-		}
+			}
 		}
 //CLICKHANDLER FOR CREATE GROUP-BUTTON=============================			
 		createGroupButton.addClickHandler(new MyHandler());
 		
-//CLICKHANDLER FOR BACK-BUTTON=============================	
-		
+//CLICKHANDLER FOR BACK-BUTTON=============================		
 		backButton.addClickHandler(new ClickHandler() {
-			/** Wenn der backButton gedrueckt wurde kommt man zur Homepage zurueck
-			 * 
-			 */
 			public void onClick(ClickEvent event) {
+				//RootPanel.get("content").clear();
+				//RootPanel.get("content").add()  "Homepage" Seite soll aufgerufen werden
 				Window.Location.replace("/Scart.html");
 			}
-			
 		});
 		
+		
+		
 	}
+
 
 	public CreateGroup(Group selection) {
 		// TODO Auto-generated constructor stub
@@ -255,4 +248,5 @@ public void onLoad() {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
