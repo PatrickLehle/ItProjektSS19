@@ -7,6 +7,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -47,8 +48,14 @@ public class CreateGroup extends VerticalPanel {
 	 * @param u (User-Objekt des Users der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
+		
+		/* AUSKOMMENTIEREN SOBALD COOKIE-LOGIN FUNKTIONIERT
+		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		u.setEmail(String.valueOf(Cookies.getCookie("email")));
+		*/
 		this.user = u;
-
+		
+		onLoad();
 	}
 //TEXTBOXEN=======================================================
 	TextBox groupTextbox = new TextBox(); 
@@ -149,7 +156,7 @@ public void onLoad() {
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
 				if(groupTextbox.getText() != "" && groupTextbox.getText() != null) { 
-					createGroupDB(groupTextbox.getText()); //Aufruf von ceateGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
+					createGroupDB(groupTextbox.getText()); //Aufruf von createGroup Methode in EditorServiceImpl bzw. entsprechenden Mapper
 				} else {
 					responseLabel.setVisible(true);
 					responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
@@ -181,9 +188,11 @@ public void onLoad() {
 				
 				// HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
 				// WENN COOKIES FUNKTIONIEREN
+				/*
 				user.setUsername("Franz");
 				user.setEmail("test@hotmail.de");
 				user.setId(1);
+				*/
 				
 				try {
 					if(user == null ) {
