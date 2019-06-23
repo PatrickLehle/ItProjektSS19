@@ -280,17 +280,6 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException {
-		try {
-
-			this.guMapper.addUserToGroup(u, g);
-
-		} catch (IllegalArgumentException | DatabaseException e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException(e);
-		}
-	}
-	
 	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException{
 		try {
 			 return guMapper.getAllUsersByGroupId(id);
@@ -505,10 +494,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
-	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws IllegalArgumentException {
+	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {
 		try {
 			// CHANGE
-			return this.rMapper.findAll();
+			return this.rMapper.getAllRetailersByGroupId(groupId);
 			
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -572,7 +561,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
 	// GroceryListArticle===========================================================================
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
 		try {
