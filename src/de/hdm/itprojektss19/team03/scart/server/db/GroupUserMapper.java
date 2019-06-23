@@ -40,7 +40,7 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public void addUserToGroup(User user,Group group) throws DatabaseException {
+	public GroupUser addUserToGroup(User user,Group group) throws DatabaseException {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -57,7 +57,7 @@ public class GroupUserMapper {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-	
+	return null;
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
