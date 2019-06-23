@@ -82,8 +82,6 @@ public class GroceryListForm extends VerticalPanel {
 	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
-	User u = new User();
-	Group g = new Group();
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
@@ -106,7 +104,7 @@ public class GroceryListForm extends VerticalPanel {
 		for(int userNumber = 0; userNumber < userVector.size(); userNumber++) {
 			firstUserListBox.addItem(userVector.get(userNumber).getUsername());
 		}
-		ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
+		ev.getAllRetailersByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
 			public void onFailure(Throwable caught) {
 				throw new IllegalArgumentException("First Retailer konnte nicht geladen werden");
 			}
@@ -245,7 +243,7 @@ public class GroceryListForm extends VerticalPanel {
 	public ListBox getRetailerListBoxDisabled() {
 		final ListBox retailerListBox = new ListBox();
 		try {
-			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
+			ev.getAllRetailersByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
 				}
@@ -269,7 +267,7 @@ public class GroceryListForm extends VerticalPanel {
 	public ListBox getRetailerListBoxEnabled() {
 		final ListBox retailerListBox = new ListBox();
 		try {
-			ev.getAllRetailersByGroupId(u, g, new AsyncCallback<Vector<Retailer>>() {
+			ev.getAllRetailersByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
 				public void onFailure(Throwable caught) {
 					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
 				}
