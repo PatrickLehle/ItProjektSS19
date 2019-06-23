@@ -156,15 +156,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public User getUserByGMail(String email) throws IllegalArgumentException {
 		try {
-			User foundUser = uMapper.findUserByEmail(email);
-			System.out.println(foundUser.getEmail());
-			return foundUser;
+			if (uMapper.findUserByEmail(email) == null) {
+				return null;
 
+			} else {
+				return uMapper.findUserByEmail(email);
+			}
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+	
 	}
+
+		
+	
 
 	@Override
 	public User getOwnProfile(User user) throws IllegalArgumentException {
@@ -236,10 +242,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public void addUserToGroup(User user, Group group) throws IllegalArgumentException {
+	public GroupUser addUserToGroup(User user, Group group) throws IllegalArgumentException {
 		try {
 			
-			this.guMapper.addUserToGroup(user, group);
+			return this.guMapper.addUserToGroup(user, group);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();

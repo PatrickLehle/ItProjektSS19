@@ -11,6 +11,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -143,7 +144,7 @@ public interface EditorService extends RemoteService {
 	 * @param g
 	 * @throws IllegalArgumentException
 	 */
-	public void addUserToGroup(User user, Group group) throws IllegalArgumentException;
+	public GroupUser addUserToGroup(User user, Group group) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
