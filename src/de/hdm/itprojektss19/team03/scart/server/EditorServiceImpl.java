@@ -236,7 +236,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	public void addUserToGroup(User user, Group group) throws IllegalArgumentException {
+		try {
+			
+			this.guMapper.addUserToGroup(user, group);
 
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
 		try {
