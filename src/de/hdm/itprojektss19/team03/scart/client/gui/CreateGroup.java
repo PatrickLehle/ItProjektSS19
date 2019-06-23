@@ -25,27 +25,28 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
- * Die Group-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
+ * Die createGroup-Form wird aufgerufen wenn eine neue Grupper erstellt werden soll
  * 
  * @author bastiantilk
  *
  */
 public class CreateGroup extends VerticalPanel {
-
-//DEFAULT CONSTRUCTOR===============================================================
+//CONNECTION WITH EDITORSERVICE/MAPPER============================
+	private EditorServiceAsync ev = ClientsideSettings.getEditor();
+	
+//DEFAULT CONSTRUCTOR=============================================
 	public CreateGroup() {
 
 	}
-//CONSTRUCTOR===============================================================
+//CONSTRUCTOR=====================================================
+	/** Konstruktor der createGroup-Seite
+	 * 
+	 * @param u (User-Objekt der die createUser-Seite aufrufen will)
+	 */
 	public CreateGroup(User u) {
 		this.user = u;
 
 	}
-	
-	
-	
-	private EditorServiceAsync ev = ClientsideSettings.getEditor();
-	
 //TEXTBOXEN=======================================================
 	TextBox groupTextbox = new TextBox(); 
 	
@@ -74,14 +75,14 @@ public class CreateGroup extends VerticalPanel {
 	//HorizontalPanel footer = new HorizontalPanel();
 	
 //VARIABLES==========================================================
-	User user = new User();
+	User user = new User(); //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
 
 //METHODS==========================================================
-	
-	//Methode wird bei dem "Aufrufen" der Klasse gestartet
-	
+
 	//public CreateGroup(User user) {   ALT
-	
+/**
+ * Methode wird bei dem "Aufrufen" der Klasse gestartet
+ */
 public void onLoad() {
 		super.onLoad();
 		
@@ -127,13 +128,19 @@ public void onLoad() {
 		footer.add(footerReport);
 		*/
 		
+		//Diese Seite wird dem RootPanel in "content" auf der HTML-Seite uebergeben
 		this.add(contentBox);
 		//this.add(footer);
 		
 //CLICKHANDLER TO CREATE A GROUP=============================
+		/** Click/Enter-Handler fuer den createGroup-Button
+		 * 
+		 * @author bastiantilk
+		 *
+		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/*
-			 * Wird aufgerufen sobald der User auf den "Erstellen" Button klickt
+			 * Wird aufgerufen sobald der User auf den createGroup-Button klickt
 			 */
 			public void onClick(ClickEvent event) {
 				 //Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
@@ -169,6 +176,7 @@ public void onLoad() {
 				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
+					//Gruppe konnte nicht in der DB erstellt werden
 					public void onFailure(Throwable caught) {
 						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 						//responseLabel.addStyleName("serverResponseLabel");
@@ -178,12 +186,13 @@ public void onLoad() {
 					
 					@Override
 					public void onSuccess(Group arg0) {
-					final Group tempGroup = arg0;
-					final User tempUser = user;
+					final Group tempGroup = arg0; //Verweis auf die gerade erstellte Gruppe
+					final User tempUser = user; //Verweis auf User der die Seite aufgerufen hat
 						ev.addUserToGroup(tempUser, tempGroup, new AsyncCallback<Void>() {
 
 							@Override
-							public void onFailure(Throwable arg0) {
+							//Gruppe konnte erstellt werden, aber aktueller User konnte nicht zur Gruppe hinzugefuegt werden
+							public void onFailure(Throwable arg0) { 
 								responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
 								//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
 							}
