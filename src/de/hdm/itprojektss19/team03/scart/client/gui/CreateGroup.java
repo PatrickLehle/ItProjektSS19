@@ -179,7 +179,8 @@ public void onLoad() {
 				final Group createGroup = new Group(groupName);
 				
 				
-				//HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
+				// HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
+				// WENN COOKIES FUNKTIONIEREN
 				user.setUsername("Franz");
 				user.setEmail("test@hotmail.de");
 				user.setId(1);

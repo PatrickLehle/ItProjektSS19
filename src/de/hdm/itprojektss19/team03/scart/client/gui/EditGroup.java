@@ -26,8 +26,10 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class EditGroup extends VerticalPanel{
 
-
+//CONNECTION WITH EDITORSERVICE/MAPPER============================
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
+
+	
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 	
 
@@ -152,7 +154,6 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			
 
 		}
 
