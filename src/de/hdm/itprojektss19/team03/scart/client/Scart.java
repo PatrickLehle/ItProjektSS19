@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -64,21 +65,39 @@ public class Scart implements EntryPoint {
 				Window.alert(err.getMessage());
 			}
 
-			public void onSuccess(LoginInfo logInfo) {
+			public void onSuccess(final LoginInfo logInfo) {
 				/**
 				 * Check if the user is logged in
 				 */
 				if (logInfo.isLoggedIn()) {
-					user.setEmail(logInfo.getEmailAddress());
-					signOutLink = logInfo.getLogoutUrl();
-					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
-				} else {
-					login(logInfo.getLoginUrl());
-				}
+					
+				
+					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("no login");
+							
+						}
+
+						@Override
+						public void onSuccess(User result) {
+							user.setEmail(result.getEmail());
+							user.setId(result.getId());
+						
+			
+							signOutLink = logInfo.getLogoutUrl();
+							editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
+						}
+						
+				});
+					
+			} else {
+				login(logInfo.getLoginUrl());
 			}
+	
 
-		});
-
+		}});
 		/**
 		 * Add header and footer to the (root-)Panels they belong to
 		 */
@@ -103,6 +122,8 @@ public class Scart implements EntryPoint {
 	 */
 	private void loadPage() {
 
+		Cookies.setCookie("userId", String.valueOf(user.getId()));
+		Cookies.setCookie("email", String.valueOf(user.getEmail()));
 		contentPanel.add(groupForm);
 		contentPanel.add(button1);
 		contentPanel.add(button2);
@@ -140,6 +161,7 @@ public class Scart implements EntryPoint {
 
 		public void onSuccess(User u) {
 			loadPage();
+			
 		}
 	};
 

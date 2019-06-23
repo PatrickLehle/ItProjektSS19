@@ -67,8 +67,9 @@ public class ScartReport implements EntryPoint {
 				if(loginInfo.isLoggedIn() == true) {
 					//User wird fuer die session erstellt
 					User u = new User();
-//					u.setId(Integer.valueOf(Cookies.getCookie("userId")));
-//					u.setEmail(Cookies.getCookie("userGMail"));
+					u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+					u.setEmail(Cookies.getCookie("email"));
+			
 					
 //					//Report wird geladen
 					loadReport(u);
@@ -97,7 +98,10 @@ public class ScartReport implements EntryPoint {
 			}
 
 			private void loadReport(final User u) {
-				
+				//Hier werden Cookies gesetzt fuer unsere ganze Session um damit global zu agieren
+				u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+				u.setEmail(Cookies.getCookie("email"));
+	
 				RootPanel.get("navigator").add(new ReportFilterForm());
 				HTML welcome = new HTML(
 						"<div align=\"center\"> <h1> <b> &nbsp; &nbsp;Report Generator &nbsp; &nbsp; </b></h1> </div>");
