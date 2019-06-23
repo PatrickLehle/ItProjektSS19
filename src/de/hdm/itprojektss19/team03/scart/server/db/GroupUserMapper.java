@@ -52,7 +52,7 @@ public class GroupUserMapper {
 			stmt.setInt(1, user.getId());
 			stmt.setInt(2, group.getId());
 			stmt.executeUpdate();
-
+			
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
@@ -164,4 +164,41 @@ public class GroupUserMapper {
 		}
 		return result;
 	}
+
+public Vector<User> getAllUsersByGroupId(int id) throws DatabaseException{
+	Connection con = null;
+	PreparedStatement stmt = null;
+
+	// SQL-Anweisung zum auslesen der Tupel aus der DB
+	String selectByKey = "SELECT groupuser.userId, groupuser.groupId, groups.name," 
+	        + " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
+	        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
+
+	Vector<User> result = new Vector<User>();
+
+	try {
+		con = DBConnection.connection();
+		stmt = con.prepareStatement(selectByKey);
+
+		ResultSet rs = stmt.executeQuery();
+		User user = new User();
+		user.setId(rs.getInt("id"));
+		user.setUsername(rs.getString("name"));
+		user.setEmail(rs.getString("email"));
+
+		while (rs.next()) {
+			User u = new User();
+			u.setId(rs.getInt("id"));
+			u.setUsername(rs.getString("name"));
+			u.setEmail(rs.getString("email"));
+
+			result.addElement(u);
+		}
+	} catch (SQLException e2) {
+		ServersideSettings.getLogger().severe(e2.getMessage());
+		throw new DatabaseException(e2);
+	}
+	return result;
+}
+
 }

@@ -20,6 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -278,7 +279,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
+	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException{
+		try {
+			 return guMapper.getAllUsersByGroupId(id);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 	// GROCERYLIST===========================================================================
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
@@ -422,7 +431,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
 		try {
 
-			return this.aMapper.findByKey(articleId); // Ausgabe fuer diese Article-Objekt muss noch hinzugefuegt werden
+			return this.aMapper.findByKey(articleId); 
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -479,6 +488,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 			this.rMapper.delete(r); // Löscht Retailer
 
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {
+		try {
+			// CHANGE
+			return this.rMapper.getAllRetailersByGroupId(groupId);
+			
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -541,7 +561,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
 	// GroceryListArticle===========================================================================
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
 		try {

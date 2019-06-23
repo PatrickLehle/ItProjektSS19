@@ -11,6 +11,7 @@ import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupUserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -23,7 +24,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class Test {
 	
-	public static void main (String[]args) {
+	public static void main (String[]args) throws DatabaseException {
 //	
 //	User u = new User();
 		
@@ -182,6 +183,11 @@ public class Test {
 	//GroupUserMapper.groupUserMapper().deleteUserFromAllGroups(u);
 	//System.out.println(	GroupUserMapper.groupUserMapper().findAllUserByGroup(3));
 //System.out.println(GroupMapper.groupMapper().findByGroupId(1));
+		
+		//Retailer r = new Retailer();
+		//r.setId(2);
+		//r.setRetailerName("Aldi");
+		//RetailerMapper.retailerMapper().insert(r);
 	}
 	
 	

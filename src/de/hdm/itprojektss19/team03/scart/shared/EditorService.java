@@ -180,6 +180,15 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#getAllUsersByGroupId(int id);
+	 * @param id
+	 * @return gibt alle User einer Group zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 
