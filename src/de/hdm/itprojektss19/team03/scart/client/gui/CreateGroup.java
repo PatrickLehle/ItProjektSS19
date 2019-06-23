@@ -218,13 +218,15 @@ public void onLoad() {
 							 * 
 							 */
 							public void onSuccess(Void arg0) {
-								responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
+								//responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
+								Window.alert("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt.");
+								Window.Location.replace("/Scart.html");
 							}
 						});
 					}
 				});
 			} catch(NullPointerException e) {
-				Window.alert(e.toString() + "User-Objekt wurde bei Seitenaufruf nicht uebergeben. Es konnte keine Gruppe erstellt werden.");
+				Window.alert(e.toString() +"\n"+ "User-Objekt wurde bei Seitenaufruf nicht uebergeben. Es konnte keine Gruppe erstellt werden.");
 			}
 		}
 		}
@@ -238,9 +240,7 @@ public void onLoad() {
 			 * 
 			 */
 			public void onClick(ClickEvent event) {
-				//RootPanel.get("content").clear();
-				//RootPanel.get("content").add()  "Homepage" Seite soll aufgerufen werden
-			
+				Window.Location.replace("/Scart.html");
 			}
 			
 		});
