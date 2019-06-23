@@ -386,7 +386,7 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
 	
-	public Vector<Retailer> getAllRetailersByGroupId(User u, Group g) throws IllegalArgumentException;
+	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws IllegalArgumentException;
 
 	// UNIT===========================================================================
 

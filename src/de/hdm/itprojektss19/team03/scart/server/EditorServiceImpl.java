@@ -496,7 +496,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
-	public Vector<Retailer> getAllRetailersByGroupId(User u, Group g) throws IllegalArgumentException {
+	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws IllegalArgumentException {
 		try {
 			// CHANGE
 			return this.rMapper.findAll();
