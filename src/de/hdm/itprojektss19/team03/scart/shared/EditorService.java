@@ -3,6 +3,7 @@ package de.hdm.itprojektss19.team03.scart.shared;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -189,6 +190,8 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException;
+	
+	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 

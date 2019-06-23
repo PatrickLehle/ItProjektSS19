@@ -288,6 +288,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException{
+		try {
+			
+			 guMapper.removeUserFromGroup(u, g);
+			 
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 	// GROCERYLIST===========================================================================
 
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {

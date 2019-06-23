@@ -381,7 +381,7 @@ public class ArticleMapper {
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
 	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end)
+	public Vector<Article> findAllArticleByDateRetailer(int retailerId, Timestamp start, Timestamp end)
 			throws DatabaseException {
 		// DB Connection aufbauen
 		Connection con = DBConnection.connection();
@@ -390,7 +390,7 @@ public class ArticleMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
-			stmt.setInt(1, id);
+			stmt.setInt(1, retailerId);
 			// Statement stmt = con.createStatement();
 
 			ResultSet rs = stmt.executeQuery();
