@@ -132,7 +132,7 @@ public class RegistryForm extends VerticalPanel {
 	ClickHandler loginClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent e) {
-			Cookies.removeCookie("dev_appserver_login");
+//			Cookies.removeCookie("dev_appserver_login");
 		}
 	};
 }

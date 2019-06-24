@@ -153,7 +153,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 					receiver.add(a);
 				}
 			}
-		
+		//work in progress: couldnt find a way to display filtered articles
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
 //					row.addColumn(new Column(allRetailers.elementAt(i).getRetailerName()));

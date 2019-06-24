@@ -97,6 +97,9 @@ public class ReportFilterForm extends VerticalPanel {
 		//Holen der Cookies aus der Session
 		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
 		user.setEmail(Cookies.getCookie("email"));	
+		
+		//Trying to find a way to save cookies for a group...
+		Cookies.setCookie("groupId", String.valueOf(group.getId()));
 		Window.alert(user.getEmail()+user.getId());
 	}
 
@@ -104,7 +107,6 @@ public class ReportFilterForm extends VerticalPanel {
 		this.user = cUser;
 
 		Window.alert(cUser.getEmail()+cUser.getId());
-//		this.rForm = cReport;
 	}
 
 //PANELS-LABELS-BUTTONS=============================================================	
@@ -448,7 +450,7 @@ public class ReportFilterForm extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 			if (choosenGroupsS.contains(checkBox.getText())) {
-
+				
 				for (int i = 0; i < choosenGroupsS.size(); i++) {
 					if (choosenGroupsS.elementAt(i) == checkBox.getText()) {
 						choosenGroupsS.removeElementAt(i);
@@ -479,8 +481,8 @@ public class ReportFilterForm extends VerticalPanel {
 				choosenRetailerS.add(checkBox.getText());
 			}
 		}
+		
 	}
-
 	class StartDateChangeHandler implements ValueChangeHandler<Date> {
 		public StartDateChangeHandler() {
 
