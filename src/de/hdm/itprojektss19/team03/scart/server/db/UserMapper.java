@@ -115,7 +115,7 @@ public class UserMapper {
 	 * @return User mit der entsprechenden ID
 	 * @throws DatabaseException
 	 */
-	public User findbyUserId(int userId) throws DatabaseException {
+	public User getUserById(int userId) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 

@@ -32,6 +32,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -75,6 +76,7 @@ public class GroceryListForm extends VerticalPanel {
 	Retailer retailer = new Retailer();
 	Vector<Article> articleVector = new Vector<Article>();
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
+	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
 	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
@@ -90,6 +92,7 @@ public class GroceryListForm extends VerticalPanel {
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
+		groceryList.setGroupId(1);
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
@@ -100,21 +103,9 @@ public class GroceryListForm extends VerticalPanel {
 		// sc.add(aTable);
 
 		this.add(hpTitle);
-		//ev.getAllUsersByGroupId(id, asyncCallback);
-		for(int userNumber = 0; userNumber < userVector.size(); userNumber++) {
-			firstUserListBox.addItem(userVector.get(userNumber).getUsername());
-		}
-		ev.getAllRetailerByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
-			public void onFailure(Throwable caught) {
-				throw new IllegalArgumentException("First Retailer konnte nicht geladen werden");
-			}
-			public void onSuccess(Vector<Retailer> result) {
-				for(int retailerNumber = 0; retailerNumber < retailerVector.size(); retailerNumber++) {
-					firstRetailerListBox.addItem(retailerVector.get(retailerNumber).getRetailerName());
-				}
-				firstRetailerListBox.setVisibleItemCount(1);
-			}
-		});
+		//CALLBACKS=============================================
+		ev.getAllUserByGroupId(1,new  AllUserCallback());
+		ev.findAllRetailer(new AllRetailersCallback());
 		hpUserRetailer.add(firstUserListBox);
 		hpUserRetailer.add(userRetailerLabel);
 		hpUserRetailer.add(firstRetailerListBox);
@@ -814,6 +805,34 @@ public class GroceryListForm extends VerticalPanel {
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
+		}
+	}
+	//CALLBACKS===============================================================================================
+	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Vector<Retailer> result) {
+			retailerVector = result;
+				for(int retailerNumber = 0; retailerNumber < retailerVector.size(); retailerNumber++) {
+					firstRetailerListBox.addItem(retailerVector.get(retailerNumber).getRetailerName());
+				}
+				firstRetailerListBox.setVisibleItemCount(1);
+		}
+	}
+	
+	class AllUserCallback implements AsyncCallback<Vector<User>> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Vector<User> result) {
+			userVector = result;
+				for(int userNumber = 0; userNumber < userVector.size(); userNumber++) {
+					firstUserListBox.addItem(userVector.get(userNumber).getUsername());
+				}
+				firstUserListBox.setVisibleItemCount(1);
 		}
 	}
 }

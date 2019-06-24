@@ -165,7 +165,7 @@ public class GroupUserMapper {
 		return result;
 	}
 
-public Vector<User> getAllUsersByGroupId(int id) throws DatabaseException{
+public Vector<User> getAllUserByGroupId(int id) throws DatabaseException{
 	Connection con = null;
 	PreparedStatement stmt = null;
 

@@ -127,7 +127,7 @@ public class GroceryListMapper {
 
 		String maxId = "SELECT MAX(id) AS maxid FROM grocerylist";
 
-		String insert = "INSERT INTO grocerylist (id, name, creationDat, modDat, groupId) VALUES (?,?,?,?,?)";
+		String insert = "INSERT INTO grocerylist (id, name, creationDat, modDat,ownerId, groupId) VALUES (?,?,?,?,?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -144,7 +144,8 @@ public class GroceryListMapper {
 			stmt.setString(2, gl.getGroceryListName());
 			stmt.setTimestamp(3, gl.getCreationDat());
 			stmt.setTimestamp(4, gl.getModDat());
-			stmt.setInt(5, gl.getGroupId());
+			stmt.setInt(5, gl.getOwnerId());
+			stmt.setInt(6, gl.getGroupId());
 
 			stmt.executeUpdate();
 

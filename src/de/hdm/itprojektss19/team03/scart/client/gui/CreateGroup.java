@@ -76,6 +76,8 @@ public class CreateGroup extends VerticalPanel {
 	
 //VARIABLES==========================================================
 	User user = new User(); //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
+	Group createGroup = new Group();
+	Group tempGroup = new Group();
 
 //METHODS==========================================================
 
@@ -172,13 +174,13 @@ public void onLoad() {
 			private void createGroupDB(String groupName) { //Sorgt fuer die Erstellung derr Gruppe in der DB und der verknuepfung von Group und User
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
-				final Group createGroup = new Group(groupName);
+				createGroup.setGroupName(groupName);
 				
 				ev.createGroup(createGroup, new AsyncCallback<Group>() {
 					
 					//Gruppe konnte nicht in der DB erstellt werden
 					public void onFailure(Throwable caught) {
-						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
+						responseLabel.setText("Fehler: User and Group not compatible.");
 						//responseLabel.addStyleName("serverResponseLabel");
 						//responseLabel.setText(SERVER_ERROR);
 					}
@@ -186,23 +188,8 @@ public void onLoad() {
 					
 					@Override
 					public void onSuccess(Group arg0) {
-					final Group tempGroup = arg0; //Verweis auf die gerade erstellte Gruppe
-					final User tempUser = user; //Verweis auf User der die Seite aufgerufen hat
-						ev.addUserToGroup(tempUser, tempGroup, new AsyncCallback<Void>() {
-
-							@Override
-							//Gruppe konnte erstellt werden, aber aktueller User konnte nicht zur Gruppe hinzugefuegt werden
-							public void onFailure(Throwable arg0) { 
-								responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
-								//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
-							}
-
-							@Override
-							public void onSuccess(Void arg0) {
-								responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
-							}
-							
-						});
+					arg0 = createGroup; //Verweis auf die gerade erstellte Gruppe
+					tempGroup = arg0;
 					
 					
 					}
@@ -217,6 +204,22 @@ public void onLoad() {
 			public void onClick(ClickEvent event) {
 				//RootPanel.get("content").clear();
 				//RootPanel.get("content").add()  "Homepage" Seite soll aufgerufen werden
+				ev.addUserToGroup(user, tempGroup, new AsyncCallback<Void>() {
+
+					@Override
+					//Gruppe konnte erstellt werden, aber aktueller User konnte nicht zur Gruppe hinzugefuegt werden
+					public void onFailure(Throwable arg0) { 
+						responseLabel.setText("Fehler: Gruppe konnte nicht erstellt werden");
+						//FEHLT NOCH: Gruppe aus Datenbank loeschen (ggf. dieselbe Methode wie in DeleteGroup)
+					}
+
+					@Override
+					public void onSuccess(Void arg0) {
+						responseLabel.setText("Die Gruppe wurde erstellt und Sie wurden automatisch hinzugefügt");
+						
+					}
+					
+				});
 			
 			}
 		});

@@ -280,9 +280,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	
-	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException{
+	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException{
 		try {
-			 return guMapper.getAllUsersByGroupId(id);
+			 return guMapper.getAllUserByGroupId(id);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);

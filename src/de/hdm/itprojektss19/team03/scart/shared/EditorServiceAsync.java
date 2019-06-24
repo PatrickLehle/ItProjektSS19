@@ -26,7 +26,7 @@ public interface EditorServiceAsync {
 
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
 
-	void getUserById(int userId, AsyncCallback<User> callback);
+	void getUserById(int userId, AsyncCallback<User> asyncCallback);
 
 	void getUserByGMail(String email, AsyncCallback<User> callback);
 
@@ -56,7 +56,7 @@ public interface EditorServiceAsync {
 
 	void findAllGroupsByUserId(int id, AsyncCallback<Vector<Group>> asyncCallback);
 	
-	void getAllUsersByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
+	void getAllUserByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
 
 	// GROCERYLIST===========================================================================
 

@@ -22,6 +22,7 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private String name = "";
 	private Timestamp creationDat;
 	private Timestamp modDat;
+	private int ownerId;
 	private int groupId;
 	private Vector<Article> articles = new Vector<Article>();
 
@@ -47,6 +48,14 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	
 	public Timestamp getModDat() {
 		return this.modDat;
+	}
+	
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
+	
+	public int getOwnerId() {
+		return this.ownerId;
 	}
 	
 	public void setGroupId(int groupId) {

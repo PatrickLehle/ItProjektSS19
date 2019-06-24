@@ -77,7 +77,7 @@ public class ProfilForm extends VerticalPanel {
 		this.user = u;
 		this.parentForm = parent;
 
-		// finduserCallback = new FindUserCallBack();
+		//finduserCallback = new FindUserCallBack();
 
 	}
 
@@ -95,7 +95,7 @@ public class ProfilForm extends VerticalPanel {
 
 		info.addStyleName("infoProfilLabel");
 
-		editorServiceA.getUserById(user.getId(), finduserCallback);
+		//editorServiceA.getUserById(user.getId(), finduserCallback);
 		/*
 		 * Timer refreshProfil = new Timer() {
 		 * 

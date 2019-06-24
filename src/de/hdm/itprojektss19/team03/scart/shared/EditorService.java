@@ -188,7 +188,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt alle User einer Group zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException;
+	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 
