@@ -4,11 +4,14 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
+import de.hdm.itprojektss19.team03.scart.server.db.GroceryListArticleMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
+import de.hdm.itprojektss19.team03.scart.server.db.GroupUserMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
@@ -17,6 +20,7 @@ import de.hdm.itprojektss19.team03.scart.shared.ReportGenerator;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;
@@ -66,6 +70,18 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	 * Datenbank vergleicht.
 	 */
 	private GroceryListMapper glMapper = null;
+	
+	/**
+	 * Die Mapperklasse wird referenziert, die die <code>GroceryList</code> und <code>Article</code>mit der
+	 * Datenbank vergleicht.
+	 */
+	private GroceryListArticleMapper gaMapper = null;
+	
+	/**
+	 * Die Mapperklasse wird referenziert, die die <code>group</code> und <code>User</code>mit der
+	 * Datenbank vergleicht.
+	 */
+	private GroupUserMapper guMapper = null;
 
 	// CONSTRUCTORS==========================================================
 
@@ -81,6 +97,9 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		this.glMapper = GroceryListMapper.groceryListMapper();
 		this.rMapper = RetailerMapper.retailerMapper();
 		this.gMapper = GroupMapper.groupMapper();
+		this.gaMapper = GroceryListArticleMapper.groceryListArticleMapper();
+		this.guMapper = GroupUserMapper.groupUserMapper();
+		
 
 		EditorServiceImpl impl = new EditorServiceImpl();
 		impl.init();
@@ -101,7 +120,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		ArticleReport report = new ArticleReport();
 
 		// Nun legen wir den Titel und unser Erstellungsdatum des Reports
-		report.setTitle("Alle Artikel von einer Gruppe ");
+		report.setTitle("Alle Artikel von " + u.getId() );
 		report.setCreated(new Date());
 
 		// Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
@@ -110,37 +129,46 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		head.addColumn(new Column("Einzelhändler"));
 		head.addColumn(new Column("Erstellungsdatum"));
 		head.addColumn(new Column("Modifikationsdatum"));
+		head.addColumn(new Column("Archivierungsdatum"));
 
 		report.addRow(head);
 
-		// Hier werden die Gruppen eines Users via des zusammengesetzten Schluessels
-		// identifiziert
-		Vector<Group> groupsByUser = this.editorService.findAllGroupsByUserId(u.getId());
-		Vector<GroceryList> allGroceryLists = this.editorService.findAllGroceryLists();
-		Vector<Article> allArticles = this.editorService.findAllArticle();
-
+		//Hier werden unsere Angeforderten Daten in einen Vector hinterlegt
+		Vector<Group> allGroupsByUser = new Vector<Group>();
+		Vector<GroceryList> allGroceryLists = new Vector<GroceryList>();
+		Vector<Article> allArticles = new Vector<Article>();
+		
+		//Hier werden die Gruppen, GroceryLists und deren Article aufgerufen
+		allGroupsByUser.addAll(this.getEditorService().findAllGroupsByUserId(u.getId()));
+		allArticles.addAll(this.editorService.findAllArticleByOwnerId(u.getId()));
+		
 		Vector<Article> receiver = new Vector<Article>();
-
-		for (int i = 0; i < groupsByUser.size(); i++) {
-			for (int j = 0; j < allGroceryLists.size(); j++) {
-				for (int k = 0; k < allArticles.size(); k++) {
-					if (groupsByUser.elementAt(i).getId() == allGroceryLists.elementAt(j).getGroupId()) {
-						receiver.addAll(
-								getEditorService().findAllArticleByGroceryList(allGroceryLists.elementAt(k).getId()));
-					}
-					Row row = new Row();
-					row.addColumn(new Column(receiver.elementAt(k).getName()));
-					row.addColumn(new Column(receiver.elementAt(k).getRetailer()));
-					row.addColumn(new Column(receiver.elementAt(k).getCreationDat().toString()));
-					row.addColumn(new Column(receiver.elementAt(k).getModDat().toString()));
-					row.addColumn(new Column(""));
-
-					report.addRow(row);
+		for (int i = 0; i < allArticles.size(); i++) {
+			
+			for (int j = 0; j < allGroupsByUser.size(); i++) {
+				
+				if(allArticles.elementAt(i).getOwnerId() == allGroupsByUser.elementAt(j).getId()) {
+					Article a = new Article();
+					a = this.editorService.getArticleById(allArticles.elementAt(j).getOwnerId());
+					receiver.add(a);
 				}
 			}
-		}
+		
+					Row row = new Row();
+					row.addColumn(new Column(allArticles.elementAt(i).getName()));
+//					row.addColumn(new Column(allRetailers.elementAt(i).getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
+					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
+					if(allArticles.elementAt(i).getDelDat() != null) {
+						row.addColumn(new Column(allArticles.elementAt(i).getDelDat().toString()));
+					}
+					report.addRow(row);	
+				}
+
 		return report;
+		
 	}
+
 
 	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
