@@ -22,6 +22,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -39,6 +40,7 @@ public class Scart implements EntryPoint {
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
 	private User user = new User();
+	private Group group = new Group();
 	private String signOutLink;
 
 	private ToolbarForm toolbar = new ToolbarForm();
@@ -84,6 +86,7 @@ public class Scart implements EntryPoint {
 						public void onSuccess(User result) {
 							user.setEmail(result.getEmail());
 							user.setId(result.getId());
+					
 						
 			
 							signOutLink = logInfo.getLogoutUrl();
@@ -124,6 +127,7 @@ public class Scart implements EntryPoint {
 
 		Cookies.setCookie("userId", String.valueOf(user.getId()));
 		Cookies.setCookie("email", String.valueOf(user.getEmail()));
+		Cookies.setCookie("groupId", String.valueOf(group.getId()));
 		contentPanel.add(groupForm);
 		contentPanel.add(button1);
 		contentPanel.add(button2);

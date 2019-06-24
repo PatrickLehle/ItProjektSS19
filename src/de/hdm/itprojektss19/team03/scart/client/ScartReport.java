@@ -17,6 +17,7 @@ import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
