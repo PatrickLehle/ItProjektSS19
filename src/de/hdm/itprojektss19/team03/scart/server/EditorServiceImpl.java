@@ -145,7 +145,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public User getUserById(int userId) throws IllegalArgumentException {
 		try {
-			User foundUser = uMapper.findbyUserId(userId);
+			User foundUser = uMapper.getUserById(userId);
 			return foundUser;
 
 		} catch (IllegalArgumentException | DatabaseException e) {
@@ -170,7 +170,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public User getOwnProfile(User user) throws IllegalArgumentException {
 		try {
 
-			return this.uMapper.findbyUserId(user.getId());
+			return this.uMapper.getUserById(user.getId());
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();

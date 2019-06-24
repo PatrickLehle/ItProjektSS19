@@ -79,6 +79,7 @@ public class CreateGroup extends VerticalPanel {
 	
 //VARIABLES==========================================================
 	User user = null; //User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden soll
+	Group createGroup = null;
 
 //METHODS==========================================================
 
