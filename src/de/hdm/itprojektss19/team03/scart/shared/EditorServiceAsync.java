@@ -94,6 +94,10 @@ public interface EditorServiceAsync {
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
 
 	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
 

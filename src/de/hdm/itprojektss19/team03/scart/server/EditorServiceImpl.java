@@ -464,6 +464,24 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
+	//
+	public Vector<Article> findAllArticleByGroupIdReport(int groupId) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByGroupId(groupId);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByOwnerId(ownerId);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 
 	// RETAILER===========================================================================
 
@@ -678,6 +696,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(ex);
 		}
 	}
+
+
 
 	/**
 	 * @Override public Vector<Article> getArticleByRetailer(Retailer r) throws
