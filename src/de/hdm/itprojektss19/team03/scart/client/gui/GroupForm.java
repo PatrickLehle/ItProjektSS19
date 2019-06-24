@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -55,6 +56,8 @@ public class GroupForm extends VerticalPanel {
 
 	public GroupForm(User u) {
 		this.user = u;
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+	    user.setEmail(Cookies.getCookie("email"));
 
 	}
 
@@ -78,8 +81,8 @@ public class GroupForm extends VerticalPanel {
 
 		this.add(groupFormPanel);
 
-		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
