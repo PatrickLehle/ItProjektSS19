@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -20,15 +21,18 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
- * @author Julian Hofer
+ * @author Julian Hofer, bastiantilk
  *
  */
 
 public class EditGroup extends VerticalPanel{
 
-
+//CONNECTION WITH EDITORSERVICE/MAPPER============================
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
+
+	
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
+	
 
 	Group group = new Group();
 	User user = new User();
@@ -56,6 +60,8 @@ public class EditGroup extends VerticalPanel{
 
 	public EditGroup(User u) {
 		this.user = u;
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+	    user.setEmail(Cookies.getCookie("email"));
 
 	}
 
@@ -82,8 +88,8 @@ public class EditGroup extends VerticalPanel{
 
 		this.add(groupFormPanel);
 
-		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -151,9 +157,38 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			
 
 		}
 
+	}
+	
+	/** Methode um einen User u aus einer Gruppe g zu entfernen.
+	 * 	Gruppe und User bestehen auch nach dem Loeschen in der DB, nur die
+	 * 	Verknuepfung in der GroupUser-Tabelle wurde aufgeloest
+	 * 
+	 * @param user (User der aus Gruppe geloescht werden soll)
+	 * @param group (Gruppe aus der der User geloescht werden soll)
+	 */
+	public void removeUserFromGroup(User user, Group group) {
+		
+		try {
+			if(user == null || group == null) {
+				throw new NullPointerException();
+			}
+		
+		editorVerwaltung.removeUserFromGroup(user, group,  new AsyncCallback<Void>() {
+			
+			public void onFailure(Throwable arg0) { 
+				Window.alert("User konnte nicht aus der Gruppe gelöscht werden");
+			}
+
+			@Override
+			public void onSuccess(Void arg0) {
+				Window.alert("User wurde aus der Gruppe gelöscht.");
+			}
+		});
+		} catch(NullPointerException e) {
+			Window.alert(e.toString()+"\n"+"User/Group ist null");
+		}
 	}
 }

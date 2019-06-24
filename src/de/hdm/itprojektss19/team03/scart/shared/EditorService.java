@@ -3,6 +3,7 @@ package de.hdm.itprojektss19.team03.scart.shared;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -143,7 +144,7 @@ public interface EditorService extends RemoteService {
 	 * @param g
 	 * @throws IllegalArgumentException
 	 */
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
+	public void addUserToGroup(User user, Group group) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -180,6 +181,17 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#getAllUsersByGroupId(int id);
+	 * @param id
+	 * @return gibt alle User einer Group zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException;
+	
+	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
 
@@ -244,8 +256,21 @@ public interface EditorService extends RemoteService {
 	 */
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroceryListByGroupId(int id);
+	 *      @return gibt alle GL's einer Grouppe via id zurueck
+	 * @param id
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroceryLists();
+	 *
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException;
 
 	// GROCERYLIST-ARTICLE===============================================================
@@ -372,10 +397,19 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllRetailer();
-	 * @return
+	 * @return gibt alle Retailer zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#getAllRetailerByGroupId(int groupId);
+	 * @param groupId
+	 * @return gibt alle Retailer einer Gruppe via groupId zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException;
 
 	// UNIT===========================================================================
 
@@ -450,12 +484,38 @@ public interface EditorService extends RemoteService {
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
 
 	// GroceryListArticle===========================================================================
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #deleteEntry(Entry e);
+	 * @param e
+	 * @throws IllegalArgumentException
+	 */
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #removeArticleFromGroceryList(GroceryList gl, Article a);
+	 * @param gl, a
+	 * @throws IllegalArgumentException
+	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByGroceryList(int groceryListId);
+	 * @param gl, a
+	 * @return gibt alle Article einer GL zurueck
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #deleteArticleFromAllLists(Article a);
+	 * @param a
+	 * @throws IllegalArgumentException
+	 */
 	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
 
 }

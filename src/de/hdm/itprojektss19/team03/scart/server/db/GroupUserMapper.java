@@ -40,24 +40,24 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public GroupUser addUserToGroup(User u, Group g) throws DatabaseException {
-
+	public void addUserToGroup(User user,Group group) throws DatabaseException {
+		
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String addString = "INSERT INTO `groupuser` (`groupId`, `userId`) VALUES (?,?)";
+		String guser = "INSERT INTO groupuser (groupId, userId) VALUES (?,?)";
 
 		try {
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(addString);
-			stmt.setInt(1, u.getId());
-			stmt.setInt(2, g.getId());
+			stmt = con.prepareStatement(guser);
+			stmt.setInt(1, group.getId());
+			stmt.setInt(2, user.getId());
 			stmt.executeUpdate();
-
+			
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
+	
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
@@ -65,13 +65,13 @@ public class GroupUserMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String delete = "DELETE FROM groupuser WHERE userId=? AND groupId=?";
+		String delete = "DELETE FROM groupuser WHERE groupId=? AND userId=?";
 
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(delete);
-			stmt.setInt(1, u.getId());
 			stmt.setInt(2, g.getId());
+			stmt.setInt(1, u.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -164,4 +164,41 @@ public class GroupUserMapper {
 		}
 		return result;
 	}
+
+public Vector<User> getAllUserByGroupId(int id) throws DatabaseException{
+	Connection con = null;
+	PreparedStatement stmt = null;
+
+	// SQL-Anweisung zum auslesen der Tupel aus der DB
+	String selectByKey = "SELECT groupuser.userId, groupuser.groupId, groups.name," 
+	        + " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
+	        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
+
+	Vector<User> result = new Vector<User>();
+
+	try {
+		con = DBConnection.connection();
+		stmt = con.prepareStatement(selectByKey);
+
+		ResultSet rs = stmt.executeQuery();
+		User user = new User();
+		user.setId(rs.getInt("id"));
+		user.setUsername(rs.getString("name"));
+		user.setEmail(rs.getString("email"));
+
+		while (rs.next()) {
+			User u = new User();
+			u.setId(rs.getInt("id"));
+			u.setUsername(rs.getString("name"));
+			u.setEmail(rs.getString("email"));
+
+			result.addElement(u);
+		}
+	} catch (SQLException e2) {
+		ServersideSettings.getLogger().severe(e2.getMessage());
+		throw new DatabaseException(e2);
+	}
+	return result;
+}
+
 }
