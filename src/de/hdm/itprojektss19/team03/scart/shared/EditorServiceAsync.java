@@ -56,7 +56,9 @@ public interface EditorServiceAsync {
 
 	void findAllGroupsByUserId(int id, AsyncCallback<Vector<Group>> asyncCallback);
 	
-	void getAllUserByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
+	void getAllUsersByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
+	
+	void removeUserFromGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
 	// GROCERYLIST===========================================================================
 

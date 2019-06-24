@@ -80,7 +80,7 @@ public class GroceryListForm extends VerticalPanel {
 	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
-	Label userRetailerLabel = new Label("zuteilen für");
+	Label userRetailerLabel = new Label("zuteilen fï¿½r");
 	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
@@ -167,7 +167,7 @@ public class GroceryListForm extends VerticalPanel {
 	 * 
 	 *         Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden
 	 *         bei einer Aktualisierung der Daten. Es werden alle Artikel der
-	 *         aktuellen GroceryList aus der DB abgefregt. Dann wird die Tabele
+	 *         aktuellen GroceryList aus der DB abgefragt. Dann wird die Tabelle
 	 *         geleert und mit dem Vektor der Artikel-Objekte gefuellt.
 	 */
 	public void loadTable() {

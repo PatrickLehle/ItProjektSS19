@@ -49,8 +49,8 @@ public class GroupUserMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(guser);
-			stmt.setInt(1, user.getId());
-			stmt.setInt(2, group.getId());
+			stmt.setInt(1, group.getId());
+			stmt.setInt(2, user.getId());
 			stmt.executeUpdate();
 			
 		} catch (SQLException e2) {
