@@ -8,6 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
