@@ -4,7 +4,6 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -17,7 +16,6 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
-
 
 /**
  * 
@@ -48,17 +46,9 @@ public class GroupForm extends VerticalPanel {
 	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
 
-
-
-	public GroupForm() {
-
-	}
-
 	public GroupForm(User u) {
 		this.user = u;
-		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
-	    user.setEmail(Cookies.getCookie("email"));
-
+		Window.alert(this.user.getEmail() + "  " + this.user.getId());
 	}
 
 	public void onLoad() {
@@ -82,7 +72,7 @@ public class GroupForm extends VerticalPanel {
 		this.add(groupFormPanel);
 
 		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
+		// editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -107,8 +97,6 @@ public class GroupForm extends VerticalPanel {
 
 		}
 	}
-	
-	
 
 	class InfoClickHandler implements ClickHandler {
 
