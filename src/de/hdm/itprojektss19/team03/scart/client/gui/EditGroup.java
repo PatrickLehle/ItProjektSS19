@@ -9,7 +9,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -38,14 +40,18 @@ public class EditGroup extends VerticalPanel{
 	User user = new User();
 	Vector<Group> allGroups = new Vector<Group>();
 	Vector<String> allGroupsS = new Vector<String>();
+	Vector<String> allUsers = new Vector<String>();
 
 	// PANELS
+	HorizontalPanel groupUserPanel = new HorizontalPanel();
 	VerticalPanel groupFormPanel = new VerticalPanel();
 	VerticalPanel checkBoxesGroup = new VerticalPanel();
+	VerticalPanel userPanel = new VerticalPanel();
 	VerticalPanel groupBtnPanel = new VerticalPanel();
+	
 
 	// Labels
-	Label groupLabel = new Label("zu verwaltende Gruppen");
+	Label groupLabel = new Label("Gruppenverwaltung");
 
 	// Buttons
 	Button deleteGroupButton = new Button("Löschen");
@@ -78,18 +84,21 @@ public class EditGroup extends VerticalPanel{
 		manageGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
-
+		
+		groupUserPanel.add(groupFormPanel);
+		groupUserPanel.add(userPanel);
 		groupFormPanel.add(groupLabel);
 		groupFormPanel.add(checkBoxesGroup);
 		groupFormPanel.add(groupBtnPanel);
+		
 		groupBtnPanel.add(deleteGroupButton);
 		groupBtnPanel.add(manageGroupButton);
 		groupBtnPanel.add(backToGroupButton);
 
 		this.add(groupFormPanel);
 
-		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -105,11 +114,11 @@ public class EditGroup extends VerticalPanel{
 
 				allGroupsS.add(result.elementAt(g).getGroupName());
 				
-				
-				CheckBox groupNames = new CheckBox(allGroupsS.elementAt(g));
-				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+				RadioButton groupNames = new RadioButton("groupNames", allGroupsS.elementAt(g));
+				//groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
 				groupNames.setStyleName("textbox");
 				checkBoxesGroup.add(groupNames);
+				
 
 			}
 
@@ -130,7 +139,7 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			
+			seeUsersfromGroup(user, group);
 
 		}
 
@@ -156,7 +165,8 @@ public class EditGroup extends VerticalPanel{
 		}
 
 		@Override
-		public void onClick(ClickEvent arg0) {
+		public void onClick(ClickEvent event) {
+			
 
 		}
 
@@ -191,4 +201,40 @@ public class EditGroup extends VerticalPanel{
 			Window.alert(e.toString()+"\n"+"User/Group ist null");
 		}
 	}
+	
+	
+	
+	public void seeUsersfromGroup(User user, Group group) {
+		try {
+			if(user == null || group == null) {
+				throw new NullPointerException();
+			}
+		
+		editorVerwaltung.getAllUserByGroupId(1,  new AsyncCallback<Vector<User>>() {
+			
+			public void onFailure(Throwable a) { 
+				Window.alert("Die User dieser Gruppe konnten nicht angezeigt werden." + a);
+			}
+
+			@Override
+			public void onSuccess(Vector <User> result) {
+				Window.alert("Das sind die User der ausgewählten Gruppe.");
+				for (int g = 0; g < result.size(); g++) {
+
+					allUsers.add(result.elementAt(g).getUsername());
+					
+					RadioButton userNames = new RadioButton("userNames", allUsers.elementAt(g));
+					//groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+					userNames.setStyleName("textbox");
+					userPanel.add(userNames);
+					
+
+				}
+			}
+		});
+		} catch(NullPointerException e) {
+			Window.alert(e.toString()+"\n"+"User/Group ist null");
+		}
+	}
+	
 }
