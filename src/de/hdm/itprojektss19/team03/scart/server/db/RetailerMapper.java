@@ -261,7 +261,7 @@ public class RetailerMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String selectByKey = "SELECT * FROM retailer WHERE id=? ORDER BY id";
+		String selectByKey = "SELECT retailer.id, retailer.name FROM retailer WHERE retailer.id=" + id;
 
 		try {
 			con = DBConnection.connection();

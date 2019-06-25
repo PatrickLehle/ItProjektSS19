@@ -170,8 +170,7 @@ public Vector<User> getAllUserByGroupId(int id) throws DatabaseException{
 	PreparedStatement stmt = null;
 
 	// SQL-Anweisung zum auslesen der Tupel aus der DB
-	String selectByKey = "SELECT groupuser.userId, groupuser.groupId, groups.name," 
-	        + " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
+	String selectByKey = "SELECT user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
 	        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
 
 	Vector<User> result = new Vector<User>();
