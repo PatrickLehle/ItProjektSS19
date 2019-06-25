@@ -21,7 +21,7 @@ public interface EditorServiceAsync {
 
 	// USER===========================================================================
 
-	void createUser(String username, String emailAdress, AsyncCallback<User> asyncCallback);
+	void createUser(User u, AsyncCallback<User> asyncCallback);
 
 	void createUser(String emailAdress, AsyncCallback<User> asyncCallback);
 
@@ -56,9 +56,9 @@ public interface EditorServiceAsync {
 	// GROUP-USER========================================================================
 
 	void findAllGroupsByUserId(int id, AsyncCallback<Vector<Group>> asyncCallback);
-	
+
 	void getAllUserByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
-	
+
 	void removeUserFromGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
 	// GROCERYLIST===========================================================================
@@ -96,9 +96,9 @@ public interface EditorServiceAsync {
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
 
 	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
@@ -110,7 +110,7 @@ public interface EditorServiceAsync {
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 
 	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
-	
+
 	void getAllRetailerByGroupId(int groupId, AsyncCallback<Vector<Retailer>> asyncCallback);
 
 	void getAllArticleByRetailer(Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
@@ -121,7 +121,7 @@ public interface EditorServiceAsync {
 			AsyncCallback<Vector<Article>> asyncCallback);
 
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
-	
+
 	// UNIT===========================================================================
 
 	// void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);

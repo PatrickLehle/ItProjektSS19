@@ -3,7 +3,6 @@ package de.hdm.itprojektss19.team03.scart.shared;
 import java.sql.Timestamp;
 import java.util.Vector;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -39,7 +38,7 @@ public interface EditorService extends RemoteService {
 	 * @return angelegter/ erstellter User
 	 * @throws Exception
 	 */
-	public User createUser(String username, String emailAdress) throws IllegalArgumentException, Exception;
+	public User createUser(User u) throws IllegalArgumentException, Exception;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -182,16 +181,16 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 * 		#getAllUsersByGroupId(int id);
+	 *      #getAllUsersByGroupId(int id);
 	 * @param id
 	 * @return gibt alle User einer Group zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException;
-	
+
 	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException;
 
 	// GROCERYLIST===========================================================================
@@ -260,7 +259,7 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllGroceryListByGroupId(int id);
-	 *      @return gibt alle GL's einer Grouppe via id zurueck
+	 * @return gibt alle GL's einer Grouppe via id zurueck
 	 * @param id
 	 * @throws IllegalArgumentException
 	 */
@@ -327,19 +326,19 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticle() throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 * 		#findAllArticleByGroupIdReport(int groupId)
+	 *      #findAllArticleByGroupIdReport(int groupId)
 	 * @param groupId
 	 * @return gibt alle Artikel einer Gruppe zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticleByGroupIdReport(int groupId) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *  	#findAllArticleByOwnerId(int ownerId)
+	 *      #findAllArticleByOwnerId(int ownerId)
 	 * @param ownerId
 	 * @return gibt alle Artikel eines Owners zurueck
 	 * @throws IllegalArgumentException
@@ -420,10 +419,10 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 * 		#getAllRetailerByGroupId(int groupId);
+	 *      #getAllRetailerByGroupId(int groupId);
 	 * @param groupId
 	 * @return gibt alle Retailer einer Gruppe via groupId zurueck
 	 * @throws IllegalArgumentException
@@ -503,7 +502,7 @@ public interface EditorService extends RemoteService {
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
 
 	// GroceryListArticle===========================================================================
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteEntry(Entry e);
@@ -515,7 +514,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #removeArticleFromGroceryList(GroceryList gl, Article a);
-	 * @param gl, a
+	 * @param gl,
+	 *            a
 	 * @throws IllegalArgumentException
 	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
@@ -523,7 +523,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllArticleByGroceryList(int groceryListId);
-	 * @param gl, a
+	 * @param gl,
+	 *            a
 	 * @return gibt alle Article einer GL zurueck
 	 * @throws IllegalArgumentException
 	 */

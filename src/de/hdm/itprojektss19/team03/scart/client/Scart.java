@@ -4,7 +4,6 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -24,7 +23,6 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -76,35 +74,30 @@ public class Scart implements EntryPoint {
 				 * Check if the user is logged in
 				 */
 				if (logInfo.isLoggedIn()) {
-					
-				
+
 					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
 
-						@Override
 						public void onFailure(Throwable caught) {
-							Window.alert("no login");
-							
+							RegistryForm registryFrom = new RegistryForm(logInfo.getLogoutUrl(),
+									logInfo.getEmailAddress());
+							innerContentPanel.clear();
+							innerContentPanel.add(registryFrom);
+							RootPanel.get("content").clear();
+							RootPanel.get("content").add(innerContentPanel);
 						}
 
-						@Override
 						public void onSuccess(User result) {
-							user.setEmail(result.getEmail());
-							user.setId(result.getId());
-					
-						
-			
-							signOutLink = logInfo.getLogoutUrl();
-							editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
+							loadPage();
 						}
-						
-				});
-					
-			} else {
-				login(logInfo.getLoginUrl());
-			}
-	
 
-		}});
+					});
+
+				} else {
+					login(logInfo.getLoginUrl());
+				}
+
+			}
+		});
 		/**
 		 * Add header and footer to the (root-)Panels they belong to
 		 */
@@ -151,21 +144,6 @@ public class Scart implements EntryPoint {
 		});
 
 	}
-
-	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
-
-		public void onFailure(Throwable t) {
-			RegistryForm registerForm = new RegistryForm(user, signOutLink);
-			innerContentPanel.clear();
-			innerContentPanel.add(registerForm);
-			RootPanel.get("content").add(innerContentPanel);
-		}
-
-		public void onSuccess(User u) {
-			loadPage();
-			
-		}
-	};
 
 	public void setInnerContent(Panel panel) {
 		Window.alert(this.innerContentPanel.getClass().getName());
