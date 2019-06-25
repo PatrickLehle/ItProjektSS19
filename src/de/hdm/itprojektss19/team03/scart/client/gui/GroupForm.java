@@ -7,8 +7,8 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -23,7 +23,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  *
  *         ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
-
 public class GroupForm extends VerticalPanel {
 
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
@@ -31,6 +30,8 @@ public class GroupForm extends VerticalPanel {
 
 	Group group = new Group();
 	User user = new User();
+
+	final HorizontalPanel innerContent;
 	Vector<Group> allGroups = new Vector<Group>();
 	Vector<String> allGroupsS = new Vector<String>();
 
@@ -46,8 +47,13 @@ public class GroupForm extends VerticalPanel {
 	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
 
-	public GroupForm(User u) {
+	public GroupForm(User u, HorizontalPanel _innerContent) {
 		this.user = u;
+		innerContent = _innerContent;
+
+		groupInfoButton.addClickHandler(infoClickHandler);
+		groupInfoButton.addStyleName("button");
+		createGroupButton.addClickHandler(createClickHandler);
 	}
 
 	public void onLoad() {
@@ -57,9 +63,9 @@ public class GroupForm extends VerticalPanel {
 		// groupNamePanel.addStyleName("");
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
-		groupInfoButton.addClickHandler(new InfoClickHandler());
+		groupInfoButton.addClickHandler(infoClickHandler);
 		groupInfoButton.addStyleName("button");
-		createGroupButton.addClickHandler(new CreateClickHandler());
+		createGroupButton.addClickHandler(createClickHandler);
 		createGroupButton.addStyleName("button");
 
 		groupFormPanel.add(groupLabel);
@@ -88,6 +94,15 @@ public class GroupForm extends VerticalPanel {
 				allGroupsS.add(result.elementAt(g).getGroupName());
 				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
 
+				groupNameLabel.addClickHandler(new ClickHandler() {
+
+					public void onClick(ClickEvent e) {
+						innerContent.clear();
+						Window.alert(e.toDebugString());
+						innerContent.add(new GroceryListForm(user));
+					}
+				});
+
 				groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
 				groupNameLabel.setStyleName("text");
 				groupNamePanel.add(groupNameLabel);
@@ -97,28 +112,26 @@ public class GroupForm extends VerticalPanel {
 		}
 	}
 
-	class InfoClickHandler implements ClickHandler {
+	ClickHandler infoClickHandler = new ClickHandler() {
 
-		@Override
 		public void onClick(ClickEvent arg0) {
 			EditGroup editGroup = new EditGroup(user);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(editGroup);
+			innerContent.clear();
+			innerContent.add(editGroup);
 
 		}
 
-	}
+	};
 
-	class CreateClickHandler implements ClickHandler {
+	ClickHandler createClickHandler = new ClickHandler() {
 
-		@Override
 		public void onClick(ClickEvent arg0) {
 			CreateGroup createGroup = new CreateGroup(user);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(createGroup);
+			innerContent.clear();
+			innerContent.add(createGroup);
 
 		}
 
-	}
+	};
 
 }
