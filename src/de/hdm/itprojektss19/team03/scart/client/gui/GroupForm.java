@@ -48,7 +48,6 @@ public class GroupForm extends VerticalPanel {
 
 	public GroupForm(User u) {
 		this.user = u;
-		Window.alert(this.user.getEmail() + "  " + this.user.getId());
 	}
 
 	public void onLoad() {
@@ -102,7 +101,7 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			EditGroup editGroup = new EditGroup();
+			EditGroup editGroup = new EditGroup(user);
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(editGroup);
 
