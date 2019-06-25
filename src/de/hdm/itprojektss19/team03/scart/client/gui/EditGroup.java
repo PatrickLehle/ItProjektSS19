@@ -172,7 +172,30 @@ public class EditGroup extends VerticalPanel{
 			if(user == null || group == null) {
 				throw new NullPointerException();
 			}
-		
+		/* Womoeglich unnoetig, wenn es egal ist ob nach Loeschung eine leere Gruppe herrscht
+		 * 
+		editorVerwaltung.getAllUsersByGroupId(group.getId(), new AsyncCallback<Vector<User>>() {
+
+			@Override
+			public void onFailure(Throwable arg0) {
+				// TODO Auto-generated method stub
+				Window.alert("User konnte nicht aus der Gruppe gelöscht werden");
+			}
+
+			@Override
+			public void onSuccess(Vector<User> arg0) {
+				// TODO Auto-generated method stub
+				if(arg0.size()==1) {
+					if(arg0.elementAt(0).getUsername()==user.getUsername()) {
+						
+					} 
+				}
+				
+				
+			}
+			
+		});
+		*/	
 		editorVerwaltung.removeUserFromGroup(user, group,  new AsyncCallback<Void>() {
 			
 			public void onFailure(Throwable arg0) { 
@@ -184,6 +207,8 @@ public class EditGroup extends VerticalPanel{
 				Window.alert("User wurde aus der Gruppe gelöscht.");
 			}
 		});
+			
+		
 		} catch(NullPointerException e) {
 			Window.alert(e.toString()+"\n"+"User/Group ist null");
 		}
