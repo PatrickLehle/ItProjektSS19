@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -47,8 +48,7 @@ public class GroupForm extends VerticalPanel {
 	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
 
-	EditGroup editGroup = new EditGroup();
-	CreateGroup createGroup = new CreateGroup(user);
+
 
 	public GroupForm() {
 
@@ -56,6 +56,8 @@ public class GroupForm extends VerticalPanel {
 
 	public GroupForm(User u) {
 		this.user = u;
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+	    user.setEmail(Cookies.getCookie("email"));
 
 	}
 
@@ -65,9 +67,11 @@ public class GroupForm extends VerticalPanel {
 		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
 		// groupNamePanel.addStyleName("");
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
-		groupLabel.addStyleName("h2");
+		groupLabel.addStyleName("h1");
 		groupInfoButton.addClickHandler(new InfoClickHandler());
+		groupInfoButton.addStyleName("button");
 		createGroupButton.addClickHandler(new CreateClickHandler());
+		createGroupButton.addStyleName("button");
 
 		groupFormPanel.add(groupLabel);
 		groupFormPanel.add(groupNamePanel);
@@ -78,6 +82,7 @@ public class GroupForm extends VerticalPanel {
 		this.add(groupFormPanel);
 
 		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -95,18 +100,21 @@ public class GroupForm extends VerticalPanel {
 				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
 
 				groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
-				groupNameLabel.setStyleName("textbox");
+				groupNameLabel.setStyleName("text");
 				groupNamePanel.add(groupNameLabel);
 
 			}
 
 		}
 	}
+	
+	
 
 	class InfoClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
+			EditGroup editGroup = new EditGroup();
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(editGroup);
 
@@ -118,6 +126,7 @@ public class GroupForm extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
+			CreateGroup createGroup = new CreateGroup(user);
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(createGroup);
 

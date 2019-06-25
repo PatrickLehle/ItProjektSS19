@@ -77,7 +77,7 @@ public class ArticleMapper {
 				article.setRetailerId(rs.getInt("retailerId"));
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
-				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setCheckBoolean(rs.getBoolean("boolean")); //Boolean ob der Artikel als gekauft markiert wurde oder nicht
 				article.setDelDat(rs.getTimestamp("delDat"));
 
 				return article;
@@ -126,7 +126,14 @@ public class ArticleMapper {
 		}
 		return articles;
 	}
-
+	/*
+	 * Gibt einen Vektor mit allen Artikeln zurueck, die den Namen der im Parameter uebergeben wurde haben. 
+	 * 
+	 * @param Name des Artikels der gesucht werden soll
+	 * 
+	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem gesucht wurde
+	 * @throws DatabaseException
+	 */
 	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -203,7 +210,7 @@ public class ArticleMapper {
 	}
 
 	/**
-	 * F�gt in der Datenbank einen neuen Artikel ein
+	 * Fuegt in der Datenbank einen neuen Artikel ein
 	 * 
 	 * @param Artikel-Objekt
 	 *            das in die DB eingef�gt werden soll
@@ -258,11 +265,10 @@ public class ArticleMapper {
 	}
 
 	/**
-	 * �ndert einen Artikel in der Datenbank
+	 * Aendert einen Artikel in der Datenbank
 	 * 
-	 * @param Zu
-	 *            �ndernder Artikel
-	 * @return Ge�nderter Artikel
+	 * @param Zu aendernder Artikel
+	 * @return Geaenderter Artikel
 	 * @throws DatabaseException
 	 */
 	public Article update(Article article) throws DatabaseException {
@@ -296,10 +302,10 @@ public class ArticleMapper {
 	}
 
 	/**
-	 * L�scht einen Artikel aus der Datenbank
+	 * Loescht einen Artikel aus der Datenbank
 	 * 
-	 * @param Zu
-	 *            l�schender Artikel
+	 * @param Zu loeschender Artikel
+	 *            
 	 * @throws DatabaseException
 	 */
 	public Article delete(Article article) throws DatabaseException {
@@ -331,7 +337,7 @@ public class ArticleMapper {
 	 * 
 	 * @param start
 	 * @param end
-	 * @return
+	 * @return Article-Vector 
 	 * @throws DatabaseException
 	 */
 	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws DatabaseException {
@@ -375,7 +381,7 @@ public class ArticleMapper {
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
 	 * @throws DatabaseException
 	 */
-	public Vector<Article> findAllArticleByDateRetailer(int id, Timestamp start, Timestamp end)
+	public Vector<Article> findAllArticleByDateRetailer(int retailerId, Timestamp start, Timestamp end)
 			throws DatabaseException {
 		// DB Connection aufbauen
 		Connection con = DBConnection.connection();
@@ -384,7 +390,7 @@ public class ArticleMapper {
 
 		try {
 			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
-			stmt.setInt(1, id);
+			stmt.setInt(1, retailerId);
 			// Statement stmt = con.createStatement();
 
 			ResultSet rs = stmt.executeQuery();
@@ -411,7 +417,14 @@ public class ArticleMapper {
 		}
 		return result;
 	}
-
+	/**
+	 * Gibt alle Artikel einer Gruppe zurueck
+	 * 
+	 * @param u User Objekt
+	 * @param g Gruppen Objekt
+	 * @return Artikel-Vektor
+	 * @throws DatabaseException
+	 */
 	public Vector<Article> findAllArticleByGroup(User u, Group g) throws DatabaseException {
 		Connection con = DBConnection.connection();
 

@@ -9,18 +9,30 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	 * 
 	 * @author TomHager
 	 */
-
+//INITIALIZATION=========================================================================
+	
 	private static final long serialVersionUID = 1L;
 	private String retailerName = "";
 	private int retailerId;
+	private Group group = new Group();
+	
+//CONSTRUCTORS===========================================================================
 	
 	public Retailer() {
-		
+	
+	}
+	
+	public Retailer(String name, int retailerId) {
+		this.retailerName = name;
+		this.retailerId = retailerId;
 	}
 
 	public Retailer(String name) {
-		
+		this.retailerName = name;
 	}
+	
+//METHODS=================================================================================
+	
 	public String getRetailerName() {
 		return retailerName;
 	}
@@ -35,6 +47,16 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	
 	public int getRetailerId() {
 		return this.retailerId;
+	}
+
+//GROUP====================================================================================
+	
+	public void setGroupId(int groupId) {
+		this.group.setId(groupId);
+	}
+	
+	public int getGroupId() {
+		return this.group.getId();
 	}
 
 }

@@ -119,8 +119,8 @@ ALTER TABLE `grocerylist`
 -- Indexes for table `grocerylistarticle`
 --
 ALTER TABLE `grocerylistarticle`
-  ADD KEY `grocerylistArticle` (`grocerylistId`),
-  ADD KEY `ArticleGrocerylist` (`articleId`);
+  ADD PRIMARY KEY (`articleId`,`grocerylistId`) USING BTREE,
+  ADD KEY `grocerylistId` (`grocerylistId`);
 
 --
 -- Indexes for table `groups`
@@ -132,8 +132,8 @@ ALTER TABLE `groups`
 -- Indexes for table `groupuser`
 --
 ALTER TABLE `groupuser`
-  ADD KEY `userGroup` (`userId`),
-  ADD KEY `groupUser` (`groupId`);
+  ADD PRIMARY KEY (`groupId`,`userId`),
+  ADD KEY `userId` (`userId`);
 
 --
 -- Indexes for table `retailer`
@@ -205,12 +205,12 @@ ALTER TABLE `grocerylist`
 -- Constraints for table `grocerylistarticle`
 --
 ALTER TABLE `grocerylistarticle`
-  ADD CONSTRAINT `ArticleGrocerylist` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`),
-  ADD CONSTRAINT `grocerylistArticle` FOREIGN KEY (`grocerylistId`) REFERENCES `grocerylist` (`id`);
+  ADD CONSTRAINT `grocerylistarticle_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`id`),
+  ADD CONSTRAINT `grocerylistarticle_ibfk_2` FOREIGN KEY (`grocerylistId`) REFERENCES `grocerylist` (`id`);
 
 --
 -- Constraints for table `groupuser`
 --
 ALTER TABLE `groupuser`
-  ADD CONSTRAINT `groupUser` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
-  ADD CONSTRAINT `userGroup` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
+  ADD CONSTRAINT `groupuser_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);

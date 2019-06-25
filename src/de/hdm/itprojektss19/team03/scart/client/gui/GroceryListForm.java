@@ -31,6 +31,8 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -47,6 +49,7 @@ public class GroceryListForm extends VerticalPanel {
 	private User user = null;
 
 	HorizontalPanel hpTitle = new HorizontalPanel();
+	HorizontalPanel hpUserRetailer = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
 
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='right'/>");
@@ -62,42 +65,51 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox articleTextBox = new TextBox(); // Artikel
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
-	TextBox retailerTextBox = new TextBox(); // RetailerId
-	ListBox retailerListBox = new ListBox();
+	ListBox firstRetailerListBox = new ListBox();
+	ListBox firstUserListBox = new ListBox();
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
 	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
 	// geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 
-	Retailer r = new Retailer();
+	Retailer retailer = new Retailer();
 	Vector<Article> articleVector = new Vector<Article>();
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
+	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
+	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
-
+	Label userRetailerLabel = new Label("zuteilen f�r");
 	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
-
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 	// GroceryListArticle aGl = new GroceryListArticle(a.getId(),
 	// groceryList.getId());
 
+	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
+		groceryList.setGroupId(1);
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
 
 		// Titel Label wird in Horitontales Panel eingefuegt
 		hpTitle.add(titelLabel);
-
-		// CellTable wird in das Scroll Panel hinzugefuegt
+		
 		// sc.add(aTable);
 
 		this.add(hpTitle);
+		//CALLBACKS=============================================
+		ev.getAllUserByGroupId(1,new  AllUserCallback());
+		ev.findAllRetailer(new AllRetailersCallback());
+		hpUserRetailer.add(firstUserListBox);
+		hpUserRetailer.add(userRetailerLabel);
+		hpUserRetailer.add(firstRetailerListBox);
+		this.add(hpUserRetailer);
 
 		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
 		int groceryListId = groceryList.getId();
@@ -154,12 +166,13 @@ public class GroceryListForm extends VerticalPanel {
 	 * @author tom
 	 * 
 	 *         Methode zum Laden der Tabelle bei erstem Aufruf oder zum Neu-laden
-	 *         bei einer Aktualisierung der Daten
-	 * 
+	 *         bei einer Aktualisierung der Daten. Es werden alle Artikel der
+	 *         aktuellen GroceryList aus der DB abgefragt. Dann wird die Tabelle
+	 *         geleert und mit dem Vektor der Artikel-Objekte gefuellt.
 	 */
 	public void loadTable() {
 		try {
-			int groceryListId = groceryList.getId();
+			final int groceryListId = groceryList.getId();
 
 			ev.findAllArticleByGroceryList(groceryListId, new AsyncCallback<Vector<Article>>() {
 				public void onFailure(Throwable caught) {
@@ -180,33 +193,31 @@ public class GroceryListForm extends VerticalPanel {
 					articleTable.setText(0, 3, "Laden");
 					boughtTable.setText(0, 0, "Gekauft");
 
-					int vectorNumber = 0; // temporaerer Zaehler um durch den Artikel-Vektor durchzugehen
 					int trueCount = 1; // Checkbox gleich true. Artikel wurd gekauft
 					int falseCount = 1; // Checkbox gleich false. Artikel noch nicht gekauft
 					int visibleNum = 0;
 
 					// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 					// aufgelistet werden im Panel.
-					for (int articleNumber = 1; articleNumber <= articleVector.size(); articleNumber++) {
-						if (articleVector.get(vectorNumber).getCheckBoolean() == false) {
-							articleTable.setText(falseCount, 0, articleVector.get(vectorNumber).getName());
+					for (int articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
+						if (articleVector.get(articleNumber).getCheckBoolean() == false) {
+							articleTable.setText(falseCount, 0, articleVector.get(articleNumber).getName());
 							articleTable.setText(falseCount, 1,
-									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
-							articleTable.setText(falseCount, 2, articleVector.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(articleNumber).getQuantity()));
+							articleTable.setText(falseCount, 2, articleVector.get(articleNumber).getUnit());
 							articleTable.setText(falseCount, 3,
-									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(articleNumber).getRetailerId()));
 							falseCount++;
 						} else {
-							boughtTable.setText(trueCount, 0, articleVector.get(vectorNumber).getName());
+							boughtTable.setText(trueCount, 0, articleVector.get(articleNumber).getName());
 							boughtTable.setText(trueCount, 1,
-									Integer.toString(articleVector.get(vectorNumber).getQuantity()));
-							boughtTable.setText(trueCount, 2, articleVector.get(vectorNumber).getUnit());
+									Integer.toString(articleVector.get(articleNumber).getQuantity()));
+							boughtTable.setText(trueCount, 2, articleVector.get(articleNumber).getUnit());
 							boughtTable.setText(trueCount, 3,
-									Integer.toString(articleVector.get(vectorNumber).getRetailerId()));
+									Integer.toString(articleVector.get(articleNumber).getRetailerId()));
 							trueCount++;
 							visibleNum = trueCount;
 						}
-						vectorNumber++;
 					}
 					if (visibleNum > 1) {
 						boughtTable.setVisible(true);
@@ -220,17 +231,52 @@ public class GroceryListForm extends VerticalPanel {
 
 	}
 
-	public ListBox getRetailerListBox() {
-		for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
-			retailerListBox.addItem(retailerVector.get(listNumber).toString());
+	public ListBox getRetailerListBoxDisabled() {
+		final ListBox retailerListBox = new ListBox();
+		try {
+			ev.getAllRetailerByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
+				public void onFailure(Throwable caught) {
+					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
+				}
+
+				public void onSuccess(Vector<Retailer> result) {
+					for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
+						retailerListBox.addItem(retailerVector.get(listNumber).toString());
+					}
+					retailerListBox.setVisibleItemCount(0);
+					retailerListBox.setEnabled(false);
+
+				}
+
+			});
+		} catch (IllegalArgumentException e) {
+			Window.alert("Einkaufsliste konnte nicht geladen werden");
 		}
-		retailerListBox.setVisibleItemCount(retailerVector.size() + 1);
-		retailerListBox.addChangeHandler(new ChangeHandler() {
-			public void onChange(ChangeEvent event) {
-				event.getRelativeElement();
-			}
-		});
-		return getRetailerListBox();
+		return retailerListBox;
+	}
+
+	public ListBox getRetailerListBoxEnabled() {
+		final ListBox retailerListBox = new ListBox();
+		try {
+			ev.getAllRetailerByGroupId(groceryList.getGroupId(), new AsyncCallback<Vector<Retailer>>() {
+				public void onFailure(Throwable caught) {
+					throw new IllegalArgumentException("Retailer konnten nicht geladen werden");
+				}
+
+				public void onSuccess(Vector<Retailer> result) {
+					for (int listNumber = 1; listNumber <= retailerVector.size(); listNumber++) {
+						retailerListBox.addItem(retailerVector.get(listNumber).toString());
+					}
+					retailerListBox.setVisibleItemCount(1);
+					retailerListBox.setEnabled(true);
+
+				}
+
+			});
+		} catch (IllegalArgumentException e) {
+			Window.alert("Einkaufsliste konnte nicht geladen werden");
+		}
+		return retailerListBox;
 	}
 
 	/**
@@ -411,80 +457,70 @@ public class GroceryListForm extends VerticalPanel {
 	public String second;
 	public String third;
 	public String fourth;
-	
+
 	// alle Methoden fuer Editieren eines Artikels
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 0);
 		second = articleTable.getText(globalRow, 1);
 		third = articleTable.getText(globalRow, 2);
-		//fourth = articleTable.getText(globalRow, 3);
 	}
+
 	public void setTextBoxesContent() {
 		articleTextBox.setText(articleTable.getText(globalRow, 0));
 		quantityTextBox.setText(articleTable.getText(globalRow, 1));
 		unitTextBox.setText(articleTable.getText(globalRow, 2));
-		//retailerTextBox.setText(articleTable.getText(globalRow, 3));
 		articleTable.setWidget(globalRow, 0, articleTextBox);
 		articleTable.setWidget(globalRow, 1, quantityTextBox);
 		articleTable.setWidget(globalRow, 2, unitTextBox);
-		//articleTable.setWidget(globalRow, 3, retailerTextBox);
+		articleTable.setWidget(globalRow, 3, getRetailerListBoxEnabled());
 	}
-	public void clearFinalRowContent() {
-		articleTable.clearCell(finalGlobalRow, 0);
-		articleTable.clearCell(finalGlobalRow, 1);
-		articleTable.clearCell(finalGlobalRow, 2);
-		//articleTable.clearCell(finalGlobalRow, 3);
-	}
+
 	public void clearTextBoxes() {
 		articleTextBox.setText(null);
 		quantityTextBox.setText(null);
 		unitTextBox.setText(null);
-		//retailerTextBox.setText(null);
 	}
+
 	public void setTableTextFromTextBoxes() {
-		articleTable.clearCell(globalRow, 0);
-		articleTable.clearCell(globalRow, 1);
-		articleTable.clearCell(globalRow, 2);
-		//articleTable.clearCell(globalRow, 3);
 		articleTable.setText(globalRow, 0, articleTextBox.getText());
 		articleTable.setText(globalRow, 1, quantityTextBox.getText());
 		articleTable.setText(globalRow, 2, unitTextBox.getText());
-		//articleTable.setText(globalRow, 3, retailerTextBox.getText());
+		articleTable.setWidget(globalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public void setTableTextFromFinalTextBox() {
 		articleTable.setText(finalGlobalRow, 0, articleTextBox.getText());
 		articleTable.setText(finalGlobalRow, 1, quantityTextBox.getText());
 		articleTable.setText(finalGlobalRow, 2, unitTextBox.getText());
-		//articleTable.setText(finalGlobalRow, 3, retailerTextBox.getText());
+		articleTable.setWidget(finalGlobalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public void replaceUnchangedText() {
-		articleTable.remove(articleTextBox);
-		articleTable.remove(quantityTextBox);
-		articleTable.remove(unitTextBox);
-		//articleTable.remove(retailerTextBox);
 		articleTable.setText(globalRow, 0, first);
 		articleTable.setText(globalRow, 1, second);
 		articleTable.setText(globalRow, 2, third);
-		//articleTable.setText(globalRow, 3, fourth);
+		articleTable.setWidget(globalRow, 3, getRetailerListBoxDisabled());
 	}
+
 	public String textBoxesEmpty() {
-		if(articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
-				&& unitTextBox.getText().isEmpty() == true && retailerTextBox.getText().isEmpty() == true) {
+		if (articleTextBox.getText().isEmpty() == true && quantityTextBox.getText().isEmpty() == true
+				&& unitTextBox.getText().isEmpty() == true) {
 			return "true";
-		}else if(articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
-				&& unitTextBox.getText().isEmpty() == false && retailerTextBox.getText().isEmpty() == false) {
+		} else if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
+				&& unitTextBox.getText().isEmpty() == false) {
 			return "false";
-		}else {
-			//Window.alert("textBoxesEmpty Error");
+		} else {
 			return "else";
 		}
 	}
+
 	public void setArticleAtributes() {
 		article.setName(articleTextBox.getText());
 		article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
 		article.setUnit(unitTextBox.getText());
-		article.setRetailerId(Integer.parseInt(retailerTextBox.getText()));
+		article.setRetailerId(getRetailerListBoxEnabled().getSelectedIndex());
 	}
+
 	public void saveChangedOnDb() {
 		ev.saveArticle(article, new AsyncCallback<Article>() {
 			public void onFailure(Throwable caught) {
@@ -497,7 +533,7 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		});
 	}
-	
+
 	/**
 	 * @author tom
 	 * 
@@ -521,7 +557,6 @@ public class GroceryListForm extends VerticalPanel {
 						saveRowContent();
 						setTextBoxesContent();
 					} else if (textBoxesEmpty() == "false") {
-						clearFinalRowContent();
 						setTableTextFromFinalTextBox();
 						setArticleAtributes();
 						saveChangedOnDb();
@@ -537,23 +572,17 @@ public class GroceryListForm extends VerticalPanel {
 							setTextBoxesContent();
 						}
 					} else {
-						articleTable.clearCell(finalGlobalRow, 0);
-						articleTable.clearCell(finalGlobalRow, 1);
-						articleTable.clearCell(finalGlobalRow, 2);
-						articleTable.clearCell(finalGlobalRow, 3);
 						articleTable.removeCell(finalGlobalRow, 4);
 						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
 						articleTable.setText(finalGlobalRow, 0, first);
 						articleTable.setText(finalGlobalRow, 1, second);
 						articleTable.setText(finalGlobalRow, 2, third);
-						articleTable.setText(finalGlobalRow, 3, fourth);
 						saveRowContent();
 						clearTextBoxes();
 						articleTable.setWidget(finalGlobalRow, 4, getCbEdit());
 						if (articleTable.getText(globalRow, 0).isEmpty() == false
 								&& articleTable.getText(globalRow, 1).isEmpty() == false
-								&& articleTable.getText(globalRow, 2).isEmpty() == false
-								&& articleTable.getText(globalRow, 3).isEmpty() == false) {
+								&& articleTable.getText(globalRow, 2).isEmpty() == false) {
 							finalGlobalRow = globalRow;
 							setTextBoxesContent();
 						}
@@ -703,31 +732,25 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setWidget(i, 0, articleTextBox);
 				articleTable.setWidget(i, 1, quantityTextBox);
 				articleTable.setWidget(i, 2, unitTextBox);
-				articleTable.setWidget(i, 3, retailerTextBox);
+				articleTable.setWidget(i, 3, getRetailerListBoxEnabled());
 			} else if (addBtnBoolean == true) {
-				if (articleTextBox.getText().isEmpty() == false && quantityTextBox.getText().isEmpty() == false
-						&& unitTextBox.getText().isEmpty() == false && retailerTextBox.getText().isEmpty() == false) {
+				if (textBoxesEmpty() == "false") {
 					addBtnBoolean = false;
 					int addRow = articleTable.getRowCount() - 1;
-					articleTable.clearCell(addRow, 0);
-					articleTable.clearCell(addRow, 1);
-					articleTable.clearCell(addRow, 2);
-					articleTable.clearCell(addRow, 3);
 					articleTable.setText(addRow, 0, articleTextBox.getText());
 					articleTable.setText(addRow, 1, quantityTextBox.getText());
 					articleTable.setText(addRow, 2, unitTextBox.getText());
-					articleTable.setText(addRow, 3, retailerTextBox.getText());
+					articleTable.setWidget(addRow, 3, getRetailerListBoxDisabled());
 					articleTextBox.setText(null);
 					quantityTextBox.setText(null);
 					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
 					// Artikel-Object muss schon erstellt sein, bevor es an die DB zur speicherung
 					// weitergegeben wird
 					article.setId(articleVector.size() + 1);
 					article.setName(articleTextBox.getText());
 					article.setQuantity(Integer.parseInt(articleTable.getText(addRow, 1)));
 					article.setUnit(unitTextBox.getText());
-					article.setRetailerId(Integer.parseInt(articleTable.getText(addRow, 3)));
+					article.setRetailerId(getRetailerListBoxDisabled().getSelectedIndex());
 
 					ev.createArticle(article, new AsyncCallback<Article>() {
 						public void onFailure(Throwable caught) {
@@ -768,7 +791,7 @@ public class GroceryListForm extends VerticalPanel {
 					});
 
 				} else if (articleTextBox.getText().isEmpty() == false || quantityTextBox.getText().isEmpty() == false
-						|| unitTextBox.getText().isEmpty() == false || retailerTextBox.getText().isEmpty() == false) {
+						|| unitTextBox.getText().isEmpty() == false) {
 					Window.alert("Es wurde kein Artikel hinzugef�gt da die Angaben nicht vollst�ndig waren");
 				} else {
 					addBtnBoolean = false;
@@ -776,13 +799,40 @@ public class GroceryListForm extends VerticalPanel {
 					articleTextBox.setText(null);
 					quantityTextBox.setText(null);
 					unitTextBox.setText(null);
-					retailerTextBox.setText(null);
 				}
 			} else if (checkBtnBoolean == true || editBtnBoolean == true || deleteBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
 				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
+		}
+	}
+	//CALLBACKS===============================================================================================
+	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Vector<Retailer> result) {
+			retailerVector = result;
+				for(int retailerNumber = 0; retailerNumber < retailerVector.size(); retailerNumber++) {
+					firstRetailerListBox.addItem(retailerVector.get(retailerNumber).getRetailerName());
+				}
+				firstRetailerListBox.setVisibleItemCount(1);
+		}
+	}
+	
+	class AllUserCallback implements AsyncCallback<Vector<User>> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Vector<User> result) {
+			userVector = result;
+				for(int userNumber = 0; userNumber < userVector.size(); userNumber++) {
+					firstUserListBox.addItem(userVector.get(userNumber).getUsername());
+				}
+				firstUserListBox.setVisibleItemCount(1);
 		}
 	}
 }
