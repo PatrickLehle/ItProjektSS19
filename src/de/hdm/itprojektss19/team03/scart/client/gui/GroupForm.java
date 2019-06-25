@@ -90,6 +90,7 @@ public class GroupForm extends VerticalPanel {
 		public void onSuccess(Vector<Group> result) {
 			// Window.alert(result.get(0).getGroupName());
 			for (int g = 0; g < result.size(); g++) {
+				final Group selectedGroup = result.elementAt(g);
 
 				allGroupsS.add(result.elementAt(g).getGroupName());
 				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
@@ -98,8 +99,7 @@ public class GroupForm extends VerticalPanel {
 
 					public void onClick(ClickEvent e) {
 						innerContent.clear();
-						Window.alert(e.toDebugString());
-						innerContent.add(new GroceryListForm(user));
+						innerContent.add(new GroceryListForm(user, selectedGroup));
 					}
 				});
 

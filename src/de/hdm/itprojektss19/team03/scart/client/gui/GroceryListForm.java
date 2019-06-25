@@ -43,8 +43,9 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class GroceryListForm extends VerticalPanel {
 
-	public GroceryListForm(User u) {
+	public GroceryListForm(User u, Group g) {
 		this.user = u;
+		this.group = g;
 	};
 
 	private User user;
@@ -96,7 +97,7 @@ public class GroceryListForm extends VerticalPanel {
 	public void onLoad() {
 		super.onLoad();
 		this.addStyleName("main-panel");
-		groceryList.setGroupId(1);
+		groceryList.setGroupId(this.group.getId());
 
 		sc.setSize("200px", "550px");
 		sc.setVerticalScrollPosition(10);
