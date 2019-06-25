@@ -9,6 +9,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -25,6 +26,7 @@ import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
@@ -92,11 +94,19 @@ public class ReportFilterForm extends VerticalPanel {
 //CONSTRUCTORS=====================================================================
 
 	public ReportFilterForm() {
+		//Holen der Cookies aus der Session
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		user.setEmail(Cookies.getCookie("email"));	
+		
+		//Trying to find a way to save cookies for a group...
+		Cookies.setCookie("groupId", String.valueOf(group.getId()));
+		Window.alert(user.getEmail()+user.getId());
 	}
 
 	public ReportFilterForm(final User cUser) {
 		this.user = cUser;
-//		this.rForm = cReport;
+
+		Window.alert(cUser.getEmail()+cUser.getId());
 	}
 
 //PANELS-LABELS-BUTTONS=============================================================	
@@ -126,7 +136,6 @@ public class ReportFilterForm extends VerticalPanel {
 	Label retailerLbl = new Label("Retailer auswählen:");
 	VerticalPanel checkBoxesRetailer = new VerticalPanel();
 	
-	ScrollPanel scroll = new ScrollPanel();
 
 	// REPORT-BUTTON=============================
 	VerticalPanel reportBtnVP = new VerticalPanel();
@@ -366,9 +375,7 @@ public class ReportFilterForm extends VerticalPanel {
 					if(choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && disabledRetailerBtn.isDown() == true) {
 
 						reportVerwaltung.createStatisticA(user, new ArticleReportCallback());
-						
-						RootPanel.get("content").add(scroll);
-						Window.alert("did it work?");
+
 						
 					}
 
@@ -443,7 +450,7 @@ public class ReportFilterForm extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 			if (choosenGroupsS.contains(checkBox.getText())) {
-
+				
 				for (int i = 0; i < choosenGroupsS.size(); i++) {
 					if (choosenGroupsS.elementAt(i) == checkBox.getText()) {
 						choosenGroupsS.removeElementAt(i);
@@ -474,8 +481,8 @@ public class ReportFilterForm extends VerticalPanel {
 				choosenRetailerS.add(checkBox.getText());
 			}
 		}
+		
 	}
-
 	class StartDateChangeHandler implements ValueChangeHandler<Date> {
 		public StartDateChangeHandler() {
 
@@ -598,7 +605,6 @@ public class ReportFilterForm extends VerticalPanel {
 	class ArticleReportCallback implements AsyncCallback<ArticleReport> {
 
 		public void onFailure(Throwable caught) {
-			Window.alert("didnt work");
 		}
 
 		public void onSuccess(ArticleReport result) {

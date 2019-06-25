@@ -80,7 +80,8 @@ CREATE TABLE `groupuser` (
 
 CREATE TABLE `retailer` (
   `id` int(100) NOT NULL,
-  `name` varchar(100) NOT NULL
+  `name` varchar(100) NOT NULL,
+  `groupId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -139,7 +140,8 @@ ALTER TABLE `groupuser`
 -- Indexes for table `retailer`
 --
 ALTER TABLE `retailer`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `groupId` (`groupId`);
 
 --
 -- Indexes for table `user`
@@ -214,3 +216,9 @@ ALTER TABLE `grocerylistarticle`
 ALTER TABLE `groupuser`
   ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
   ADD CONSTRAINT `groupuser_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
+
+--
+-- Constraints for table `retailer`
+--
+ALTER TABLE `retailer`
+  ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`);

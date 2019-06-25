@@ -2,7 +2,6 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -25,7 +24,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class RegistryForm extends VerticalPanel {
 
 	private EditorServiceAsync editorService = ClientsideSettings.getEditor();
-	private final User user;
+	private final User user = new User();
 
 	private Anchor logout = new Anchor();
 	private FlowPanel buttons = new FlowPanel();
@@ -45,13 +44,13 @@ public class RegistryForm extends VerticalPanel {
 	 * @param u
 	 *            user der eigenloggt ist
 	 */
-	public RegistryForm(User u, String logoutLink) {
-		user = u;
+	public RegistryForm(String logoutLink, String email) {
+		user.setEmail(email);
 		logout.setHref(logoutLink);
 		welcome.setStyleName("h1");
 		infoLabel.setStyleName("text");
 		nameTextbox.setStyleName("textbox-big");
-		emailTextbox.setValue(user.getEmail());
+		emailTextbox.setValue(email);
 		emailTextbox.setReadOnly(true);
 		emailTextbox.setStyleName("textbox-big");
 		save.setStyleName("button");
@@ -70,7 +69,7 @@ public class RegistryForm extends VerticalPanel {
 		this.add(emailTextbox);
 		this.add(buttons);
 
-		if (checkEmail(u.getEmail()) == false) {
+		if (checkEmail(user.getEmail()) == false) {
 			Window.alert("E-Mail ist ungültig!");
 		}
 		;
@@ -78,10 +77,10 @@ public class RegistryForm extends VerticalPanel {
 
 	public void saveUser(User u) {
 		u.setUsername(nameTextbox.getValue());
-		editorService.createUser(u.getUsername(), u.getEmail(), new AsyncCallback<User>() {
+		editorService.createUser(u, new AsyncCallback<User>() {
 
 			public void onSuccess(User user) {
-				Window.alert("Register");
+				Window.Location.reload();
 			}
 
 			public void onFailure(Throwable e) {
@@ -132,7 +131,7 @@ public class RegistryForm extends VerticalPanel {
 	ClickHandler loginClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent e) {
-			Cookies.removeCookie("dev_appserver_login");
+			// Cookies.removeCookie("dev_appserver_login");
 		}
 	};
 }

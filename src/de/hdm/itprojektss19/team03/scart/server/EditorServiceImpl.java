@@ -99,26 +99,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// USER====================================================================================
 
-	public User createUser(String username, String emailAdress) throws Exception {
-		// E-Mail und Username muss zunaechst ueber GUI abgefragt werden
-
-		try {
-
-			User result = uMapper.findUserByEmail(emailAdress);
-
-			if (result != null) {
-				return result;
-				// Email bereits vorhanden
-			} else {
-				User newUser = new User(username, emailAdress);
-				uMapper.insert(newUser);
-				return newUser;
-				// Ausgabe der Rueckgabe aus der insert Funktion fehlt
-			}
-
-		} catch (IllegalArgumentException | DatabaseException e) {
-			e.printStackTrace();
-			throw e;
+	public User createUser(User u) throws Exception {
+		if (u != null) {
+			User user = uMapper.insert(u);
+			return user;
+		} else {
+			return null;
 		}
 
 	}
@@ -156,14 +142,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public User getUserByGMail(String email) throws IllegalArgumentException {
 		try {
-			User foundUser = uMapper.findUserByEmail(email);
-			System.out.println(foundUser.getEmail());
-			return foundUser;
-
+			return uMapper.findUserByEmail(email);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+
 	}
 
 	@Override
@@ -236,10 +220,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public void addUserToGroup(User user, Group group) throws IllegalArgumentException {
+	public GroupUser addUserToGroup(User user, Group group) throws IllegalArgumentException {
 		try {
-			
-			this.guMapper.addUserToGroup(user, group);
+
+			return this.guMapper.addUserToGroup(user, group);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -279,21 +263,21 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
-	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException{
+
+	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException {
 		try {
-			 return guMapper.getAllUserByGroupId(id);
+			return guMapper.getAllUserByGroupId(id);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
-	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException{
+
+	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException {
 		try {
-			
-			 guMapper.removeUserFromGroup(u, g);
-			 
+
+			guMapper.removeUserFromGroup(u, g);
+
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -442,7 +426,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
 		try {
 
-			return this.aMapper.findByKey(articleId); 
+			return this.aMapper.findByKey(articleId);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -464,6 +448,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Article> findAllArticle() throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAll();
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	//
+	public Vector<Article> findAllArticleByGroupIdReport(int groupId) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByGroupId(groupId);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByOwnerId(ownerId);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -504,12 +507,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {
 		try {
 			// CHANGE
 			return this.rMapper.getAllRetailersByGroupId(groupId);
-			
+
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -572,7 +575,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	// GroceryListArticle===========================================================================
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
 		try {
