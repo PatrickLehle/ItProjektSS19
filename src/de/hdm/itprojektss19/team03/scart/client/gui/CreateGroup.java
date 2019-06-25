@@ -81,7 +81,7 @@ public class CreateGroup extends VerticalPanel {
 	// VARIABLES==========================================================
 	User user = null; // User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden
 						// soll
-	Group createGroup = null;
+	Group createGroup = new Group();
 
 	// METHODS==========================================================
 
@@ -241,8 +241,6 @@ public class CreateGroup extends VerticalPanel {
 								public void onSuccess(GroupUser arg0) {
 									responseLabel.setText("Die Gruppe '" + tempGroup.getGroupName()
 											+ "' wurde erstellt und Sie wurden automatisch der Gruppe hinzugefügt");
-									Window.alert("Die Gruppe '" + tempGroup.getGroupName()
-											+ "' wurde erstellt und Sie wurden automatisch hinzugefügt.");
 								}
 							});
 
