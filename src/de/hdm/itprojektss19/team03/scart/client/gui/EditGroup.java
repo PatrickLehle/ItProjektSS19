@@ -68,8 +68,6 @@ public class EditGroup extends VerticalPanel{
 
 	public EditGroup(User u) {
 		this.user = u;
-		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
-	    user.setEmail(Cookies.getCookie("email"));
 
 	}
 
@@ -99,8 +97,8 @@ public class EditGroup extends VerticalPanel{
 
 		this.add(groupFormPanel);
 
-		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+		//editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
@@ -150,9 +148,7 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			GroupForm groupForm = new GroupForm(user);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(groupForm);
+			Window.Location.replace("/Scart.html");
 
 		}
 
