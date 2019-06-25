@@ -38,8 +38,10 @@ public class EditGroup extends VerticalPanel{
 
 	Group group = new Group();
 	User user = new User();
-	Vector<Group> allGroups = new Vector<Group>();
-	Vector<String> allGroupsS = new Vector<String>();
+	//Vector<Group> allGroups = new Vector<Group>();
+	Vector<String> allGroups = new Vector<String>();
+	Vector<Integer> allGroupIds = new Vector<Integer>();
+	Vector<String> choosenGroups = new Vector<String>();
 	Vector<String> allUsers = new Vector<String>();
 
 	// PANELS
@@ -112,10 +114,9 @@ public class EditGroup extends VerticalPanel{
 			// Window.alert(result.get(0).getGroupName());
 			for (int g = 0; g < result.size(); g++) {
 
-				allGroupsS.add(result.elementAt(g).getGroupName());
-				
-				RadioButton groupNames = new RadioButton("groupNames", allGroupsS.elementAt(g));
-				//groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+				allGroups.add(result.elementAt(g).getGroupName());
+				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
+				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
 				groupNames.setStyleName("textbox");
 				checkBoxesGroup.add(groupNames);
 				
@@ -166,7 +167,8 @@ public class EditGroup extends VerticalPanel{
 
 		@Override
 		public void onClick(ClickEvent event) {
-			
+			choosenGroups.contains(checkBox.getText());
+				
 
 		}
 
@@ -210,7 +212,7 @@ public class EditGroup extends VerticalPanel{
 				throw new NullPointerException();
 			}
 		
-		editorVerwaltung.getAllUserByGroupId(1,  new AsyncCallback<Vector<User>>() {
+		editorVerwaltung.getAllUserByGroupId(group.getId(),  new AsyncCallback<Vector<User>>() {
 			
 			public void onFailure(Throwable a) { 
 				Window.alert("Die User dieser Gruppe konnten nicht angezeigt werden." + a);
@@ -224,7 +226,7 @@ public class EditGroup extends VerticalPanel{
 					allUsers.add(result.elementAt(g).getUsername());
 					
 					RadioButton userNames = new RadioButton("userNames", allUsers.elementAt(g));
-					//groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+					//userNames.addClickHandler(new UserCheckBoxClickHandler(userNames));
 					userNames.setStyleName("textbox");
 					userPanel.add(userNames);
 					
