@@ -80,7 +80,6 @@ public class Scart implements EntryPoint {
 						}
 
 						public void onSuccess(User result) {
-							Window.alert("id: " + result.getId());
 							loadPage();
 						}
 
@@ -140,7 +139,6 @@ public class Scart implements EntryPoint {
 	}
 
 	public void setInnerContent(Panel panel) {
-		Window.alert(this.innerContentPanel.getClass().getName());
 		innerContentPanel.clear();
 		innerContentPanel.add(panel);
 	}
