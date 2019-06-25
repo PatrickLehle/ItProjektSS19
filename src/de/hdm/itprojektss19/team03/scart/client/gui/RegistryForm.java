@@ -80,7 +80,7 @@ public class RegistryForm extends VerticalPanel {
 		editorService.createUser(u, new AsyncCallback<User>() {
 
 			public void onSuccess(User user) {
-				Window.alert("Register");
+				Window.Location.reload();
 			}
 
 			public void onFailure(Throwable e) {
