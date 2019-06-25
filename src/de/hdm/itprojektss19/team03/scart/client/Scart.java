@@ -40,7 +40,7 @@ public class Scart implements EntryPoint {
 
 	private FooterForm footer = new FooterForm();
 	private GroceryListForm groceryListForm = new GroceryListForm();
-	private GroupForm groupForm = new GroupForm();
+	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
 	private HorizontalPanel innerContentPanel = new HorizontalPanel();
@@ -80,7 +80,7 @@ public class Scart implements EntryPoint {
 						}
 
 						public void onSuccess(User result) {
-							loadPage();
+							loadPage(result);
 						}
 
 					});
@@ -113,9 +113,10 @@ public class Scart implements EntryPoint {
 	/**
 	 * Add content to content panel
 	 */
-	private void loadPage() {
+	private void loadPage(User user) {
 
 		innerContentPanel.addStyleName("inner-content");
+		groupForm = new GroupForm(user);
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
