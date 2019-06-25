@@ -12,6 +12,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -144,7 +145,7 @@ public interface EditorService extends RemoteService {
 	 * @param g
 	 * @throws IllegalArgumentException
 	 */
-	public void addUserToGroup(User user, Group group) throws IllegalArgumentException;
+	public GroupUser addUserToGroup(User user, Group group) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -326,6 +327,24 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticle() throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#findAllArticleByGroupIdReport(int groupId)
+	 * @param groupId
+	 * @return gibt alle Artikel einer Gruppe zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByGroupIdReport(int groupId) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *  	#findAllArticleByOwnerId(int ownerId)
+	 * @param ownerId
+	 * @return gibt alle Artikel eines Owners zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
 
 	// RETAILER===========================================================================
 

@@ -10,6 +10,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 //import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -44,7 +45,7 @@ public interface EditorServiceAsync {
 
 	void getAllGroupsByUser(User u, AsyncCallback<Vector<Group>> asyncCallback);
 
-	void addUserToGroup(User user, Group group, AsyncCallback<Void> asyncCallback);
+	void addUserToGroup(User user, Group group, AsyncCallback<GroupUser> asyncCallback);
 
 	void leaveGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
@@ -95,6 +96,10 @@ public interface EditorServiceAsync {
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
 
 	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
 

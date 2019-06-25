@@ -4,6 +4,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -23,6 +24,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -69,21 +71,40 @@ public class Scart implements EntryPoint {
 				Window.alert(err.getMessage());
 			}
 
-			public void onSuccess(LoginInfo logInfo) {
+			public void onSuccess(final LoginInfo logInfo) {
 				/**
 				 * Check if the user is logged in
 				 */
 				if (logInfo.isLoggedIn()) {
-					user.setEmail(logInfo.getEmailAddress());
-					signOutLink = logInfo.getLogoutUrl();
-					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
-				} else {
-					login(logInfo.getLoginUrl());
-				}
+					
+				
+					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
+
+						@Override
+						public void onFailure(Throwable caught) {
+							Window.alert("no login");
+							
+						}
+
+						@Override
+						public void onSuccess(User result) {
+							user.setEmail(result.getEmail());
+							user.setId(result.getId());
+					
+						
+			
+							signOutLink = logInfo.getLogoutUrl();
+							editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
+						}
+						
+				});
+					
+			} else {
+				login(logInfo.getLoginUrl());
 			}
+	
 
-		});
-
+		}});
 		/**
 		 * Add header and footer to the (root-)Panels they belong to
 		 */
@@ -142,6 +163,7 @@ public class Scart implements EntryPoint {
 
 		public void onSuccess(User u) {
 			loadPage();
+			
 		}
 	};
 
