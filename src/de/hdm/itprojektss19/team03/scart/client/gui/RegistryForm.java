@@ -13,6 +13,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -24,7 +26,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class RegistryForm extends VerticalPanel {
 
 	private EditorServiceAsync editorService = ClientsideSettings.getEditor();
-	private final User user = new User();
+	private User user = new User();
 
 	private Anchor logout = new Anchor();
 	private FlowPanel buttons = new FlowPanel();
@@ -76,11 +78,12 @@ public class RegistryForm extends VerticalPanel {
 	}
 
 	public void saveUser(User u) {
+
 		u.setUsername(nameTextbox.getValue());
 		editorService.createUser(u, new AsyncCallback<User>() {
 
 			public void onSuccess(User user) {
-				Window.Location.reload();
+				editorService.getUserByGMail(user.getEmail(), userCallback);
 			}
 
 			public void onFailure(Throwable e) {
@@ -89,6 +92,10 @@ public class RegistryForm extends VerticalPanel {
 			}
 		});
 	};
+
+	public void createGroup(User u) {
+
+	}
 
 	/**
 	 * UEberprueft korrekte syntax der Eingabe
@@ -117,6 +124,42 @@ public class RegistryForm extends VerticalPanel {
 		}
 	}
 
+	AsyncCallback<Group> createGroupCallback = new AsyncCallback<Group>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to create new Group: " + t);
+		}
+
+		public void onSuccess(Group g) {
+			editorService.addUserToGroup(user, g, addUserToGroupCallback);
+		}
+	};
+
+	AsyncCallback<GroupUser> addUserToGroupCallback = new AsyncCallback<GroupUser>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to add new user to new Group: " + t);
+		}
+
+		@Override
+		public void onSuccess(GroupUser gU) {
+			Window.Location.reload();
+		}
+	};
+
+	AsyncCallback<User> userCallback = new AsyncCallback<User>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to get user object: " + t);
+		}
+
+		public void onSuccess(User u) {
+			Group g = new Group("Meine erste Gruppe");
+			user = u;
+			editorService.createGroup(g, createGroupCallback);
+		}
+	};
+
 	ClickHandler saveClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent e) {
@@ -128,10 +171,4 @@ public class RegistryForm extends VerticalPanel {
 		}
 	};
 
-	ClickHandler loginClickHandler = new ClickHandler() {
-
-		public void onClick(ClickEvent e) {
-			// Cookies.removeCookie("dev_appserver_login");
-		}
-	};
 }
