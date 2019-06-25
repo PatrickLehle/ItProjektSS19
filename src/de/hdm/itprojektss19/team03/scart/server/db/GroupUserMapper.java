@@ -40,7 +40,7 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public void addUserToGroup(User user,Group group) throws DatabaseException {
+	public GroupUser addUserToGroup(User user,Group group) throws DatabaseException {
 		
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -57,7 +57,7 @@ public class GroupUserMapper {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-	
+	return null;
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
@@ -170,8 +170,7 @@ public Vector<User> getAllUserByGroupId(int id) throws DatabaseException{
 	PreparedStatement stmt = null;
 
 	// SQL-Anweisung zum auslesen der Tupel aus der DB
-	String selectByKey = "SELECT groupuser.userId, groupuser.groupId, groups.name," 
-	        + " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
+	String selectByKey = "SELECT user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
 	        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
 
 	Vector<User> result = new Vector<User>();

@@ -455,5 +455,69 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+	
+	public Vector<Article> findAllArticleByGroupId(int groupId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(
+					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,article.ownerId, article.creationDat, article.modDat, article.boolean, article.delDat FROM article WHERE groupId="
+							+ groupId);
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setOwnerId(rs.getInt("ownerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(
+					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,article.ownerId, article.creationDat, article.modDat, article.boolean, article.delDat FROM article WHERE ownerId="
+							+ ownerId);
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setOwnerId(rs.getInt("ownerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
 
 }
