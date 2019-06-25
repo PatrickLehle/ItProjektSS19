@@ -23,6 +23,7 @@ public class Article extends BusinessObject {
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
+	private boolean fav;
 	private Boolean checkBoolean;
 	
 	
@@ -34,6 +35,7 @@ public class Article extends BusinessObject {
 		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
+	    setFav(false);
 		setCheckBoolean(false);
 	}
 	
@@ -108,6 +110,14 @@ public class Article extends BusinessObject {
 	
 	public Timestamp getDelDat() {
 		return delDat;
+	}
+	
+	public void setFav(boolean fav) {
+		this.fav = fav;
+	}
+	
+	public boolean getFav() {
+		return this.fav;
 	}
 
 //RETAILER======================================================

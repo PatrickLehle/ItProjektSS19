@@ -188,6 +188,8 @@ public class Test {
 		//r.setId(2);
 		//r.setRetailerName("Aldi");
 		//RetailerMapper.retailerMapper().insert(r);
+		System.out.println(ArticleMapper.articleMapper().findAllArticleByFavouriteTRUE());
+		
 	}
 	
 	
