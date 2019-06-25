@@ -16,7 +16,6 @@ import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
@@ -39,13 +38,9 @@ public class Scart implements EntryPoint {
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
-	private User user = new User();
-	private String signOutLink;
-
 	private FooterForm footer = new FooterForm();
 	private GroceryListForm groceryListForm = new GroceryListForm();
 	private GroupForm groupForm = new GroupForm();
-	private ProfilForm profilForm = new ProfilForm();
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
 	private HorizontalPanel innerContentPanel = new HorizontalPanel();
@@ -54,8 +49,6 @@ public class Scart implements EntryPoint {
 
 	// @todo: delete test buttons
 	private Button button1 = new Button("grocery list");
-
-	private static Scart articleMapper = null;
 
 	/**
 	 * startet, sobald das Modul geladen wird.
@@ -87,6 +80,7 @@ public class Scart implements EntryPoint {
 						}
 
 						public void onSuccess(User result) {
+							Window.alert("id: " + result.getId());
 							loadPage();
 						}
 
