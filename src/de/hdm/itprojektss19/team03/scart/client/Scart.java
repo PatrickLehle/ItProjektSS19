@@ -4,14 +4,12 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
-import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
@@ -27,7 +25,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * Die Scart classe implementiert EntryPoint, d.h. sie wird als erstes
  * aufgerufen, sobald die Anwendung gestartet wird.
  * 
- * @author PatrickLehle
  * @author Marco Dell'Oso
  *
  */
@@ -37,16 +34,12 @@ public class Scart implements EntryPoint {
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
 	private FooterForm footer = new FooterForm();
-	private GroceryListForm groceryListForm;
 	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
 	private HorizontalPanel innerContentPanel = new HorizontalPanel();
 	private ScrollPanel navigationPanel = new ScrollPanel();
 	private ToolbarForm toolbar = new ToolbarForm(innerContentPanel);
-
-	// @todo: delete test buttons
-	private Button button1 = new Button("grocery list");
 
 	/**
 	 * startet, sobald das Modul geladen wird.
@@ -118,7 +111,6 @@ public class Scart implements EntryPoint {
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
-		innerContentPanel.add(button1);
 		contentPanel.add(navigationPanel);
 		contentPanel.add(innerContentPanel);
 
