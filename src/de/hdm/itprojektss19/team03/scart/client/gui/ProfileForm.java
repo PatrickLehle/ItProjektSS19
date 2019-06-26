@@ -66,8 +66,13 @@ public class ProfileForm {
 		
 	}
 	
+	/**
+	 * 
+	 * buildProfile-Methode: ...
+	 *
+	 */
+	
 	public void buildProfile() {
-		
 		
 		yourProfilePanel.add(yourProfileLabel);
 		userNamePanel.add(userNameLabel);
@@ -97,7 +102,6 @@ public class ProfileForm {
 
 		public void onClick(ClickEvent event) {
 
-			
 			userNameTB.setText(user.getUsername());
 			userNamePanel.add(userNameTB);
 
@@ -165,6 +169,7 @@ public class ProfileForm {
 			db.add(vp);
 			
 		}
+		
 	}
 	
 	class YesSaveButtonClickHandler implements ClickHandler {
@@ -192,6 +197,12 @@ public class ProfileForm {
 				
 			}
 			
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
+			
 		}
 		
 	}
@@ -208,11 +219,16 @@ public class ProfileForm {
 		
 		public void onClick(ClickEvent event) {
 			
-			
-			
 			editorService.deleteUser(user, new DeleteUserCallback());
+			
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
 
 		}
+		
 	}
 	
 	class NoButtonClickHandler implements ClickHandler {
@@ -237,8 +253,13 @@ public class ProfileForm {
 	
 	}
 	
+	/**
+	 * 
+	 * Callbacks: ...
+	 *
+	 */
+	
 	class FindUserByGMailCallback  implements AsyncCallback<User> {
-		
 		
 		@Override
 		public void onFailure(Throwable arg0) {
@@ -274,8 +295,7 @@ public class ProfileForm {
 			buildProfile();
 			
 		}
-		
-		
+			
 	}
 	
 	class DeleteUserCallback implements AsyncCallback <Void> {
@@ -293,8 +313,6 @@ public class ProfileForm {
 			Window.alert("Ihr Profil wurde erfolgreich gelöscht!");
 			
 		}
-		
-		
 		
 	}
 	
