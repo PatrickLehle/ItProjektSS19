@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.util.Vector;
 
+
+
 /**
  * Ein <code>ReportWriter</code>, der Reports mittels Plain Text formatiert. Das
  * im Zielformat vorliegende Ergebnis wird in der Variable
@@ -43,6 +45,8 @@ public class PlainTextReportWriter extends ReportWriter {
 		return "___________________________________________";
 	}
 
+//ARTICLE-REPORT-PROCESS===================================================================
+
 	/**
 	 * Prozessieren des übergebenen Reports und Ablage im Zielformat. Ein Auslesen
 	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
@@ -80,6 +84,8 @@ public class PlainTextReportWriter extends ReportWriter {
 		}
 	}
 
+//ARTICLE-DATE-REPORT-PROCESS===============================================================
+	
 	/**
 	 * Prozessieren des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
 	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
@@ -122,6 +128,15 @@ public class PlainTextReportWriter extends ReportWriter {
 		}
 	}
 
+//ARTICLE-RETAILER-REPORT-PROCESS=============================================================
+	
+	/**
+	 * Prozessieren des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
+	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
+	 * 
+	 * @param r
+	 *            der zu prozessierende Report
+	 */
 	public void process(ArticleRetailerReport r) {
 
 		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
@@ -157,6 +172,50 @@ public class PlainTextReportWriter extends ReportWriter {
 		}
 	}
 
+//ARTICLE-DATE-RETAILER-REPORT-PROCESS=======================================================
+
+	/**
+	 * Prozessieren des uebergebenen Reports und Ablage im Zielformat. Ein Auslesen
+	 * des Ergebnisses kann später mittels <code>getReportText()</code> erfolgen.
+	 * 
+	 * @param r
+	 *            der zu prozessierende Report
+	 */
+	@Override
+	public void process(ArticleDateRetailerReport r) {
+		// Zunaechst loeschen wir das Ergebnis vorhergehender Prozessierungen.
+		this.resetReportText();
+
+		/*
+		 * In diesen Buffer schreiben wir waehrend der Prozessierung sukzessiv unsere
+		 * Ergebnisse.
+		 */
+		StringBuffer result = new StringBuffer();
+
+		/*
+		 * Nun werden Schritt fuer Schritt die einzelnen Bestandteile des Reports
+		 * ausgelesen und in Text-Form ueersetzt.
+		 */
+		result.append("Untertitel " + r.getTitle() + "\n");
+
+		Vector<Row> rows = r.getRows();
+
+		for (Row row : rows) {
+			for (int k = 0; k < row.getNumColumns(); k++) {
+				result.append(row.getColumnAt(k) + "\t ; \t");
+			}
+
+			result.append("\n");
+
+			/*
+			 * Zum Schluss wird unser Arbeits-Buffer in einen String umgewandelt und der
+			 * reportText-Variable zugewiesen. Dadurch wird es moeglich, anschließend das
+			 * Ergebnis mittels getReportText() auszulesen.
+			 */
+			this.reportText = result.toString();
+		}
+	}
+	
 	/**
 	 * Auslesen des Ergebnisses der zuletzt aufgerufenen Prozessierungsmethode.
 	 * 
@@ -165,10 +224,5 @@ public class PlainTextReportWriter extends ReportWriter {
 	public String getReportText() {
 		return this.getHeader() + this.reportText + this.getTrailer();
 	}
-
-	@Override
-	public void process(ArticleDateRetailerReport r) {
-		// TODO Auto-generated method stub
-
-	}
 }
+

@@ -9,12 +9,13 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * Die ReportForm beinhaltet alle notwendigen GUI-GWT-Elemente,
@@ -27,7 +28,7 @@ public class ReportForm extends VerticalPanel{
 	
 	EditorServiceAsync editorV = ClientsideSettings.getEditor();
 	
-	Group group = null;
+	User user = null;
 	
 //CONSTRUCTORS========================================================
 	
@@ -35,8 +36,8 @@ public class ReportForm extends VerticalPanel{
 		
 	}
 	
-	public ReportForm(Group g) {
-		this.group = g;
+	public ReportForm(User u) {
+		this.user = u;
 	}
 	
 //LABELS==============================================================
@@ -45,10 +46,10 @@ public class ReportForm extends VerticalPanel{
 	
 //PANELS==============================================================
 
-	HorizontalPanel header = new HorizontalPanel();
-	HorizontalPanel main = new HorizontalPanel();
-	HorizontalPanel filter = new HorizontalPanel();
-	ScrollPanel scroll = new ScrollPanel();
+	HorizontalPanel headerHP = new HorizontalPanel();
+	HorizontalPanel mainHP = new HorizontalPanel();
+	VerticalPanel filterVP = new VerticalPanel();
+	ScrollPanel scrollP = new ScrollPanel();
 
 //HTML================================================================
 	
@@ -59,14 +60,14 @@ public class ReportForm extends VerticalPanel{
 	public void onLoad() {
 		super.onLoad();
 		
-		editorV.getGroupById(group.getId(), new findGroupCallBack());
+		editorV.getUserById(user.getId(), new findUserCallBack());
 		
 	//SETTING-STYLE-NAME==========================
 		this.addStyleName("ReportForm");
-		header.addStyleName("ReportHeader");
-		main.setStyleName("MainReport");
-		filter.addStyleName("NavPanel");
-		scroll.addStyleName("Scroll");
+		headerHP.addStyleName("ReportHeader");
+		mainHP.setStyleName("MainReport");
+		filterVP.addStyleName("NavPanel");
+		scrollP.addStyleName("Scroll");
 	
 	//BUTTON======================================
 		Button editor = new Button("Editor", new ClickHandler() {
@@ -78,18 +79,21 @@ public class ReportForm extends VerticalPanel{
 		});
 	
 	//ADD=========================================
-		header.add(editor);
-		scroll.add(reportHTML);
-		ReportFilterForm reportFForm = new ReportFilterForm(group, this);
-		filter.add(reportFForm);
-		main.add(filter);
-		main.add(scroll);
-		main.setWidth("100%");
-		main.setCellWidth(filter, "20%");
-		main.setHorizontalAlignment(ALIGN_CENTER);
+		headerHP.add(editor);
+		scrollP.add(reportHTML);
+		ReportFilterForm reportFForm = new ReportFilterForm(user);
+		filterVP.add(reportFForm);
+		mainHP.add(filterVP);
+		mainHP.add(scrollP);
+		mainHP.setWidth("100%");
+		mainHP.setCellWidth(filterVP, "20%");
+		mainHP.setHorizontalAlignment(ALIGN_CENTER);
 		
-		this.add(header);
-		this.add(main);
+		RootPanel.get().add(headerHP);
+		RootPanel.get().add(mainHP);
+		
+//		this.add(header);
+//		this.add(main);
 	}
 
 //SETTER===============================================================
@@ -97,22 +101,23 @@ public class ReportForm extends VerticalPanel{
 	public void setReport(HTML rHTML) {
 		if(rHTML != null) {
 			this.reportHTML = rHTML;
-			scroll.clear();
-			scroll.add(reportHTML);
+			scrollP.clear();
+			scrollP.add(reportHTML);
+			RootPanel.get("content").add(scrollP);
 		}
 	}
 
 //CLASS================================================================
 	
-	class findGroupCallBack implements AsyncCallback<Group>{
+	class findUserCallBack implements AsyncCallback<User>{
 		
 		public void onFailure(Throwable caught) {
 	
 		}
 		
-		public void onSuccess(Group result) {
-			if(result != null && result.getId() == group.getId()) {
-				group = result;
+		public void onSuccess(User result) {
+			if(result != null && result.getId() == user.getId()) {
+				user = result;
 			}
 		}
 	}

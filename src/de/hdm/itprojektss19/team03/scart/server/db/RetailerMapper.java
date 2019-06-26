@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
-import de.hdm.itprojektss19.team03.scart.server.db.DBConnection;
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
+import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
+import de.hdm.itprojektss19.team03.scart.shared.bo.BusinessObject;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
@@ -51,10 +54,12 @@ public class RetailerMapper {
 	 * 
 	 * Sucht eine Retailer anhand seiner ID
 	 * 
-	 * @param zu Suchende id
+	 * @param zu
+	 *            Suchende id
 	 * @return Das Retailer-Objekt, falls ein passendes gefunden wurde.
+	 * @throws DatabaseException
 	 */
-	public Retailer findByKey(int id) {
+	public Retailer findByKey(int id) throws DatabaseException {
 
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
@@ -71,18 +76,21 @@ public class RetailerMapper {
 				return retailer;
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}
+
 	/**
 	 * Gibt einen Retailer via Namen zurueck
+	 * 
 	 * @param name
 	 * @param r
 	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
+	 * @throws DatabaseException
 	 */
-	public Vector<Retailer> findRetailerByName(String name, Retailer r){
+	public Vector<Retailer> findRetailerByName(String name, Retailer r) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -97,7 +105,7 @@ public class RetailerMapper {
 
 			ResultSet rs = stmt.executeQuery();
 
-				while (rs.next()) {
+			while (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setRetailerId(rs.getInt("id"));
 				retailer.setRetailerName(rs.getString("name"));
@@ -105,8 +113,8 @@ public class RetailerMapper {
 				result.addElement(retailer);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
-			return null;
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return result;
 	}
@@ -115,8 +123,9 @@ public class RetailerMapper {
 	 * Sucht alle Retailers
 	 * 
 	 * @return Vector mit allen gefundenen Retailers
+	 * @throws DatabaseException
 	 */
-	public Vector<Retailer> findAll() {
+	public Vector<Retailer> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
 		Connection con = DBConnection.connection();
 
@@ -135,20 +144,47 @@ public class RetailerMapper {
 				retailers.addElement(retailer);
 			}
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 
 		return retailers;
 	}
 	
+	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT retailer.id, retailer.name FROM retailer, groups WHERE groupId=" + groupId);
+		
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				retailer.setId(rs.getInt("id"));
+				retailer.setRetailerName(rs.getString("name"));
+
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
 	/**
 	 * F�gt in der Datenbank einen neuen Retailer ein
 	 * 
-	 * @param Retailer-Objekt das in die DB eingef�gt werden soll
+	 * @param Retailer-Objekt
+	 *            das in die DB eingef�gt werden soll
 	 * @return Die Eingef�gte Retailer mit aktueller ID
+	 * @throws DatabaseException
 	 */
-	public Retailer insert(Retailer retailer) {
-		
+	public Retailer insert(Retailer retailer) throws DatabaseException {
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
@@ -158,7 +194,7 @@ public class RetailerMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(maxIdSQL);
 			ResultSet rs = stmt.executeQuery();
-			
+
 			if (rs.next()) {
 				retailer.setId(rs.getInt("maxid") + 1);
 			}
@@ -168,7 +204,8 @@ public class RetailerMapper {
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return retailer;
 	}
@@ -176,10 +213,12 @@ public class RetailerMapper {
 	/**
 	 * �ndert einen Retailer in der Datenbank
 	 * 
-	 * @param Zu �ndernder Retailer
+	 * @param Zu
+	 *            �ndernder Retailer
 	 * @return Ge�nderter Retailer
+	 * @throws DatabaseException
 	 */
-	public Retailer update(Retailer retailer) {
+	public Retailer update(Retailer retailer) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -192,30 +231,33 @@ public class RetailerMapper {
 			stmt.setString(1, retailer.getRetailerName());
 			stmt.setInt(2, retailer.getId());
 			stmt.executeUpdate();
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return retailer;
 	}
-	
+
 	/**
 	 * L�scht einen Retailer aus der Datenbank
 	 * 
-	 * @param Zu l�schender Retailer
+	 * @param Zu
+	 *            l�schender Retailer
+	 * @throws DatabaseException
 	 */
-	public void delete(Retailer retailer) {
+	public void delete(Retailer retailer) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		try {
 			Statement stmt = con.createStatement();
 			stmt.executeUpdate("DELETE FROM retailer WHERE id=" + retailer.getId());
 
 		} catch (SQLException e2) {
-			e2.printStackTrace();
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 	}
-	
-	public Retailer findById(int id) {
+
+	public Retailer findById(int id) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
@@ -234,9 +276,9 @@ public class RetailerMapper {
 				r.setRetailerName(rs.getString("name"));
 				return r;
 			}
-		}
-		catch (SQLException e2) {
-			e2.printStackTrace();
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
 		return null;
 	}

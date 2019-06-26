@@ -1,1 +1,267 @@
 @charset "UTF-8";
+
+/* REPORT CSS FILE */
+
+body {
+	height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	padding: 0px;
+	margin: 0px !important;
+	font-family: 'Raleway', sans-serif !important;
+	background: black !important;
+}
+.gwt-Anchor{
+	positin: fixed;
+ 	margin: 10px 0px 0px 100px;
+	padding: 7px;
+	color: black;
+	border-width: 5px;
+	font-weight: bold;
+	border-bottom-right-radius: 10px; 
+	border-bottom-left-radius: 10px; 
+	border-color: red;
+	border: solid;
+	border: 5px;
+	background:#edd44d; 
+
+}
+
+.welcomeReportText{
+	color: #f1d750;
+	font-size: 10pt; 
+	font-weight: bold;
+	padding: 15px;
+	text-shadow: 0 0 0.5em #87F, 0 0 0.5em #87F, 0 0 0.5em #87F;
+}
+
+#top{		
+	background: url(/images/scartbannerdarkblank.jpg);
+	background-size: cover;
+} 
+ 	
+#navigator{
+	position: sticky;
+	display: block;
+	float: left;
+	text-align: center;
+	height: 100%;
+	margin: 60px 0px 0px 100px !important;
+	background-color: #edd44d;
+	border-radius: 6px;
+	-moz-box-shadow: inset 0 0 4px #000000;
+	-webkit-box-shadow: inset 0 0 4px #000000;
+	box-shadow: inset 0 0 4px #000000;
+}
+				
+#content{
+ 	float: right;
+	background: #edd44d;
+	background-size: 100% 100% !important;
+	border-radius: 6px;
+	-moz-box-shadow: inset 0 0 10px #000000;
+	-webkit-box-shadow: inset 0 0 10px #000000;
+	box-shadow: inset 0 0 10px #000000;
+	width: auto;
+	margin: 60px 100px 0px 0px !important;
+	height: auto; 
+	padding: 5px;
+	margin: 3px; 
+	
+}
+		
+#footer{
+	padding: 7px 0px 0px 0px;
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	background: url(/images/scartbannerdarkblank.jpg) !important;
+	background-size: cover !important;
+	border-radius: 3px;
+	clear:both;
+}
+
+.PickGroupVPanel{
+	width: 450px;
+	align: center !important;
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.ChooseGroupLabel{
+	border: none;
+	font-family: sans-serif;
+	font-weight: bold;
+	border-radius: 0px;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	width: auto;
+	padding: 15px;
+	background: #ff4a5c;
+}
+
+.PickPeriodVPanel{
+	width: 450px;
+	height: 100%;
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+.periodLabel{
+	border: none;
+	font-family: sans-serif;
+	font-size: 4px;
+	font-weight: bold;
+	border-radius: 0px;
+	width: auto;
+	padding: 15px;
+	background: #ff4a5c;
+}
+
+.StartPanel{
+	margin: 10px;
+	padding: 10px;
+	border-radius: 3px;
+}
+
+.EndPanel{
+	margin: 10px;
+	/* border-size: 5px; */
+	padding: 10px;
+	border-radius: 3px;
+}
+
+.RetailerVP{
+	width: 450px;
+	height: 100%;
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.RetailerLabel{
+	border: none;
+	font-family: sans-serif;
+	font-weight: bold;
+	border-radius: 0px;
+	width: auto;
+	padding: 15px;
+	background: #ff4a5c;
+}
+
+.CheckBoxesGroupVPanel{
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.CheckBoxesRetailerVP{
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+.PeriodTimePickerH{
+	border: none;
+	padding: 5px;
+	background: #404040;
+	color: #ffffff;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	width: 100%;
+	height: 100%;
+}
+
+.reportBtnVP{
+	border: none;
+	padding: 5px;
+	background: #404040;
+	color: #ffffff;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-align: center;
+	border-radius: 0px;
+	border-bottom-right-radius: 7px;
+	border-bottom-left-radius: 7px;
+	width: 100%;
+}
+
+button.gwt-Button {
+	border: none;
+	padding: 7px;
+	background: #404040;
+	color: #ffffff;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	width: 100%;
+}   
+
+.gwt-Label{
+	font-size: 15px;
+}
+
+.DisabledPeriodBtn{
+	border: none;
+	padding: 7px;
+	background: #404040 !important;
+	color: #ffffff ;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+	width: 450px;
+}
+
+.DisabledPeriodVPonClick{
+	opacity: 0.2;
+	width: 450px;
+	height: 100%;
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+
+.DisabledRetailerVPonClick{
+	opacity: 0.2;
+	width: 450px;
+	height: 100%;
+	background: #76e76d;
+	margin: 10px;
+	border-radius: 10px;
+}
+.DisabledRetailerBtn{
+	border: none;
+	padding: 7px;
+	background: #404040 !important;
+	color: #ffffff;
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 20px;
+	border-top-left-radius: 20px;
+	width: auto;
+}
+
+.gwt-ToggleButton {
+	border: none;
+	padding: 7px !important;
+	background: #404040 !important;
+	color: #ffffff !important; 
+	font-family: sans-serif;
+	text-align: center;
+	border-radius: 0px;
+	border-top-right-radius: 10px !important;
+	border-top-left-radius: 10px !important;
+	width: auto;
+}
+
+

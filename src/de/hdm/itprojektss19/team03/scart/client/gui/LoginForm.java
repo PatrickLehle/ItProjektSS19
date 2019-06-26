@@ -1,41 +1,33 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Anchor;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.VerticalPanel;
+
+import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 
 public class LoginForm extends VerticalPanel {
 
 	private Anchor signInLink;
+	private Image googleSignIn = new Image("/images/googleLogin.png");
+	private LoginInfo loginInfo = new LoginInfo();
+	private Label label = new Label("Logge dich mit deinem Google Konto ein oder erstelle ein neues Profil");
 
-	public LoginForm() {
-	}
-
-	public LoginForm(String str) {
+	public LoginForm(String loginURL) {
 		signInLink = new Anchor();
-		signInLink.setHref(str);
+		signInLink.setHref(loginURL);
 
 	}
 
 	public void onLoad() {
 		super.onLoad();
 
-		Label header = new Label("Shop smart, with SCart!");
-		Image logo = new Image("/images/ScartLogo.png");
-		VerticalPanel loginPanel = new VerticalPanel();
-		Image googleSignIn = new Image("/images/googleLogin.png");
-
-		loginPanel.setStyleName("login-panel");
-		loginPanel.setVerticalAlignment(ALIGN_MIDDLE);
-		loginPanel.setHorizontalAlignment(ALIGN_CENTER);
-		logo.setStyleName("logo");
-		header.setStyleName("login-text");
 		googleSignIn.setStylePrimaryName("signinwithgoogle");
 		signInLink.getElement().appendChild(googleSignIn.getElement());
+		// signInLink.setHref(loginInfo.getLoginUrl());
 
-		// loginPanel.add(logo);
-		loginPanel.add(header);
-		loginPanel.add(signInLink);
-
-		this.add(loginPanel);
-
+		this.add(label);
+		this.add(signInLink);
 	}
 }

@@ -1,9 +1,9 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Vector;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -22,75 +22,78 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 @RemoteServiceRelativePath("editorservice")
 public interface EditorService extends RemoteService {
-	
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl #init();
 	 */
 	public void init() throws IllegalArgumentException;
-	
-	
-//USER===========================================================================
-	
-	
+
+	// USER===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createUser(String emailAddress);
-	 * @param username, emailAddress 
-	 * 						Email Adresse des Users
+	 * @param username,
+	 *            emailAddress Email Adresse des Users
 	 * @return angelegter/ erstellter User
+	 * @throws Exception
 	 */
-	public User createUser( String username, String emailAdress) throws IllegalArgumentException;
-	
+	public User createUser(String username, String emailAdress) throws IllegalArgumentException, Exception;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createUser(String emailAddress);
-	 * @param emailAddress 
-	 * 						Email Adresse des Users
-	 * @return angelegter/ erstellter User
+	 * @param emailAddress
+	 *            Email Adresse des Users
+	 * @return angelegter/ erstellter UserF
+	 * @throws DatabaseException
 	 */
-	public User createUser(String emailAdress) throws IllegalArgumentException;
-	
-	
+	public User createUser(String emailAdress) throws IllegalArgumentException, DatabaseException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteUser(User u);
-	 * @param n - aktuell eingeloggter User
+	 * @param n
+	 *            - aktuell eingeloggter User
+	 * @throws DatabaseException
 	 * 
 	 */
-	public void deleteUser(User u) throws IllegalArgumentException;
-	
+	public void deleteUser(User u) throws IllegalArgumentException, DatabaseException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getUserById(int userId);
-	 * @param userId 
-	 * 				UserId des Users
+	 * @param userId
+	 *            UserId des Users
 	 * @return nutzer
+	 * @throws DatabaseException
 	 * 
 	 */
-	public User getUserById(int userId) throws IllegalArgumentException;
-	
+	public User getUserById(int userId) throws IllegalArgumentException, DatabaseException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getUserByGmail(String email);
-	 * @param email 
-	 * 				Email des Email Users
+	 * @param email
+	 *            Email des Email Users
 	 * @return user
+	 * @throws DatabaseException
+	 * @throws IllegalArgumentException
 	 * 
 	 */
-	public User getUserByGMail(String email) throws IllegalArgumentException;
-	
+	public User getUserByGMail(String email)
+			throws IllegalArgumentException, DatabaseException, IllegalArgumentException;
+
 	/**
 	 * 
 	 * @param user
-	 * @return  gibt eigenes user Profil zurueck
+	 * @return gibt eigenes user Profil zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public User getOwnProfile(User user) throws IllegalArgumentException;
-	
-	
-//GROUP===========================================================================
-	
+
+	// GROUP===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createUser(Group g);
@@ -99,7 +102,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Group createGroup(Group g) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveGroup(Group g);
@@ -107,7 +110,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void saveGroup(Group g) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteGroup(Group g);
@@ -115,7 +118,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteGroup(Group g) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getGroupById(int groupId);
@@ -124,7 +127,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Group getGroupById(int groupId) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getAllGroupsByUser(User u);
@@ -141,8 +144,8 @@ public interface EditorService extends RemoteService {
 	 * @param g
 	 * @throws IllegalArgumentException
 	 */
-	public void addUserToGroup(User u, Group g) throws IllegalArgumentException;
-	
+	public void addUserToGroup(User user, Group group) throws IllegalArgumentException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #leaveGroup(User u, Group g);
@@ -151,15 +154,16 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllGroups()
 	 * @return
 	 * @throws IllegalArgumentException
+	 * @throws DatabaseException
 	 */
-	public Vector<Group> findAllGroups() throws IllegalArgumentException;
-	
+	public Vector<Group> findAllGroups() throws IllegalArgumentException, DatabaseException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #statusSharingGroup(Vector<Group> result);
@@ -167,9 +171,30 @@ public interface EditorService extends RemoteService {
 	 * @return zeigt den Status der Gruppen an
 	 */
 	public Vector<Group> statusSharingGroup(Vector<Group> result);
+
+	// GROUP-USER============================================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroupsByUserId(int id);
+	 * @param id
+	 * @return gibt alle Gruppen eines Users zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException;
 	
-//GROCERYLIST===========================================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#getAllUsersByGroupId(int id);
+	 * @param id
+	 * @return gibt alle User einer Group zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<User> getAllUsersByGroupId(int id) throws IllegalArgumentException;
 	
+	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException;
+
+	// GROCERYLIST===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createGroceryList(String name, GroceryList gl);
@@ -179,7 +204,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveGroceryList(GroceryList gl);
@@ -187,7 +212,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void saveGroceryList(GroceryList gl) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteGroceryList(GroceryList gl);
@@ -195,7 +220,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteGroceryList(GroceryList gl) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getGroceryListByOwner(User u);
@@ -230,9 +255,36 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException;
-	
-//ARTICLE===========================================================================
-	
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroceryListByGroupId(int id);
+	 *      @return gibt alle GL's einer Grouppe via id zurueck
+	 * @param id
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllGroceryLists();
+	 *
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException;
+
+	// GROCERYLIST-ARTICLE===============================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByGroceryList(int id);
+	 * @param id
+	 * @return gibt alle Article einer GroceryList aus.
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException;
+
+	// ARTICLE===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createArticle(Article a);
@@ -241,7 +293,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Article createArticle(Article a) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveArticle(Article a);
@@ -249,7 +301,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Article saveArticle(Article a) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteArticle(Article a);
@@ -257,7 +309,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteArticle(Article a) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getArticleById(int articleId);
@@ -275,8 +327,8 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Article> findAllArticle() throws IllegalArgumentException;
 
-//RETAILER===========================================================================
-	
+	// RETAILER===========================================================================
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #createRetailer(Retailer r);
@@ -285,7 +337,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Retailer createRetailer(Retailer r) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveRetailer(Retailer r);
@@ -293,7 +345,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void saveRetailer(Retailer r) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteRetailer(Retailer r);
@@ -301,7 +353,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteRetailer(Retailer r) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getArticleByRetailer(Retailer r);
@@ -310,7 +362,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getArticleByDate(Date start, Date end);
@@ -320,7 +372,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getArticleByDateRetailer(Date start, Date end, Retailer r);
@@ -330,8 +382,9 @@ public interface EditorService extends RemoteService {
 	 * @return gibt einen Article eines Retailers mit Zeitspanne zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end) throws IllegalArgumentException;
-	
+	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end)
+			throws IllegalArgumentException;
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getRetailerById(int retailerId);
@@ -340,61 +393,70 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException;
-	
+
 	/**
-	 *  @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #getRetailerById(int retailerId);
-	 * @return gibt einen Vektor mit allen Retailer zurueck
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllRetailer();
+	 * @return gibt alle Retailer zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
 	
-//UNIT===========================================================================
-	
-//	/**
-//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-//	 *      #createUnit(Unit u);
-//	 * @param u
-//	 * @return eine Unit wird erstellt
-//	 * @throws IllegalArgumentException
-//	 */
-//	public Unit createUnit(Unit u) throws IllegalArgumentException;
-//	
-//	/**
-//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-//	 *      #saveUnit(Unit u);
-//	 * @param u
-//	 * @throws IllegalArgumentException
-//	 */
-//	public void saveUnit(Unit u) throws IllegalArgumentException;
-//	
-//	/**
-//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-//	 *      #deleteUnit(Unit u);
-//	 * @param u
-//	 * @throws IllegalArgumentException
-//	 */
-//	public void deleteUnit(Unit u) throws IllegalArgumentException;
-//	
-//	/**
-//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-//	 *      #getUnitById(int unitId);
-//	 * @param unitId
-//	 * @return es wird nach einer Unit via Id gesucht
-//	 * @throws IllegalArgumentException
-//	 */
-//	public Unit getUnitById(int unitId) throws IllegalArgumentException;
-//	
-//	/**
-//	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-//	 *      #getUnitByName(String unitName);
-//	 * @param unitName
-//	 * @return es wird eine Unit via name gesucht
-//	 * @throws IllegalArgumentException
-//	 */
-//	public Unit getUnitByName(String unitName) throws IllegalArgumentException;
-	
-//ENTRY===========================================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 		#getAllRetailerByGroupId(int groupId);
+	 * @param groupId
+	 * @return gibt alle Retailer einer Gruppe via groupId zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException;
+
+	// UNIT===========================================================================
+
+	// /**
+	// * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	// * #createUnit(Unit u);
+	// * @param u
+	// * @return eine Unit wird erstellt
+	// * @throws IllegalArgumentException
+	// */
+	// public Unit createUnit(Unit u) throws IllegalArgumentException;
+	//
+	// /**
+	// * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	// * #saveUnit(Unit u);
+	// * @param u
+	// * @throws IllegalArgumentException
+	// */
+	// public void saveUnit(Unit u) throws IllegalArgumentException;
+	//
+	// /**
+	// * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	// * #deleteUnit(Unit u);
+	// * @param u
+	// * @throws IllegalArgumentException
+	// */
+	// public void deleteUnit(Unit u) throws IllegalArgumentException;
+	//
+	// /**
+	// * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	// * #getUnitById(int unitId);
+	// * @param unitId
+	// * @return es wird nach einer Unit via Id gesucht
+	// * @throws IllegalArgumentException
+	// */
+	// public Unit getUnitById(int unitId) throws IllegalArgumentException;
+	//
+	// /**
+	// * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	// * #getUnitByName(String unitName);
+	// * @param unitName
+	// * @return es wird eine Unit via name gesucht
+	// * @throws IllegalArgumentException
+	// */
+	// public Unit getUnitByName(String unitName) throws IllegalArgumentException;
+
+	// ENTRY===========================================================================
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -404,7 +466,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Entry createEntry(Entry e) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveEntry(Entry e);
@@ -412,7 +474,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void saveEntry(Entry e) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteEntry(Entry e);
@@ -420,12 +482,40 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public void deleteEntry(Entry e) throws IllegalArgumentException;
+
+	// GroceryListArticle===========================================================================
 	
-//GroceryListArticle===========================================================================
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #deleteEntry(Entry e);
+	 * @param e
+	 * @throws IllegalArgumentException
+	 */
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #removeArticleFromGroceryList(GroceryList gl, Article a);
+	 * @param gl, a
+	 * @throws IllegalArgumentException
+	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByGroceryList(int groceryListId);
+	 * @param gl, a
+	 * @return gibt alle Article einer GL zurueck
+	 * @throws IllegalArgumentException
+	 */
 	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #deleteArticleFromAllLists(Article a);
+	 * @param a
+	 * @throws IllegalArgumentException
+	 */
 	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
-	
-	
+
 }

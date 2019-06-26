@@ -18,8 +18,11 @@ public class Article extends BusinessObject {
 	private int quantity;
 	private String unit;
 	private int retailerId;
+	private int ownerId;
+	private Retailer retailer = new Retailer();
 	private Timestamp creationDat;
 	private Timestamp modDat;
+	private Timestamp delDat;
 	private Boolean checkBoolean;
 	
 	
@@ -36,11 +39,13 @@ public class Article extends BusinessObject {
 	
 //Default Constructor
 	public Article () {
-		
+	
 	}
 	
 //METHODS===============================================================
-	
+	public int getId() {
+		return this.id;
+	}
 	public void setCheckBoolean(Boolean checkBoolean) {
 		this.checkBoolean = checkBoolean;
 	}
@@ -80,7 +85,14 @@ public class Article extends BusinessObject {
 	public void setCreationDat(Timestamp i) {
 		this.creationDat = i;
 	}
+	
+	public int getOwnerId() {
+		return ownerId;
+	}
 
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	public Timestamp getModDat() {
 		return modDat;
@@ -88,6 +100,14 @@ public class Article extends BusinessObject {
 
 	public void setModDat(Timestamp modDat) {
 		this.modDat = modDat;
+	}
+	
+	public void setDelDat(Timestamp delDat) {
+		this.delDat = delDat;
+	}
+	
+	public Timestamp getDelDat() {
+		return delDat;
 	}
 
 //RETAILER======================================================
@@ -99,6 +119,14 @@ public class Article extends BusinessObject {
 
 	public int getRetailerId() {
 		return this.retailerId;
+	}
+	
+	public void setRetailer(String ret) {
+		this.retailer.setRetailerName(ret);
+	}
+	
+	public String getRetailer() {
+		return this.retailer.getRetailerName();
 	}
 
 }

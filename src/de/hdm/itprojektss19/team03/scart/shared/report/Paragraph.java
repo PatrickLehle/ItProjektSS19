@@ -1,6 +1,9 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
+import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 import de.hdm.itprojektss19.team03.scart.shared.report.Report;
 
@@ -22,7 +25,7 @@ import de.hdm.itprojektss19.team03.scart.shared.report.Report;
  * @see Report
  * @author Thies
  */
-public abstract class Paragraph implements Serializable {
+public abstract class Paragraph implements IsSerializable {
 
   /**
    * 

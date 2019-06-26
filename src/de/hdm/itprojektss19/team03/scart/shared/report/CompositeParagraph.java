@@ -1,7 +1,11 @@
 package de.hdm.itprojektss19.team03.scart.shared.report;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 
 	/**
 	 * Diese Klasse stellt eine Menge einzelner Absätze (
@@ -10,7 +14,7 @@ import java.util.Vector;
 	 * 
 	 * @author Thies
 	 */
-	public class CompositeParagraph extends Paragraph implements Serializable {
+	public class CompositeParagraph extends Paragraph implements IsSerializable {
 
 	  /**
 	   * 
@@ -22,6 +26,15 @@ import java.util.Vector;
 	   */
 	  private Vector<SimpleParagraph> subParagraphs = new Vector<SimpleParagraph>();
 
+		/**
+		 * Methode um alle SimpleParagraph-Objekte des CompositeParagraphs auszugeben.
+		 * Es werden also alle "Unterabschnitte" hier ausgegeben.
+		 * @return ArrayList mit allen (Sub)SimpleParagraphs
+		 */
+		public Vector<SimpleParagraph> getAllSimpleParagraphs ()
+		{
+			return this.subParagraphs;	
+		}
 	  /**
 	   * Einen Unterabschnitt hinzufügen.
 	   * 

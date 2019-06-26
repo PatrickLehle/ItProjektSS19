@@ -60,5 +60,10 @@ public class Group extends BusinessObject implements IsSerializable {
 		//Hat noch keine sinnvolle implementierung <3
 		return status;
 	}
+	
+	public int getId() {
+		return this.id;
+	}
+	
 
 }
