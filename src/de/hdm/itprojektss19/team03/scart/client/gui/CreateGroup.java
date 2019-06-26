@@ -188,12 +188,6 @@ public class CreateGroup extends VerticalPanel {
 				responseLabel.setText("");
 				createGroup.setGroupName(groupName);
 
-				// HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
-				// WENN COOKIES FUNKTIONIEREN
-				user.setUsername("Franz");
-				user.setEmail("test@hotmail.de");
-				user.setId(1);
-
 				try {
 					if (user == null) {
 						throw new NullPointerException();
@@ -206,9 +200,7 @@ public class CreateGroup extends VerticalPanel {
 						 * 
 						 */
 						public void onFailure(Throwable caught) {
-							responseLabel.setText("Fehler: User and Group not compatible.");
-							// responseLabel.addStyleName("serverResponseLabel");
-							// responseLabel.setText(SERVER_ERROR);
+							Window.alert("Group could not be creater: " + caught);
 						}
 
 						@Override

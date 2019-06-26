@@ -2,8 +2,6 @@ package de.hdm.itprojektss19.team03.scart.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -39,7 +37,7 @@ public class Scart implements EntryPoint {
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
 	private FooterForm footer = new FooterForm();
-	private GroceryListForm groceryListForm = new GroceryListForm();
+	private GroceryListForm groceryListForm;
 	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
@@ -116,7 +114,7 @@ public class Scart implements EntryPoint {
 	private void loadPage(User user) {
 
 		innerContentPanel.addStyleName("inner-content");
-		groupForm = new GroupForm(user);
+		groupForm = new GroupForm(user, innerContentPanel);
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
@@ -126,16 +124,6 @@ public class Scart implements EntryPoint {
 
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentPanel);
-
-		// @todo: delete test buttons
-		button1.addClickHandler(new ClickHandler() {
-
-			public void onClick(ClickEvent evt) {
-				innerContentPanel.clear();
-				innerContentPanel.add(groceryListForm);
-
-			}
-		});
 
 	}
 
