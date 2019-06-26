@@ -256,6 +256,21 @@ public class ProfileForm {
 		
 	}
 	
-	
+	class VerifyFieldCallback implements AsyncCallback<String[]> {
+		
+		
+		public void onFailure() {
+			
+			
+			
+		}
+		
+		public void onSuccess() {
+			
+			
+			
+		}
+		
+	}
 	
 }
