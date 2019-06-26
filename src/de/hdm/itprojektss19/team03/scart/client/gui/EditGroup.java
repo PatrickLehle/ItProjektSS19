@@ -8,9 +8,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
@@ -29,30 +31,35 @@ public class EditGroup extends VerticalPanel {
 
 	// CONNECTION WITH EDITORSERVICE/MAPPER============================
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
-
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
 	Group group = new Group();
 	User user = new User();
-	// Vector<Group> allGroups = new Vector<Group>();
-	Vector<String> allGroups = new Vector<String>();
-	Vector<Integer> allGroupIds = new Vector<Integer>();
-	Vector<String> choosenGroups = new Vector<String>();
+	
+//	// Vector<Group> allGroups = new Vector<Group>();
+//	Vector<String> allGroups = new Vector<String>();
+//	Vector<Integer> allGroupIds = new Vector<Integer>();
+//	Vector<String> choosenGroups = new Vector<String>();
 	Vector<String> allUsers = new Vector<String>();
 
 	// PANELS
-	HorizontalPanel groupUserPanel = new HorizontalPanel();
 	VerticalPanel groupFormPanel = new VerticalPanel();
-	VerticalPanel checkBoxesGroup = new VerticalPanel();
 	VerticalPanel userPanel = new VerticalPanel();
-	VerticalPanel groupBtnPanel = new VerticalPanel();
+	HorizontalPanel btnPanel = new HorizontalPanel();
+	HorizontalPanel groupNamePanel = new HorizontalPanel();	
 
 	// Labels
-	Label groupLabel = new Label("Gruppenverwaltung");
+	Label groupLabel = new Label("Gruppenname: ");
+	
+	//TextBox
+	TextBox groupTextBox = new TextBox();
+	
+	//FlexTable
+	FlexTable userTable = new FlexTable();
 
 	// Buttons
-	Button deleteGroupButton = new Button("Löschen");
-	Button manageGroupButton = new Button("Bearbeiten");
+	Button deleteGroupButton = new Button("Austreten");
+	Button safeGroupButton = new Button("Speichern");
 	Button backToGroupButton = new Button("Zurück");
 
 	public EditGroup() {
@@ -62,59 +69,61 @@ public class EditGroup extends VerticalPanel {
 	public EditGroup(User u, Group g) {
 		this.user = u;
 		this.group = g;
+		group.setId(1);
 	}
 
 	public void onLoad() {
 		super.onLoad();
 
-		checkBoxesGroup.setHorizontalAlignment(ALIGN_CENTER);
-		// groupNamePanel.addStyleName("");
-		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
-		groupLabel.addStyleName("h1");
+		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
+		groupLabel.addStyleName("h2");
 		deleteGroupButton.addClickHandler(new DeleteClickHandler());
 		deleteGroupButton.addStyleName("button");
-		manageGroupButton.addClickHandler(new ManageClickHandler());
-		manageGroupButton.addStyleName("button");
+		safeGroupButton.addClickHandler(new SafeClickHandler());
+		safeGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
+		
+		groupNamePanel.add(groupLabel);
+		groupNamePanel.add(groupTextBox);
+		
+		userPanel.add(userTable);
+		
+		groupFormPanel.add(groupNamePanel);
+		groupFormPanel.add(userPanel);
+		groupFormPanel.add(btnPanel);
 
-		groupUserPanel.add(groupFormPanel);
-		groupUserPanel.add(userPanel);
-		groupFormPanel.add(groupLabel);
-		groupFormPanel.add(checkBoxesGroup);
-		groupFormPanel.add(groupBtnPanel);
-
-		groupBtnPanel.add(deleteGroupButton);
-		groupBtnPanel.add(manageGroupButton);
-		groupBtnPanel.add(backToGroupButton);
+		btnPanel.add(deleteGroupButton);
+		btnPanel.add(safeGroupButton);
+		btnPanel.add(backToGroupButton);
 
 		this.add(groupFormPanel);
 
-		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
+//		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
 		// editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
 
 	}
 
-	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
-
-		public void onFailure(Throwable e) {
-			Window.alert("Error getting Groups: " + e);
-		}
-
-		public void onSuccess(Vector<Group> result) {
-			// Window.alert(result.get(0).getGroupName());
-			for (int g = 0; g < result.size(); g++) {
-
-				allGroups.add(result.elementAt(g).getGroupName());
-				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
-				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
-				groupNames.setStyleName("textbox");
-				checkBoxesGroup.add(groupNames);
-
-			}
-
-		}
-	}
+//	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
+//
+//		public void onFailure(Throwable e) {
+//			Window.alert("Error getting Groups: " + e);
+//		}
+//
+//		public void onSuccess(Vector<Group> result) {
+//			// Window.alert(result.get(0).getGroupName());
+//			for (int g = 0; g < result.size(); g++) {
+//
+//				allGroups.add(result.elementAt(g).getGroupName());
+//				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
+//				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+//				groupNames.setStyleName("textbox");
+//				checkBoxesGroup.add(groupNames);
+//
+//			}
+//
+//		}
+//	}
 
 	class DeleteClickHandler implements ClickHandler {
 
@@ -125,7 +134,7 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	class ManageClickHandler implements ClickHandler {
+	class SafeClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
@@ -145,20 +154,20 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	class GroupCheckBoxClickHandler implements ClickHandler {
-		CheckBox checkBox = null;
-
-		public GroupCheckBoxClickHandler(CheckBox cB) {
-			this.checkBox = cB;
-		}
-
-		@Override
-		public void onClick(ClickEvent event) {
-			choosenGroups.contains(checkBox.getText());
-
-		}
-
-	}
+//	class GroupCheckBoxClickHandler implements ClickHandler {
+//		CheckBox checkBox = null;
+//
+//		public GroupCheckBoxClickHandler(CheckBox cB) {
+//			this.checkBox = cB;
+//		}
+//
+//		@Override
+//		public void onClick(ClickEvent event) {
+//			choosenGroups.contains(checkBox.getText());
+//
+//		}
+//
+//	}
 
 	/**
 	 * Methode um einen User u aus einer Gruppe g zu entfernen. Gruppe und User
