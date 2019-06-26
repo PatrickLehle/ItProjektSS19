@@ -1,9 +1,8 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import java.util.Vector;
-
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -265,6 +264,26 @@ public class ProfileForm {
 			buildProfile();
 			
 		}
+		
+		
+	}
+	
+	class DeleteUserCallback implements AsyncCallback <Void> {
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(Void arg0) {
+			// TODO Auto-generated method stub
+			
+			Window.alert("Ihr Profil wurde erfolgreich gelöscht!");
+			
+		}
+		
 		
 		
 	}
