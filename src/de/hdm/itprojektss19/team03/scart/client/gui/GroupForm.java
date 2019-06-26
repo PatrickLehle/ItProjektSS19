@@ -123,6 +123,7 @@ public class GroupForm extends VerticalPanel {
 			for (int j = 0; j < allGrocery.size(); j++) {
 				if (allGroups.get(i).equals(getGroupOfGroceryList(allGrocery.get(j)))) {
 					Label groceryLabel = new Label(allGrocery.get(j).getGroceryListName());
+					groceryLabel.addClickHandler(new GroceryListClickHandler(allGrocery.get(j)));
 					groceryLabel.addStyleName("tree-grocery");
 					groupTree.getItem(i).addItem(groceryLabel);
 					groupTree.getItem(i).setState(true);

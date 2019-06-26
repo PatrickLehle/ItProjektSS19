@@ -468,11 +468,12 @@ public class ArticleMapper {
 
 				result.addElement(a);
 			}
+
+			return result;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return result;
 	}
 
 	public Vector<Article> findAllArticleByGroupId(int groupId) throws DatabaseException {

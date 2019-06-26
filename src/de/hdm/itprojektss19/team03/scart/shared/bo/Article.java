@@ -4,7 +4,8 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 /**
- * Ein Article besitzt einen Namen, eine Quantity mit ihrer Unit und einen dazugehoerigen Retailer
+ * Ein Article besitzt einen Namen, eine Quantity mit ihrer Unit und einen
+ * dazugehoerigen Retailer
  * 
  * @see <code>Retailer</code>
  * @see <code>Unit</code>
@@ -19,16 +20,13 @@ public class Article extends BusinessObject {
 	private String unit;
 	private int retailerId;
 	private int ownerId;
-	private int groupId;
-	private Retailer retailer = new Retailer();
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
 	private boolean fav;
 	private Boolean checkBoolean;
-	
-	
-//CONSTRUCTORS==========================================================
+
+	// CONSTRUCTORS==========================================================
 	public Article(String name, int quantity, String unit, int retailerId) {
 		this.name = name;
 		this.quantity = quantity;
@@ -36,31 +34,32 @@ public class Article extends BusinessObject {
 		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
-	    setFav(false);
+		setFav(false);
 		setCheckBoolean(false);
 	}
-	
-//Default Constructor
-	public Article () {
-	
+
+	// Default Constructor
+	public Article() {
+
 	}
-	
-//METHODS===============================================================
+
+	// METHODS===============================================================
 	public int getId() {
 		return this.id;
 	}
+
 	public void setCheckBoolean(Boolean checkBoolean) {
 		this.checkBoolean = checkBoolean;
 	}
-	
+
 	public Boolean getCheckBoolean() {
 		return this.checkBoolean;
 	}
-	
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	
+
 	public String getUnit() {
 		return this.unit;
 	}
@@ -88,7 +87,7 @@ public class Article extends BusinessObject {
 	public void setCreationDat(Timestamp i) {
 		this.creationDat = i;
 	}
-	
+
 	public int getOwnerId() {
 		return ownerId;
 	}
@@ -104,46 +103,38 @@ public class Article extends BusinessObject {
 	public void setModDat(Timestamp modDat) {
 		this.modDat = modDat;
 	}
-	
+
 	public void setDelDat(Timestamp delDat) {
 		this.delDat = delDat;
 	}
-	
+
 	public Timestamp getDelDat() {
 		return delDat;
 	}
-	
+
 	public void setFav(boolean fav) {
 		this.fav = fav;
 	}
-	
+
 	public boolean getFav() {
 		return this.fav;
 	}
 
-//RETAILER======================================================
-	
+	// RETAILER======================================================
+
 	public void setRetailerId(int retailerId) {
-		this.retailerId =retailerId;
-		
+		this.retailerId = retailerId;
+
 	}
 
 	public int getRetailerId() {
 		return this.retailerId;
 	}
-	
-	public void setRetailer(String ret) {
-		this.retailer.setRetailerName(ret);
-	}
-	
-	public String getRetailer() {
-		return this.retailer.getRetailerName();
-	}
-	
+
 	public void setGroupId(int groupId) {
 		this.setId(groupId);
 	}
-	
+
 	public int getGroupId() {
 		return ownerId;
 	}

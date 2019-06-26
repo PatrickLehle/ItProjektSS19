@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
@@ -27,7 +28,6 @@ public class ShoppingListForm extends HorizontalPanel {
 	}
 
 	public void onLoad() {
-		super.onLoad();
 		retrieveArticles();
 	}
 
@@ -41,8 +41,21 @@ public class ShoppingListForm extends HorizontalPanel {
 	}
 
 	private Vector<Article> retrieveArticles() {
-		Window.alert(groceryList.getArticles().get(0).getName());
+		editorService.findAllArticleByGroceryList(groceryList, articleCallback);
 		return new Vector<Article>();
 	}
+
+	AsyncCallback<Vector<Article>> articleCallback = new AsyncCallback<Vector<Article>>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to retrieve Articles: " + t);
+		}
+
+		public void onSuccess(Vector<Article> articles) {
+			for (int i = 0; i < articles.size(); i++) {
+				Window.alert(articles.get(i).getRetailerId() + "");
+			}
+		}
+	};
 
 }

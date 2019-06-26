@@ -544,7 +544,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt alle Article einer GL zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> findAllArticleByGroceryList(int groceryListId) throws IllegalArgumentException;
+	public Vector<Article> findAllArticleByGroceryList(GroceryList groceryList) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
