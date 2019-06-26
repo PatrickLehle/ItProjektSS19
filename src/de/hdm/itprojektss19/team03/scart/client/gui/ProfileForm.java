@@ -180,14 +180,10 @@ public class ProfileForm {
 		
 		public void onClick(ClickEvent event) {
 			
-			editorService.getUserByGMail(new  );
+			String newEmailAdress = emailAdressTB.getText();
 			
-			dbox.hide();
-			dbox.clear();
-			dbox.removeFromParent();
-			dbox.setAnimationEnabled(false);
-			dbox.setGlassEnabled(false);
-
+			editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
+			
 		}
 	}
 	
@@ -203,11 +199,9 @@ public class ProfileForm {
 		
 		public void onClick(ClickEvent event) {
 			
-			dbox.hide();
-			dbox.clear();
-			dbox.removeFromParent();
-			dbox.setAnimationEnabled(false);
-			dbox.setGlassEnabled(false);
+			
+			
+			editorService.deleteUser(user, new DeleteUserCallback());
 
 		}
 	}
@@ -234,58 +228,44 @@ public class ProfileForm {
 	
 	}
 	
-	class FindAllUserCallback  implements AsyncCallback<Vector<String>> {
+	class FindUserByGMailCallback  implements AsyncCallback<User> {
 		
-		public void onFailure() {
-			
-			
+		
+		@Override
+		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
 			
 		}
-		
-		public void onSuccess() {
+
+		@Override
+		public void onSuccess(User arg0) {
+			// TODO Auto-generated method stub
 			
+			String newUserName = userNameTB.getText();
+			String newEmailAdress = emailAdressTB.getText();
 			
-			
-		}
-		
-		String newUserName = userNameTB.getText();
-		String newEmailAdress = emailAdressTB.getText();
-		
-		
-		editorService.verifyField(new String[] {newUserName, newEmailAdress}, new VerifyFielCallback());
-		
-	}
-	
-	class VerifyFieldCallback implements AsyncCallback<String[]> {
-		
-		
-		public void onFailure() {
-			
-			
-			
-		}
-		
-		public void onSuccess() {
-			
-			editorService.createUser(userNameTB, emailAdressTB, new UpdateUserCallback());
+			editorService.createUser(newUserName, newEmailAdress, new UpdateUserCallback());
 			
 		}
 		
 	}
 	
 	class UpdateUserCallback implements AsyncCallback <User> {
-		
-		public void onFailure() {
-			
-			
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
 			
 		}
-		
-		public void onSuccess() {
+
+		@Override
+		public void onSuccess(User arg0) {
+			// TODO Auto-generated method stub
 			
 			buildProfile();
 			
 		}
+		
 		
 	}
 	
