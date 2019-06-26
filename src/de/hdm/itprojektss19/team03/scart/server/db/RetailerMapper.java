@@ -151,15 +151,14 @@ public class RetailerMapper {
 		return retailers;
 	}
 	
-	public Vector<Retailer> getAllRetailersByGroupId(User u, Group g) throws DatabaseException {
+	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		Vector<Retailer> retailers = new Vector<Retailer>();
 
 		try {
 			Statement statement = con.createStatement();
-			// CHANGE
 			ResultSet rs = statement.executeQuery(
-					"SELECT retailer.id, retailer.name FROM retailer, groups WHERE userId="	+ u.getId() + "AND groupId=" + g.getId());
+					"SELECT retailer.id, retailer.name FROM retailer, groups WHERE groupId=" + groupId);
 		
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
@@ -262,7 +261,7 @@ public class RetailerMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String selectByKey = "SELECT * FROM retailer WHERE id=? ORDER BY id";
+		String selectByKey = "SELECT retailer.id, retailer.name FROM retailer WHERE retailer.id=" + id;
 
 		try {
 			con = DBConnection.connection();

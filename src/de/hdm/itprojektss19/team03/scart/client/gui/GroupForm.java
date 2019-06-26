@@ -4,131 +4,194 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-
 /**
  * 
- * @author Julian Hofer
+ * @author Julian Hofer, Marco Dell'Oso
  *
  *         ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
-
 public class GroupForm extends VerticalPanel {
 
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
-	Group group = new Group();
 	User user = new User();
+	Vector<GroceryList> allGrocery = new Vector<GroceryList>();
 	Vector<Group> allGroups = new Vector<Group>();
-	Vector<String> allGroupsS = new Vector<String>();
 
 	// PANELS
-	VerticalPanel groupFormPanel = new VerticalPanel();
-	VerticalPanel groupNamePanel = new VerticalPanel();
+	private Tree groupTree = new Tree();
+	final HorizontalPanel innerContent;
+	VerticalPanel groupsPanel = new VerticalPanel();
 	VerticalPanel groupBtnPanel = new VerticalPanel();
+	HorizontalPanel loadingPanel = new HorizontalPanel();
+	ScrollPanel scrollPanel = new ScrollPanel(groupsPanel);
+	VerticalPanel navigation = new VerticalPanel();
+
+	// Images
+	Image loading1 = new Image();
+	Image loading2 = new Image();
+	Image loading3 = new Image();
 
 	// Labels
-	Label groupLabel = new Label("Gruppenname");
+	Label groupLabel = new Label("Gruppen");
 
-	// Buttons
-	Button groupInfoButton = new Button("Gruppen verwalten");
-	Button createGroupButton = new Button("Gruppe hinzufügen");
+	public GroupForm(User u, HorizontalPanel _innerContent) {
 
-
-
-	public GroupForm() {
-
-	}
-
-	public GroupForm(User u) {
 		this.user = u;
 
+		innerContent = _innerContent;
+		groupTree.addSelectionHandler(selectionHandler);
 	}
 
 	public void onLoad() {
-		super.onLoad();
 
-		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
-		// groupNamePanel.addStyleName("");
-		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
+		// super.onLoad();
+		loading1.setUrl("/images/fruits-banana.gif");
+		loading2.setUrl("/images/fruits-grape.gif");
+		loading3.setUrl("/images/fruits-melon.gif");
+		loadingPanel.add(loading1);
+		loadingPanel.add(loading2);
+		loadingPanel.add(loading3);
+		loadingPanel.setHorizontalAlignment(ALIGN_CENTER);
+		loadingPanel.setVerticalAlignment(ALIGN_MIDDLE);
+
+		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
-		groupInfoButton.addClickHandler(new InfoClickHandler());
-		groupInfoButton.addStyleName("button");
-		createGroupButton.addClickHandler(new CreateClickHandler());
-		createGroupButton.addStyleName("button");
+		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
 
-		groupFormPanel.add(groupLabel);
-		groupFormPanel.add(groupNamePanel);
-		groupFormPanel.add(groupBtnPanel);
-		groupBtnPanel.add(groupInfoButton);
-		groupBtnPanel.add(createGroupButton);
+		navigation.setHorizontalAlignment(ALIGN_LEFT);
+		navigation.setVerticalAlignment(ALIGN_TOP);
+		navigation.add(groupLabel);
+		navigation.add(loadingPanel);
+		this.add(navigation);
 
-		this.add(groupFormPanel);
-
-		//editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());
-		editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
-
+		editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
 	}
 
-	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
+	AsyncCallback<Vector<GroceryList>> allGroupsCallback = new AsyncCallback<Vector<GroceryList>>() {
 
 		public void onFailure(Throwable e) {
 			Window.alert("Error getting Groups: " + e);
 		}
 
-		public void onSuccess(Vector<Group> result) {
-			// Window.alert(result.get(0).getGroupName());
+		public void onSuccess(Vector<GroceryList> result) {
+
 			for (int g = 0; g < result.size(); g++) {
-
-				allGroupsS.add(result.elementAt(g).getGroupName());
-				Label groupNameLabel = new Label(allGroupsS.elementAt(g));
-
-				groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
-				groupNameLabel.setStyleName("text");
-				groupNamePanel.add(groupNameLabel);
-
+				Group tempGroup = getGroupOfGroceryList(result.get(g));
+				if (!allGroups.contains(tempGroup)) {
+					allGroups.add(tempGroup);
+				}
+				allGrocery.add(result.get(g));
 			}
 
+			fillTree();
 		}
+	};
+
+	public void fillTree() {
+		groupTree.setAnimationEnabled(true);
+		Label newGroup = new Label("+ Gruppe hinzufügen");
+		newGroup.addStyleName("tree-new-group");
+		newGroup.addClickHandler(createClickHandler);
+
+		for (int i = 0; i < allGroups.size(); i++) {
+			Label groupLabel = new Label(allGroups.get(i).getGroupName());
+			groupLabel.addStyleName("tree-group");
+			groupLabel.addClickHandler(new GroupClickHandler(allGroups.get(i)));
+			groupTree.addItem(groupLabel);
+
+			for (int j = 0; j < allGrocery.size(); j++) {
+				if (allGroups.get(i).equals(getGroupOfGroceryList(allGrocery.get(j)))) {
+					Label groceryLabel = new Label(allGrocery.get(j).getGroceryListName());
+					groceryLabel.addClickHandler(new GroceryListClickHandler(allGrocery.get(j)));
+					groceryLabel.addStyleName("tree-grocery");
+					groupTree.getItem(i).addItem(groceryLabel);
+					groupTree.getItem(i).setState(true);
+				}
+			}
+			Label newGroceryList = new Label("+ Einkaufsliste hinzufügen");
+			newGroceryList.addStyleName("tree-new-gl");
+			groupTree.getItem(i).insertItem(0, newGroceryList);
+		}
+
+		groupTree.insertItem(0, newGroup);
+		loadingPanel.clear();
+		groupsPanel.add(groupTree);
+		navigation.add(groupsPanel);
+		innerContent.getElement().getStyle().setProperty("margin",
+				"0px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
 	}
-	
-	
 
-	class InfoClickHandler implements ClickHandler {
+	public Group getGroupOfGroceryList(GroceryList gl) {
+		Group glGroup = new Group();
+		glGroup.setId(gl.getGroupId());
+		glGroup.setGroupName(gl.getGroupName());
+		return glGroup;
+	}
 
-		@Override
+	SelectionHandler<TreeItem> selectionHandler = new SelectionHandler<TreeItem>() {
+
+		public void onSelection(SelectionEvent<TreeItem> event) {
+
+		}
+	};
+
+	class GroupClickHandler implements ClickHandler {
+		final Group selection;
+
+		public GroupClickHandler(Group g) {
+			selection = g;
+		}
+
 		public void onClick(ClickEvent arg0) {
-			EditGroup editGroup = new EditGroup();
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(editGroup);
+			innerContent.clear();
+			innerContent.add(new EditGroup(user, selection));
+		}
+	};
 
+	class GroceryListClickHandler implements ClickHandler {
+		final GroceryList selection;
+
+		public GroceryListClickHandler(GroceryList gl) {
+			selection = gl;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			innerContent.clear();
+			innerContent.add(new ShoppingListForm(user, selection));
 		}
 
 	}
 
-	class CreateClickHandler implements ClickHandler {
+	ClickHandler createClickHandler = new ClickHandler() {
 
-		@Override
 		public void onClick(ClickEvent arg0) {
 			CreateGroup createGroup = new CreateGroup(user);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(createGroup);
+			innerContent.clear();
+			innerContent.add(createGroup);
 
 		}
 
-	}
+	};
 
 }

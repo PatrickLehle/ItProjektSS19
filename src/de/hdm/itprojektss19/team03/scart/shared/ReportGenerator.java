@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateReport;
 import de.hdm.itprojektss19.team03.scart.shared.report.ArticleDateRetailerReport;

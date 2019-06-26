@@ -2,7 +2,6 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
@@ -14,6 +13,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -25,7 +26,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class RegistryForm extends VerticalPanel {
 
 	private EditorServiceAsync editorService = ClientsideSettings.getEditor();
-	private final User user;
+	private User user = new User();
 
 	private Anchor logout = new Anchor();
 	private FlowPanel buttons = new FlowPanel();
@@ -45,13 +46,13 @@ public class RegistryForm extends VerticalPanel {
 	 * @param u
 	 *            user der eigenloggt ist
 	 */
-	public RegistryForm(User u, String logoutLink) {
-		user = u;
+	public RegistryForm(String logoutLink, String email) {
+		user.setEmail(email);
 		logout.setHref(logoutLink);
 		welcome.setStyleName("h1");
 		infoLabel.setStyleName("text");
 		nameTextbox.setStyleName("textbox-big");
-		emailTextbox.setValue(user.getEmail());
+		emailTextbox.setValue(email);
 		emailTextbox.setReadOnly(true);
 		emailTextbox.setStyleName("textbox-big");
 		save.setStyleName("button");
@@ -70,18 +71,19 @@ public class RegistryForm extends VerticalPanel {
 		this.add(emailTextbox);
 		this.add(buttons);
 
-		if (checkEmail(u.getEmail()) == false) {
+		if (checkEmail(user.getEmail()) == false) {
 			Window.alert("E-Mail ist ungültig!");
 		}
 		;
 	}
 
 	public void saveUser(User u) {
+
 		u.setUsername(nameTextbox.getValue());
-		editorService.createUser(u.getUsername(), u.getEmail(), new AsyncCallback<User>() {
+		editorService.createUser(u, new AsyncCallback<User>() {
 
 			public void onSuccess(User user) {
-				Window.alert("Register");
+				editorService.getUserByGMail(user.getEmail(), userCallback);
 			}
 
 			public void onFailure(Throwable e) {
@@ -90,6 +92,10 @@ public class RegistryForm extends VerticalPanel {
 			}
 		});
 	};
+
+	public void createGroup(User u) {
+
+	}
 
 	/**
 	 * UEberprueft korrekte syntax der Eingabe
@@ -118,6 +124,42 @@ public class RegistryForm extends VerticalPanel {
 		}
 	}
 
+	AsyncCallback<Group> createGroupCallback = new AsyncCallback<Group>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to create new Group: " + t);
+		}
+
+		public void onSuccess(Group g) {
+			editorService.addUserToGroup(user, g, addUserToGroupCallback);
+		}
+	};
+
+	AsyncCallback<GroupUser> addUserToGroupCallback = new AsyncCallback<GroupUser>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to add new user to new Group: " + t);
+		}
+
+		@Override
+		public void onSuccess(GroupUser gU) {
+			Window.Location.reload();
+		}
+	};
+
+	AsyncCallback<User> userCallback = new AsyncCallback<User>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to get user object: " + t);
+		}
+
+		public void onSuccess(User u) {
+			Group g = new Group("Meine erste Gruppe");
+			user = u;
+			editorService.createGroup(g, createGroupCallback);
+		}
+	};
+
 	ClickHandler saveClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent e) {
@@ -129,10 +171,4 @@ public class RegistryForm extends VerticalPanel {
 		}
 	};
 
-	ClickHandler loginClickHandler = new ClickHandler() {
-
-		public void onClick(ClickEvent e) {
-			Cookies.removeCookie("dev_appserver_login");
-		}
-	};
 }
