@@ -91,10 +91,6 @@ public class GroupForm extends VerticalPanel {
 		navigation.add(groupLabel);
 		navigation.add(loadingPanel);
 		this.add(navigation);
-		// groupFormPanel.add(groupNamePanel);
-		// groupFormPanel.add(groupBtnPanel);
-		// groupBtnPanel.add(groupInfoButton);
-		// groupBtnPanel.add(createGroupButton);
 
 		editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
 	}
@@ -121,7 +117,9 @@ public class GroupForm extends VerticalPanel {
 
 	public void fillTree() {
 		groupTree.setAnimationEnabled(true);
-
+		Label newGroup = new Label("+ Gruppe anlegen");
+		newGroup.addClickHandler(createClickHandler);
+		groupTree.add(newGroup);
 		for (int i = 0; i < allGroups.size(); i++) {
 			Label groupLabel = new Label(allGroups.get(i).getGroupName());
 			groupLabel.addStyleName("tree-group");
