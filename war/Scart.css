@@ -25,7 +25,6 @@ body {
     width: 100%;
     padding: 0px;
     margin: 0px;
-    margin-left: 220px;
 }
 
 .navigation {
@@ -85,6 +84,28 @@ body {
     font-weight: bold !important;
     /* Old browsers */
     background: rgb(242, 210, 37) !important;
+}
+
+.tree-group {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.tree-grocery {
+    font-size: 1.2em; 
+}
+
+.tree-new-group {
+    font-size: 1.5em;
+    color: rgb(150, 150, 150) !important;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.tree-new-gl {
+    font-size: 1.2em;
+    color: rgb(150, 150, 150) !important;
+    font-style: italic;
 }
 
 .icon-button {}

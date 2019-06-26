@@ -8,7 +8,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -26,7 +25,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
- * @author Julian Hofer
+ * @author Julian Hofer, Marco Dell'Oso
  *
  *         ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
@@ -56,15 +55,11 @@ public class GroupForm extends VerticalPanel {
 	// Labels
 	Label groupLabel = new Label("Gruppen");
 
-	// Buttons
-	Button createGroupButton = new Button("Gruppe hinzufügen");
-
 	public GroupForm(User u, HorizontalPanel _innerContent) {
 
 		this.user = u;
 
 		innerContent = _innerContent;
-		createGroupButton.addClickHandler(createClickHandler);
 		groupTree.addSelectionHandler(selectionHandler);
 	}
 
@@ -83,8 +78,6 @@ public class GroupForm extends VerticalPanel {
 		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
 		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
-		createGroupButton.addClickHandler(createClickHandler);
-		createGroupButton.addStyleName("button");
 
 		navigation.setHorizontalAlignment(ALIGN_LEFT);
 		navigation.setVerticalAlignment(ALIGN_TOP);
@@ -117,9 +110,10 @@ public class GroupForm extends VerticalPanel {
 
 	public void fillTree() {
 		groupTree.setAnimationEnabled(true);
-		Label newGroup = new Label("+ Gruppe anlegen");
+		Label newGroup = new Label("+ Gruppe hinzufügen");
+		newGroup.addStyleName("tree-new-group");
 		newGroup.addClickHandler(createClickHandler);
-		groupTree.add(newGroup);
+
 		for (int i = 0; i < allGroups.size(); i++) {
 			Label groupLabel = new Label(allGroups.get(i).getGroupName());
 			groupLabel.addStyleName("tree-group");
@@ -129,14 +123,23 @@ public class GroupForm extends VerticalPanel {
 			for (int j = 0; j < allGrocery.size(); j++) {
 				if (allGroups.get(i).equals(getGroupOfGroceryList(allGrocery.get(j)))) {
 					Label groceryLabel = new Label(allGrocery.get(j).getGroceryListName());
+					groceryLabel.addClickHandler(new GroceryListClickHandler(allGrocery.get(j)));
 					groceryLabel.addStyleName("tree-grocery");
 					groupTree.getItem(i).addItem(groceryLabel);
 					groupTree.getItem(i).setState(true);
 				}
 			}
+			Label newGroceryList = new Label("+ Einkaufsliste hinzufügen");
+			newGroceryList.addStyleName("tree-new-gl");
+			groupTree.getItem(i).insertItem(0, newGroceryList);
 		}
+
+		groupTree.insertItem(0, newGroup);
 		loadingPanel.clear();
-		navigation.add(groupTree);
+		groupsPanel.add(groupTree);
+		navigation.add(groupsPanel);
+		innerContent.getElement().getStyle().setProperty("margin",
+				"0px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
 	}
 
 	public Group getGroupOfGroceryList(GroceryList gl) {

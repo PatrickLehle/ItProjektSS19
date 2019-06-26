@@ -285,7 +285,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	// GROCERYLIST===========================================================================
 
-	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
+	public GroceryList createGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
 			return this.glMapper.insert(gl);
@@ -613,9 +613,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Vector<Article> findAllArticleByGroceryList(int groceryListId) {
+	public Vector<Article> findAllArticleByGroceryList(GroceryList groceryList) {
 		try {
-			return this.glaMapper.findAllArticleByGroceryListId(groceryListId);
+			return this.glaMapper.findAllArticleByGroceryListId(groceryList.getId());
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();

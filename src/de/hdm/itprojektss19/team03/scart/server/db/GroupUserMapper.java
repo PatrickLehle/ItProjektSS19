@@ -45,19 +45,23 @@ public class GroupUserMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String guser = "INSERT INTO groupuser (groupId, userId) VALUES (?,?)";
+		GroupUser gu = new GroupUser();
+		gu.setGroupId(group.getId());
+		gu.setUserId(user.getId());
 
 		try {
+
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(guser);
-			stmt.setInt(1, group.getId());
-			stmt.setInt(2, user.getId());
+			stmt.setInt(1, gu.getGroupId());
+			stmt.setInt(2, gu.getUserId());
 			stmt.executeUpdate();
 
+			return gu;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
