@@ -95,9 +95,8 @@ public class CreateGroup extends VerticalPanel {
 
 	// METHODS==========================================================
 
-	// public CreateGroup(User user) { ALT
 	/**
-	 * Methode wird bei dem "Aufrufen" der Klasse gestartet
+	 * Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
 	 */
 	public void onLoad() {
 		super.onLoad();

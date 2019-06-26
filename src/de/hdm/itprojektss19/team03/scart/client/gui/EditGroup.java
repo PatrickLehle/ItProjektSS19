@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -54,16 +55,41 @@ public class EditGroup extends VerticalPanel {
 	Button deleteGroupButton = new Button("Löschen");
 	Button manageGroupButton = new Button("Bearbeiten");
 	Button backToGroupButton = new Button("Zurück");
-
+	
+// DEFAULT CONSTRUCTOR=============================================
+	/**
+	* Default Konstruktor der EditGroup-Seite
+	* 
+	*/
 	public EditGroup() {
 
 	}
-
+	
+// CONSTRUCTOR=====================================================
+	/**
+ 	* Konstruktoren der EditGroup-Seite
+	* 
+	* @param u (User-Objekt des Users der die EditUser-Seite aufrufen will)
+	*   
+	*/
 	public EditGroup(User u, Group g) {
 		this.user = u;
 		this.group = g;
 	}
+	
+	public EditGroup(User u) {
+		
+		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		u.setEmail(String.valueOf(Cookies.getCookie("email")));
+		
+		this.user = u;
+		
+		onLoad();
+	}
 
+	/**
+	 * Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
+	 */
 	public void onLoad() {
 		super.onLoad();
 
@@ -107,7 +133,7 @@ public class EditGroup extends VerticalPanel {
 
 				allGroups.add(result.elementAt(g).getGroupName());
 				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
-				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
+				groupNames.addClickHandler(new UserCheckBoxClickHandler(groupNames));
 				groupNames.setStyleName("textbox");
 				checkBoxesGroup.add(groupNames);
 
@@ -129,12 +155,14 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			seeUsersfromGroup(user, group);
+			seeUsersfromGroup(group);
 
 		}
 
 	}
-
+	/** Zurueck Button; laed die Seite "Scart.html" neu
+	 *
+	 */
 	class BackToClickHandler implements ClickHandler {
 
 		@Override
@@ -145,10 +173,10 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	class GroupCheckBoxClickHandler implements ClickHandler {
+	class UserCheckBoxClickHandler implements ClickHandler {
 		CheckBox checkBox = null;
 
-		public GroupCheckBoxClickHandler(CheckBox cB) {
+		public UserCheckBoxClickHandler(CheckBox cB) {
 			this.checkBox = cB;
 		}
 
@@ -193,9 +221,9 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-	public void seeUsersfromGroup(User user, Group group) {
+	public void seeUsersfromGroup(Group group) {
 		try {
-			if (user == null || group == null) {
+			if (group == null) {
 				throw new NullPointerException();
 			}
 
