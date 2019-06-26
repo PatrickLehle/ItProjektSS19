@@ -110,11 +110,8 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,"
-				+ "article.ownerId, article.creationDat, article.modDat, article.boolean FROM grocerylistarticle "
-				+ "JOIN article ON grocerylistarticle.articleId = article.id " + "JOIN grocerylist "
-				+ "ON grocerylistarticle.grocerylistId = grocerylist.id " + "WHERE grocerylistarticle.grocerylistId= "
-				+ grocerylistId;
+		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId = article.id JOIN grocerylist ON grocerylistarticle.grocerylistId = grocerylist.id "
+				+ "WHERE grocerylistarticle.grocerylistId= " + grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -133,13 +130,18 @@ public class GroceryListArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit(rs.getString("unit"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+				a.setOwnerId(rs.getInt("ownerId"));
 				result.addElement(a);
 			}
+			return result;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return result;
 	}
 
 	/**
