@@ -78,6 +78,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean")); //Boolean ob der Artikel als gekauft markiert wurde oder nicht
+				article.setFav(rs.getBoolean("fav"));
 				article.setDelDat(rs.getTimestamp("delDat"));
 
 				return article;
@@ -117,6 +118,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(a);
 			}
@@ -159,6 +161,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setFav(rs.getBoolean("fav"));
 				article.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
@@ -198,6 +201,7 @@ public class ArticleMapper {
 				article.setCreationDat(rs.getTimestamp("creationDat"));
 				article.setModDat(rs.getTimestamp("modDat"));
 				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setFav(rs.getBoolean("fav"));
 				article.setDelDat(rs.getTimestamp("delDat"));
 				articles.addElement(article);
 			}
@@ -276,7 +280,7 @@ public class ArticleMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, ownerId=?, modDat=?, boolean=? WHERE id=" + article.getId();
+		String update = "UPDATE article SET name=?, quantity=?, unit=?, retailerId=?, ownerId=?, modDat=?, boolean=?, fav=? WHERE id=" + article.getId();
 
 		try {
 			
@@ -291,6 +295,7 @@ public class ArticleMapper {
 			stmt.setInt(5, article.getOwnerId());
 			stmt.setTimestamp(6, article.getModDat());
 			stmt.setBoolean(7, article.getCheckBoolean());
+			stmt.setBoolean(8, article.getFav());
 
 			stmt.executeUpdate();
 
@@ -360,6 +365,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
@@ -389,8 +395,8 @@ public class ArticleMapper {
 		Vector<Article> result = new Vector<Article>();
 
 		try {
-			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?=");
-			stmt.setInt(1, retailerId);
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM article WHERE retailerId=?");
+			stmt.setInt(1, id);
 			// Statement stmt = con.createStatement();
 
 			ResultSet rs = stmt.executeQuery();
@@ -407,6 +413,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
@@ -445,6 +452,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
@@ -463,7 +471,7 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,article.ownerId, article.creationDat, article.modDat, article.boolean, article.delDat FROM article WHERE groupId="
+					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,article.ownerId, article.creationDat, article.modDat, article.boolean, article.fav, article.delDat FROM article WHERE groupId="
 							+ groupId);
 
 			while (rs.next()) {
@@ -477,6 +485,7 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);
@@ -495,7 +504,7 @@ public class ArticleMapper {
 		try {
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(
-					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,article.ownerId, article.creationDat, article.modDat, article.boolean, article.delDat FROM article WHERE ownerId="
+					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId, article.ownerId, article.creationDat, article.modDat, article.boolean, article.fav, article.delDat FROM article WHERE ownerId="
 							+ ownerId);
 
 			while (rs.next()) {
@@ -509,6 +518,40 @@ public class ArticleMapper {
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	public Vector<Article> findAllArticleByFavouriteTRUE()throws DatabaseException{
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(
+					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId, article.ownerId, article.creationDat, article.modDat, article.boolean, article.fav, article.delDat FROM article WHERE fav="
+							+ true);
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setRetailerId(rs.getInt("retailerId"));
+				a.setOwnerId(rs.getInt("ownerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 
 				result.addElement(a);

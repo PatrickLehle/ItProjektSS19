@@ -101,6 +101,8 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
+	void findAllArticleByFavouriteTRUE(AsyncCallback<Vector<Article>> asyncCallback);
+	
 	// RETAILER===========================================================================
 
 	void createRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
