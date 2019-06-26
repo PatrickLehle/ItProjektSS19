@@ -1,5 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -15,6 +17,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -151,7 +155,7 @@ public class CreateGroup extends VerticalPanel {
 			 */
 			public void onClick(ClickEvent event) {
 				// Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
-				if (groupTextbox.getText() != "" && groupTextbox.getText() != null) {
+				if (checkName(groupTextbox.getText())) {
 					createGroupDB(groupTextbox.getText()); // Aufruf von ceateGroup Methode in EditorServiceImpl bzw.
 															// entsprechenden Mapper
 				} else {
@@ -166,7 +170,7 @@ public class CreateGroup extends VerticalPanel {
 			 */
 			public void onKeyUp(KeyUpEvent event) {
 				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					if (groupTextbox.getText() != "" && groupTextbox.getText() != null) {
+					if (checkName(groupTextbox.getText())) {
 						createGroupDB(groupTextbox.getText()); // Aufruf von createGroupDB Methode
 					} else {
 						responseLabel.setVisible(true);
@@ -230,9 +234,14 @@ public class CreateGroup extends VerticalPanel {
 								 * Die Gruppe konnte erstellt werden und der aktuelle User der Gruppe
 								 * hinzugefuegt werden
 								 */
-								public void onSuccess(GroupUser arg0) {
-									responseLabel.setText("Die Gruppe '" + tempGroup.getGroupName()
-											+ "' wurde erstellt und Sie wurden automatisch der Gruppe hinzugefügt");
+								public void onSuccess(GroupUser gU) {
+									Window.alert("gu");
+									GroceryList gl = new GroceryList();
+									gl.setArticles(new Vector<Article>());
+									gl.setGroceryListName("Einkaufsliste");
+									gl.setGroupId(gU.getGroupId());
+									gl.setOwnerId(gU.getUserId());
+									ev.createGroceryList(gl, groceryListCallback);
 								}
 							});
 
@@ -260,13 +269,34 @@ public class CreateGroup extends VerticalPanel {
 		});
 	}
 
-	public CreateGroup(Group selection) {
-		// TODO Auto-generated constructor stub
-	}
+	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
 
-	public void setSelectedGroup(Group selectedGroup) {
-		// TODO Auto-generated method stub
+		public void onSuccess(GroceryList gl) {
+			Window.Location.reload();
+		}
 
-	}
+		public void onFailure(Throwable t) {
+			Window.alert(t.getLocalizedMessage());
+		}
+	};
+
+	/**
+	 * UEberprueft korrekte syntax der Eingabe
+	 * 
+	 * @param str
+	 * @return true, wenn der Name passt
+	 */
+	private Boolean checkName(String str) {
+		// \w -> nur Buchstaben oder Zahlen
+		if (str.matches("^[a-zA-Z]*$") == false) {
+			return false;
+		} else if (str.length() > 10) {
+			return false;
+		} else if (str.length() < 2) {
+			return false;
+		} else {
+			return true;
+		}
+	};
 
 }

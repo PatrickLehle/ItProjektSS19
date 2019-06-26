@@ -203,7 +203,7 @@ public interface EditorService extends RemoteService {
 	 * @return angelegte/ erstellte GroceryList
 	 * @throws IllegalArgumentException
 	 */
-	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException;
+	public GroceryList createGroceryList(GroceryList gl) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
