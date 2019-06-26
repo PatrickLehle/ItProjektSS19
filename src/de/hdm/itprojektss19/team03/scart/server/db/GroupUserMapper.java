@@ -40,8 +40,8 @@ public class GroupUserMapper {
 		return groupUserMapper;
 	}
 
-	public GroupUser addUserToGroup(User user,Group group) throws DatabaseException {
-		
+	public GroupUser addUserToGroup(User user, Group group) throws DatabaseException {
+
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String guser = "INSERT INTO groupuser (groupId, userId) VALUES (?,?)";
@@ -52,12 +52,12 @@ public class GroupUserMapper {
 			stmt.setInt(1, group.getId());
 			stmt.setInt(2, user.getId());
 			stmt.executeUpdate();
-			
+
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-	return null;
+		return null;
 	}
 
 	public void removeUserFromGroup(User u, Group g) throws DatabaseException {
@@ -137,9 +137,9 @@ public class GroupUserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT groupuser.groupId, groupuser.userId, groups.name," 
-		        + " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
-		        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.userId=" + userId;
+		String selectByKey = "SELECT groupuser.groupId, groupuser.userId, groups.name,"
+				+ " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id "
+				+ "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.userId=" + userId;
 
 		Vector<Group> result = new Vector<Group>();
 
@@ -148,12 +148,10 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			Group group = new Group();
-			group.setGroupName("name");
 
 			while (rs.next()) {
 				Group g = new Group();
-				g.setId(rs.getInt("id"));
+				g.setId(rs.getInt("groupId"));
 				g.setGroupName(rs.getString("name"));
 
 				result.addElement(g);
@@ -165,39 +163,39 @@ public class GroupUserMapper {
 		return result;
 	}
 
-public Vector<User> getAllUserByGroupId(int id) throws DatabaseException{
-	Connection con = null;
-	PreparedStatement stmt = null;
+	public Vector<User> getAllUserByGroupId(int id) throws DatabaseException {
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-	// SQL-Anweisung zum auslesen der Tupel aus der DB
-	String selectByKey = "SELECT user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id " 
-	        + "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
+		// SQL-Anweisung zum auslesen der Tupel aus der DB
+		String selectByKey = "SELECT user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id "
+				+ "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
 
-	Vector<User> result = new Vector<User>();
+		Vector<User> result = new Vector<User>();
 
-	try {
-		con = DBConnection.connection();
-		stmt = con.prepareStatement(selectByKey);
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
 
-		ResultSet rs = stmt.executeQuery();
-		User user = new User();
-		user.setId(rs.getInt("id"));
-		user.setUsername(rs.getString("name"));
-		user.setEmail(rs.getString("email"));
+			ResultSet rs = stmt.executeQuery();
+			User user = new User();
+			user.setId(rs.getInt("id"));
+			user.setUsername(rs.getString("name"));
+			user.setEmail(rs.getString("email"));
 
-		while (rs.next()) {
-			User u = new User();
-			u.setId(rs.getInt("id"));
-			u.setUsername(rs.getString("name"));
-			u.setEmail(rs.getString("email"));
+			while (rs.next()) {
+				User u = new User();
+				u.setId(rs.getInt("id"));
+				u.setUsername(rs.getString("name"));
+				u.setEmail(rs.getString("email"));
 
-			result.addElement(u);
+				result.addElement(u);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
 		}
-	} catch (SQLException e2) {
-		ServersideSettings.getLogger().severe(e2.getMessage());
-		throw new DatabaseException(e2);
+		return result;
 	}
-	return result;
-}
 
 }

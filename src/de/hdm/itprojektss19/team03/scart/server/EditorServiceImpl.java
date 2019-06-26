@@ -369,6 +369,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException {
+		try {
+			return glMapper.findAllGroceryListsByUserId(userId);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
 	// GROCERYLIST-ARTICLE===============================================================
 
 	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException {
@@ -472,7 +481,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByFavouriteTRUE();

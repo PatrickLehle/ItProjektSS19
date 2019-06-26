@@ -5,11 +5,10 @@ import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-
 /**
- * Realisierung einer GroceryList. Ein GroceryList-Objekt
- * zeichnet sich durch seine Gruppe mit einem Artikel,
- * seiner Menge und dem dazugehoerigen Retailer aus.
+ * Realisierung einer GroceryList. Ein GroceryList-Objekt zeichnet sich durch
+ * seine Gruppe mit einem Artikel, seiner Menge und dem dazugehoerigen Retailer
+ * aus.
  * 
  * @see <code>BusinessObject</code>
  * @see <code>Article</code>
@@ -24,6 +23,7 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private Timestamp modDat;
 	private int ownerId;
 	private int groupId;
+	private String groupName;
 	private Vector<Article> articles = new Vector<Article>();
 
 	public String getGroceryListName() {
@@ -37,41 +37,49 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	public void setCreationDat(Timestamp creationDat) {
 		this.creationDat = creationDat;
 	}
-	
+
 	public Timestamp getCreationDat() {
 		return this.creationDat;
 	}
-	
+
 	public void setModDat(Timestamp modDat) {
 		this.modDat = modDat;
 	}
-	
+
 	public Timestamp getModDat() {
 		return this.modDat;
 	}
-	
+
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;
 	}
-	
+
 	public int getOwnerId() {
 		return this.ownerId;
 	}
-	
+
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
 	}
-	
+
 	public int getGroupId() {
 		return this.groupId;
 	}
-	
+
 	public Vector<Article> getArticles() {
 		return articles;
 	}
 
 	public void setArticles(Vector<Article> articles) {
 		this.articles = articles;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 }
