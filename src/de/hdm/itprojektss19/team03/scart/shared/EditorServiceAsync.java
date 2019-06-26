@@ -63,7 +63,7 @@ public interface EditorServiceAsync {
 
 	// GROCERYLIST===========================================================================
 
-	void createGroceryList(String name, GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
+	void createGroceryList(GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
 
 	void saveGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
 

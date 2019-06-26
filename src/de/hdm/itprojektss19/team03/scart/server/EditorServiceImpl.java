@@ -285,7 +285,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	// GROCERYLIST===========================================================================
 
-	public GroceryList createGroceryList(String name, GroceryList gl) throws IllegalArgumentException {
+	public GroceryList createGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
 			return this.glMapper.insert(gl);
