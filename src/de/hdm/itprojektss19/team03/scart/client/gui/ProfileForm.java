@@ -181,9 +181,19 @@ public class ProfileForm {
 			
 			String newEmailAdress = emailAdressTB.getText();
 			
-			editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
+			if (newEmailAdress.length() > 20) {
+				
+				Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
+			
+			}
+			else {
+				
+				editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
+				
+			}
 			
 		}
+		
 	}
 	
 	class YesDeleteButtonClickHandler implements ClickHandler {
