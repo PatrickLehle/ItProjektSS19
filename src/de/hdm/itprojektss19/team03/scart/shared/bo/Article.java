@@ -19,6 +19,7 @@ public class Article extends BusinessObject {
 	private String unit;
 	private int retailerId;
 	private int ownerId;
+	private int groupId;
 	private Retailer retailer = new Retailer();
 	private Timestamp creationDat;
 	private Timestamp modDat;
@@ -137,6 +138,14 @@ public class Article extends BusinessObject {
 	
 	public String getRetailer() {
 		return this.retailer.getRetailerName();
+	}
+	
+	public void setGroupId(int groupId) {
+		this.setId(groupId);
+	}
+	
+	public int getGroupId() {
+		return ownerId;
 	}
 
 }

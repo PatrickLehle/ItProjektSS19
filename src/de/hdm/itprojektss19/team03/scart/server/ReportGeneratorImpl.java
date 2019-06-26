@@ -120,7 +120,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		ArticleReport report = new ArticleReport();
 
 		// Nun legen wir den Titel und unser Erstellungsdatum des Reports
-		report.setTitle("Alle Artikel von " + u.getId() );
+		report.setTitle("Alle Artikel von " + u.getEmail() );
 		report.setCreated(new Date());
 
 		// Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
@@ -137,26 +137,29 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Group> allGroupsByUser = new Vector<Group>();
 		Vector<GroceryList> allGroceryLists = new Vector<GroceryList>();
 		Vector<Article> allArticles = new Vector<Article>();
+		Vector<Retailer> allRetailers = new Vector<Retailer>();
 		
 		//Hier werden die Gruppen, GroceryLists und deren Article aufgerufen
 		allGroupsByUser.addAll(this.getEditorService().findAllGroupsByUserId(u.getId()));
-		allArticles.addAll(this.editorService.findAllArticleByOwnerId(u.getId()));
-		
+		allArticles.addAll(this.editorService.findAllArticleByFavouriteTRUE());
+		allRetailers.addAll(this.editorService.findAllRetailer());
 		Vector<Article> receiver = new Vector<Article>();
+		
+		
 		for (int i = 0; i < allArticles.size(); i++) {
 			
-			for (int j = 0; j < allGroupsByUser.size(); i++) {
+			for (int j = 0; j < allGroupsByUser.size(); j++) {
 				
-				if(allArticles.elementAt(i).getOwnerId() == allGroupsByUser.elementAt(j).getId()) {
+				if(allArticles.elementAt(i).getGroupId() == allGroupsByUser.elementAt(j).getId()) {
 					Article a = new Article();
-					a = this.editorService.getArticleById(allArticles.elementAt(j).getOwnerId());
+					a = this.editorService.getArticleById(allArticles.elementAt(j).getGroupId());
 					receiver.add(a);
 				}
 			}
-		//work in progress: couldnt find a way to display filtered articles
+		//work in progress: found a way to display Articles marked as Favourit <3 :)
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
-//					row.addColumn(new Column(allRetailers.elementAt(i).getRetailerName()));
+					row.addColumn(new Column(allRetailers.elementAt(i).getRetailerName()));
 					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
 					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
 					if(allArticles.elementAt(i).getDelDat() != null) {
