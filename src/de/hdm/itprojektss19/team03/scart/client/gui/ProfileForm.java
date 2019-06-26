@@ -10,6 +10,8 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -47,6 +49,8 @@ public class ProfileForm {
 	HorizontalPanel userNamePanel = new HorizontalPanel();
 	HorizontalPanel emailAdressPanel = new HorizontalPanel();
 	HorizontalPanel buttonPanel = new HorizontalPanel();
+	
+	EditorServiceAsync editorService = ClientsideSettings.getEditor();
 	
 	/**
 	 * 
