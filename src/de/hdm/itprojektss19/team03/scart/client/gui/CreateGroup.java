@@ -49,10 +49,9 @@ public class CreateGroup extends VerticalPanel {
 	 */
 	public CreateGroup(User u) {
 		
-		/* AUSKOMMENTIEREN SOBALD COOKIE-LOGIN FUNKTIONIERT
 		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
 		u.setEmail(String.valueOf(Cookies.getCookie("email")));
-		*/
+		
 		this.user = u;
 		
 		onLoad();
@@ -134,10 +133,6 @@ public void onLoad() {
 		contentBox.add(buttonPanel);
 		contentBox.add(responsePanel);
 		
-		/*
-		footer.add(footerHome);
-		footer.add(footerReport);
-		*/
 		
 		//Diese Seite wird dem RootPanel in "content" auf der HTML-Seite uebergeben
 		this.add(contentBox);
