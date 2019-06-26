@@ -244,7 +244,7 @@ public class GroceryListMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT grocerylist.id, grocerylist.name, grocerylist.creationDat, grocerylist.modDat, groups.id, groups.name FROM grocerylist, groups WHERE groups.id= " + id;
+		String selectByKey = "SELECT * FROM grocerylist WHERE groupId= " + id;
 
 		Vector<GroceryList> result = new Vector<GroceryList>();
 
@@ -269,4 +269,36 @@ public class GroceryListMapper {
 		return result;
 	}
 
+	public Vector<GroceryList> findAllGroceryListsByUserId(int userId) throws DatabaseException {
+		Connection con;
+		PreparedStatement stmt;
+
+		String selectByKey = "SELECT `grocerylist`.*, `groups`.* FROM `grocerylist`, `groups` WHERE `groups`.`id` = `grocerylist`.`groupId` AND `grocerylist`.`ownerId` = "
+				+ userId;
+
+		Vector<GroceryList> groceryList = new Vector<GroceryList>();
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				GroceryList gl = new GroceryList();
+				gl.setId(rs.getInt(1));
+				gl.setGroceryListName(rs.getString(2));
+				gl.setCreationDat(rs.getTimestamp(3));
+				gl.setModDat(rs.getTimestamp(4));
+				gl.setOwnerId(rs.getInt(5));
+				gl.setGroupId(rs.getInt(6));
+				gl.setGroupName(rs.getString(8));
+				groceryList.addElement(gl);
+			}
+			return groceryList;
+		} catch (SQLException e) {
+			ServersideSettings.getLogger().severe(e.getMessage());
+			throw new DatabaseException(e);
+		}
+
+	}
 }

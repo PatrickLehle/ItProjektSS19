@@ -19,10 +19,12 @@ public class Article extends BusinessObject {
 	private String unit;
 	private int retailerId;
 	private int ownerId;
+	private int groupId;
 	private Retailer retailer = new Retailer();
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
+	private boolean fav;
 	private Boolean checkBoolean;
 	
 	
@@ -34,6 +36,7 @@ public class Article extends BusinessObject {
 		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
+	    setFav(false);
 		setCheckBoolean(false);
 	}
 	
@@ -109,6 +112,14 @@ public class Article extends BusinessObject {
 	public Timestamp getDelDat() {
 		return delDat;
 	}
+	
+	public void setFav(boolean fav) {
+		this.fav = fav;
+	}
+	
+	public boolean getFav() {
+		return this.fav;
+	}
 
 //RETAILER======================================================
 	
@@ -127,6 +138,14 @@ public class Article extends BusinessObject {
 	
 	public String getRetailer() {
 		return this.retailer.getRetailerName();
+	}
+	
+	public void setGroupId(int groupId) {
+		this.setId(groupId);
+	}
+	
+	public int getGroupId() {
+		return ownerId;
 	}
 
 }

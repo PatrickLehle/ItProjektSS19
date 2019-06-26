@@ -81,6 +81,8 @@ public interface EditorServiceAsync {
 
 	void findAllGroceryLists(AsyncCallback<Vector<GroceryList>> asyncCallback);
 
+	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
+
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
@@ -100,6 +102,8 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByFavouriteTRUE(AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
 

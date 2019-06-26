@@ -266,6 +266,14 @@ public interface EditorService extends RemoteService {
 	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException;
 
 	/**
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException;
+
+	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllGroceryLists();
 	 *
@@ -344,6 +352,14 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByFavouriteTRUE()
+	 * @return gibt alle Article die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException;
 
 	// RETAILER===========================================================================
 
