@@ -18,10 +18,13 @@ public class Article extends BusinessObject {
 	private int quantity;
 	private String unit;
 	private int retailerId;
+	private int ownerId;
+	private int groupId;
 	private Retailer retailer = new Retailer();
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
+	private boolean fav;
 	private Boolean checkBoolean;
 	
 	
@@ -33,16 +36,19 @@ public class Article extends BusinessObject {
 		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
+	    setFav(false);
 		setCheckBoolean(false);
 	}
 	
 //Default Constructor
 	public Article () {
-		
+	
 	}
 	
 //METHODS===============================================================
-	
+	public int getId() {
+		return this.id;
+	}
 	public void setCheckBoolean(Boolean checkBoolean) {
 		this.checkBoolean = checkBoolean;
 	}
@@ -82,7 +88,14 @@ public class Article extends BusinessObject {
 	public void setCreationDat(Timestamp i) {
 		this.creationDat = i;
 	}
+	
+	public int getOwnerId() {
+		return ownerId;
+	}
 
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
 
 	public Timestamp getModDat() {
 		return modDat;
@@ -98,6 +111,14 @@ public class Article extends BusinessObject {
 	
 	public Timestamp getDelDat() {
 		return delDat;
+	}
+	
+	public void setFav(boolean fav) {
+		this.fav = fav;
+	}
+	
+	public boolean getFav() {
+		return this.fav;
 	}
 
 //RETAILER======================================================
@@ -117,6 +138,14 @@ public class Article extends BusinessObject {
 	
 	public String getRetailer() {
 		return this.retailer.getRetailerName();
+	}
+	
+	public void setGroupId(int groupId) {
+		this.setId(groupId);
+	}
+	
+	public int getGroupId() {
+		return ownerId;
 	}
 
 }

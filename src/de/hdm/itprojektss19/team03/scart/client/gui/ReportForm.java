@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -38,6 +39,9 @@ public class ReportForm extends VerticalPanel{
 	
 	public ReportForm(User u) {
 		this.user = u;
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		user.setEmail(Cookies.getCookie("email"));	
+		Window.alert(user.getEmail()+" "+user.getId()+ "Test");
 	}
 	
 //LABELS==============================================================
@@ -91,6 +95,7 @@ public class ReportForm extends VerticalPanel{
 		
 		RootPanel.get().add(headerHP);
 		RootPanel.get().add(mainHP);
+		
 //		this.add(header);
 //		this.add(main);
 	}
@@ -102,6 +107,7 @@ public class ReportForm extends VerticalPanel{
 			this.reportHTML = rHTML;
 			scrollP.clear();
 			scrollP.add(reportHTML);
+			RootPanel.get("content").add(scrollP);
 		}
 	}
 

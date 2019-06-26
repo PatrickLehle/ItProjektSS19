@@ -4,26 +4,25 @@ import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Timer;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.Tree;
+import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 
-import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
-import de.hdm.itprojektss19.team03.scart.client.gui.EditGroup;
-import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.AllGroupsCallback;
-import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.AllRetailersCallback;
-import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.GroupCheckBoxClickHandler;
-
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
@@ -31,129 +30,165 @@ import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm.GroupCheckB
  *
  *         ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
-
 public class GroupForm extends VerticalPanel {
 
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
-	Group group = new Group();
 	User user = new User();
-	Vector<Group> allGroups = null;
-	Vector<String> allGroupsS = new Vector<String>();
-	
+	Vector<GroceryList> allGrocery = new Vector<GroceryList>();
+	Vector<Group> allGroups = new Vector<Group>();
 
 	// PANELS
-	VerticalPanel groupFormPanel = new VerticalPanel();
-	VerticalPanel groupNamePanel = new VerticalPanel();
+	private Tree groupTree = new Tree();
+	final HorizontalPanel innerContent;
+	VerticalPanel groupsPanel = new VerticalPanel();
 	VerticalPanel groupBtnPanel = new VerticalPanel();
+	HorizontalPanel loadingPanel = new HorizontalPanel();
+	ScrollPanel scrollPanel = new ScrollPanel(groupsPanel);
+	VerticalPanel navigation = new VerticalPanel();
+
+	// Images
+	Image loading1 = new Image();
+	Image loading2 = new Image();
+	Image loading3 = new Image();
 
 	// Labels
-	Label groupLabel = new Label("Gruppenname");
+	Label groupLabel = new Label("Gruppen");
 
 	// Buttons
-	Button groupInfoButton = new Button("Gruppen verwalten");
 	Button createGroupButton = new Button("Gruppe hinzufügen");
-	
-	EditGroup editGroup = new EditGroup();
-	CreateGroup createGroup = new CreateGroup(user);
-	
 
-	public GroupForm() {
+	public GroupForm(User u, HorizontalPanel _innerContent) {
 
-	}
-
-	public GroupForm (User u) {
 		this.user = u;
-	
-	}
-	
 
+		innerContent = _innerContent;
+		createGroupButton.addClickHandler(createClickHandler);
+		groupTree.addSelectionHandler(selectionHandler);
+	}
 
 	public void onLoad() {
-		super.onLoad();
-		
-		groupNamePanel.setHorizontalAlignment(ALIGN_CENTER);
-		//groupNamePanel.addStyleName("");
-		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
-		groupLabel.addStyleName("h2");
-		groupInfoButton.addClickHandler(new InfoClickHandler());
-		createGroupButton.addClickHandler(new CreateClickHandler());
-		
-		
-		groupFormPanel.add(groupLabel);		
-		groupFormPanel.add(groupNamePanel);
-		groupFormPanel.add(groupBtnPanel);
-		groupBtnPanel.add(groupInfoButton);
-		groupBtnPanel.add(createGroupButton);
-		
-		this.add(groupFormPanel);
 
-		
-		editorVerwaltung.findAllGroups(new AllGroupsCallback());
-		
-		//TIMEFRAME-CHECK-FOR-CHANGE===================
-		Timer refresh = new Timer() {
-			public void run() {
-				editorVerwaltung.findAllGroups(new AllGroupsCallback());
-			}
-		};
-		// refresh.scheduleRepeating(10000);
+		// super.onLoad();
+		loading1.setUrl("/images/fruits-banana.gif");
+		loading2.setUrl("/images/fruits-grape.gif");
+		loading3.setUrl("/images/fruits-melon.gif");
+		loadingPanel.add(loading1);
+		loadingPanel.add(loading2);
+		loadingPanel.add(loading3);
+		loadingPanel.setHorizontalAlignment(ALIGN_CENTER);
+		loadingPanel.setVerticalAlignment(ALIGN_MIDDLE);
 
+		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
+		groupLabel.addStyleName("h1");
+		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
+		createGroupButton.addClickHandler(createClickHandler);
+		createGroupButton.addStyleName("button");
+
+		navigation.setHorizontalAlignment(ALIGN_LEFT);
+		navigation.setVerticalAlignment(ALIGN_TOP);
+		navigation.add(groupLabel);
+		navigation.add(loadingPanel);
+		this.add(navigation);
+
+		editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
 	}
-	
-	
-	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
-		
+
+	AsyncCallback<Vector<GroceryList>> allGroupsCallback = new AsyncCallback<Vector<GroceryList>>() {
+
 		public void onFailure(Throwable e) {
 			Window.alert("Error getting Groups: " + e);
 		}
-		
-		public void onSuccess(Vector<Group> result) {
-			allGroups = result;
 
-			if (allGroupsS.size() != result.size()) {
-				allGroupsS.clear();
+		public void onSuccess(Vector<GroceryList> result) {
 
-				for (int g = 0; g < result.size(); g++) {
-					allGroupsS.add(result.elementAt(g).getGroupName());
-					Label groupNameLabel = new Label(allGroupsS.elementAt(g));
-					groupNameLabel.setHorizontalAlignment(ALIGN_LEFT);
-					groupNameLabel.setStyleName("textbox");
-					groupNamePanel.add(groupNameLabel);
+			for (int g = 0; g < result.size(); g++) {
+				Group tempGroup = getGroupOfGroceryList(result.get(g));
+				if (!allGroups.contains(tempGroup)) {
+					allGroups.add(tempGroup);
+				}
+				allGrocery.add(result.get(g));
+			}
+
+			fillTree();
+		}
+	};
+
+	public void fillTree() {
+		groupTree.setAnimationEnabled(true);
+		Label newGroup = new Label("+ Gruppe anlegen");
+		newGroup.addClickHandler(createClickHandler);
+		groupTree.add(newGroup);
+		for (int i = 0; i < allGroups.size(); i++) {
+			Label groupLabel = new Label(allGroups.get(i).getGroupName());
+			groupLabel.addStyleName("tree-group");
+			groupLabel.addClickHandler(new GroupClickHandler(allGroups.get(i)));
+			groupTree.addItem(groupLabel);
+
+			for (int j = 0; j < allGrocery.size(); j++) {
+				if (allGroups.get(i).equals(getGroupOfGroceryList(allGrocery.get(j)))) {
+					Label groceryLabel = new Label(allGrocery.get(j).getGroceryListName());
+					groceryLabel.addStyleName("tree-grocery");
+					groupTree.getItem(i).addItem(groceryLabel);
+					groupTree.getItem(i).setState(true);
 				}
 			}
 		}
+		loadingPanel.clear();
+		navigation.add(groupTree);
 	}
-	
 
-	
+	public Group getGroupOfGroceryList(GroceryList gl) {
+		Group glGroup = new Group();
+		glGroup.setId(gl.getGroupId());
+		glGroup.setGroupName(gl.getGroupName());
+		return glGroup;
+	}
 
-	class InfoClickHandler implements ClickHandler {
+	SelectionHandler<TreeItem> selectionHandler = new SelectionHandler<TreeItem>() {
 
-		@Override
+		public void onSelection(SelectionEvent<TreeItem> event) {
+
+		}
+	};
+
+	class GroupClickHandler implements ClickHandler {
+		final Group selection;
+
+		public GroupClickHandler(Group g) {
+			selection = g;
+		}
+
 		public void onClick(ClickEvent arg0) {
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(editGroup);
-			
+			innerContent.clear();
+			innerContent.add(new EditGroup(user, selection));
+		}
+	};
 
+	class GroceryListClickHandler implements ClickHandler {
+		final GroceryList selection;
 
+		public GroceryListClickHandler(GroceryList gl) {
+			selection = gl;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			innerContent.clear();
+			innerContent.add(new ShoppingListForm(user, selection));
 		}
 
 	}
 
-	class CreateClickHandler implements ClickHandler {
+	ClickHandler createClickHandler = new ClickHandler() {
 
-		@Override
 		public void onClick(ClickEvent arg0) {
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(createGroup);
+			CreateGroup createGroup = new CreateGroup(user);
+			innerContent.clear();
+			innerContent.add(createGroup);
 
-			
 		}
 
-	}
-	
-
+	};
 
 }

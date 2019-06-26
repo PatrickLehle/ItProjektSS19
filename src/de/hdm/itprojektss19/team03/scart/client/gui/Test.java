@@ -182,6 +182,13 @@ public class Test {
 	//GroupUserMapper.groupUserMapper().deleteUserFromAllGroups(u);
 	//System.out.println(	GroupUserMapper.groupUserMapper().findAllUserByGroup(3));
 //System.out.println(GroupMapper.groupMapper().findByGroupId(1));
+		
+		//Retailer r = new Retailer();
+		//r.setId(2);
+		//r.setRetailerName("Aldi");
+		//RetailerMapper.retailerMapper().insert(r);
+		System.out.println(ArticleMapper.articleMapper().findAllArticleByFavouriteTRUE());
+		
 	}
 	
 	

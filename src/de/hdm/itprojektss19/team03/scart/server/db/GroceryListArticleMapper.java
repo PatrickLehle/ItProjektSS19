@@ -110,8 +110,8 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT grocerylistarticle.grocerylistId, grocerylist.name, article.id, article.name, "
-				+ "article.creationDat, article.modDat, article.boolean FROM grocerylistarticle "
+		String selectByKey = "SELECT article.id, article.name, article.quantity, article.unit, article.retailerId,"
+				+ "article.ownerId, article.creationDat, article.modDat, article.boolean FROM grocerylistarticle "
 				+ "JOIN article ON grocerylistarticle.articleId = article.id " + "JOIN grocerylist "
 				+ "ON grocerylistarticle.grocerylistId = grocerylist.id " + "WHERE grocerylistarticle.grocerylistId= "
 				+ grocerylistId;
