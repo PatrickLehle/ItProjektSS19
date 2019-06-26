@@ -151,7 +151,7 @@ public interface EditorServiceAsync {
 
 	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);
 
-	void findAllArticleByGroceryList(int groceryListId, AsyncCallback<Vector<Article>> asyncCallback);
+	void findAllArticleByGroceryList(GroceryList groceryList, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
 }
