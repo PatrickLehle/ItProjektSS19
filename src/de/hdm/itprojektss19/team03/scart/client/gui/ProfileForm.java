@@ -1,7 +1,10 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
@@ -177,6 +180,8 @@ public class ProfileForm {
 		
 		public void onClick(ClickEvent event) {
 			
+			editorService.getUserByGMail(new  );
+			
 			dbox.hide();
 			dbox.clear();
 			dbox.removeFromParent();
@@ -228,5 +233,29 @@ public class ProfileForm {
 		}
 	
 	}
+	
+	class FindAllUserCallback  implements AsyncCallback<Vector<String>> {
+		
+		public void onFailure() {
+			
+			
+			
+		}
+		
+		public void onSuccess() {
+			
+			
+			
+		}
+		
+		String newUserName = userNameTB.getText();
+		String newEmailAdress = emailAdressTB.getText();
+		
+		
+		editorService.verifyField(new String[] {newUserName, newEmailAdress}, new VerifyFielCallback());
+		
+	}
+	
+	
 	
 }
