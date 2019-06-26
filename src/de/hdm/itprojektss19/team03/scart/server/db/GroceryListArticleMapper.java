@@ -110,8 +110,9 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId = article.id JOIN grocerylist ON grocerylistarticle.grocerylistId = grocerylist.id "
-				+ "WHERE grocerylistarticle.grocerylistId= " + grocerylistId;
+		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId = article.id JOIN grocerylist ON grocerylistarticle.grocerylistId "
+				+ "= grocerylist.id JOIN retailer ON retailer.id = article.id WHERE grocerylistarticle.grocerylistId= "
+				+ grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -125,8 +126,8 @@ public class GroceryListArticleMapper {
 
 			while (rs.next()) {
 				Article a = new Article();
-				a.setId(rs.getInt("id"));
-				a.setName(rs.getString("name"));
+				a.setId(rs.getInt(3));
+				a.setName(rs.getString(4));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
@@ -135,6 +136,7 @@ public class GroceryListArticleMapper {
 				a.setUnit(rs.getString("unit"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 				a.setOwnerId(rs.getInt("ownerId"));
+				a.setRetailerName(rs.getString(20));
 				result.addElement(a);
 			}
 			return result;

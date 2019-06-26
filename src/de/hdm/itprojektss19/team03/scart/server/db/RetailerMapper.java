@@ -9,10 +9,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
-import de.hdm.itprojektss19.team03.scart.shared.bo.BusinessObject;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
@@ -150,16 +147,16 @@ public class RetailerMapper {
 
 		return retailers;
 	}
-	
+
 	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		Vector<Retailer> retailers = new Vector<Retailer>();
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery(
-					"SELECT retailer.id, retailer.name FROM retailer, groups WHERE groupId=" + groupId);
-		
+			ResultSet rs = statement
+					.executeQuery("SELECT retailer.id, retailer.name FROM retailer, groups WHERE groupId=" + groupId);
+
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
 				retailer.setId(rs.getInt("id"));
@@ -266,7 +263,6 @@ public class RetailerMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(selectByKey);
-			stmt.setInt(1, id);
 
 			ResultSet rs = stmt.executeQuery();
 

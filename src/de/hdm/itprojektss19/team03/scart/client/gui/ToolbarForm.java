@@ -7,11 +7,11 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootPanel;
 
 public class ToolbarForm extends HorizontalPanel {
 
-	public ToolbarForm(HorizontalPanel _innerContent) {
-		final HorizontalPanel innerContent = _innerContent;
+	public ToolbarForm() {
 		Anchor reportGeneratorLink = new Anchor("", "ScartReport.html");
 		Button reportBtn = new Button("Report Generator");
 		Button profilBtn = new Button("Profil");
@@ -26,8 +26,8 @@ public class ToolbarForm extends HorizontalPanel {
 		profilBtn.addClickHandler(new ClickHandler() {
 
 			public void onClick(ClickEvent arg0) {
-				innerContent.clear();
-				innerContent.add(profilForm);
+				RootPanel.get("content").clear();
+				RootPanel.get("content").add(profilForm);
 			}
 		});
 
