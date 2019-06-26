@@ -267,7 +267,23 @@ public class ProfileForm {
 		
 		public void onSuccess() {
 			
+			editorService.createUser(userNameTB, emailAdressTB, new UpdateUserCallback());
 			
+		}
+		
+	}
+	
+	class UpdateUserCallback implements AsyncCallback <User> {
+		
+		public void onFailure() {
+			
+			
+			
+		}
+		
+		public void onSuccess() {
+			
+			buildProfile();
 			
 		}
 		
