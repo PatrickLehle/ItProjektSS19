@@ -9,19 +9,19 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	 * 
 	 * @author TomHager
 	 */
-//INITIALIZATION=========================================================================
-	
+	// INITIALIZATION=========================================================================
+
 	private static final long serialVersionUID = 1L;
-	private String retailerName = "";
+	private String retailerName;
 	private int retailerId;
-	private Group group = new Group();
-	
-//CONSTRUCTORS===========================================================================
-	
+	private Group group;
+
+	// CONSTRUCTORS===========================================================================
+
 	public Retailer() {
-	
+
 	}
-	
+
 	public Retailer(String name, int retailerId) {
 		this.retailerName = name;
 		this.retailerId = retailerId;
@@ -30,9 +30,9 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	public Retailer(String name) {
 		this.retailerName = name;
 	}
-	
-//METHODS=================================================================================
-	
+
+	// METHODS=================================================================================
+
 	public String getRetailerName() {
 		return retailerName;
 	}
@@ -40,23 +40,23 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	public void setRetailerName(String retailerName) {
 		this.retailerName = retailerName;
 	}
-	
+
 	public void setRetailerId(int retailerId) {
 		this.retailerId = retailerId;
 	}
-	
+
 	public int getRetailerId() {
 		return this.retailerId;
 	}
 
-//GROUP====================================================================================
-	
-	public void setGroupId(int groupId) {
-		this.group.setId(groupId);
+	public Group getGroup() {
+		return group;
 	}
-	
-	public int getGroupId() {
-		return this.group.getId();
+
+	public void setGroup(Group group) {
+		this.group = group;
 	}
+
+	// GROUP====================================================================================
 
 }

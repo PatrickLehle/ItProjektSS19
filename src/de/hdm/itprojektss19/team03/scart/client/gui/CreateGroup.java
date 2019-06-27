@@ -235,7 +235,6 @@ public class CreateGroup extends VerticalPanel {
 								 * hinzugefuegt werden
 								 */
 								public void onSuccess(GroupUser gU) {
-									Window.alert("gu");
 									GroceryList gl = new GroceryList();
 									gl.setArticles(new Vector<Article>());
 									gl.setGroceryListName("Einkaufsliste");

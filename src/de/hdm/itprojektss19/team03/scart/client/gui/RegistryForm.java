@@ -1,5 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Vector;
+
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -13,6 +15,8 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -27,6 +31,7 @@ public class RegistryForm extends VerticalPanel {
 
 	private EditorServiceAsync editorService = ClientsideSettings.getEditor();
 	private User user = new User();
+	private Group group = new Group();
 
 	private Anchor logout = new Anchor();
 	private FlowPanel buttons = new FlowPanel();
@@ -131,7 +136,19 @@ public class RegistryForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Group g) {
+			group = g;
 			editorService.addUserToGroup(user, g, addUserToGroupCallback);
+		}
+	};
+
+	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
+
+		public void onFailure(Throwable t) {
+			Window.alert("Failed to make new GroceryList: " + t);
+		}
+
+		public void onSuccess(GroceryList gl) {
+			Window.Location.reload();
 		}
 	};
 
@@ -143,7 +160,15 @@ public class RegistryForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(GroupUser gU) {
-			Window.Location.reload();
+			GroceryList gl = new GroceryList();
+			gl.setArticles(new Vector<Article>());
+			gl.setGroceryListName("Einkaufsliste");
+			gl.setGroupId(group.getId());
+			gl.setGroupName(group.getGroupName());
+			gl.setOwnerId(user.getId());
+
+			editorService.createGroceryList(gl, groceryListCallback);
+
 		}
 	};
 
