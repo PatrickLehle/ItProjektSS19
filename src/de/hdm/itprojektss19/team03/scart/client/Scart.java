@@ -37,7 +37,6 @@ public class Scart implements EntryPoint {
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
 	private ScrollPanel navigationPanel = new ScrollPanel();
-	private ToolbarForm toolbar = new ToolbarForm();
 
 	/**
 	 * startet, sobald das Modul geladen wird.
@@ -77,11 +76,7 @@ public class Scart implements EntryPoint {
 
 			}
 		});
-		/**
-		 * Add header and footer to the (root-)Panels they belong to
-		 */
-		RootPanel.get("header").clear();
-		RootPanel.get("header").add(toolbar);
+
 		RootPanel.get("footer").clear();
 		RootPanel.get("footer").add(footer);
 	}
@@ -98,11 +93,15 @@ public class Scart implements EntryPoint {
 	 * Add content to content panel
 	 */
 	private void loadPage(User user) {
+		ToolbarForm toolbar = new ToolbarForm(user);
 
 		groupForm = new GroupForm(user);
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
+
+		RootPanel.get("header").clear();
+		RootPanel.get("header").add(toolbar);
 
 		RootPanel.get("navigation").clear();
 		RootPanel.get("navigation").add(navigationPanel);

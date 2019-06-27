@@ -9,13 +9,15 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 
+import de.hdm.itprojektss19.team03.scart.shared.bo.User;
+
 public class ToolbarForm extends HorizontalPanel {
 
-	public ToolbarForm() {
+	public ToolbarForm(User user) {
 		Anchor reportGeneratorLink = new Anchor("", "ScartReport.html");
 		Button reportBtn = new Button("Report Generator");
 		Button profilBtn = new Button("Profil");
-		final ProfilForm profilForm = new ProfilForm();
+		final ProfileForm profileForm = new ProfileForm(user);
 
 		reportBtn.addStyleName("button");
 		profilBtn.addStyleName("button");
@@ -27,7 +29,7 @@ public class ToolbarForm extends HorizontalPanel {
 
 			public void onClick(ClickEvent arg0) {
 				RootPanel.get("content").clear();
-				RootPanel.get("content").add(profilForm);
+				RootPanel.get("content").add(profileForm);
 			}
 		});
 
