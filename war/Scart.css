@@ -20,20 +20,12 @@ body {
 }
 
 .inner-content {
-    text-align: -webkit-center;
-    height: 100%;
-    width: 100%;
-    padding: 0px;
-    margin: 0px;
+    margin-top: 1em;
 }
 
 .navigation {
-    height: 100%;
-    /* border-right: 1px solid black; */
     padding-right: 1em;
-    padding-left: 1em;
     position: fixed !important;
-    width: 180px;
     -moz-box-shadow: 0 0 10px #000000;
     -webkit-box-shadow: 0 0 10px #000000;
     box-shadow: 0 0 10px #000000;
@@ -86,13 +78,22 @@ body {
     background: rgb(242, 210, 37) !important;
 }
 
+.retailer-panel {
+    width: 100px;
+    margin-left: 20px;
+}
+
+.retailers-panel {
+    margin: 1em;
+}
+
 .tree-group {
     font-size: 1.5em;
     font-weight: bold;
 }
 
 .tree-grocery {
-    font-size: 1.2em; 
+    font-size: 1.2em;
 }
 
 .tree-new-group {

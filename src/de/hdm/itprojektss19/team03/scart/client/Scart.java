@@ -5,7 +5,6 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 
@@ -37,15 +36,12 @@ public class Scart implements EntryPoint {
 	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
-	private HorizontalPanel innerContentPanel = new HorizontalPanel();
 	private ScrollPanel navigationPanel = new ScrollPanel();
-	private ToolbarForm toolbar = new ToolbarForm(innerContentPanel);
 
 	/**
 	 * startet, sobald das Modul geladen wird.
 	 */
 	public void onModuleLoad() {
-		innerContentPanel.setSpacing(30);
 
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
@@ -64,10 +60,8 @@ public class Scart implements EntryPoint {
 						public void onFailure(Throwable caught) {
 							RegistryForm registryFrom = new RegistryForm(logInfo.getLogoutUrl(),
 									logInfo.getEmailAddress());
-							innerContentPanel.clear();
-							innerContentPanel.add(registryFrom);
 							RootPanel.get("content").clear();
-							RootPanel.get("content").add(innerContentPanel);
+							RootPanel.get("content").add(registryFrom);
 						}
 
 						public void onSuccess(User result) {
@@ -82,11 +76,7 @@ public class Scart implements EntryPoint {
 
 			}
 		});
-		/**
-		 * Add header and footer to the (root-)Panels they belong to
-		 */
-		RootPanel.get("header").clear();
-		RootPanel.get("header").add(toolbar);
+
 		RootPanel.get("footer").clear();
 		RootPanel.get("footer").add(footer);
 	}
@@ -96,39 +86,28 @@ public class Scart implements EntryPoint {
 	 */
 	private void login(String logURL) {
 		LoginForm loginForm = new LoginForm(logURL);
-		innerContentPanel.clear();
-		innerContentPanel.add(loginForm);
-		RootPanel.get("content").add(innerContentPanel);
+		RootPanel.get("content").add(loginForm);
 	}
 
 	/**
 	 * Add content to content panel
 	 */
 	private void loadPage(User user) {
+		ToolbarForm toolbar = new ToolbarForm(user);
 
-		innerContentPanel.addStyleName("inner-content");
-		groupForm = new GroupForm(user, innerContentPanel);
+		groupForm = new GroupForm(user);
 		groupForm.addStyleName("navigation");
 		groupForm.setHeight("100%");
 		navigationPanel.add(groupForm);
-		contentPanel.add(navigationPanel);
-		contentPanel.add(innerContentPanel);
+
+		RootPanel.get("header").clear();
+		RootPanel.get("header").add(toolbar);
+
+		RootPanel.get("navigation").clear();
+		RootPanel.get("navigation").add(navigationPanel);
 
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentPanel);
 
-	}
-
-	public void setInnerContent(Panel panel) {
-		innerContentPanel.clear();
-		innerContentPanel.add(panel);
-	}
-
-	public HorizontalPanel getInnerContentPanel() {
-		return innerContentPanel;
-	}
-
-	public void setInnerContentPanel(HorizontalPanel innerContentPanel) {
-		this.innerContentPanel = innerContentPanel;
 	}
 }
