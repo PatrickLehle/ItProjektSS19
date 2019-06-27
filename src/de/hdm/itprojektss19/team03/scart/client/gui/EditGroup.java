@@ -8,7 +8,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
@@ -16,6 +18,9 @@ import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.FindUserByGMailCallback;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.NoButtonClickHandler;
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.YesSaveButtonClickHandler;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -31,12 +36,13 @@ public class EditGroup extends VerticalPanel {
 
 	// CONNECTION WITH EDITORSERVICE/MAPPER============================
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
+	EditorServiceAsync editorService = ClientsideSettings.getEditor();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
 	Group group = new Group();
 	User user = new User();
 
-//	// Vector<Group> allGroups = new Vector<Group>();
+	Vector<Group> GrouptoUpdate = new Vector<Group>();
 //	Vector<String> allGroups = new Vector<String>();
 //	Vector<Integer> allGroupIds = new Vector<Integer>();
 //	Vector<String> choosenGroups = new Vector<String>();
@@ -77,7 +83,7 @@ public class EditGroup extends VerticalPanel {
 		super.onLoad();
 
 		groupTextBox.setText(group.getGroupName());
-
+		groupTextBox.addStyleName("textbox");
 		groupNameHPanel.setHorizontalAlignment(ALIGN_RIGHT);
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h2");
@@ -196,6 +202,75 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
+			DialogBox db = new DialogBox();
+			VerticalPanel vp = new VerticalPanel();
+			HorizontalPanel hp = new HorizontalPanel();
+			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
+			Button nB = new Button("Nein", new NoButtonClickHandler(db));
+			Label l = new HTML("<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
+
+			vp.add(l);
+			hp.add(yB);
+			hp.add(nB);
+			vp.add(hp);
+
+			db.setGlassEnabled(true);
+			db.setAnimationEnabled(true);
+			db.center();
+			db.show();
+
+			db.add(vp);
+
+		}
+
+	}
+	
+	class NoButtonClickHandler implements ClickHandler {
+
+		DialogBox dbox = new DialogBox();
+
+		public NoButtonClickHandler(DialogBox db) {
+
+			this.dbox = db;
+
+		}
+
+		public void onClick(ClickEvent event) {
+
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
+
+		}
+
+	}
+	
+	class YesSaveButtonClickHandler implements ClickHandler {
+
+		DialogBox dbox = new DialogBox();
+
+		public YesSaveButtonClickHandler(DialogBox db) {
+
+			this.dbox = db;
+
+		}
+
+		public void onClick(ClickEvent event) {
+			
+			String newGroupName = groupLabel.getText();
+			group.setGroupName(newGroupName);
+			
+			// Evt mit eigenem UpdateGroupName Mapper ????
+			
+			//editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback);
+
+			dbox.hide();
+			dbox.clear();
+			dbox.removeFromParent();
+			dbox.setAnimationEnabled(false);
+			dbox.setGlassEnabled(false);
 
 		}
 
@@ -220,7 +295,19 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Vector<User> result) {
 			allUsers = result;
-			loadTable();
+			onLoad();
+
+			}
+			
+		}
+	
+	class UpdateGroupNameCallback implements AsyncCallback<Group> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Group result) {
+			onLoad();
 
 			}
 			
