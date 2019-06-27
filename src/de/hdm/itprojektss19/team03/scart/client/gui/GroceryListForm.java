@@ -55,7 +55,9 @@ public class GroceryListForm extends VerticalPanel {
 	HorizontalPanel hpTitle = new HorizontalPanel();
 	HorizontalPanel hpUserRetailer = new HorizontalPanel();
 	HorizontalPanel hpButtons = new HorizontalPanel();
-
+	
+	HorizontalPanel changeGlNamePanel = new HorizontalPanel(); //HorizontalPanel wo Label, Textbox und Button zum aendern des GroceryListnamen enthalten sind
+	
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='right'/>");
 	Button editBtn = new Button("<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
 	Button deleteBtn = new Button("<image src='/images/minusButton.png' width='16px' height='16px' align='left'/>");
@@ -71,6 +73,13 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
 	ListBox retailerListBox = new ListBox();
 	ListBox userListBox = new ListBox();
+	
+	
+	//Elemente zum anendern des GroceryList Namen
+	//TODO: Stylenames zuordnen fuer diese Elemente
+	Label glChangeNameLabel = new Label("Einkaufsliste umbenennen:"); 
+	TextBox glChangeNameTextbox = new TextBox();
+	Button glChangeNameButton = new Button("Ändern");
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
@@ -108,6 +117,11 @@ public class GroceryListForm extends VerticalPanel {
 		// sc.add(aTable);
 
 		this.add(hpTitle);
+		
+		changeGlNamePanel.add(glChangeNameLabel); //Elemente fuer die Aenderung des GroceryList-Namen
+		changeGlNamePanel.add(glChangeNameTextbox);
+		changeGlNamePanel.add(glChangeNameButton);
+		this.add(changeGlNamePanel); //Elemente fuer die Aenderung des GroceryList-Namen werden dem Hauptpanel hinzugefuegt
 		// CALLBACKS=============================================
 		ev.getAllUserByGroupId(1, new AllUserCallback());
 		ev.findAllRetailer(new AllRetailersCallback());
@@ -147,6 +161,9 @@ public class GroceryListForm extends VerticalPanel {
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		checkBtn.addClickHandler(new CheckClickHandler());
 		backTo.addClickHandler(new BackToClickHandler());
+		
+		glChangeNameButton.addClickHandler(new ChangeGlNameButtonClickHandler(groceryList, glChangeNameTextbox.getText()));
+		
 
 		quantityTextBox.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -817,5 +834,33 @@ public class GroceryListForm extends VerticalPanel {
 			unitTextBox.setText(null);
 		}
 	}
+	
+	public class ChangeGlNameButtonClickHandler implements ClickHandler {
+		public ChangeGlNameButtonClickHandler(GroceryList g, String glName) {
+			groceryList = g;
+		}
+		@Override
+		public void onClick(ClickEvent e) {
+			if(glChangeNameTextbox.getText() != null || glChangeNameTextbox.getText() !="" && glChangeNameTextbox.getText().length() < 100) {
+			groceryList.setGroceryListName(glChangeNameTextbox.getText());
+			
+			ev.saveGroceryList(groceryList, new AsyncCallback<Void>() {
+				@Override
+				public void onFailure(Throwable arg0) {
+					// TODO Auto-generated method stub
+					Window.alert("Gruppe konnte nicht umbenennt werden");
+				}
+				@Override
+				public void onSuccess(Void arg0) {
+					// TODO Auto-generated method stub
+					Window.alert("Gruppe wurde in "+groceryList.getGroceryListName()+" umbenannt");
+				}
 
+		});
+			} else {
+				Window.alert("Geben Sie einen passenden Namen fuer die Einkaufsliste ein");
+			}
+	}
+
+}
 }

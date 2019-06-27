@@ -3,6 +3,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import java.sql.Timestamp;
 import java.util.Vector;
 
+import com.google.gwt.cell.client.EditTextCell;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
