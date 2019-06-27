@@ -21,7 +21,8 @@ CREATE TABLE `article` (
   `creationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `boolean` tinyint(1) NOT NULL,
-  `delDat` timestamp NULL DEFAULT NULL
+  `delDat` timestamp NULL DEFAULT NULL,
+  `fav` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
