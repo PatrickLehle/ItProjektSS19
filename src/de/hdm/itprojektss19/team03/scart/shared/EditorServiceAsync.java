@@ -21,13 +21,13 @@ public interface EditorServiceAsync {
 
 	// USER===========================================================================
 
-	void createUser(String username, String emailAdress, AsyncCallback<User> asyncCallback);
+	void createUser(User u, AsyncCallback<User> asyncCallback);
 
 	void createUser(String emailAdress, AsyncCallback<User> asyncCallback);
 
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
 
-	void getUserById(int userId, AsyncCallback<User> callback);
+	void getUserById(int userId, AsyncCallback<User> asyncCallback);
 
 	void getUserByGMail(String email, AsyncCallback<User> callback);
 
@@ -56,12 +56,14 @@ public interface EditorServiceAsync {
 	// GROUP-USER========================================================================
 
 	void findAllGroupsByUserId(int id, AsyncCallback<Vector<Group>> asyncCallback);
-	
-	void getAllUsersByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
+
+	void getAllUserByGroupId(int id, AsyncCallback<Vector<User>> asyncCallback);
+
+	void removeUserFromGroup(User u, Group g, AsyncCallback<Void> asyncCallback);
 
 	// GROCERYLIST===========================================================================
 
-	void createGroceryList(String name, GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
+	void createGroceryList(GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
 
 	void saveGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
 
@@ -79,6 +81,8 @@ public interface EditorServiceAsync {
 
 	void findAllGroceryLists(AsyncCallback<Vector<GroceryList>> asyncCallback);
 
+	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
+
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
@@ -94,13 +98,13 @@ public interface EditorServiceAsync {
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
 
 	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void findAllArticleByFavouriteTRUE(AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	// RETAILER===========================================================================
 
 	void createRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
@@ -110,7 +114,7 @@ public interface EditorServiceAsync {
 	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
 
 	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
-	
+
 	void getAllRetailerByGroupId(int groupId, AsyncCallback<Vector<Retailer>> asyncCallback);
 
 	void getAllArticleByRetailer(Retailer r, AsyncCallback<Vector<Article>> asyncCallback);
@@ -121,7 +125,7 @@ public interface EditorServiceAsync {
 			AsyncCallback<Vector<Article>> asyncCallback);
 
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
-	
+
 	// UNIT===========================================================================
 
 	// void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
@@ -147,7 +151,7 @@ public interface EditorServiceAsync {
 
 	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);
 
-	void findAllArticleByGroceryList(int groceryListId, AsyncCallback<Vector<Article>> asyncCallback);
+	void findAllArticleByGroceryList(GroceryList groceryList, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
 }

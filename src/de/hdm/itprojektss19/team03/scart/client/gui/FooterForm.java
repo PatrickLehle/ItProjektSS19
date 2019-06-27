@@ -8,9 +8,9 @@ public class FooterForm extends HorizontalPanel {
 	public FooterForm() {
 		Label txt = new Label("footer text");
 
-		this.add(txt);
-		this.addStyleName("footer");
 		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.setVerticalAlignment(ALIGN_MIDDLE);
+		this.addStyleName("footer");
+		this.add(txt);
 	}
 }

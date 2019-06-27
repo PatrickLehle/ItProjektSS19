@@ -115,7 +115,7 @@ public class UserMapper {
 	 * @return User mit der entsprechenden ID
 	 * @throws DatabaseException
 	 */
-	public User findbyUserId(int userId) throws DatabaseException {
+	public User getUserById(int userId) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
@@ -166,7 +166,7 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT * FROM user WHERE email=?";
+		String selectByKey = "SELECT `user`.*, `user`.`email` FROM `user` WHERE `user`.`email` = '" + userEmail + "'";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -174,7 +174,7 @@ public class UserMapper {
 
 			// Aufbereitung des vorbereitenden Statements
 			stmt = con.prepareStatement(selectByKey);
-			stmt.setString(1, userEmail);
+			// stmt.setString(1, userEmail);
 
 			// Ausfuehren des SQL Statement
 			ResultSet rs = stmt.executeQuery();
@@ -187,14 +187,16 @@ public class UserMapper {
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt(1));
 				u.setEmail(rs.getString(2));
+				u.setUsername(rs.getString(3));
 
 				return u;
+			} else {
+				throw new DatabaseException();
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
 
 	/**
@@ -209,43 +211,24 @@ public class UserMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		// Query fuer die Abfrage der hoechsten ID (Primaerschluessel) in der Datenbank
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM user";
-
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String insertSQL = "INSERT INTO user (id, email, name) VALUES (?,?,?)";
+		String insertSQL = "INSERT INTO user (email, name) VALUES (?,?)";
 
 		try {
-			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(maxIdSQL);
-
-			// MAX ID Query ausfuehren
-			ResultSet rs = stmt.executeQuery();
-
-			// Damit dieser daraufhin um 1 inkrementiert der ID des BO zugewiesen wird
-			if (rs.next()) {
-				user.setId(rs.getInt("maxid") + 1);
-			}
-
-			// Jetzt erfolgt das Einfuegen des Objekts
 			stmt = con.prepareStatement(insertSQL);
+			// stmt.setInt(1, user.getId());
+			stmt.setString(1, user.getEmail());
+			stmt.setString(2, user.getUsername());
 
-			// Setzen der ? als Platzhalter fuer den Wert
-			stmt.setInt(1, user.getId());
-			stmt.setString(2, user.getEmail());
-			stmt.setString(3, user.getUsername());
-
-			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
 
-			// Aufruf des printStackTrace ermoeglicht, die Analyse von Fehlermeldungen.
+			return user;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
 
-		return user;
 	}
 
 	/**
