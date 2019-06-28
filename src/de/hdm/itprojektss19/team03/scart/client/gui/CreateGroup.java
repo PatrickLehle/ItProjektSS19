@@ -11,6 +11,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -52,9 +53,10 @@ public class CreateGroup extends VerticalPanel {
 	 *            (User-Objekt des Users der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
-		
+		/* Cookies: ggf. entfernen
 		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
 		u.setEmail(String.valueOf(Cookies.getCookie("email")));
+		*/
 		
 		this.user = u;
 		
@@ -92,6 +94,9 @@ public class CreateGroup extends VerticalPanel {
 	User user = null; // User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden
 						// soll
 	Group createGroup = new Group();
+	
+	
+	
 
 	// METHODS==========================================================
 
@@ -312,5 +317,7 @@ public class CreateGroup extends VerticalPanel {
 			return true;
 		}
 	};
+	
+	
 
 }

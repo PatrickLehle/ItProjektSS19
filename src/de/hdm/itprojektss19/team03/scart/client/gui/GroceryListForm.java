@@ -46,7 +46,13 @@ public class GroceryListForm extends VerticalPanel {
 	public GroceryListForm(User u, Group g) {
 		this.user = u;
 		this.group = g;
-	};
+	}
+	
+	public GroceryListForm(User u, Group g, GroceryList gl) {
+		this.user = u;
+		this.group = g;
+		this.groceryList = gl;
+	}
 
 	private User user;
 	private Group group;
@@ -854,6 +860,7 @@ public class GroceryListForm extends VerticalPanel {
 				public void onSuccess(Void arg0) {
 					// TODO Auto-generated method stub
 					Window.alert("Gruppe wurde in "+groceryList.getGroceryListName()+" umbenannt");
+					//TODO: Seite neu laden um aktualisierten GroceryList namen zu uebernehmen
 				}
 
 		});

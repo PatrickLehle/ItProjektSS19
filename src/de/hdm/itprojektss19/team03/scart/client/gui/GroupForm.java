@@ -216,7 +216,7 @@ public class GroupForm extends VerticalPanel {
 				@Override
 				public void onSuccess(GroceryList arg0) {
 					// TODO Auto-generated method stub
-					Window.Location.replace("/Scart.html"); //Springt zurueck zur Homepage,
+					Window.Location.reload(); //Springt zurueck zur Homepage,
 								// damit der Tree geleert wird und neu geladen werden kann
 				}
 				
