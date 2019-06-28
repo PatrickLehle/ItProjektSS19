@@ -203,8 +203,7 @@ public class GroceryListForm extends VerticalPanel {
 		for (articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
 			// retailerId = articleVector.get(articleNumber).getRetailerId() + 1;
 			ev.getRetailerById(retailerId, new GetRetailerCallback());
-			if (articleVector.get(articleNumber).getCheckBoolean() == false
-					&& articleVector.get(articleNumber).getDelDat() == null) {
+			if (articleVector.get(articleNumber).getDelDat() == null && articleVector.get(articleNumber).getCheckBoolean() == false) {
 				articleTable.setText(falseCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				articleTable.setText(falseCount, 1, articleVector.get(articleNumber).getName());
 				articleTable.setText(falseCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
@@ -212,8 +211,7 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setText(falseCount, 4, retailer.getRetailerName());
 				setFavButtonFalse();
 				falseCount++;
-			} else if (articleVector.get(articleNumber).getCheckBoolean() == true
-					&& articleVector.get(articleNumber).getDelDat() == null) {
+			} else if (articleVector.get(articleNumber).getDelDat() != null && articleVector.get(articleNumber).getCheckBoolean() == false) {
 				boughtTable.setText(trueCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				boughtTable.setText(trueCount, 1, articleVector.get(articleNumber).getName());
 				boughtTable.setText(trueCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
@@ -355,17 +353,16 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				rowIndex = articleTable.getCellForEvent(event).getRowIndex();
 				rowCount = boughtTable.getRowCount();
-
+				article = null;
+				
 				article.setId(Integer.parseInt(articleTable.getText(rowIndex, 0)));
 				article.setName(articleTable.getText(rowIndex, 1));
-				// article.setQuantity(Integer.parseInt(articleTable.getText(rowIndex, 2)));
+				article.setQuantity(Integer.parseInt(articleTable.getText(rowIndex, 2)));
 				article.setQuantity(10);
-				// article.setUnit(articleTable.getText(rowIndex, 3));
+				article.setUnit(articleTable.getText(rowIndex, 3));
 				article.setUnit("kg");
 				article.setRetailerId(1);
-				article.setCheckBoolean(true);
-
-				ev.saveArticle(article, new SaveArticleCallback());
+				ev.deleteArticle(article, new DeleteArticleCallBack());
 			}
 		});
 		cb.setValue(false);
@@ -384,39 +381,18 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				rowIndex = boughtTable.getCellForEvent(event).getRowIndex();
 				rowCount = articleTable.getRowCount();
-
 				article = null;
 
+				article.setId(Integer.parseInt(boughtTable.getText(rowIndex, 0)));
 				article.setName(boughtTable.getText(rowIndex, 1));
 				article.setQuantity(Integer.parseInt(boughtTable.getText(rowIndex, 2)));
-				article.setUnit(boughtTable.getText(rowIndex, 3));
-				article.setRetailerId(Integer.parseInt(boughtTable.getText(rowIndex, 4)));
-				article.setCheckBoolean(false);
-
-				ev.saveArticle(article, new AsyncCallback<Article>() {
-					public void onFailure(Throwable caught) {
-						Window.alert("Artikel konnte nicht von der gekauft Tabelle entfernt werden");
-						article = null;
-					}
-
-					public void onSuccess(Article arg0) {
-						articleTable.setText(rowCount, 1, arg0.getName());
-						articleTable.setText(rowCount, 2, Integer.toString(arg0.getQuantity()));
-						articleTable.setText(rowCount, 3, arg0.getUnit());
-						articleTable.setText(rowCount, 4, Integer.toString(arg0.getRetailerId()));
-						articleTable.setWidget(rowCount, 5, getCbCheck());
-						boughtTable.removeRow(rowIndex);
-
-						if (boughtTable.getRowCount() < 1) {
-							boughtTable.setVisible(false);
-						}
-						loadTable();
-
-						article = null;
-					}
-				});
+				article.setQuantity(Integer.parseInt(boughtTable.getText(rowIndex, 3)));
+				article.setUnit(boughtTable.getText(rowIndex, 4));
+				article.setRetailerId(1);
+				ev.deleteArticle(article, new DeleteArticleCallBack());
 			}
 		});
+				
 		cb.setValue(true);
 		return cb;
 	}
@@ -833,12 +809,35 @@ public class GroceryListForm extends VerticalPanel {
 	class DeleteArticleCallBack implements AsyncCallback<Void> {
 
 		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Loeschen");
+			articleTable.setWidget(rowIndex, 5, getCbCheck());
 		}
 
 		public void onSuccess(Void result) {
-			articleTable.removeRow(globalRow);
+			if(article.getDelDat() == null) {
+				boughtTable.setText(rowCount, 0, Integer.toString(article.getId()));
+				boughtTable.setText(rowCount, 1, article.getName());
+				boughtTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
+				boughtTable.setText(rowCount, 3, article.getUnit());
+				boughtTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
+				boughtTable.setWidget(rowCount, 5, getCbReturn());
+				articleTable.removeRow(rowIndex);
+			}else if(article.getDelDat() != null) {
+				articleTable.setText(rowCount, 0, Integer.toString(article.getId()));
+				articleTable.setText(rowCount, 1, article.getName());
+				articleTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
+				articleTable.setText(rowCount, 3, article.getUnit());
+				articleTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
+				articleTable.setWidget(rowCount, 5, getCbReturn());
+			}
+
+			if (boughtTable.getRowCount() > 1) {
+				boughtTable.setVisible(true);
+			}
+			article = null;
+			loadTable();
 		}
-	}
+		}
 
 	class GetRetailerCallback implements AsyncCallback<Retailer> {
 
@@ -859,19 +858,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Article result) {
-			boughtTable.setText(rowCount, 0, Integer.toString(article.getId()));
-			boughtTable.setText(rowCount, 1, article.getName());
-			boughtTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
-			boughtTable.setText(rowCount, 3, article.getUnit());
-			boughtTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
-			boughtTable.setWidget(rowCount, 5, getCbReturn());
-			articleTable.removeRow(rowIndex);
-
-			if (boughtTable.getRowCount() > 1) {
-				boughtTable.setVisible(true);
-			}
-			article = null; // Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt
-							// werden konnte
+			article = null;
 			loadTable();
 			Window.alert("2");
 		}
