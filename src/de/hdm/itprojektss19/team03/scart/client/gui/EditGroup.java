@@ -2,6 +2,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -36,7 +37,6 @@ public class EditGroup extends VerticalPanel {
 
 	// CONNECTION WITH EDITORSERVICE/MAPPER============================
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
-	EditorServiceAsync editorService = ClientsideSettings.getEditor();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
 	Group group = new Group();
@@ -80,7 +80,6 @@ public class EditGroup extends VerticalPanel {
 	}
 
 	public void onLoad() {
-		super.onLoad();
 
 		groupTextBox.setText(group.getGroupName());
 		groupTextBox.addStyleName("textbox");
@@ -119,19 +118,17 @@ public class EditGroup extends VerticalPanel {
 	}
 
 	public void loadTable() {
-		
+
 		userTable.removeAllRows();
 
 		userTable.setText(0, 1, "Benutzername");
 		userTable.setText(0, 2, "Email");
 		userTable.setText(0, 3, "");
-		
-		for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
-			editorVerwaltung.getAllUserByGroupId(group.getId(),new AllUserCallback());
-			
-		}
-		
-		
+		userTable.setText(1, 1, user.getUsername());
+		userTable.setText(1, 2, user.getEmail());
+
+		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
+
 	}
 
 	public void setGroupNameLabel() {
@@ -170,8 +167,6 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-
-
 	class DeleteClickHandler implements ClickHandler {
 		Group group = new Group();
 		User user = new User();
@@ -207,7 +202,8 @@ public class EditGroup extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
+			Label l = new HTML(
+					"<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -224,7 +220,7 @@ public class EditGroup extends VerticalPanel {
 		}
 
 	}
-	
+
 	class NoButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -246,7 +242,7 @@ public class EditGroup extends VerticalPanel {
 		}
 
 	}
-	
+
 	class YesSaveButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -258,13 +254,13 @@ public class EditGroup extends VerticalPanel {
 		}
 
 		public void onClick(ClickEvent event) {
-			
+
 			String newGroupName = groupLabel.getText();
 			group.setGroupName(newGroupName);
-			
+
 			// Evt mit eigenem UpdateGroupName Mapper ????
-			
-			//editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback);
+
+			// editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback);
 
 			dbox.hide();
 			dbox.clear();
@@ -291,16 +287,27 @@ public class EditGroup extends VerticalPanel {
 	class AllUserCallback implements AsyncCallback<Vector<User>> {
 
 		public void onFailure(Throwable caught) {
+			GWT.log(caught.getLocalizedMessage());
 		}
 
 		public void onSuccess(Vector<User> result) {
 			allUsers = result;
-			onLoad();
+
+			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
+				GWT.log(group.getId() + "");
+
+				if (allUsers.get(userNumber).getId() != user.getId()) {
+					userTable.setText(userNumber + 2, 1, allUsers.get(userNumber).getUsername());
+					userTable.setText(userNumber + 2, 2, allUsers.get(userNumber).getEmail());
+
+				}
 
 			}
-			
+
 		}
-	
+
+	}
+
 	class UpdateGroupNameCallback implements AsyncCallback<Group> {
 
 		public void onFailure(Throwable caught) {
@@ -309,13 +316,12 @@ public class EditGroup extends VerticalPanel {
 		public void onSuccess(Group result) {
 			onLoad();
 
-			}
-			
 		}
-	
-	
+
 	}
-	
+
+}
+
 //	public void seeUsersfromGroup(User user, Group group) {
 //	try {
 //		if (user == null || group == null) {
@@ -347,7 +353,6 @@ public class EditGroup extends VerticalPanel {
 //		Window.alert(e.toString() + "\n" + "User/Group ist null");
 //	}
 //}
-	
 
 //	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
 //
@@ -384,5 +389,3 @@ public class EditGroup extends VerticalPanel {
 //		}
 //
 //	}
-
-
