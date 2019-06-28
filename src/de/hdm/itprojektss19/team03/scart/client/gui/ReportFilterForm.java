@@ -63,6 +63,7 @@ public class ReportFilterForm extends VerticalPanel {
 	Vector<Group> allGroups = null;
 	Vector<Group> choosenGroups = new Vector<Group>();
 	Vector<Retailer> allRetailer = null;
+	Vector<Retailer> choosenRetailer = new Vector<Retailer>();
 	Vector<User> allUsers = null;
 
 	Vector<String> allGroupsS = new Vector<String>();
@@ -104,7 +105,6 @@ public class ReportFilterForm extends VerticalPanel {
 	public ReportFilterForm(final User cUser) {
 		this.user = cUser;
 
-		Window.alert(cUser.getEmail()+cUser.getId());
 	}
 
 //PANELS-LABELS-BUTTONS=============================================================	
@@ -307,7 +307,7 @@ public class ReportFilterForm extends VerticalPanel {
 				for (int g = 0; g < result.size(); g++) {
 					allRetailerS.add(result.elementAt(g).getRetailerName());
 					CheckBox temp = new CheckBox(allRetailerS.elementAt(g));
-					temp.addClickHandler(new RetailerCheckBoxClickHandler(temp));
+					temp.addClickHandler(new RetailerCheckBoxClickHandler(temp, allRetailer.get(g)));
 					checkBoxesRetailer.add(temp);
 				}
 			}
@@ -374,7 +374,6 @@ public class ReportFilterForm extends VerticalPanel {
 					if(choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && disabledRetailerBtn.isDown() == true) {
 
 						reportVerwaltung.createStatisticA(user, choosenGroups, new ArticleReportCallback());
-
 						
 					}
 
@@ -418,9 +417,9 @@ public class ReportFilterForm extends VerticalPanel {
 					
 					//Gruppe und Retailer (Check)
 					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false) {
-						Window.alert("Report von der Gruppe und des Retailers wurde erstellt");
-						//TODO
-						return;
+						
+						reportVerwaltung.createStatisticAR(user, choosenGroups, choosenRetailer, new ArticleRetailerReportCallback());
+					
 					}
 
 					if (cStartDate.equals(cEndDate)) {
@@ -472,12 +471,20 @@ public class ReportFilterForm extends VerticalPanel {
 
 	class RetailerCheckBoxClickHandler implements ClickHandler {
 		CheckBox checkBox = null;
+		Retailer retailer;
 
-		public RetailerCheckBoxClickHandler(CheckBox cB) {
+		public RetailerCheckBoxClickHandler(CheckBox cB, Retailer r) {
 			this.checkBox = cB;
+			this.retailer = r;
 		}
 
 		public void onClick(ClickEvent event) {
+			if(checkBox.getValue()) {
+				choosenRetailer.add(retailer);
+			}else {
+				choosenRetailer.remove(retailer);
+			}
+			
 			if (choosenRetailerS.contains(checkBox.getText())) {
 
 				for (int i = 0; i < choosenRetailerS.size(); i++) {
