@@ -34,8 +34,8 @@ public class ProfileForm {
 
 	//LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
-	Label userNameLabel = new Label("Name: ");
-	Label emailAdressLabel = new Label("E-Mail: ");
+	Label userNameDescLabel = new Label("Name: ");
+	Label emailAdressDescLabel = new Label("E-Mail: ");
 
 	//BUTTONS================================================
 
@@ -64,7 +64,7 @@ public class ProfileForm {
 
 		buildProfile();
 		
-		editorService.getUserById(user.getId(), )
+		editorService.getUserById(user.getId(), new FindUserCallback());
 
 	}
 
@@ -77,8 +77,12 @@ public class ProfileForm {
 	public void buildProfile() {
 
 		yourProfilePanel.add(yourProfileLabel);
-		userNamePanel.add(userNameLabel);
-		emailAdressPanel.add(emailAdressLabel);
+		userNamePanel.add(userNameDescLabel);
+		Label userNameContLabel = new Label(user.getUsername());
+		userNamePanel.add(userNameContLabel);
+		emailAdressPanel.add(emailAdressDescLabel);
+		Label emailAdressContLabel = new Label(user.getEmail());
+		emailAdressPanel.add(emailAdressContLabel);
 
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
