@@ -18,7 +18,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
@@ -47,7 +46,7 @@ import de.hdm.itprojektss19.team03.scart.shared.report.SimpleReport;
  */
 public class ReportFilterForm extends VerticalPanel {
 
-//INITIALISATION===========================================================
+	// INITIALISATION===========================================================
 
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
@@ -89,17 +88,15 @@ public class ReportFilterForm extends VerticalPanel {
 	@SuppressWarnings("deprecation")
 	Date dateAfterChosenStartDate = new Date(119, 0, 2);
 
-//CONSTRUCTORS=====================================================================
-
-	public ReportFilterForm() {
-	}
+	// CONSTRUCTORS=====================================================================
 
 	public ReportFilterForm(final User cUser) {
 		this.user = cUser;
-//		this.rForm = cReport;
+
+		Window.alert(cUser.getEmail() + " id: " + cUser.getId());
 	}
 
-//PANELS-LABELS-BUTTONS=============================================================	
+	// PANELS-LABELS-BUTTONS=============================================================
 
 	// GROUPS-FILTER=======================
 	VerticalPanel pickGroup = new VerticalPanel();
@@ -125,14 +122,12 @@ public class ReportFilterForm extends VerticalPanel {
 	ToggleButton disabledRetailerBtn = new ToggleButton("Filter Deaktivieren", "Filter Aktivieren");
 	Label retailerLbl = new Label("Retailer auswählen:");
 	VerticalPanel checkBoxesRetailer = new VerticalPanel();
-	
-	ScrollPanel scroll = new ScrollPanel();
 
 	// REPORT-BUTTON=============================
 	VerticalPanel reportBtnVP = new VerticalPanel();
 	Button getReportBtn = new Button("Report generieren");
 
-//METHODS===========================================================================
+	// METHODS===========================================================================
 
 	@SuppressWarnings("deprecation")
 	public void onLoad() {
@@ -193,9 +188,9 @@ public class ReportFilterForm extends VerticalPanel {
 
 		// ROOT-BUTTONS=================
 		RootPanel.get("navigator").add(reportBtnVP);
-//		RootPanel.get("navigator").add(getReportBtn);
+		// RootPanel.get("navigator").add(getReportBtn);
 
-//END=========================================================================================================
+		// END=========================================================================================================
 
 		editorVerwaltung.findAllGroups(new AllGroupsCallback());
 		editorVerwaltung.findAllRetailer(new AllRetailersCallback());
@@ -354,85 +349,85 @@ public class ReportFilterForm extends VerticalPanel {
 	public class getReportClickHandler implements ClickHandler {
 
 		@SuppressWarnings("deprecation")
-				public void onClick(ClickEvent event) {
+		public void onClick(ClickEvent event) {
 
-					cStartDate = start.getValue();
-					cStartDate.setHours(1);
+			cStartDate = start.getValue();
+			cStartDate.setHours(1);
 
-					cEndDate = end.getValue();
-					cEndDate.setHours(1);
-	
-					//Nur Gruppen Report (Check)
-					if(choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && disabledRetailerBtn.isDown() == true) {
+			cEndDate = end.getValue();
+			cEndDate.setHours(1);
 
-						reportVerwaltung.createStatisticA(user, new ArticleReportCallback());
-						
-						RootPanel.get("content").add(scroll);
-						Window.alert("did it work?");
-						
-					}
+			// Nur Gruppen Report (Check)
+			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true
+					&& disabledRetailerBtn.isDown() == true) {
 
-					//Gruppe mit Zeitraum Report (Check)
-					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null  && cEndDate != null && disabledRetailerBtn.isDown() == true) {
-						Window.alert("Report von Gruppe mit Zeitraum wurde erstellt");
-						
-						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
-						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+				reportVerwaltung.createStatisticA(user, new ArticleReportCallback());
 
-						Date choosenStartDatePl1 = cStartDate;
-						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
-						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+			}
 
-						Date choosenEndDatePl1 = cEndDate;
-						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
-						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+			// Gruppe mit Zeitraum Report (Check)
+			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null
+					&& cEndDate != null && disabledRetailerBtn.isDown() == true) {
+				Window.alert("Report von Gruppe mit Zeitraum wurde erstellt");
 
-						return;
-						//TODO
-					}
+				Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+				Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
 
-					//Gruppe mit Zeitraum und Retailer (Check)
-					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null && cEndDate != null && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false ) {
-						Window.alert("Report von der Gruppe mit Zeitraum und des Retailers wurde erstellt");
-						
-						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
-						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+				Date choosenStartDatePl1 = cStartDate;
+				CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+				Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
 
-						Date choosenStartDatePl1 = cStartDate;
-						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
-						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+				Date choosenEndDatePl1 = cEndDate;
+				CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+				Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
 
-						Date choosenEndDatePl1 = cEndDate;
-						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
-						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+				return;
+				// TODO
+			}
 
-						return;
-						//TODO
-					}
-					
-					//Gruppe und Retailer (Check)
-					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false) {
-						Window.alert("Report von der Gruppe und des Retailers wurde erstellt");
-						//TODO
-						return;
-					}
+			// Gruppe mit Zeitraum und Retailer (Check)
+			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null
+					&& cEndDate != null && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false) {
+				Window.alert("Report von der Gruppe mit Zeitraum und des Retailers wurde erstellt");
 
-					if (cStartDate.equals(cEndDate)) {
-						Window.alert("Das Startdatum und Enddatum dürfen nicht das selbe sein.");
-						return;
-						//TODO
-					}
-					
-					if (choosenGroupsS.size() == 0 || cStartDate == null || cEndDate == null || choosenRetailerS.size() == 0 && disabledRetailerBtn.isDown() == false ) {
-						Window.alert("Bitte füllen Sie alle Felder aus.");
-						return;
-						//TODO
-					}
-		
-				}
+				Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+				Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+
+				Date choosenStartDatePl1 = cStartDate;
+				CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+				Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+
+				Date choosenEndDatePl1 = cEndDate;
+				CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+				Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+
+				return;
+				// TODO
+			}
+
+			// Gruppe und Retailer (Check)
+			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && choosenRetailerS.size() != 0
+					&& disabledRetailerBtn.isDown() == false) {
+				Window.alert("Report von der Gruppe und des Retailers wurde erstellt");
+				// TODO
+				return;
+			}
+
+			if (cStartDate.equals(cEndDate)) {
+				Window.alert("Das Startdatum und Enddatum dürfen nicht das selbe sein.");
+				return;
+				// TODO
+			}
+
+			if (choosenGroupsS.size() == 0 || cStartDate == null || cEndDate == null
+					|| choosenRetailerS.size() == 0 && disabledRetailerBtn.isDown() == false) {
+				Window.alert("Bitte füllen Sie alle Felder aus.");
+				return;
+				// TODO
+			}
+
 		}
-	
-	
+	}
 
 	class GroupCheckBoxClickHandler implements ClickHandler {
 		CheckBox checkBox = null;
@@ -474,6 +469,7 @@ public class ReportFilterForm extends VerticalPanel {
 				choosenRetailerS.add(checkBox.getText());
 			}
 		}
+
 	}
 
 	class StartDateChangeHandler implements ValueChangeHandler<Date> {
@@ -546,8 +542,8 @@ public class ReportFilterForm extends VerticalPanel {
 			}
 		}
 	}
-//ARTICLE-DATE-RETAILER-CALLBACK===================================================================
-	
+	// ARTICLE-DATE-RETAILER-CALLBACK===================================================================
+
 	class ArticleDateRetailerReportCallback implements AsyncCallback<ArticleDateRetailerReport> {
 
 		public void onFailure(Throwable caught) {
@@ -561,8 +557,8 @@ public class ReportFilterForm extends VerticalPanel {
 			rForm.setReport(html);
 		}
 	}
-//ARTICLE-RETAILER-CALLBACK========================================================================
-	
+	// ARTICLE-RETAILER-CALLBACK========================================================================
+
 	class ArticleRetailerReportCallback implements AsyncCallback<ArticleRetailerReport> {
 
 		public void onFailure(Throwable caught) {
@@ -577,8 +573,8 @@ public class ReportFilterForm extends VerticalPanel {
 		}
 	}
 
-//ARTICLE-DATE-CALLBACK============================================================================
-	
+	// ARTICLE-DATE-CALLBACK============================================================================
+
 	class ArticleDateReportCallback implements AsyncCallback<ArticleDateReport> {
 
 		public void onFailure(Throwable caught) {
@@ -593,12 +589,11 @@ public class ReportFilterForm extends VerticalPanel {
 		}
 	}
 
-//ARTICLE-CALLBACK=================================================================================
-	
+	// ARTICLE-CALLBACK=================================================================================
+
 	class ArticleReportCallback implements AsyncCallback<ArticleReport> {
 
 		public void onFailure(Throwable caught) {
-			Window.alert("didnt work");
 		}
 
 		public void onSuccess(ArticleReport result) {

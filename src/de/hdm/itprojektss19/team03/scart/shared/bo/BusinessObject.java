@@ -29,16 +29,16 @@ public abstract class BusinessObject implements Serializable, IsSerializable {
 	/**
 	 * Die eindeutige Identifikationsnummer einer Instanz dieser Klasse.
 	 */
-	protected int id = 0;
+	protected int id;
 
-	
 	public BusinessObject() {
-		
+
 	}
-	
+
 	public BusinessObject(int id) {
 		this.id = id;
 	}
+
 	/**
 	 * Auslesen der ID.
 	 * 

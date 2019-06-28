@@ -14,10 +14,10 @@ public class LoginInfo extends BusinessObject implements IsSerializable {
 	 */
 
 	private boolean loggedIn = false;
-	private String loginUrl = "";
-	private String logoutUrl = " ";
-	private String emailAddress = "";
-	private String username = "";
+	private String loginUrl;
+	private String logoutUrl;
+	private String emailAddress;
+	private String username;
 
 	public LoginInfo() {
 

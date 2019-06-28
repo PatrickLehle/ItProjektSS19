@@ -2,22 +2,22 @@ package de.hdm.itprojektss19.team03.scart.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
-import de.hdm.itprojektss19.team03.scart.client.gui.GroceryListForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
 <<<<<<< HEAD
 import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm1;
 =======
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
+<<<<<<< HEAD
 import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
+>>>>>>> dev
+=======
 >>>>>>> dev
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
@@ -32,7 +32,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * Die Scart classe implementiert EntryPoint, d.h. sie wird als erstes
  * aufgerufen, sobald die Anwendung gestartet wird.
  * 
- * @author PatrickLehle
  * @author Marco Dell'Oso
  *
  */
@@ -41,16 +40,11 @@ public class Scart implements EntryPoint {
 	private LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
 
-	private User user = new User();
-	private String signOutLink;
-
-	private ToolbarForm toolbar = new ToolbarForm();
 	private FooterForm footer = new FooterForm();
-	private GroceryListForm groceryListForm = new GroceryListForm();
-	private GroupForm groupForm = new GroupForm();
-	private ProfilForm profilForm = new ProfilForm();
+	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
+<<<<<<< HEAD
 
 	// @todo: delete test buttons
 	private Button button1 = new Button("grocery list");
@@ -63,13 +57,15 @@ public class Scart implements EntryPoint {
 	private ProfilForm1 pf = new ProfilForm1();
 	
 =======
+=======
+	private ScrollPanel navigationPanel = new ScrollPanel();
+>>>>>>> dev
 
 	/**
 	 * startet, sobald das Modul geladen wird.
 	 */
 >>>>>>> dev
 	public void onModuleLoad() {
-		contentPanel.setSpacing(30);
 
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
@@ -77,26 +73,34 @@ public class Scart implements EntryPoint {
 				Window.alert(err.getMessage());
 			}
 
-			public void onSuccess(LoginInfo logInfo) {
+			public void onSuccess(final LoginInfo logInfo) {
 				/**
 				 * Check if the user is logged in
 				 */
 				if (logInfo.isLoggedIn()) {
-					user.setEmail(logInfo.getEmailAddress());
-					signOutLink = logInfo.getLogoutUrl();
-					editorService.getUserByGMail(logInfo.getEmailAddress(), newUserCallback);
+
+					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
+
+						public void onFailure(Throwable caught) {
+							RegistryForm registryFrom = new RegistryForm(logInfo.getLogoutUrl(),
+									logInfo.getEmailAddress());
+							RootPanel.get("content").clear();
+							RootPanel.get("content").add(registryFrom);
+						}
+
+						public void onSuccess(User result) {
+							loadPage(result);
+						}
+
+					});
+
 				} else {
 					login(logInfo.getLoginUrl());
 				}
-			}
 
+			}
 		});
 
-		/**
-		 * Add header and footer to the (root-)Panels they belong to
-		 */
-		RootPanel.get("header").clear();
-		RootPanel.get("header").add(toolbar);
 		RootPanel.get("footer").clear();
 		RootPanel.get("footer").add(footer);
 	}
@@ -106,54 +110,28 @@ public class Scart implements EntryPoint {
 	 */
 	private void login(String logURL) {
 		LoginForm loginForm = new LoginForm(logURL);
-		contentPanel.clear();
-		contentPanel.add(loginForm);
-		RootPanel.get("content").add(contentPanel);
+		RootPanel.get("content").add(loginForm);
 	}
 
 	/**
 	 * Add content to content panel
 	 */
-	private void loadPage() {
+	private void loadPage(User user) {
+		ToolbarForm toolbar = new ToolbarForm(user);
 
-		contentPanel.add(groupForm);
-		contentPanel.add(button1);
-		contentPanel.add(button2);
+		groupForm = new GroupForm(user);
+		groupForm.addStyleName("navigation");
+		groupForm.setHeight("100%");
+		navigationPanel.add(groupForm);
+
+		RootPanel.get("header").clear();
+		RootPanel.get("header").add(toolbar);
+
+		RootPanel.get("navigation").clear();
+		RootPanel.get("navigation").add(navigationPanel);
+
 		RootPanel.get("content").clear();
 		RootPanel.get("content").add(contentPanel);
 
-		// @todo: delete test buttons
-		button1.addClickHandler(new ClickHandler() {
-
-			public void onClick(ClickEvent evt) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(groceryListForm);
-
-			}
-		});
-
-		button2.addClickHandler(new ClickHandler() {
-
-			public void onClick(ClickEvent evt) {
-				RootPanel.get("content").clear();
-				RootPanel.get("content").add(profilForm);
-
-			}
-		});
 	}
-
-	AsyncCallback<User> newUserCallback = new AsyncCallback<User>() {
-
-		public void onFailure(Throwable t) {
-			RegistryForm registerForm = new RegistryForm(user, signOutLink);
-			contentPanel.clear();
-			contentPanel.add(registerForm);
-			RootPanel.get("content").add(contentPanel);
-		}
-
-		public void onSuccess(User u) {
-			loadPage();
-		}
-	};
-
 }
