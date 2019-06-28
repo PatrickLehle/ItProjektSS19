@@ -50,6 +50,7 @@ public class GroceryListForm extends VerticalPanel {
 
 	private User user;
 	private Group group;
+	
 	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	HorizontalPanel hpTitle = new HorizontalPanel();
@@ -90,8 +91,13 @@ public class GroceryListForm extends VerticalPanel {
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 
+	int trueCount = 1;
+	int falseCount = 1;
 	int rowIndex;
 	int rowCount;
+	int rowIndexA;
+	int rowIndexB;
+	int articleNumber;
 
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
@@ -167,6 +173,7 @@ public class GroceryListForm extends VerticalPanel {
 		});
 
 		this.add(hpButtons);
+		sc.add(this);
 	}
 
 	/**
@@ -191,13 +198,11 @@ public class GroceryListForm extends VerticalPanel {
 		articleTable.setText(0, 4, "Laden");
 		boughtTable.setText(0, 1, "Gekauft");
 
-		int trueCount = 1; // Checkbox gleich true. Artikel wurd gekauft
-		int falseCount = 1; // Checkbox gleich false. Artikel noch nicht gekauft
 		int visibleNum = 0;
 		int retailerId = 1;
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		for (int articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
+		for (articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
 			// retailerId = articleVector.get(articleNumber).getRetailerId() + 1;
 			ev.getRetailerById(retailerId, new GetRetailerCallback());
 			if (articleVector.get(articleNumber).getCheckBoolean() == false
@@ -207,6 +212,7 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setText(falseCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				articleTable.setText(falseCount, 3, articleVector.get(articleNumber).getUnit());
 				articleTable.setText(falseCount, 4, retailer.getRetailerName());
+				setFavButtonFalse();
 				falseCount++;
 			} else if (articleVector.get(articleNumber).getCheckBoolean() == true
 					&& articleVector.get(articleNumber).getDelDat() == null) {
@@ -215,6 +221,7 @@ public class GroceryListForm extends VerticalPanel {
 				boughtTable.setText(trueCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				boughtTable.setText(trueCount, 3, articleVector.get(articleNumber).getUnit());
 				boughtTable.setText(trueCount, 4, retailer.getRetailerName());
+				setFavButtonTrue();
 				trueCount++;
 				visibleNum = trueCount;
 			}
@@ -223,7 +230,23 @@ public class GroceryListForm extends VerticalPanel {
 			boughtTable.setVisible(true);
 		}
 	}
+	
+	public void setFavButtonFalse() {
+		if(articleVector.get(articleNumber).getFav() == true) {
+			articleTable.setWidget(falseCount, 6, getFavButtonTrue());
+		}else {
+			articleTable.setWidget(falseCount, 6, getFavButtonFalse());
+		}
+	}
 
+	public void setFavButtonTrue() {
+		if(articleVector.get(articleNumber).getFav() == true) {
+			boughtTable.setWidget(trueCount, 6, getFavButtonTrue());
+		}else {
+			boughtTable.setWidget(trueCount, 6, getFavButtonFalse());
+		}
+	}
+	
 	public ListBox getRetailerListBox() {
 		ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
 		ev.getArticleById(globalRow, new GetArticleCallback());
@@ -237,28 +260,85 @@ public class GroceryListForm extends VerticalPanel {
 	 * @return https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
 	 *         Liest aus, welche Reihe ausgewaehlt wurde durch einen ClickHandler.
 	 */
-	public static TableRowElement findNearestParentRow(Node node) {
-		Node element = findNearestParentNodeByType(node, "tr");
-		if (element != null) {
-			return element.cast();
-		}
-		return null;
-	}
-
-	public static Node findNearestParentNodeByType(Node node, String nodeType) {
-		while ((node != null)) {
-			if (Element.is(node)) {
-				Element elem = (Element) Element.as(node);
-
-				String tagName = elem.getTagName();
-
-				if (nodeType.equalsIgnoreCase(tagName)) {
-					return elem.cast();
+//	public static TableRowElement findNearestParentRow(Node node) {
+//		Node element = findNearestParentNodeByType(node, "tr");
+//		if (element != null) {
+//			return element.cast();
+//		}
+//		return null;
+//	}
+//
+//	public static Node findNearestParentNodeByType(Node node, String nodeType) {
+//		while ((node != null)) {
+//			if (Element.is(node)) {
+//				Element elem = (Element) Element.as(node);
+//
+//				String tagName = elem.getTagName();
+//
+//				if (nodeType.equalsIgnoreCase(tagName)) {
+//					return elem.cast();
+//				}
+//			}
+//			node = node.getParentNode();
+//		}
+//		return null;
+//	}
+	
+	public Button getFavButtonFalse() {
+		Button favBtnFalse = new Button("NOT ATM");
+		
+		favBtnFalse.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
+				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
+				
+				if (rowIndexA != 0) {
+					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else if(rowIndexB != 0) {
+					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				}else {
+					Window.alert("getFavButtonFalse Error");
 				}
+				
+				if (article != null) {
+					article.setFav(true);
+					ev.saveArticle(article, new SaveArticleCallback());
+				}
+				rowIndexA = 0;
+				rowIndexB = 0;
 			}
-			node = node.getParentNode();
-		}
-		return null;
+		});
+		
+		return favBtnFalse;
+	}
+	
+	public Button getFavButtonTrue() {
+		Button favBtnTrue = new Button("FAVORITE TRUE");
+		
+		favBtnTrue.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
+				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
+				
+				if (rowIndexA != 0) {
+					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else if(rowIndexB != 0) {
+					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				}else {
+					Window.alert("getFavButtonTrue Error");
+				}
+				
+				if (article != null) {
+					article.setFav(true);
+					ev.saveArticle(article, new SaveArticleCallback());
+				}
+				
+				rowIndexA = 0;
+				rowIndexB = 0;
+			}
+		});
+		
+		return favBtnTrue;
 	}
 
 	/**
@@ -795,6 +875,30 @@ public class GroceryListForm extends VerticalPanel {
 							// werden konnte
 			loadTable();
 			Window.alert("2");
+		}
+	}
+	
+	class setArticleFavorite implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Article result) {
+			result = article;
+			if (rowIndexA != 0) {
+				if(articleTable.getWidget(rowIndexA, 6) == getFavButtonFalse()) {
+					articleTable.setWidget(rowIndexA, 6, getFavButtonTrue());
+				}else {
+					articleTable.setWidget(rowIndexA, 6, getFavButtonFalse());
+				}
+				
+			}else if(rowIndexB !=0) {
+				if(boughtTable.getWidget(rowIndexB, 6) == getFavButtonFalse()) {
+					boughtTable.setWidget(rowIndexB, 6, getFavButtonTrue());
+				}else {
+					boughtTable.setWidget(rowIndexB, 6, getFavButtonFalse());
+				}
+			}
 		}
 	}
 
