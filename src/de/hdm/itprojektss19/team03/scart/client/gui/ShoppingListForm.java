@@ -99,7 +99,7 @@ public class ShoppingListForm extends HorizontalPanel {
 
 				Retailer r = new Retailer();
 				r.setId(articles.get(i).getRetailerId());
-				r.setRetailerName((articles.get(i).getRetailerName()));
+				r.setRetailerName((articles.get(i).getRetailer().getRetailerName()));
 				r.setGroup(group);
 				r.setRetailerId(articles.get(i).getRetailerId());
 
