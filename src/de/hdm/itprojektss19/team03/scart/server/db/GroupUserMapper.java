@@ -74,8 +74,8 @@ public class GroupUserMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(delete);
-			stmt.setInt(2, g.getId());
-			stmt.setInt(1, u.getId());
+			stmt.setInt(1, g.getId()); 
+			stmt.setInt(2, u.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
