@@ -542,15 +542,21 @@ public class ArticleMapper {
 		return result;
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws DatabaseException {
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
+			String s = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			
 			ResultSet rs = stmt.executeQuery(
-					"SELECT article.id, article.name, article.quantity, article.unit, article.retailerId, article.ownerId, article.creationDat, article.modDat, article.boolean, article.fav, article.delDat FROM article WHERE fav="
-							+ true);
+					"SELECT * FROM article WHERE delDat IS NOT NULL AND fav = TRUE AND (article.groupId = "
+							+ groups.get(0).getId() + s +")");
+
 
 			while (rs.next()) {
 				Article a = new Article();
