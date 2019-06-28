@@ -359,7 +359,7 @@ public interface EditorService extends RemoteService {
 	 * @return gibt alle Article die als Favoriten markiert sind zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException;
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException;
 
 	// RETAILER===========================================================================
 

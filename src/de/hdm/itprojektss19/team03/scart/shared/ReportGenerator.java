@@ -1,6 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
 import java.sql.Timestamp;
+import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
@@ -19,7 +20,7 @@ public interface ReportGenerator extends RemoteService {
 
 	void init();
 	
-	public ArticleReport createStatisticA(User u) throws IllegalArgumentException;
+	public ArticleReport createStatisticA(User u, Vector<Group> g) throws IllegalArgumentException;
 	
 	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException;
 	
