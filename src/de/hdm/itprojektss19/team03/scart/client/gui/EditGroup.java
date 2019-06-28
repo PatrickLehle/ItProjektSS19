@@ -2,6 +2,7 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.core.shared.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Cookies;
@@ -17,6 +18,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
@@ -56,6 +58,8 @@ public class EditGroup extends VerticalPanel {
 	Button manageGroupButton = new Button("Bearbeiten");
 	Button backToGroupButton = new Button("Zurück");
 	
+	
+	Vector<CheckBox> checkBoxVector = new Vector<CheckBox>();
 // DEFAULT CONSTRUCTOR=============================================
 	/**
 	* Default Konstruktor der EditGroup-Seite
@@ -78,10 +82,10 @@ public class EditGroup extends VerticalPanel {
 	}
 	
 	public EditGroup(User u) {
-		
+		/*
 		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
 		u.setEmail(String.valueOf(Cookies.getCookie("email")));
-		
+		*/
 		this.user = u;
 		
 		onLoad();
@@ -132,10 +136,14 @@ public class EditGroup extends VerticalPanel {
 			for (int g = 0; g < result.size(); g++) {
 
 				allGroups.add(result.elementAt(g).getGroupName());
-				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
-				groupNames.addClickHandler(new UserCheckBoxClickHandler(groupNames));
-				groupNames.setStyleName("textbox");
-				checkBoxesGroup.add(groupNames);
+				
+				//radioButtonVector.add(new RadioButton("Group "+g, allGroups.elementAt(g)));
+				checkBoxVector.add(new CheckBox(allGroups.elementAt(g)));
+
+				//RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
+				checkBoxVector.elementAt(g).addClickHandler(new UserCheckBoxClickHandler(checkBoxVector.elementAt(g)));
+				//groupNames.setStyleName("textbox");
+				checkBoxesGroup.add(checkBoxVector.elementAt(g));
 
 			}
 
@@ -146,7 +154,37 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-
+			editorVerwaltung.removeUserFromGroup(user, group, new AsyncCallback<Void>() {
+				@Override
+				public void onFailure(Throwable arg0) {
+					// TODO Auto-generated method stub
+					//Window.alert("Fehler: Gruppe konnte nicht verlassen werden");
+					GWT.log("Fehler: Gruppe konnte nicht verlassen werden!");
+				}
+				@Override
+				public void onSuccess(Void arg0) {
+					int trueIndex = 0;
+					int trueAnzahl = 0;
+					for(int i=0; i < allGroups.size(); i++) {
+						if(checkBoxVector.elementAt(i).getValue()==true) {
+							trueAnzahl++;
+							trueIndex = i;
+						}
+					}
+					if(trueAnzahl > 1) {
+						Window.alert("Fehler: Nur eine Gruppe auswählen");
+					} else if(trueAnzahl == 1) {
+						
+					allGroups.clear();
+					
+					editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());  //Aktualisierung Gruppen
+					
+					}
+					
+				
+				}
+				
+			});
 		}
 
 	}
