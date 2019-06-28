@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
@@ -68,6 +69,7 @@ public class EditGroup extends VerticalPanel {
 	Button safeGroupButton = new Button("Alle Änderungen speichern");
 	Button backToGroupButton = new Button("Zurück");
 	Button deleteUserButton = new Button("Entfernen");
+	
 
 	public EditGroup() {
 
@@ -92,8 +94,8 @@ public class EditGroup extends VerticalPanel {
 		safeGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
-		deleteUserButton.addClickHandler(new DeleteUserClickHandler());
-		// groupTextBox.setStyleName("textbox");
+		//deleteUserButton.addClickHandler(new DeleteUserClickHandler());
+		
 
 		groupNameHPanel.add(groupLabel);
 		groupNameHPanel.add(groupTextBox);
@@ -135,6 +137,10 @@ public class EditGroup extends VerticalPanel {
 		groupTextBox.setText(group.getGroupName());
 
 	}
+	
+//	public void getDeleteUserButton() {
+//		DeleteUserClickHandler 
+//	}
 
 	/**
 	 * Methode um einen User u aus einer Gruppe g zu entfernen. Gruppe und User
@@ -187,8 +193,17 @@ public class EditGroup extends VerticalPanel {
 	}
 
 	class DeleteUserClickHandler implements ClickHandler {
-
+		User user = new User();
+		Group group = new Group();
+		
+		public DeleteUserClickHandler(User u, Group g) {
+			this.user = u;
+			this.group = g;
+		}
+		
 		public void onClick(ClickEvent arg0) {
+			
+			removeUserFromGroup(user, group);
 
 		}
 	}
@@ -281,6 +296,8 @@ public class EditGroup extends VerticalPanel {
 		}
 
 	}
+	
+
 
 	// CALLBACKS
 
@@ -295,11 +312,14 @@ public class EditGroup extends VerticalPanel {
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 				GWT.log(group.getId() + "");
-
-				if (allUsers.get(userNumber).getId() != user.getId()) {
+				Button button = new Button("Aus Gruppe entfernen");
+				button.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
+ 
+				if (allUsers.get(userNumber).getId() < allUsers.size()) {
 					userTable.setText(userNumber + 2, 1, allUsers.get(userNumber).getUsername());
 					userTable.setText(userNumber + 2, 2, allUsers.get(userNumber).getEmail());
-
+					userTable.setWidget(userNumber + 2, 3, button);
+					
 				}
 
 			}
