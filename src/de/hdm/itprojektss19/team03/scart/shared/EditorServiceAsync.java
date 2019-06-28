@@ -103,7 +103,10 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
+	//ARTICLE-REPORT==============================================================================
 	void findAllArticleByFavouriteTRUE(Vector<Group> groups,AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups,Vector<Retailer> retailers,AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
 

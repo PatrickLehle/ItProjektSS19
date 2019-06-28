@@ -353,13 +353,23 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
 
+	//ARTICLE-REPORT=======================================================================
+	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #findAllArticleByFavouriteTRUE()
+	 *      #findAllArticleByFavouriteTRUE(Vector<Group> groups)
 	 * @return gibt alle Article die als Favoriten markiert sind zurueck
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)
+	 * @return gibt alle Article sowie zugehoerigen Retailer die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException;
 
 	// RETAILER===========================================================================
 
