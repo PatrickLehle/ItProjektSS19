@@ -63,6 +63,8 @@ public class ProfileForm {
 	public void onLoad() {
 
 		buildProfile();
+		
+		editorService.getUserById(user.getId(), )
 
 	}
 
@@ -280,7 +282,7 @@ public class ProfileForm {
 
 	}
 
-	class UpdateUserCallback implements AsyncCallback <User> {
+	class UpdateUserCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
@@ -298,7 +300,7 @@ public class ProfileForm {
 
 	}
 
-	class DeleteUserCallback implements AsyncCallback <Void> {
+	class DeleteUserCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
@@ -314,6 +316,24 @@ public class ProfileForm {
 
 		}
 
+	}
+	
+	class FindUserCallback implements AsyncCallback<User> {
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(User arg0) {
+			// TODO Auto-generated method stub
+			
+			buildProfile();
+			
+		}
+		
 	}
 
 }
