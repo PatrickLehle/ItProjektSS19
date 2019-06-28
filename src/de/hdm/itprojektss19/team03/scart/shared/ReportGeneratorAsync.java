@@ -32,7 +32,7 @@ public interface ReportGeneratorAsync {
 	
 	void createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS, AsyncCallback<ArticleDateReport> callback);
 	
-	void createStatisticAR(User user, int retailerId, AsyncCallback<ArticleRetailerReport> callback);
+	void createStatisticAR(User user, Vector<Group> g,Vector<Retailer> r, AsyncCallback<ArticleRetailerReport> callback);
 	
 	void createStatisticADR(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS,AsyncCallback<ArticleDateRetailerReport> callback);
 
