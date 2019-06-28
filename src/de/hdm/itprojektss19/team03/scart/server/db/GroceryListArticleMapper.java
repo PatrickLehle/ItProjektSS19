@@ -11,8 +11,6 @@ import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 
 /**
  * 
@@ -128,8 +126,6 @@ public class GroceryListArticleMapper {
 
 			while (rs.next()) {
 				Article a = new Article();
-				Retailer r = new Retailer();
-				Group group = new Group();
 				a.setId(rs.getInt(3));
 				a.setName(rs.getString(4));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
@@ -140,11 +136,7 @@ public class GroceryListArticleMapper {
 				a.setUnit(rs.getString("unit"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 				a.setOwnerId(rs.getInt("ownerId"));
-				a.setRetailer(r);
-				r.setId(rs.getInt("id"));
-				r.setRetailerName(rs.getString(20));
-				r.setGroup(group);
-				
+				a.setRetailerName(rs.getString(20));
 				result.addElement(a);
 			}
 			return result;
