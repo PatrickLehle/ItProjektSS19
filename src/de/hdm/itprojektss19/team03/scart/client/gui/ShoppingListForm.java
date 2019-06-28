@@ -21,8 +21,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
- * @author Tom
- * @author bastiantilk
  * @author Marco
  *
  */
@@ -51,15 +49,11 @@ public class ShoppingListForm extends HorizontalPanel {
 	private VerticalPanel retailerPanel;
 	private DecoratorPanel decoPanel;
 
-	private void fillTable(String retailer, Vector<Article> articles) {
-
-	}
-
 	private void getData() {
 		editorService.findAllArticleByGroceryList(groceryList, articleCallback);
 	}
 
-	public void createForms() {
+	public void createForms(Vector<Article> articles) {
 		flowPanel.clear();
 		outerPanel.clear();
 		for (Retailer r : retailers) {
@@ -73,8 +67,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			retailerPanel.clear();
 			retailerPanel.addStyleName("retailer-panel");
 			retailerPanel.add(retailerHeader);
-			retailerPanel.add(new Label("hier kommen dann bald die artikel hin"));
-
+			retailerPanel.add(new GroceryListForm(user, group, articles, r));
 			decoPanel = new DecoratorPanel();
 			decoPanel.clear();
 			decoPanel.addStyleName("retailers-panel");
@@ -106,8 +99,9 @@ public class ShoppingListForm extends HorizontalPanel {
 				if (!retailers.contains(r)) {
 					retailers.add(r);
 				}
+
 			}
-			createForms();
+			createForms(articles);
 		}
 	};
 

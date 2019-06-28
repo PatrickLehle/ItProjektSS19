@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -10,7 +12,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -19,7 +20,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -43,13 +43,17 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class GroceryListForm extends VerticalPanel {
 
-	public GroceryListForm(User u, Group g) {
+	public GroceryListForm(User u, Group g, Vector<Article> a, Retailer r) {
 		this.user = u;
 		this.group = g;
+		this.retailer = r;
+		this.articleVector = a;
 	};
 
 	private User user;
 	private Group group;
+	private Retailer retailer;
+
 	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	HorizontalPanel hpTitle = new HorizontalPanel();
@@ -77,30 +81,31 @@ public class GroceryListForm extends VerticalPanel {
 	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
 	// geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 
-	Retailer retailer = new Retailer();
-	Vector<Article> articleVector = new Vector<Article>();
+	Vector<Article> articleVector;
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
 	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
 	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
 	Label userRetailerLabel = new Label("zuteilen f�r");
-	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 
+	int trueCount = 1;
+	int falseCount = 1;
 	int rowIndex;
 	int rowCount;
+	int rowIndexA;
+	int rowIndexB;
+	int articleNumber;
 
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
+
 		super.onLoad();
 		this.addStyleName("main-panel");
 		groceryList.setGroupId(this.group.getId());
-
-		sc.setSize("200px", "550px");
-		sc.setVerticalScrollPosition(10);
 
 		// Titel Label wird in Horitontales Panel eingefuegt
 		hpTitle.add(titelLabel);
@@ -109,8 +114,8 @@ public class GroceryListForm extends VerticalPanel {
 
 		this.add(hpTitle);
 		// CALLBACKS=============================================
-		ev.getAllUserByGroupId(1, new AllUserCallback());
-		ev.findAllRetailer(new AllRetailersCallback());
+		// ev.getAllUserByGroupId(1, new AllUserCallback());
+		// ev.findAllRetailer(new AllRetailersCallback());
 		hpUserRetailer.add(userListBox);
 		hpUserRetailer.add(userRetailerLabel);
 		hpUserRetailer.add(retailerListBox);
@@ -118,9 +123,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
 		int groceryListId = groceryList.getId();
-		ev.findAllArticleByGroceryListId(1, new AllArticlesCallback());// Ruft Metode
+		// ev.findAllArticleByGroceryListId(1, new AllArticlesCallback());// Ruft Metode
 		// zum laden/fuellen der Tabelle auf
-
+		loadTable();
 		this.add(articleTable);
 		this.add(boughtTable);
 		boughtTable.setVisible(false);
@@ -191,13 +196,11 @@ public class GroceryListForm extends VerticalPanel {
 		articleTable.setText(0, 4, "Laden");
 		boughtTable.setText(0, 1, "Gekauft");
 
-		int trueCount = 1; // Checkbox gleich true. Artikel wurd gekauft
-		int falseCount = 1; // Checkbox gleich false. Artikel noch nicht gekauft
 		int visibleNum = 0;
 		int retailerId = 1;
 		// for Schleife das alle Artikel mit Name Quantity Unit und RetailerName
 		// aufgelistet werden im Panel.
-		for (int articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
+		for (articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
 			// retailerId = articleVector.get(articleNumber).getRetailerId() + 1;
 			ev.getRetailerById(retailerId, new GetRetailerCallback());
 			if (articleVector.get(articleNumber).getCheckBoolean() == false
@@ -207,6 +210,7 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setText(falseCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				articleTable.setText(falseCount, 3, articleVector.get(articleNumber).getUnit());
 				articleTable.setText(falseCount, 4, retailer.getRetailerName());
+				setFavButtonFalse();
 				falseCount++;
 			} else if (articleVector.get(articleNumber).getCheckBoolean() == true
 					&& articleVector.get(articleNumber).getDelDat() == null) {
@@ -215,12 +219,30 @@ public class GroceryListForm extends VerticalPanel {
 				boughtTable.setText(trueCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				boughtTable.setText(trueCount, 3, articleVector.get(articleNumber).getUnit());
 				boughtTable.setText(trueCount, 4, retailer.getRetailerName());
+				setFavButtonTrue();
 				trueCount++;
 				visibleNum = trueCount;
 			}
 		}
 		if (visibleNum > 1) {
 			boughtTable.setVisible(true);
+		}
+		GWT.log(articleVector.get(0).getName());
+	}
+
+	public void setFavButtonFalse() {
+		if (articleVector.get(articleNumber).getFav() == true) {
+			articleTable.setWidget(falseCount, 6, getFavButtonTrue());
+		} else {
+			articleTable.setWidget(falseCount, 6, getFavButtonFalse());
+		}
+	}
+
+	public void setFavButtonTrue() {
+		if (articleVector.get(articleNumber).getFav() == true) {
+			boughtTable.setWidget(trueCount, 6, getFavButtonTrue());
+		} else {
+			boughtTable.setWidget(trueCount, 6, getFavButtonFalse());
 		}
 	}
 
@@ -259,6 +281,63 @@ public class GroceryListForm extends VerticalPanel {
 			node = node.getParentNode();
 		}
 		return null;
+	}
+
+	public Button getFavButtonFalse() {
+		Button favBtnFalse = new Button("NOT ATM");
+
+		favBtnFalse.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
+				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
+
+				if (rowIndexA != 0) {
+					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else if (rowIndexB != 0) {
+					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else {
+					Window.alert("getFavButtonFalse Error");
+				}
+
+				if (article != null) {
+					article.setFav(true);
+					ev.saveArticle(article, new SaveArticleCallback());
+				}
+				rowIndexA = 0;
+				rowIndexB = 0;
+			}
+		});
+
+		return favBtnFalse;
+	}
+
+	public Button getFavButtonTrue() {
+		Button favBtnTrue = new Button("FAVORITE TRUE");
+
+		favBtnTrue.addClickHandler(new ClickHandler() {
+			public void onClick(ClickEvent event) {
+				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
+				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
+
+				if (rowIndexA != 0) {
+					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else if (rowIndexB != 0) {
+					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
+				} else {
+					Window.alert("getFavButtonTrue Error");
+				}
+
+				if (article != null) {
+					article.setFav(true);
+					ev.saveArticle(article, new SaveArticleCallback());
+				}
+
+				rowIndexA = 0;
+				rowIndexB = 0;
+			}
+		});
+
+		return favBtnTrue;
 	}
 
 	/**
@@ -795,6 +874,30 @@ public class GroceryListForm extends VerticalPanel {
 							// werden konnte
 			loadTable();
 			Window.alert("2");
+		}
+	}
+
+	class setArticleFavorite implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Article result) {
+			result = article;
+			if (rowIndexA != 0) {
+				if (articleTable.getWidget(rowIndexA, 6) == getFavButtonFalse()) {
+					articleTable.setWidget(rowIndexA, 6, getFavButtonTrue());
+				} else {
+					articleTable.setWidget(rowIndexA, 6, getFavButtonFalse());
+				}
+
+			} else if (rowIndexB != 0) {
+				if (boughtTable.getWidget(rowIndexB, 6) == getFavButtonFalse()) {
+					boughtTable.setWidget(rowIndexB, 6, getFavButtonTrue());
+				} else {
+					boughtTable.setWidget(rowIndexB, 6, getFavButtonFalse());
+				}
+			}
 		}
 	}
 
