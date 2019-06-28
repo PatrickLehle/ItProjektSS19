@@ -8,21 +8,16 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.RadioButton;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.FindUserByGMailCallback;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.NoButtonClickHandler;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.YesSaveButtonClickHandler;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -156,18 +151,9 @@ public class EditGroup extends VerticalPanel {
 			if (user == null || group == null) {
 				throw new NullPointerException();
 			}
-
-			editorVerwaltung.removeUserFromGroup(user, group, new AsyncCallback<Void>() {
-
-				public void onFailure(Throwable arg0) {
-					Window.alert("User konnte nicht aus der Gruppe gelöscht werden");
-				}
-
-				@Override
-				public void onSuccess(Void arg0) {
-					Window.alert("User wurde aus der Gruppe gelöscht.");
-				}
-			});
+			GWT.log(user.getId()+" delete");
+			editorVerwaltung.removeUserFromGroup(user, group, new RemoveUserFromGroupCallback());
+			
 		} catch (NullPointerException e) {
 			Window.alert(e.toString() + "\n" + "User/Group ist null");
 		}
@@ -187,6 +173,7 @@ public class EditGroup extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent arg0) {
 			removeUserFromGroup(user, group);
+			
 
 		}
 
@@ -201,8 +188,7 @@ public class EditGroup extends VerticalPanel {
 			this.group = g;
 		}
 		
-		public void onClick(ClickEvent arg0) {
-			
+		public void onClick(ClickEvent arg0) {			
 			removeUserFromGroup(user, group);
 
 		}
@@ -215,7 +201,7 @@ public class EditGroup extends VerticalPanel {
 			DialogBox db = new DialogBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
-			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
+			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, group));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
 			Label l = new HTML(
 					"<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
@@ -261,27 +247,31 @@ public class EditGroup extends VerticalPanel {
 	class YesSaveButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
+		Group group = new Group();
 
-		public YesSaveButtonClickHandler(DialogBox db) {
+		public YesSaveButtonClickHandler(DialogBox db, Group g) {
 
 			this.dbox = db;
+			this.group = g;
 
 		}
 
 		public void onClick(ClickEvent event) {
 
-			String newGroupName = groupLabel.getText();
+			String newGroupName = groupTextBox.getText();
 			group.setGroupName(newGroupName);
 
 			// Evt mit eigenem UpdateGroupName Mapper ????
 
-			// editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback);
+			editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback());
 
 			dbox.hide();
 			dbox.clear();
 			dbox.removeFromParent();
 			dbox.setAnimationEnabled(false);
 			dbox.setGlassEnabled(false);
+			
+			
 
 		}
 
@@ -311,7 +301,6 @@ public class EditGroup extends VerticalPanel {
 			allUsers = result;
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
-				GWT.log(group.getId() + "");
 				Button button = new Button("Aus Gruppe entfernen");
 				button.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
  
@@ -328,16 +317,40 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	class UpdateGroupNameCallback implements AsyncCallback<Group> {
+	class UpdateGroupNameCallback implements AsyncCallback<Void> {
 
 		public void onFailure(Throwable caught) {
 		}
 
-		public void onSuccess(Group result) {
-			onLoad();
+		public void onSuccess(Void arg0) {
+			GroupForm groupForm = new GroupForm(user);
+			groupForm.setStyleName("navigation");
+			RootPanel.get("navigation").clear();
+			RootPanel.get("content").clear();
+			RootPanel.get("navigation").add(groupForm);
+			RootPanel.get("content").add(new EditGroup(user, group));
 
 		}
 
+	}
+	
+	class RemoveUserFromGroupCallback implements AsyncCallback<Void> {
+
+		public void onFailure(Throwable arg0) {
+			Window.alert("User konnte nicht aus der Gruppe gelöscht werden");
+		}
+
+		@Override
+		public void onSuccess(Void arg0) {
+			
+			GroupForm groupForm = new GroupForm(user);
+			groupForm.setStyleName("navigation");
+			RootPanel.get("navigation").clear();
+			RootPanel.get("content").clear();
+			RootPanel.get("navigation").add(groupForm);
+			RootPanel.get("content").add(new EditGroup(user, group));
+			Window.alert("User wurde aus der Gruppe gelöscht.");
+		}
 	}
 
 }
