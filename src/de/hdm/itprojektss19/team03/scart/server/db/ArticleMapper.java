@@ -233,7 +233,7 @@ public class ArticleMapper {
 		String maxIdSQL = "SELECT MAX(article.id) AS maxid FROM article";
 
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String insertSQL = "INSERT INTO article ( name, quantity, unit, retailerId, ownerId, creationDat, modDat, boolean) VALUES (?,?,?,?,?,?,?,?)";
+		String insertSQL = "INSERT INTO article ( name, quantity, unit, retailerId, ownerId, groupId, creationDat, modDat, boolean, fav) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -257,9 +257,11 @@ public class ArticleMapper {
 			stmt.setString(3, article.getUnit());
 			stmt.setInt(4, article.getRetailerId());
 			stmt.setInt(5, article.getOwnerId());
-			stmt.setTimestamp(6, article.getCreationDat());
-			stmt.setTimestamp(7, article.getModDat());
-			stmt.setBoolean(8, article.getCheckBoolean());
+			stmt.setInt(6, article.getGroupId());
+			stmt.setTimestamp(7, article.getCreationDat());
+			stmt.setTimestamp(8, article.getModDat());
+			stmt.setBoolean(9, article.getCheckBoolean());
+			stmt.setBoolean(10, article.getFav());
 
 			// Ausfuehren des SQL Statement
 			stmt.executeUpdate();
