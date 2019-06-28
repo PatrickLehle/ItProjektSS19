@@ -111,7 +111,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return this.editorService;
 	}
 
-	public ArticleReport createStatisticA(User u) throws IllegalArgumentException {
+	public ArticleReport createStatisticA(User u, Vector<Group> groups) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}
@@ -134,14 +134,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		report.addRow(head);
 
 		//Hier werden unsere Angeforderten Daten in einen Vector hinterlegt
-		Vector<Group> allGroupsByUser = new Vector<Group>();
+		Vector<Group> allGroupsByUser = groups;
 		Vector<GroceryList> allGroceryLists = new Vector<GroceryList>();
 		Vector<Article> allArticles = new Vector<Article>();
 		Vector<Retailer> allRetailers = new Vector<Retailer>();
 		
 		//Hier werden die Gruppen, GroceryLists und deren Article aufgerufen
-		allGroupsByUser.addAll(this.getEditorService().findAllGroupsByUserId(u.getId()));
-		allArticles.addAll(this.editorService.findAllArticleByFavouriteTRUE());
+//		allGroupsByUser.addAll(this.getEditorService().findAllGroupsByUserId(u.getId()));
+		allArticles.addAll(this.editorService.findAllArticleByFavouriteTRUE(groups));
 		allRetailers.addAll(this.editorService.findAllRetailer());
 		Vector<Article> receiver = new Vector<Article>();
 		

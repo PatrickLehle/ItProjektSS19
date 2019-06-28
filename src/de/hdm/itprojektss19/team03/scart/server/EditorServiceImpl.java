@@ -482,9 +482,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException {
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException {
 		try {
-			return this.aMapper.findAllArticleByFavouriteTRUE();
+			return this.aMapper.findAllArticleByFavouriteTRUE(groups);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);

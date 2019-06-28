@@ -28,7 +28,7 @@ public interface ReportGeneratorAsync {
 	
 	void init(AsyncCallback<Void> callback);
 
-	void createStatisticA(User u, AsyncCallback<ArticleReport> callback);
+	void createStatisticA(User u, Vector<Group> g, AsyncCallback<ArticleReport> callback);
 	
 	void createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS, AsyncCallback<ArticleDateReport> callback);
 	
