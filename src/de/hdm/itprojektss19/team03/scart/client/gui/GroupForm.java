@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -130,7 +131,10 @@ public class GroupForm extends VerticalPanel {
 			}
 			Label newGroceryList = new Label("+ Einkaufsliste hinzufügen");
 			newGroceryList.addStyleName("tree-new-gl");
+			newGroceryList.addClickHandler(new NewGroceryListClickHandler(allGroups.get(i)));
 			groupTree.getItem(i).insertItem(0, newGroceryList);
+			
+			
 		}
 
 		groupTree.insertItem(0, newGroup);
@@ -151,7 +155,6 @@ public class GroupForm extends VerticalPanel {
 	SelectionHandler<TreeItem> selectionHandler = new SelectionHandler<TreeItem>() {
 
 		public void onSelection(SelectionEvent<TreeItem> event) {
-
 		}
 	};
 
@@ -184,6 +187,45 @@ public class GroupForm extends VerticalPanel {
 			outer.add(new ShoppingListForm(user, selection, group));
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(outer);
+		}
+
+	}
+	
+	class NewGroceryListClickHandler implements ClickHandler {
+		//final GroceryList selection;
+		final Group group;
+
+		public NewGroceryListClickHandler(Group g) {
+			//selection = gl;
+			group = g;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			GroceryList groceryList = new GroceryList();
+			groceryList.setGroceryListName("Neue GroceryList");
+			groceryList.setOwnerId(user.getId());
+			groceryList.setGroupId(group.getId());
+			groceryList.setGroupName(group.getGroupName());
+			editorVerwaltung.createGroceryList(groceryList, new AsyncCallback<GroceryList>() {
+				@Override
+				public void onFailure(Throwable arg0) {
+					// TODO Auto-generated method stub
+					Window.alert("Neue Groceryliste konte nicht erstellt werden");
+				}
+				@Override
+				public void onSuccess(GroceryList arg0) {
+					// TODO Auto-generated method stub
+					Window.Location.replace("/Scart.html"); //Springt zurueck zur Homepage,
+								// damit der Tree geleert wird und neu geladen werden kann
+				}
+				
+			});
+			/*
+			outer.clear();
+			outer.add(new ShoppingListForm(user, selection, group));
+			RootPanel.get("content").clear();
+			RootPanel.get("content").add(outer);
+			*/
 		}
 
 	}

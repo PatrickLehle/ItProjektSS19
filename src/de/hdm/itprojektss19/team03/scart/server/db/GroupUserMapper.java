@@ -100,8 +100,7 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			User u = new User();
-			u.setUsername("name");
+			
 
 			while (rs.next()) {
 				User user = new User();
@@ -109,7 +108,7 @@ public class GroupUserMapper {
 				user.setUsername(rs.getString("name"));
 				user.setEmail(rs.getString("email"));
 
-				result.addElement(u);
+				result.addElement(user);
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -182,10 +181,6 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			User user = new User();
-			user.setId(rs.getInt("id"));
-			user.setUsername(rs.getString("name"));
-			user.setEmail(rs.getString("email"));
 
 			while (rs.next()) {
 				User u = new User();

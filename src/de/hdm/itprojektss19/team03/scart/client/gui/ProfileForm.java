@@ -44,7 +44,6 @@ public class ProfileForm extends VerticalPanel {
 
 	public ProfileForm(User u) {
 		user = u;
-		Window.alert(u.getUsername());
 	}
 
 	User user = new User();
