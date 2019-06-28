@@ -13,6 +13,7 @@ import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -542,6 +543,7 @@ public class ArticleMapper {
 		return result;
 	}
 
+	//REPORT-ARTICLE=============================================================================================
 	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -554,24 +556,31 @@ public class ArticleMapper {
 			}
 			
 			ResultSet rs = stmt.executeQuery(
-					"SELECT * FROM article WHERE delDat IS NOT NULL AND fav = TRUE AND (article.groupId = "
+					"SELECT * FROM article JOIN retailer ON article.retailerId = retailer.id JOIN groups ON article.groupId = groups.id "
+					+ "WHERE delDat IS NOT NULL AND fav = TRUE AND (article.groupId = "
 							+ groups.get(0).getId() + s +")");
 
-
 			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString(17));
+				group.setId(rs.getInt(16));
+				retailer.setId(rs.getInt(13));
+				retailer.setRetailerName(rs.getString(14));
+				retailer.setGroup(group);
 				Article a = new Article();
 				a.setId(rs.getInt("id"));
 				a.setName(rs.getString("name"));
 				a.setQuantity(rs.getInt("quantity"));
 				a.setUnit("unit");
-				a.setRetailerId(rs.getInt("retailerId"));
 				a.setOwnerId(rs.getInt("ownerId"));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
 				a.setCheckBoolean(rs.getBoolean("boolean"));
 				a.setFav(rs.getBoolean("fav"));
 				a.setDelDat(rs.getTimestamp("delDat"));
-
+				a.setRetailer(retailer);
+				
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -580,5 +589,58 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+	
+	//REPORT-ARTICLE-RETAILER======================================================================================
+	
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)  throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			String s = new String();
+			String r = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			for (int j = 1; j < retailers.size(); j++) {
+				r = r + " OR " + retailers.get(j).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM article JOIN retailer ON article.retailerId = retailer.id JOIN groups ON article.groupId = groups.id "
+					+ "WHERE delDat IS NOT NULL AND fav = TRUE AND (article.groupId = "
+							+ groups.get(0).getId() + s +") AND (retailer.id= "+ retailers.get(0).getId() + r + ")");
+
+			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString(17));
+				group.setId(rs.getInt(16));
+				retailer.setId(rs.getInt(13));
+				retailer.setRetailerName(rs.getString(14));
+				retailer.setGroup(group);
+				Article a = new Article();
+				a.setId(rs.getInt("id"));
+				a.setName(rs.getString("name"));
+				a.setQuantity(rs.getInt("quantity"));
+				a.setUnit("unit");
+				a.setOwnerId(rs.getInt("ownerId"));
+				a.setCreationDat(rs.getTimestamp("creationDat"));
+				a.setModDat(rs.getTimestamp("modDat"));
+				a.setCheckBoolean(rs.getBoolean("boolean"));
+				a.setFav(rs.getBoolean("fav"));
+				a.setDelDat(rs.getTimestamp("delDat"));
+				a.setRetailer(retailer);
+				
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
 
 }

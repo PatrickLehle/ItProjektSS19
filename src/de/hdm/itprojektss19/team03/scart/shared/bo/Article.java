@@ -18,9 +18,8 @@ public class Article extends BusinessObject {
 	private String name = "";
 	private int quantity;
 	private String unit;
-	private int retailerId;
-	private String retailerName;
 	private int ownerId;
+	private Retailer retailer;
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
@@ -28,11 +27,10 @@ public class Article extends BusinessObject {
 	private Boolean checkBoolean;
 
 	// CONSTRUCTORS==========================================================
-	public Article(String name, int quantity, String unit, int retailerId) {
+	public Article(String name, int quantity, String unit) {
 		this.name = name;
 		this.quantity = quantity;
 		this.unit = unit;
-		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
 		setFav(false);
@@ -123,14 +121,6 @@ public class Article extends BusinessObject {
 
 	// RETAILER======================================================
 
-	public void setRetailerId(int retailerId) {
-		this.retailerId = retailerId;
-
-	}
-
-	public int getRetailerId() {
-		return this.retailerId;
-	}
 
 	public void setGroupId(int groupId) {
 		this.setId(groupId);
@@ -140,12 +130,23 @@ public class Article extends BusinessObject {
 		return ownerId;
 	}
 
-	public String getRetailerName() {
-		return retailerName;
+	public Retailer getRetailer() {
+		return retailer;
 	}
 
-	public void setRetailerName(String retailerName) {
-		this.retailerName = retailerName;
+	public void setRetailer(Retailer retailer) {
+		this.retailer = retailer;
 	}
+	
+	public void setRetailerId(int retailerId) {
+		this.retailer.setId(retailerId);
+	}
+	
+	public int getRetailerId() {
+		return retailer.getId();
+	}
+	
+
+
 
 }
