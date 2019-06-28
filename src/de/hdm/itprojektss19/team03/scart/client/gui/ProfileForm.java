@@ -277,10 +277,7 @@ public class ProfileForm {
 		public void onSuccess(User arg0) {
 			// TODO Auto-generated method stub
 
-			String newUserName = userNameTB.getText();
-			String newEmailAdress = emailAdressTB.getText();
-
-			editorService.createUser(newUserName, newEmailAdress, new UpdateUserCallback());
+			editorService.createUser(user, new UpdateUserCallback());
 
 		}
 
