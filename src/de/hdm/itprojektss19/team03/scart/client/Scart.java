@@ -10,7 +10,15 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 
 import de.hdm.itprojektss19.team03.scart.client.gui.FooterForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.GroupForm;
+<<<<<<< HEAD
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm1;
+=======
 import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
+<<<<<<< HEAD
+import de.hdm.itprojektss19.team03.scart.client.gui.ProfilForm;
+>>>>>>> dev
+=======
+>>>>>>> dev
 import de.hdm.itprojektss19.team03.scart.client.gui.RegistryForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ToolbarForm;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
@@ -36,11 +44,27 @@ public class Scart implements EntryPoint {
 	private GroupForm groupForm;
 
 	private HorizontalPanel contentPanel = new HorizontalPanel();
+<<<<<<< HEAD
+
+	// @todo: delete test buttons
+	private Button button1 = new Button("grocery list");
+	private Button button2 = new Button("profile ");
+<<<<<<< HEAD
+	private Button button3 = new Button("group ");
+	
+	private GroceryListForm glf = new GroceryListForm();
+	private GroupForm gf = new GroupForm();
+	private ProfilForm1 pf = new ProfilForm1();
+	
+=======
+=======
 	private ScrollPanel navigationPanel = new ScrollPanel();
+>>>>>>> dev
 
 	/**
 	 * startet, sobald das Modul geladen wird.
 	 */
+>>>>>>> dev
 	public void onModuleLoad() {
 
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {

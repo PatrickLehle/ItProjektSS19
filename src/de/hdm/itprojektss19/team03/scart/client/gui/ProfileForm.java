@@ -18,37 +18,33 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * ProfileForm: ...
- * 
- * 
+ *
+ *
  * @author vanduyho
  *
  */
 
-public class ProfileForm extends VerticalPanel {
-
-	public ProfileForm(User u) {
-		user = u;
-	}
+public class ProfileForm {
 
 	User user = new User();
 
-	// TEXTBOXES==============================================
+	//TEXTBOXES==============================================
 	TextBox userNameTB = new TextBox();
 	TextBox emailAdressTB = new TextBox();
 
-	// LABELS=================================================
+	//LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
-	Label userNameLabel = new Label("Name: ");
-	Label emailAdressLabel = new Label("E-Mail: ");
+	Label userNameDescLabel = new Label("Name: ");
+	Label emailAdressDescLabel = new Label("E-Mail: ");
 
-	// BUTTONS================================================
+	//BUTTONS================================================
 
 	Button editButton = new Button("Profil bearbeiten");
 	Button deleteButton = new Button("Profil löschen");
 	Button saveButton = new Button("Änderung speichern");
 	Button nosaveButton = new Button();
 
-	// PANELS=================================================
+	//PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
 
 	HorizontalPanel yourProfilePanel = new HorizontalPanel();
@@ -59,7 +55,7 @@ public class ProfileForm extends VerticalPanel {
 	EditorServiceAsync editorService = ClientsideSettings.getEditor();
 
 	/**
-	 * 
+	 *
 	 * onLoad-Methode: ...
 	 *
 	 */
@@ -67,11 +63,13 @@ public class ProfileForm extends VerticalPanel {
 	public void onLoad() {
 
 		buildProfile();
+		
+		editorService.getUserById(user.getId(), new FindUserCallback());
 
 	}
 
 	/**
-	 * 
+	 *
 	 * buildProfile-Methode: ...
 	 *
 	 */
@@ -79,8 +77,12 @@ public class ProfileForm extends VerticalPanel {
 	public void buildProfile() {
 
 		yourProfilePanel.add(yourProfileLabel);
-		userNamePanel.add(userNameLabel);
-		emailAdressPanel.add(emailAdressLabel);
+		userNamePanel.add(userNameDescLabel);
+		Label userNameContLabel = new Label(user.getUsername());
+		userNamePanel.add(userNameContLabel);
+		emailAdressPanel.add(emailAdressDescLabel);
+		Label emailAdressContLabel = new Label(user.getEmail());
+		emailAdressPanel.add(emailAdressContLabel);
 
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
@@ -94,12 +96,10 @@ public class ProfileForm extends VerticalPanel {
 		saveButton.addClickHandler(new SaveButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
-		this.add(contentPanel);
-
 	}
 
 	/**
-	 * 
+	 *
 	 * ClickHandler: ...
 	 *
 	 */
@@ -131,7 +131,8 @@ public class ProfileForm extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
+			Label l = new HTML(
+					"<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -158,7 +159,8 @@ public class ProfileForm extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesDeleteButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>");
+			Label l = new HTML(
+					"<h1> Profil löschen </h1> <p> Möchten Sie Ihr Profil endgültig löschen? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -180,7 +182,7 @@ public class ProfileForm extends VerticalPanel {
 
 		DialogBox dbox = new DialogBox();
 
-		public YesSaveButtonClickHandler(DialogBox db) {
+		public YesSaveButtonClickHandler (DialogBox db) {
 
 			this.dbox = db;
 
@@ -194,7 +196,8 @@ public class ProfileForm extends VerticalPanel {
 
 				Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 
-			} else {
+			}
+			else {
 
 				editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
 
@@ -214,7 +217,7 @@ public class ProfileForm extends VerticalPanel {
 
 		DialogBox dbox = new DialogBox();
 
-		public YesDeleteButtonClickHandler(DialogBox db) {
+		public YesDeleteButtonClickHandler (DialogBox db) {
 
 			this.dbox = db;
 
@@ -238,7 +241,7 @@ public class ProfileForm extends VerticalPanel {
 
 		DialogBox dbox = new DialogBox();
 
-		public NoButtonClickHandler(DialogBox db) {
+		public NoButtonClickHandler (DialogBox db) {
 
 			this.dbox = db;
 
@@ -257,12 +260,12 @@ public class ProfileForm extends VerticalPanel {
 	}
 
 	/**
-	 * 
+	 *
 	 * Callbacks: ...
 	 *
 	 */
 
-	class FindUserByGMailCallback implements AsyncCallback<User> {
+	class FindUserByGMailCallback  implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
@@ -274,10 +277,7 @@ public class ProfileForm extends VerticalPanel {
 		public void onSuccess(User arg0) {
 			// TODO Auto-generated method stub
 
-			String newUserName = userNameTB.getText();
-			String newEmailAdress = emailAdressTB.getText();
-
-			editorService.createUser(newEmailAdress, new UpdateUserCallback());
+			editorService.createUser(user, new UpdateUserCallback());
 
 		}
 
@@ -318,5 +318,24 @@ public class ProfileForm extends VerticalPanel {
 		}
 
 	}
+	
+	class FindUserCallback implements AsyncCallback<User> {
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onSuccess(User arg0) {
+			// TODO Auto-generated method stub
+			
+			buildProfile();
+			
+		}
+		
+	}
 
 }
+
