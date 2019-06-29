@@ -166,7 +166,8 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT `user`.*, `user`.`email` FROM `user` WHERE `user`.`email` = '" + userEmail + "'";
+		String selectByKey = "SELECT * FROM user WHERE email=?";
+		User u = new User();
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -174,22 +175,21 @@ public class UserMapper {
 
 			// Aufbereitung des vorbereitenden Statements
 			stmt = con.prepareStatement(selectByKey);
-			// stmt.setString(1, userEmail);
+			stmt.setString(1, userEmail);
 
 			// Ausfuehren des SQL Statement
 			ResultSet rs = stmt.executeQuery();
+			
+			
 
 			if (rs.next()) {
-
-				// Ergebnis-Tupel in Objekt umwandeln
-				User u = new User();
 
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt(1));
 				u.setEmail(rs.getString(2));
 				u.setUsername(rs.getString(3));
 
-				return u;
+				
 			} else {
 				throw new DatabaseException();
 			}
@@ -197,6 +197,7 @@ public class UserMapper {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
+		return u;
 	}
 
 	/**
