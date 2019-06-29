@@ -408,7 +408,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return a;
 	}
 
-	public Article saveArticle(Article a) throws IllegalArgumentException {
+	public void saveArticle(Article a) throws IllegalArgumentException {
 		try {
 
 			this.aMapper.update(a);
@@ -417,7 +417,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
+		
 	}
 
 	public void deleteArticle(Article a) throws IllegalArgumentException {
@@ -438,6 +438,17 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			return this.aMapper.findByKey(articleId);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	public Article getArticleByArticleId(int id) throws IllegalArgumentException{
+		try {
+			
+			return this.aMapper.findById(id);
+			
+		}catch ( IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}

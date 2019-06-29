@@ -91,11 +91,13 @@ public interface EditorServiceAsync {
 
 	void createArticle(Article a, AsyncCallback<Article> asyncCallback);
 
-	void saveArticle(Article a, AsyncCallback<Article> asyncCallback);
+	void saveArticle(Article a, AsyncCallback<Void> asyncCallback);
 
 	void deleteArticle(Article a, AsyncCallback<Void> asyncCallback);
 
 	void getArticleById(int articleId, AsyncCallback<Article> asyncCallback);
+	
+	void getArticleByArticleId(int id, AsyncCallback<Article> asyncCallback);
 
 	void findAllArticle(AsyncCallback<Vector<Article>> asyncCallback);
 
