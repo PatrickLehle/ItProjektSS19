@@ -1,8 +1,25 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Generation Time: Jun 28, 2019 at 04:28 PM
+-- Server version: 5.7.24-log
+-- PHP Version: 7.2.10
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
 --
--- Database: `ITPROJEKTSS19`
+-- Database: `itprojektss19`
 --
 
 -- --------------------------------------------------------
@@ -18,11 +35,12 @@ CREATE TABLE `article` (
   `unit` varchar(100) NOT NULL,
   `retailerId` int(100) NOT NULL,
   `ownerId` int(100) NOT NULL,
+  `groupId` int(11) NOT NULL,
   `creationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `modDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `boolean` tinyint(1) NOT NULL,
-  `delDat` timestamp NULL DEFAULT NULL,
-  `fav` tinyint(1) NOT NULL
+  `fav` tinyint(1) NOT NULL,
+  `delDat` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -107,7 +125,8 @@ CREATE TABLE `user` (
 ALTER TABLE `article`
   ADD PRIMARY KEY (`id`),
   ADD KEY `retailerArticle` (`retailerId`),
-  ADD KEY `ownerId` (`ownerId`);
+  ADD KEY `ownerId` (`ownerId`),
+  ADD KEY `groupId` (`groupId`);
 
 --
 -- Indexes for table `grocerylist`
@@ -194,6 +213,7 @@ ALTER TABLE `user`
 ALTER TABLE `article`
   ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`ownerId`) REFERENCES `user` (`id`),
   ADD CONSTRAINT `article_ibfk_2` FOREIGN KEY (`ownerId`) REFERENCES `user` (`id`),
+  ADD CONSTRAINT `groupId` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`),
   ADD CONSTRAINT `retailerArticle` FOREIGN KEY (`retailerId`) REFERENCES `retailer` (`id`);
 
 --
@@ -223,3 +243,8 @@ ALTER TABLE `groupuser`
 --
 ALTER TABLE `retailer`
   ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`id`);
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
