@@ -68,7 +68,6 @@ public class EditGroup extends VerticalPanel {
 	Button safeGroupButton = new Button("Alle Änderungen speichern");
 	Button backToGroupButton = new Button("Zurück");
 	Button deleteUserButton = new Button("Entfernen");
-	
 
 	public EditGroup() {
 
@@ -93,8 +92,7 @@ public class EditGroup extends VerticalPanel {
 		safeGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
-		//deleteUserButton.addClickHandler(new DeleteUserClickHandler());
-		
+		// deleteUserButton.addClickHandler(new DeleteUserClickHandler());
 
 		groupNameHPanel.add(groupLabel);
 		groupNameHPanel.add(groupTextBox);
@@ -119,7 +117,7 @@ public class EditGroup extends VerticalPanel {
 	}
 
 	public void loadTable() {
-		
+
 		// new User Textfield
 		TextBox userNameTextBox = new TextBox();
 		TextBox userEmailTextBox = new TextBox();
@@ -127,7 +125,7 @@ public class EditGroup extends VerticalPanel {
 		// Add User Button
 		Button addButton = new Button("add");
 		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
-		
+
 		userTable.removeAllRows();
 
 		userTable.setText(0, 1, "Benutzername");
@@ -140,8 +138,6 @@ public class EditGroup extends VerticalPanel {
 		userTable.setWidget(2, 3, addButton);
 
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
-		
-		
 
 	}
 
@@ -149,7 +145,7 @@ public class EditGroup extends VerticalPanel {
 		groupTextBox.setText(group.getGroupName());
 
 	}
-	
+
 //	public void getDeleteUserButton() {
 //		DeleteUserClickHandler 
 //	}
@@ -168,9 +164,9 @@ public class EditGroup extends VerticalPanel {
 			if (user == null || group == null) {
 				throw new NullPointerException();
 			}
-			GWT.log(user.getId()+" delete");
+			GWT.log(user.getId() + " delete");
 			editorVerwaltung.removeUserFromGroup(user, group, new RemoveUserFromGroupCallback());
-			
+
 		} catch (NullPointerException e) {
 			Window.alert(e.toString() + "\n" + "User/Group ist null");
 		}
@@ -190,7 +186,6 @@ public class EditGroup extends VerticalPanel {
 		@Override
 		public void onClick(ClickEvent arg0) {
 			removeUserFromGroup(user, group);
-			
 
 		}
 
@@ -199,13 +194,13 @@ public class EditGroup extends VerticalPanel {
 	class DeleteUserClickHandler implements ClickHandler {
 		User user = new User();
 		Group group = new Group();
-		
+
 		public DeleteUserClickHandler(User u, Group g) {
 			this.user = u;
 			this.group = g;
 		}
-		
-		public void onClick(ClickEvent arg0) {			
+
+		public void onClick(ClickEvent arg0) {
 			removeUserFromGroup(user, group);
 
 		}
@@ -276,36 +271,33 @@ public class EditGroup extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 
 			String newGroupName = groupTextBox.getText();
+
 			group.setGroupName(newGroupName);
-
-			// Evt mit eigenem UpdateGroupName Mapper ????
-
-			editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback());
-
 			dbox.hide();
 			dbox.clear();
 			dbox.removeFromParent();
 			dbox.setAnimationEnabled(false);
 			dbox.setGlassEnabled(false);
 
+			editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback());
+
 		}
 
 	}
-	
-	
+
 	class AddUserClickHandler implements ClickHandler {
-		
+
 //		Group group = new Group();
 //		GroupUser gu = new GroupUser();
 		User users = new User();
 		TextBox userEmailTextBox = new TextBox();
-		
+
 //		public AddUserClickHandler(User u, Group g) {
 //			this.user = u;
 //			this.group = g;
 //			
 //		}
-		
+
 //		public AddUserClickHandler(String userName, String userEmail, Group group) {
 ////			this.group = group;
 //			
@@ -316,46 +308,41 @@ public class EditGroup extends VerticalPanel {
 //		}
 
 		public AddUserClickHandler(TextBox userEmail, TextBox userName, Group group) {
-	// TODO Auto-generated constructor stub
-			
+			// TODO Auto-generated constructor stub
+
 			userEmailTextBox = userEmail;
-			
+
 		}
 
 		public void onClick(ClickEvent arg0) {
-			GWT.log(userEmailTextBox.getText()+" passts?");
-			
+			GWT.log(userEmailTextBox.getText() + " passts?");
+
 			userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
-			
 
 		}
 	}
-	
+
 	class EmailChangeHandler implements ChangeHandler {
 		String uemail;
 		User nuser = new User();
-		
+
 		public EmailChangeHandler(String email) {
 			uemail = email;
-			
+
 			nuser.setEmail(uemail);
-			
-			GWT.log(nuser.getEmail()+" cannot find Gmail3");
+
+			GWT.log(nuser.getEmail() + " cannot find Gmail3");
 			editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
-			
+
 		}
 
 		@Override
 		public void onChange(ChangeEvent arg0) {
 //			String email = userEmailTextBox.getText();
 //			nuser.setEmail(email);
-			
-			
+
 		}
 	}
-							
-
-	
 
 	class BackToClickHandler implements ClickHandler {
 
@@ -366,8 +353,6 @@ public class EditGroup extends VerticalPanel {
 		}
 
 	}
-	
-
 
 	// CALLBACKS
 
@@ -381,49 +366,43 @@ public class EditGroup extends VerticalPanel {
 			allUsers = result;
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
-				
+
 //				// new User Textfield
 //				TextBox userNameTextBox = new TextBox();
 //				TextBox userEmailTextBox = new TextBox();
-				
-				
-				
-				
+
 				// UserDelete Button
 				Button deleteButton = new Button("delete");
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
-				
+
 //				// Add User Button
 //				Button addButton = new Button("add");
 //				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
-				
 
 				if (allUsers.get(userNumber).getId() < allUsers.size()) {
-					userTable.setText(userNumber + 3, 1, allUsers.get(userNumber).getUsername());
-					userTable.setText(userNumber + 3, 2, allUsers.get(userNumber).getEmail());
-					userTable.setWidget(userNumber + 3, 3, deleteButton);
-					
-					
+					userTable.setText(userNumber + 4, 1, allUsers.get(userNumber).getUsername());
+					userTable.setText(userNumber + 4, 2, allUsers.get(userNumber).getEmail());
+					userTable.setWidget(userNumber + 4, 3, deleteButton);
+
 				}
 
 			}
-			
 
 		}
 
 	}
-	
+
 	class FindUserByGmailCallback implements AsyncCallback<User> {
 
 		public void onFailure(Throwable caught) {
-			//Window.alert("Prüfe ob die Email Adresse richtig geschrieben ist");
-			GWT.log(user.getEmail()+" cannot find Gemail");
+			Window.alert("Prüfe ob die Email Adresse richtig geschrieben ist und die Person bereits registriert ist");
+			GWT.log(user.getEmail() + " cannot find Gemail");
 		}
 
 		public void onSuccess(User u) {
 			User newUser = new User();
 			newUser = u;
-			
+
 			editorVerwaltung.addUserToGroup(newUser, group, new AddUserCallback());
 
 		}
@@ -440,28 +419,29 @@ public class EditGroup extends VerticalPanel {
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").clear();
 			RootPanel.get("navigation").add(groupForm);
-			RootPanel.get("content").clear();		
+			RootPanel.get("content").clear();
 			RootPanel.get("content").add(new EditGroup(user, group));
 
 		}
 
 	}
-	
+
 	class AddUserCallback implements AsyncCallback<GroupUser> {
 
 		public void onFailure(Throwable arg0) {
-			Window.alert("User konnte nicht zur Gruppe hinzugefügt werden!");
+			Window.alert("User konnte nicht zur Gruppe hinzugefügt werden oder ist bereits in der Gruppe!");
 		}
 
 		@Override
 		public void onSuccess(GroupUser arg0) {
 			GWT.log("funzt");
 			onLoad();
+			Window.alert("Der User wurde erfolgreich zu der Gruppe " + group.getGroupName() + " hinzugefügt!");
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
-	
+
 	class RemoveUserFromGroupCallback implements AsyncCallback<Void> {
 
 		public void onFailure(Throwable arg0) {
@@ -474,7 +454,7 @@ public class EditGroup extends VerticalPanel {
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").clear();
 			RootPanel.get("navigation").add(groupForm);
-			RootPanel.get("content").clear();		
+			RootPanel.get("content").clear();
 			RootPanel.get("content").add(new EditGroup(user, group));
 			Window.alert("User wurde aus der Gruppe gelöscht.");
 		}
