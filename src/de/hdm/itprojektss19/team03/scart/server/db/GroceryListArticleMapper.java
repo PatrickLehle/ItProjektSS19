@@ -136,7 +136,9 @@ public class GroceryListArticleMapper {
 				a.setUnit(rs.getString("unit"));
 				a.setDelDat(rs.getTimestamp("delDat"));
 				a.setOwnerId(rs.getInt("ownerId"));
-				a.setRetailerName(rs.getString(20));
+				a.setFav(rs.getBoolean("fav"));
+				a.setGroupId(rs.getInt("groupId"));
+				a.setRetailerName(rs.getString(22));
 				result.addElement(a);
 			}
 			return result;

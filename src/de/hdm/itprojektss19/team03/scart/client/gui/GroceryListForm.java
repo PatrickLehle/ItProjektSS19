@@ -2,6 +2,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
+import com.google.gwt.core.shared.GWT;
+import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -10,7 +12,6 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -19,7 +20,6 @@ import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -43,14 +43,17 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class GroceryListForm extends VerticalPanel {
 
-	public GroceryListForm(User u, Group g) {
+	public GroceryListForm(User u, Group g, Vector<Article> a, Retailer r) {
 		this.user = u;
 		this.group = g;
+		this.retailer = r;
+		this.articleVector = a;
 	};
 
 	private User user;
 	private Group group;
-	
+	private Retailer retailer;
+
 	private EditorServiceAsync ev = ClientsideSettings.getEditor();
 
 	HorizontalPanel hpTitle = new HorizontalPanel();
@@ -78,15 +81,13 @@ public class GroceryListForm extends VerticalPanel {
 	Article article = new Article(); // temporaerer Artikel wenn ein Artikel
 	// geupdated/neu erstellt wird, um dieses Objekt auch an die DB zu pushen
 
-	Retailer retailer = new Retailer();
-	Vector<Article> articleVector = new Vector<Article>();
+	Vector<Article> articleVector;
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
 	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
 	Vector<User> userVector = new Vector<User>();
 
 	Label titelLabel = new Label();
 	Label userRetailerLabel = new Label("zuteilen f�r");
-	ScrollPanel sc = new ScrollPanel();
 
 	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
@@ -101,12 +102,10 @@ public class GroceryListForm extends VerticalPanel {
 
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
+
 		super.onLoad();
 		this.addStyleName("main-panel");
 		groceryList.setGroupId(this.group.getId());
-
-		sc.setSize("200px", "550px");
-		sc.setVerticalScrollPosition(10);
 
 		// Titel Label wird in Horitontales Panel eingefuegt
 		hpTitle.add(titelLabel);
@@ -115,8 +114,8 @@ public class GroceryListForm extends VerticalPanel {
 
 		this.add(hpTitle);
 		// CALLBACKS=============================================
-		ev.getAllUserByGroupId(1, new AllUserCallback());
-		ev.findAllRetailer(new AllRetailersCallback());
+		// ev.getAllUserByGroupId(1, new AllUserCallback());
+		// ev.findAllRetailer(new AllRetailersCallback());
 		hpUserRetailer.add(userListBox);
 		hpUserRetailer.add(userRetailerLabel);
 		hpUserRetailer.add(retailerListBox);
@@ -124,9 +123,9 @@ public class GroceryListForm extends VerticalPanel {
 
 		// GroceryListId = Parameter sollte bei seitenaufruf uebergeben werden.
 		int groceryListId = groceryList.getId();
-		ev.findAllArticleByGroceryListId(1, new AllArticlesCallback());// Ruft Metode
+		// ev.findAllArticleByGroceryListId(1, new AllArticlesCallback());// Ruft Metode
 		// zum laden/fuellen der Tabelle auf
-
+		loadTable();
 		this.add(articleTable);
 		this.add(boughtTable);
 		boughtTable.setVisible(false);
@@ -173,7 +172,6 @@ public class GroceryListForm extends VerticalPanel {
 		});
 
 		this.add(hpButtons);
-		sc.add(this);
 	}
 
 	/**
@@ -205,8 +203,7 @@ public class GroceryListForm extends VerticalPanel {
 		for (articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
 			// retailerId = articleVector.get(articleNumber).getRetailerId() + 1;
 			ev.getRetailerById(retailerId, new GetRetailerCallback());
-			if (articleVector.get(articleNumber).getCheckBoolean() == false
-					&& articleVector.get(articleNumber).getDelDat() == null) {
+			if (articleVector.get(articleNumber).getDelDat() == null && articleVector.get(articleNumber).getCheckBoolean() == false) {
 				articleTable.setText(falseCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				articleTable.setText(falseCount, 1, articleVector.get(articleNumber).getName());
 				articleTable.setText(falseCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
@@ -214,8 +211,7 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setText(falseCount, 4, retailer.getRetailerName());
 				setFavButtonFalse();
 				falseCount++;
-			} else if (articleVector.get(articleNumber).getCheckBoolean() == true
-					&& articleVector.get(articleNumber).getDelDat() == null) {
+			} else if (articleVector.get(articleNumber).getDelDat() != null && articleVector.get(articleNumber).getCheckBoolean() == false) {
 				boughtTable.setText(trueCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				boughtTable.setText(trueCount, 1, articleVector.get(articleNumber).getName());
 				boughtTable.setText(trueCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
@@ -229,24 +225,25 @@ public class GroceryListForm extends VerticalPanel {
 		if (visibleNum > 1) {
 			boughtTable.setVisible(true);
 		}
+		GWT.log(articleVector.get(0).getName());
 	}
-	
+
 	public void setFavButtonFalse() {
-		if(articleVector.get(articleNumber).getFav() == true) {
+		if (articleVector.get(articleNumber).getFav() == true) {
 			articleTable.setWidget(falseCount, 6, getFavButtonTrue());
-		}else {
+		} else {
 			articleTable.setWidget(falseCount, 6, getFavButtonFalse());
 		}
 	}
 
 	public void setFavButtonTrue() {
-		if(articleVector.get(articleNumber).getFav() == true) {
+		if (articleVector.get(articleNumber).getFav() == true) {
 			boughtTable.setWidget(trueCount, 6, getFavButtonTrue());
-		}else {
+		} else {
 			boughtTable.setWidget(trueCount, 6, getFavButtonFalse());
 		}
 	}
-	
+
 	public ListBox getRetailerListBox() {
 		ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
 		ev.getArticleById(globalRow, new GetArticleCallback());
@@ -260,46 +257,46 @@ public class GroceryListForm extends VerticalPanel {
 	 * @return https://stackoverflow.com/questions/11415652/remove-row-from-flextable-in-gwt
 	 *         Liest aus, welche Reihe ausgewaehlt wurde durch einen ClickHandler.
 	 */
-//	public static TableRowElement findNearestParentRow(Node node) {
-//		Node element = findNearestParentNodeByType(node, "tr");
-//		if (element != null) {
-//			return element.cast();
-//		}
-//		return null;
-//	}
-//
-//	public static Node findNearestParentNodeByType(Node node, String nodeType) {
-//		while ((node != null)) {
-//			if (Element.is(node)) {
-//				Element elem = (Element) Element.as(node);
-//
-//				String tagName = elem.getTagName();
-//
-//				if (nodeType.equalsIgnoreCase(tagName)) {
-//					return elem.cast();
-//				}
-//			}
-//			node = node.getParentNode();
-//		}
-//		return null;
-//	}
-	
+	public static TableRowElement findNearestParentRow(Node node) {
+		Node element = findNearestParentNodeByType(node, "tr");
+		if (element != null) {
+			return element.cast();
+		}
+		return null;
+	}
+
+	public static Node findNearestParentNodeByType(Node node, String nodeType) {
+		while ((node != null)) {
+			if (Element.is(node)) {
+				Element elem = (Element) Element.as(node);
+
+				String tagName = elem.getTagName();
+
+				if (nodeType.equalsIgnoreCase(tagName)) {
+					return elem.cast();
+				}
+			}
+			node = node.getParentNode();
+		}
+		return null;
+	}
+
 	public Button getFavButtonFalse() {
 		Button favBtnFalse = new Button("NOT ATM");
-		
+
 		favBtnFalse.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
 				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
-				
+
 				if (rowIndexA != 0) {
 					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
-				} else if(rowIndexB != 0) {
+				} else if (rowIndexB != 0) {
 					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
-				}else {
+				} else {
 					Window.alert("getFavButtonFalse Error");
 				}
-				
+
 				if (article != null) {
 					article.setFav(true);
 					ev.saveArticle(article, new SaveArticleCallback());
@@ -308,36 +305,36 @@ public class GroceryListForm extends VerticalPanel {
 				rowIndexB = 0;
 			}
 		});
-		
+
 		return favBtnFalse;
 	}
-	
+
 	public Button getFavButtonTrue() {
 		Button favBtnTrue = new Button("FAVORITE TRUE");
-		
+
 		favBtnTrue.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
 				rowIndexA = articleTable.getCellForEvent(event).getRowIndex();
 				rowIndexB = boughtTable.getCellForEvent(event).getRowIndex();
-				
+
 				if (rowIndexA != 0) {
 					ev.getArticleById(Integer.parseInt(articleTable.getText(rowIndexA, 0)), new GetArticleCallback());
-				} else if(rowIndexB != 0) {
+				} else if (rowIndexB != 0) {
 					ev.getArticleById(Integer.parseInt(boughtTable.getText(rowIndexA, 0)), new GetArticleCallback());
-				}else {
+				} else {
 					Window.alert("getFavButtonTrue Error");
 				}
-				
+
 				if (article != null) {
 					article.setFav(true);
 					ev.saveArticle(article, new SaveArticleCallback());
 				}
-				
+
 				rowIndexA = 0;
 				rowIndexB = 0;
 			}
 		});
-		
+
 		return favBtnTrue;
 	}
 
@@ -356,17 +353,16 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				rowIndex = articleTable.getCellForEvent(event).getRowIndex();
 				rowCount = boughtTable.getRowCount();
-
+				article = null;
+				
 				article.setId(Integer.parseInt(articleTable.getText(rowIndex, 0)));
 				article.setName(articleTable.getText(rowIndex, 1));
-				// article.setQuantity(Integer.parseInt(articleTable.getText(rowIndex, 2)));
+				article.setQuantity(Integer.parseInt(articleTable.getText(rowIndex, 2)));
 				article.setQuantity(10);
-				// article.setUnit(articleTable.getText(rowIndex, 3));
+				article.setUnit(articleTable.getText(rowIndex, 3));
 				article.setUnit("kg");
 				article.setRetailerId(1);
-				article.setCheckBoolean(true);
-
-				ev.saveArticle(article, new SaveArticleCallback());
+				ev.deleteArticle(article, new DeleteArticleCallBack());
 			}
 		});
 		cb.setValue(false);
@@ -385,39 +381,18 @@ public class GroceryListForm extends VerticalPanel {
 			public void onClick(ClickEvent event) {
 				rowIndex = boughtTable.getCellForEvent(event).getRowIndex();
 				rowCount = articleTable.getRowCount();
-
 				article = null;
 
+				article.setId(Integer.parseInt(boughtTable.getText(rowIndex, 0)));
 				article.setName(boughtTable.getText(rowIndex, 1));
 				article.setQuantity(Integer.parseInt(boughtTable.getText(rowIndex, 2)));
-				article.setUnit(boughtTable.getText(rowIndex, 3));
-				article.setRetailerId(Integer.parseInt(boughtTable.getText(rowIndex, 4)));
-				article.setCheckBoolean(false);
-
-				ev.saveArticle(article, new AsyncCallback<Article>() {
-					public void onFailure(Throwable caught) {
-						Window.alert("Artikel konnte nicht von der gekauft Tabelle entfernt werden");
-						article = null;
-					}
-
-					public void onSuccess(Article arg0) {
-						articleTable.setText(rowCount, 1, arg0.getName());
-						articleTable.setText(rowCount, 2, Integer.toString(arg0.getQuantity()));
-						articleTable.setText(rowCount, 3, arg0.getUnit());
-						articleTable.setText(rowCount, 4, Integer.toString(arg0.getRetailerId()));
-						articleTable.setWidget(rowCount, 5, getCbCheck());
-						boughtTable.removeRow(rowIndex);
-
-						if (boughtTable.getRowCount() < 1) {
-							boughtTable.setVisible(false);
-						}
-						loadTable();
-
-						article = null;
-					}
-				});
+				article.setQuantity(Integer.parseInt(boughtTable.getText(rowIndex, 3)));
+				article.setUnit(boughtTable.getText(rowIndex, 4));
+				article.setRetailerId(1);
+				ev.deleteArticle(article, new DeleteArticleCallBack());
 			}
 		});
+				
 		cb.setValue(true);
 		return cb;
 	}
@@ -834,12 +809,35 @@ public class GroceryListForm extends VerticalPanel {
 	class DeleteArticleCallBack implements AsyncCallback<Void> {
 
 		public void onFailure(Throwable caught) {
+			Window.alert("Fehler beim Loeschen");
+			articleTable.setWidget(rowIndex, 5, getCbCheck());
 		}
 
 		public void onSuccess(Void result) {
-			articleTable.removeRow(globalRow);
+			if(article.getDelDat() == null) {
+				boughtTable.setText(rowCount, 0, Integer.toString(article.getId()));
+				boughtTable.setText(rowCount, 1, article.getName());
+				boughtTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
+				boughtTable.setText(rowCount, 3, article.getUnit());
+				boughtTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
+				boughtTable.setWidget(rowCount, 5, getCbReturn());
+				articleTable.removeRow(rowIndex);
+			}else if(article.getDelDat() != null) {
+				articleTable.setText(rowCount, 0, Integer.toString(article.getId()));
+				articleTable.setText(rowCount, 1, article.getName());
+				articleTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
+				articleTable.setText(rowCount, 3, article.getUnit());
+				articleTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
+				articleTable.setWidget(rowCount, 5, getCbReturn());
+			}
+
+			if (boughtTable.getRowCount() > 1) {
+				boughtTable.setVisible(true);
+			}
+			article = null;
+			loadTable();
 		}
-	}
+		}
 
 	class GetRetailerCallback implements AsyncCallback<Retailer> {
 
@@ -860,24 +858,12 @@ public class GroceryListForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Article result) {
-			boughtTable.setText(rowCount, 0, Integer.toString(article.getId()));
-			boughtTable.setText(rowCount, 1, article.getName());
-			boughtTable.setText(rowCount, 2, Integer.toString(article.getQuantity()));
-			boughtTable.setText(rowCount, 3, article.getUnit());
-			boughtTable.setText(rowCount, 4, Integer.toString(article.getRetailerId()));
-			boughtTable.setWidget(rowCount, 5, getCbReturn());
-			articleTable.removeRow(rowIndex);
-
-			if (boughtTable.getRowCount() > 1) {
-				boughtTable.setVisible(true);
-			}
-			article = null; // Artikle-Objekt wurde geleert, da Artikel erfolgreich in der DB angelegt
-							// werden konnte
+			article = null;
 			loadTable();
 			Window.alert("2");
 		}
 	}
-	
+
 	class setArticleFavorite implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -886,16 +872,16 @@ public class GroceryListForm extends VerticalPanel {
 		public void onSuccess(Article result) {
 			result = article;
 			if (rowIndexA != 0) {
-				if(articleTable.getWidget(rowIndexA, 6) == getFavButtonFalse()) {
+				if (articleTable.getWidget(rowIndexA, 6) == getFavButtonFalse()) {
 					articleTable.setWidget(rowIndexA, 6, getFavButtonTrue());
-				}else {
+				} else {
 					articleTable.setWidget(rowIndexA, 6, getFavButtonFalse());
 				}
-				
-			}else if(rowIndexB !=0) {
-				if(boughtTable.getWidget(rowIndexB, 6) == getFavButtonFalse()) {
+
+			} else if (rowIndexB != 0) {
+				if (boughtTable.getWidget(rowIndexB, 6) == getFavButtonFalse()) {
 					boughtTable.setWidget(rowIndexB, 6, getFavButtonTrue());
-				}else {
+				} else {
 					boughtTable.setWidget(rowIndexB, 6, getFavButtonFalse());
 				}
 			}
