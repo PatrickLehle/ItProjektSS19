@@ -17,15 +17,33 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
- * ProfileForm: ...
- *
+ * 
+ * ProfileForm:
+ *  
+ * Darstellung und Interaktion eines Profils.
+ * Profil beinhaltet Überschrift, Name und E-Mail-Adresse.
+ * Profil lässt sich per Buttons bearbeiten und löschen.
  *
  * @author vanduyho
  *
  */
 
-public class ProfileForm {
+public class ProfileForm extends VerticalPanel {
 
+	/**
+	 *
+	 * Konstruktor der ProfileForm:
+	 * 
+	 * @param u ist Nutzer des Profils
+	 *
+	 */
+	
+	public ProfileForm(User u) {
+		
+		this.user = u;
+		
+	}
+	
 	User user = new User();
 
 	//TEXTBOXES==============================================
@@ -42,7 +60,6 @@ public class ProfileForm {
 	Button editButton = new Button("Profil bearbeiten");
 	Button deleteButton = new Button("Profil löschen");
 	Button saveButton = new Button("Änderung speichern");
-	Button nosaveButton = new Button();
 
 	//PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
@@ -56,7 +73,9 @@ public class ProfileForm {
 
 	/**
 	 *
-	 * onLoad-Methode: ...
+	 * onLoad-Methode:
+	 * 
+	 * Panels werden dem Browser hinzugefügt.
 	 *
 	 */
 
@@ -70,7 +89,9 @@ public class ProfileForm {
 
 	/**
 	 *
-	 * buildProfile-Methode: ...
+	 * buildProfile-Methode:
+	 * 
+	 * Aufbau eines Profils.
 	 *
 	 */
 
@@ -100,7 +121,25 @@ public class ProfileForm {
 
 	/**
 	 *
-	 * ClickHandler: ...
+	 * ClickHandler:
+	 * 
+	 * EditButtonClickHandler
+	 * SaveButtonClickHandler
+	 * DeleteButtonClickHandler
+	 * YesSaveButtonClickHandler
+	 * YesDeleteButtonClickHandler
+	 * NoButtonClickHandler
+	 *
+	 */
+	
+	/**
+	 *
+	 * EditButtonClickHandler:
+	 * 
+	 * Textboxes für Name und E-Mail-Adresse werden hinzugefügt.
+	 * "editButton" und "deleteButton" werden entfernt.
+	 * "contentPanel" wird hinzugefügt.
+	 * 
 	 *
 	 */
 
@@ -121,6 +160,15 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * SaveButtonClickHandler:
+	 * 
+	 * Dialogbox für "Ja" oder "Nein" Abfrage.
+	 * 
+	 *
+	 */
 
 	class SaveButtonClickHandler implements ClickHandler {
 
@@ -149,6 +197,14 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * DeleteButtonClickHandler:
+	 * 
+	 * Dialogbox für "Ja" oder "Nein" Abfrage.
+	 *
+	 */
 
 	class DeleteButtonClickHandler implements ClickHandler {
 
@@ -177,6 +233,15 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * YesSaveButtonClickHandler:
+	 * 
+	 * If-Abfrage für die Länge der E-Mail-Adresse.
+	 * 
+	 *
+	 */
 
 	class YesSaveButtonClickHandler implements ClickHandler {
 
@@ -213,6 +278,14 @@ public class ProfileForm {
 
 	}
 
+	/**
+	 * 
+	 * YesDeleteButtonClickHandler:
+	 * 
+	 * Löschen des Profils eines Nutzers.
+	 *
+	 */
+	
 	class YesDeleteButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -236,6 +309,15 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * NoButtonClickHandler:
+	 * 
+	 * Schließen der DialogBox.
+	 * 
+	 * 
+	 */
 
 	class NoButtonClickHandler implements ClickHandler {
 
@@ -261,7 +343,20 @@ public class ProfileForm {
 
 	/**
 	 *
-	 * Callbacks: ...
+	 * Callbacks:
+	 * 
+	 * FindUserByGMailCallback
+	 * UpdateUserCallback
+	 * DeleteUserCallback
+	 * FindUserCallback
+	 *
+	 */
+	
+	/**
+	 * 
+	 * FindUserByGMailCallback:
+	 * 
+	 * ...
 	 *
 	 */
 
@@ -282,6 +377,14 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * UpdateUserCallback:
+	 * 
+	 * ...
+	 * 
+	 */
 
 	class UpdateUserCallback implements AsyncCallback<User> {
 
@@ -301,6 +404,14 @@ public class ProfileForm {
 
 	}
 
+	/**
+	 * 
+	 * DeleteUserCallback:
+	 * 
+	 * ...
+	 *
+	 */
+	
 	class DeleteUserCallback implements AsyncCallback<Void> {
 
 		@Override
@@ -318,6 +429,14 @@ public class ProfileForm {
 		}
 
 	}
+	
+	/**
+	 * 
+	 * FindUserCallback:
+	 * 
+	 * ...
+	 * 
+	 */
 	
 	class FindUserCallback implements AsyncCallback<User> {
 
@@ -338,4 +457,3 @@ public class ProfileForm {
 	}
 
 }
-
