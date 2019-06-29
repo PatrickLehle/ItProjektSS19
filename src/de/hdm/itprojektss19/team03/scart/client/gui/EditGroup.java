@@ -124,9 +124,11 @@ public class EditGroup extends VerticalPanel {
 
 		// Add User Button
 		Button addButton = new Button("add");
+		addButton.addStyleName("table-button1");
 		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
 
 		userTable.removeAllRows();
+		userTable.setStyleName("table");
 
 		userTable.setText(0, 0, "Benutzername");
 		userTable.setText(0, 1, "Email");
@@ -404,7 +406,8 @@ public class EditGroup extends VerticalPanel {
 //				TextBox userEmailTextBox = new TextBox();
 
 				// UserDelete Button
-				Button deleteButton = new Button("delete");
+				Button deleteButton = new Button("x");
+				deleteButton.addStyleName("table-button1");
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
 
 //				// Add User Button

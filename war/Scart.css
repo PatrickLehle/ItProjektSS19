@@ -53,17 +53,6 @@ body {
 
 /* overwrite gwt basic button*/
 
-.gwt-Button {
-    margin: 10px;
-    width: 180px;
-    height: 40px;
-    color: rgb(25, 31, 31) !important;
-    box-shadow: 0px 0px 5px rgba(242, 210, 37);
-    font-size: 1.2em;
-    border-style: none !important;
-    font-weight: bold !important;
-    background: rgb(242, 210, 37) !important;
-}
 
 .button {
     margin: 10px !important;
@@ -76,6 +65,17 @@ body {
     font-weight: bold !important;
     /* Old browsers */
     background: rgb(242, 210, 37) !important;
+}
+
+.table-button1 {
+  background: grey;
+  color: black;
+  border: 1px solid #555555;
+}
+
+.table-button1:hover {
+  background: rgb(242, 210, 37) !important;
+  color: white;
 }
 
 .retailer-panel {
