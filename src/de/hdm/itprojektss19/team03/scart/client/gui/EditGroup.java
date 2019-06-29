@@ -128,14 +128,14 @@ public class EditGroup extends VerticalPanel {
 
 		userTable.removeAllRows();
 
-		userTable.setText(0, 1, "Benutzername");
-		userTable.setText(0, 2, "Email");
-		userTable.setText(0, 3, "");
-		userTable.setText(1, 1, user.getUsername());
-		userTable.setText(1, 2, user.getEmail());
-		userTable.setWidget(2, 1, userNameTextBox);
-		userTable.setWidget(2, 2, userEmailTextBox);
-		userTable.setWidget(2, 3, addButton);
+		userTable.setText(0, 0, "Benutzername");
+		userTable.setText(0, 1, "Email");
+		userTable.setText(0, 2, "");
+		userTable.setText(1, 0, user.getUsername());
+		userTable.setText(1, 1, user.getEmail());
+		userTable.setWidget(2, 0, userNameTextBox);
+		userTable.setWidget(2, 1, userEmailTextBox);
+		userTable.setWidget(2, 2, addButton);
 
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
@@ -171,6 +171,28 @@ public class EditGroup extends VerticalPanel {
 			Window.alert(e.toString() + "\n" + "User/Group ist null");
 		}
 	}
+	
+	
+	public void addUser(TextBox userEmail, TextBox userName, Group group) {
+		TextBox userEmailTextBox = new TextBox();
+		userEmailTextBox = userEmail;
+		String uemail;
+		User nuser = new User();
+		uemail = userEmailTextBox.getText();
+		nuser.setEmail(uemail);
+		
+		if (nuser.getEmail() == user.getEmail()) {
+			Window.alert("Es handelt sich um deine eigene Email Adresse");
+		}
+		
+		//GWT.log(nuser.getEmail() + " cannot find Gmail3");
+		editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
+
+		
+	}
+	
+	
+	// ClickHandler
 
 	class DeleteClickHandler implements ClickHandler {
 		Group group = new Group();
@@ -287,10 +309,11 @@ public class EditGroup extends VerticalPanel {
 
 	class AddUserClickHandler implements ClickHandler {
 
-//		Group group = new Group();
+		Group groups = new Group();
 //		GroupUser gu = new GroupUser();
 		User users = new User();
 		TextBox userEmailTextBox = new TextBox();
+		TextBox userNameTextBox = new TextBox();
 
 //		public AddUserClickHandler(User u, Group g) {
 //			this.user = u;
@@ -311,38 +334,46 @@ public class EditGroup extends VerticalPanel {
 			// TODO Auto-generated constructor stub
 
 			userEmailTextBox = userEmail;
+			userNameTextBox = userName;
+			groups = group;
 
 		}
 
 		public void onClick(ClickEvent arg0) {
 			GWT.log(userEmailTextBox.getText() + " passts?");
-
-			userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
-
-		}
-	}
-
-	class EmailChangeHandler implements ChangeHandler {
-		String uemail;
-		User nuser = new User();
-
-		public EmailChangeHandler(String email) {
-			uemail = email;
-
-			nuser.setEmail(uemail);
-
-			GWT.log(nuser.getEmail() + " cannot find Gmail3");
-			editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
-
-		}
-
-		@Override
-		public void onChange(ChangeEvent arg0) {
-//			String email = userEmailTextBox.getText();
-//			nuser.setEmail(email);
+			
+			addUser(userEmailTextBox, userNameTextBox, groups);
+			
+			//userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
 
 		}
 	}
+	
+
+//	class EmailChangeHandler implements ChangeHandler {
+//		String uemail;
+//		User nuser = new User();
+//
+//		public EmailChangeHandler(String email) {
+//			uemail = email;
+//
+//			nuser.setEmail(uemail);
+//			if (nuser.getEmail() == user.getEmail()) {
+//				Window.alert("Es handelt sich um deine eigene Email Adresse");
+//			}
+//
+//			//GWT.log(nuser.getEmail() + " cannot find Gmail3");
+//			editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
+//
+//		}
+//
+//		@Override
+//		public void onChange(ChangeEvent arg0) {
+////			String email = userEmailTextBox.getText();
+////			nuser.setEmail(email);
+//
+//		}
+//	}
 
 	class BackToClickHandler implements ClickHandler {
 
@@ -364,6 +395,7 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Vector<User> result) {
 			allUsers = result;
+			//User user = new User();
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 
@@ -379,10 +411,10 @@ public class EditGroup extends VerticalPanel {
 //				Button addButton = new Button("add");
 //				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
 
-				if (allUsers.get(userNumber).getId() < allUsers.size()) {
-					userTable.setText(userNumber + 4, 1, allUsers.get(userNumber).getUsername());
-					userTable.setText(userNumber + 4, 2, allUsers.get(userNumber).getEmail());
-					userTable.setWidget(userNumber + 4, 3, deleteButton);
+				if (allUsers.get(userNumber).getId() != user.getId()) {
+					userTable.setText(userNumber + 3, 0, allUsers.get(userNumber).getUsername());
+					userTable.setText(userNumber + 3, 1, allUsers.get(userNumber).getEmail());
+					userTable.setWidget(userNumber + 3, 2, deleteButton);
 
 				}
 
@@ -395,6 +427,7 @@ public class EditGroup extends VerticalPanel {
 	class FindUserByGmailCallback implements AsyncCallback<User> {
 
 		public void onFailure(Throwable caught) {
+			
 			Window.alert("Prüfe ob die Email Adresse richtig geschrieben ist und die Person bereits registriert ist");
 			GWT.log(user.getEmail() + " cannot find Gemail");
 		}
