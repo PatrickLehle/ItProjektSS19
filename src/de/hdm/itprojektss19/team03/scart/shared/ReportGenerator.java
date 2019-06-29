@@ -23,10 +23,9 @@ public interface ReportGenerator extends RemoteService {
 	
 	public ArticleReport createStatisticA(User u, Vector<Group> g) throws IllegalArgumentException;
 	
-	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException;
+	public ArticleDateReport createStatisticAD(User user, Vector<Group> groups, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException;
 	
 	public ArticleRetailerReport createStatisticAR(User user, Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException;
 	
-	public ArticleDateRetailerReport createStatisticADR(User user, Timestamp choosenStartDate,
-			Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException;
+	public ArticleDateRetailerReport createStatisticADR(User user, Vector<Group> groups, Vector<Retailer> retailers, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException;
 }

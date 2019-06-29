@@ -120,7 +120,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		ArticleReport report = new ArticleReport();
 
 		// Nun legen wir den Titel und unser Erstellungsdatum des Reports
-		report.setTitle("Alle häufig gekauften Artikel von: " + u.getEmail() );
+		report.setTitle("Alle häufig gekauften Artikel von: " + u.getEmail());
 		report.setCreated(new Date());
 
 		// Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
@@ -171,12 +171,61 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 //ARTICLE-DATE-REPORT========================================================================================================================
 
-	public ArticleDateReport createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate,
+	public ArticleDateReport createStatisticAD(User user, Vector<Group> groups, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
 		if (this.getEditorService() == null) {
 			return null;
 		}
-		return null;
+	
+		// Als erstes erstellen wir eine Instanz des ArticleReport
+		ArticleDateReport report = new ArticleDateReport();
+
+		// Nun legen wir den Titel und unser Erstellungsdatum des Reports
+		report.setTitle("Alle häufig gekauften Artikel von: " + user.getEmail());
+		report.setCreated(new Date());
+
+		// Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
+		Row head = new Row();
+		head.addColumn(new Column("Artikel-Name"));
+		head.addColumn(new Column("Einzelhändler"));
+		head.addColumn(new Column("Erstellungsdatum"));
+		head.addColumn(new Column("Modifikationsdatum"));
+		head.addColumn(new Column("Archivierungsdatum"));
+
+		report.addRow(head);
+
+		//Hier werden unsere Angeforderten Daten in einen Vector hinterlegt
+		Vector<Group> allGroupsByUser = groups;
+		Vector<Article> allArticles = new Vector<Article>();
+		
+		//Hier werden die Gruppen und deren Article aufgerufen
+		allArticles.addAll(this.editorService.findAllArticleByDateFavouriteTRUE(groups, choosenStartDate, choosenEndDate));
+		
+		Vector<Article> receiver = new Vector<Article>();
+		
+		for (int i = 0; i < allArticles.size(); i++) {
+			
+			for (int j = 0; j < allGroupsByUser.size(); j++) {
+				
+				if(allArticles.elementAt(i).getGroupId() == allGroupsByUser.elementAt(j).getId()) {
+					Article a = new Article();
+					a = this.editorService.getArticleById(allArticles.elementAt(j).getGroupId());
+					receiver.add(a);
+				}
+			}
+	
+					Row row = new Row();
+					row.addColumn(new Column(allArticles.elementAt(i).getName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
+					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
+					if(allArticles.elementAt(i).getDelDat() != null) {
+						row.addColumn(new Column(allArticles.elementAt(i).getDelDat().toString()));
+					}
+					report.addRow(row);	
+				}
+
+		return report;
 	}
 
 //ARTICLE-RETAILER-REPORT====================================================================================================================
@@ -241,13 +290,60 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 //ARTICLE-DATE-RETAILER-REPORT===============================================================================================================
 	
-	
-	public ArticleDateRetailerReport createStatisticADR(User user, Timestamp choosenStartDate, Timestamp choosenEndDate,
+	public ArticleDateRetailerReport createStatisticADR(User user, Vector<Group> groups, Vector<Retailer> retailers, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
 		}
-		return null;
+		// Als erstes erstellen wir eine Instanz des ArticleReport
+		ArticleDateRetailerReport report = new ArticleDateRetailerReport();
+
+		// Nun legen wir den Titel und unser Erstellungsdatum des Reports
+		report.setTitle("Alle häufig gekauften Artikel von: " + user.getEmail());
+		report.setCreated(new Date());
+
+		// Als naechstes erstellen wir die Kopfzeile unserer Reporttabelle
+		Row head = new Row();
+		head.addColumn(new Column("Artikel-Name"));
+		head.addColumn(new Column("Einzelhändler"));
+		head.addColumn(new Column("Erstellungsdatum"));
+		head.addColumn(new Column("Modifikationsdatum"));
+		head.addColumn(new Column("Archivierungsdatum"));
+
+		report.addRow(head);
+
+		//Hier werden unsere Angeforderten Daten in einen Vector hinterlegt
+		Vector<Group> allGroupsByUser = groups;
+		Vector<Article> allArticles = new Vector<Article>();
+		
+		//Hier werden die Gruppen und deren Article aufgerufen
+		allArticles.addAll(this.editorService.findAllArticleByDateRetailerFavouriteTRUE(groups, retailers, choosenStartDate, choosenEndDate));
+		
+		Vector<Article> receiver = new Vector<Article>();
+		
+		for (int i = 0; i < allArticles.size(); i++) {
+			
+			for (int j = 0; j < allGroupsByUser.size(); j++) {
+				
+				if(allArticles.elementAt(i).getGroupId() == allGroupsByUser.elementAt(j).getId()) {
+					Article a = new Article();
+					a = this.editorService.getArticleById(allArticles.elementAt(j).getGroupId());
+					receiver.add(a);
+				}
+			}
+	
+					Row row = new Row();
+					row.addColumn(new Column(allArticles.elementAt(i).getName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
+					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
+					if(allArticles.elementAt(i).getDelDat() != null) {
+						row.addColumn(new Column(allArticles.elementAt(i).getDelDat().toString()));
+					}
+					report.addRow(row);	
+				}
+
+		return report;
 	}
 
 }

@@ -30,11 +30,11 @@ public interface ReportGeneratorAsync {
 
 	void createStatisticA(User u, Vector<Group> g, AsyncCallback<ArticleReport> callback);
 	
-	void createStatisticAD(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS, AsyncCallback<ArticleDateReport> callback);
+	void createStatisticAD(User user, Vector<Group> groups, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS, AsyncCallback<ArticleDateReport> callback);
 	
 	void createStatisticAR(User user, Vector<Group> g,Vector<Retailer> r, AsyncCallback<ArticleRetailerReport> callback);
 	
-	void createStatisticADR(User user, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS,AsyncCallback<ArticleDateRetailerReport> callback);
+	void createStatisticADR(User user, Vector<Group> groups, Vector<Retailer> retailers, Timestamp choosenStartDate, Timestamp choosenEndDate, Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS, AsyncCallback<ArticleDateRetailerReport> callback);
 
 
 	
