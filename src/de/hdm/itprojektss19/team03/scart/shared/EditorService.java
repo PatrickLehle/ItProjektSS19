@@ -371,6 +371,16 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)
+	 * @return gibt alle Article sowie den zugehoerigen Zeitraum die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
 	// RETAILER===========================================================================
 
 	/**
