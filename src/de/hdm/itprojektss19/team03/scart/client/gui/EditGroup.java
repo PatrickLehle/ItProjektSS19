@@ -65,7 +65,7 @@ public class EditGroup extends VerticalPanel {
 
 	// Buttons
 	Button deleteGroupButton = new Button("Aus Gruppe austreten");
-	Button safeGroupButton = new Button("Alle Änderungen speichern");
+	Button safeGroupButton = new Button("Änderungen speichern");
 	Button backToGroupButton = new Button("Zurück");
 	Button deleteUserButton = new Button("Entfernen");
 
