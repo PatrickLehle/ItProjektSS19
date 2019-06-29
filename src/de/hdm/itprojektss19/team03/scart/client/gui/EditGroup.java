@@ -82,7 +82,9 @@ public class EditGroup extends VerticalPanel {
 	public void onLoad() {
 
 		groupTextBox.setText(group.getGroupName());
-		groupTextBox.addStyleName("textbox");
+		groupTextBox.addStyleName("textbox-big");
+//		groupTextBox.addStyleName("h3");
+		groupFormPanel.setHorizontalAlignment(ALIGN_CENTER);
 		groupNameHPanel.setHorizontalAlignment(ALIGN_RIGHT);
 		groupLabel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h2");
@@ -128,7 +130,7 @@ public class EditGroup extends VerticalPanel {
 		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
 
 		userTable.removeAllRows();
-		userTable.setStyleName("table");
+		userTable.setStyleName("gwt-flextable");
 
 		userTable.setText(0, 0, "Benutzername");
 		userTable.setText(0, 1, "Email");
