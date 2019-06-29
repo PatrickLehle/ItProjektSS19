@@ -3,6 +3,8 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -21,6 +23,7 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -43,6 +46,7 @@ public class EditGroup extends VerticalPanel {
 //	Vector<Integer> allGroupIds = new Vector<Integer>();
 //	Vector<String> choosenGroups = new Vector<String>();
 	Vector<User> allUsers = new Vector<User>();
+	Vector<String> newUser = new Vector<String>();
 
 	// PANELS
 	VerticalPanel groupFormPanel = new VerticalPanel();
@@ -115,7 +119,15 @@ public class EditGroup extends VerticalPanel {
 	}
 
 	public void loadTable() {
+		
+		// new User Textfield
+		TextBox userNameTextBox = new TextBox();
+		TextBox userEmailTextBox = new TextBox();
 
+		// Add User Button
+		Button addButton = new Button("add");
+		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
+		
 		userTable.removeAllRows();
 
 		userTable.setText(0, 1, "Benutzername");
@@ -123,8 +135,13 @@ public class EditGroup extends VerticalPanel {
 		userTable.setText(0, 3, "");
 		userTable.setText(1, 1, user.getUsername());
 		userTable.setText(1, 2, user.getEmail());
+		userTable.setWidget(2, 1, userNameTextBox);
+		userTable.setWidget(2, 2, userEmailTextBox);
+		userTable.setWidget(2, 3, addButton);
 
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
+		
+		
 
 	}
 
@@ -270,12 +287,75 @@ public class EditGroup extends VerticalPanel {
 			dbox.removeFromParent();
 			dbox.setAnimationEnabled(false);
 			dbox.setGlassEnabled(false);
-			
-			
 
 		}
 
 	}
+	
+	
+	class AddUserClickHandler implements ClickHandler {
+		
+//		Group group = new Group();
+//		GroupUser gu = new GroupUser();
+		User users = new User();
+		TextBox userEmailTextBox = new TextBox();
+		
+//		public AddUserClickHandler(User u, Group g) {
+//			this.user = u;
+//			this.group = g;
+//			
+//		}
+		
+//		public AddUserClickHandler(String userName, String userEmail, Group group) {
+////			this.group = group;
+//			
+//			users.setUsername(userName);
+//			users.setEmail(userEmail);	
+//			GWT.log(userEmail +" cannot find Gmail1");
+//			
+//		}
+
+		public AddUserClickHandler(TextBox userEmail, TextBox userName, Group group) {
+	// TODO Auto-generated constructor stub
+			
+			userEmailTextBox = userEmail;
+			
+		}
+
+		public void onClick(ClickEvent arg0) {
+			GWT.log(userEmailTextBox.getText()+" passts?");
+			
+			userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
+			
+
+		}
+	}
+	
+	class EmailChangeHandler implements ChangeHandler {
+		String uemail;
+		User nuser = new User();
+		
+		public EmailChangeHandler(String email) {
+			uemail = email;
+			
+			nuser.setEmail(uemail);
+			
+			GWT.log(nuser.getEmail()+" cannot find Gmail3");
+			editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
+			
+		}
+
+		@Override
+		public void onChange(ChangeEvent arg0) {
+//			String email = userEmailTextBox.getText();
+//			nuser.setEmail(email);
+			
+			
+		}
+	}
+							
+
+	
 
 	class BackToClickHandler implements ClickHandler {
 
@@ -301,17 +381,50 @@ public class EditGroup extends VerticalPanel {
 			allUsers = result;
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
-				Button button = new Button("Aus Gruppe entfernen");
-				button.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
- 
+				
+//				// new User Textfield
+//				TextBox userNameTextBox = new TextBox();
+//				TextBox userEmailTextBox = new TextBox();
+				
+				
+				
+				
+				// UserDelete Button
+				Button deleteButton = new Button("delete");
+				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
+				
+//				// Add User Button
+//				Button addButton = new Button("add");
+//				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
+				
+
 				if (allUsers.get(userNumber).getId() < allUsers.size()) {
-					userTable.setText(userNumber + 2, 1, allUsers.get(userNumber).getUsername());
-					userTable.setText(userNumber + 2, 2, allUsers.get(userNumber).getEmail());
-					userTable.setWidget(userNumber + 2, 3, button);
+					userTable.setText(userNumber + 3, 1, allUsers.get(userNumber).getUsername());
+					userTable.setText(userNumber + 3, 2, allUsers.get(userNumber).getEmail());
+					userTable.setWidget(userNumber + 3, 3, deleteButton);
+					
 					
 				}
 
 			}
+			
+
+		}
+
+	}
+	
+	class FindUserByGmailCallback implements AsyncCallback<User> {
+
+		public void onFailure(Throwable caught) {
+			//Window.alert("Prüfe ob die Email Adresse richtig geschrieben ist");
+			GWT.log(user.getEmail()+" cannot find Gemail");
+		}
+
+		public void onSuccess(User u) {
+			User newUser = new User();
+			newUser = u;
+			
+			editorVerwaltung.addUserToGroup(newUser, group, new AddUserCallback());
 
 		}
 
@@ -326,12 +439,27 @@ public class EditGroup extends VerticalPanel {
 			GroupForm groupForm = new GroupForm(user);
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").clear();
-			RootPanel.get("content").clear();
 			RootPanel.get("navigation").add(groupForm);
+			RootPanel.get("content").clear();		
 			RootPanel.get("content").add(new EditGroup(user, group));
 
 		}
 
+	}
+	
+	class AddUserCallback implements AsyncCallback<GroupUser> {
+
+		public void onFailure(Throwable arg0) {
+			Window.alert("User konnte nicht zur Gruppe hinzugefügt werden!");
+		}
+
+		@Override
+		public void onSuccess(GroupUser arg0) {
+			GWT.log("funzt");
+			onLoad();
+			// TODO Auto-generated method stub
+			
+		}
 	}
 	
 	class RemoveUserFromGroupCallback implements AsyncCallback<Void> {
@@ -342,12 +470,11 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Void arg0) {
-			
 			GroupForm groupForm = new GroupForm(user);
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").clear();
-			RootPanel.get("content").clear();
 			RootPanel.get("navigation").add(groupForm);
+			RootPanel.get("content").clear();		
 			RootPanel.get("content").add(new EditGroup(user, group));
 			Window.alert("User wurde aus der Gruppe gelöscht.");
 		}
