@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.EditTextCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
@@ -85,10 +86,79 @@ public class GroupForm extends VerticalPanel {
 		navigation.add(groupLabel);
 		navigation.add(loadingPanel);
 		this.add(navigation);
-
-		editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
+		
+		//editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback); //Old Method
+		findAllGroceryListFromUser(user); //Temporaer, wenn es funktioniert bleibt es drin
 	}
+	/** Methode um alle GroceryLists des User zu finden
+	 * 
+	 * @param u /User Objekt)
+	 * @return Vector mit den GroceryListen
+	 */
+	public Vector<GroceryList> findAllGroceryListFromUser(User u) {
+		
+		GWT.log(u.getId()+" "+u.getUsername()+" "+u.getEmail());
+		
+		editorVerwaltung.findAllGroupsByUserId(u.getId(), new AsyncCallback<Vector<Group>>() {
+		
+			@Override
+			public void onFailure(Throwable arg0) {
+				Window.alert("Einkaufslisten von dem User konnten nicht gefunden werden");
+			}
 
+			@Override
+			public void onSuccess(Vector<Group> arg0)  {
+				allGroups.clear();
+				allGroups = arg0;
+				GWT.log(allGroups.toString());
+			
+				for(int i=0; i < arg0.size();i++) {
+					editorVerwaltung.findAllGroceryListByGroupId(arg0.get(i).getId(), new AsyncCallback<Vector<GroceryList>>() {
+
+						@Override
+						public void onFailure(Throwable arg0) {
+							GWT.log(arg0.toString()+"\n"+"Einkaufslisten der Gruppe konnten nicht gefunden werden");
+						}
+
+						@Override
+						public void onSuccess(Vector<GroceryList> arg0) {
+							// TODO Auto-generated method stub
+							allGrocery.addAll(arg0);
+							GWT.log(allGrocery.toString());
+							
+							
+						}
+					});
+					
+					GWT.log("2tens" + allGrocery.toString());
+					for (int g = 0; g < allGrocery.size(); g++) {
+						Group tempGroup = getGroupOfGroceryList(allGrocery.get(g));
+							if (!allGroups.contains(tempGroup)) {
+								
+								allGroups.add(tempGroup);
+								
+								GWT.log(tempGroup.toString());
+								
+								}
+							
+								GWT.log(tempGroup.toString());
+								//allGrocery.add(allGrocery.get(g));
+								
+								fillTree();
+							}
+				}
+			}
+		});
+					
+		return allGrocery;
+	}
+	
+	
+	
+	
+	
+	
+	
 	AsyncCallback<Vector<GroceryList>> allGroupsCallback = new AsyncCallback<Vector<GroceryList>>() {
 
 		public void onFailure(Throwable e) {

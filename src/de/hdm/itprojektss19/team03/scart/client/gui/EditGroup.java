@@ -2,16 +2,11 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import java.util.Vector;
 
-<<<<<<< HEAD
-import com.google.gwt.core.shared.GWT;
-=======
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
->>>>>>> dev
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -27,7 +22,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
-import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -73,49 +67,18 @@ public class EditGroup extends VerticalPanel {
 	Button deleteGroupButton = new Button("Aus Gruppe austreten");
 	Button safeGroupButton = new Button("Alle Änderungen speichern");
 	Button backToGroupButton = new Button("Zurück");
-<<<<<<< HEAD
-	
-	
-	Vector<CheckBox> checkBoxVector = new Vector<CheckBox>();
-// DEFAULT CONSTRUCTOR=============================================
-	/**
-	* Default Konstruktor der EditGroup-Seite
-	* 
-	*/
-=======
 	Button deleteUserButton = new Button("Entfernen");
 
->>>>>>> dev
 	public EditGroup() {
 
 	}
-	
-// CONSTRUCTOR=====================================================
-	/**
- 	* Konstruktoren der EditGroup-Seite
-	* 
-	* @param u (User-Objekt des Users der die EditUser-Seite aufrufen will)
-	*   
-	*/
+
 	public EditGroup(User u, Group g) {
 		this.user = u;
 		this.group = g;
 		// group.setId(1);
 	}
-	
-	public EditGroup(User u) {
-		/*
-		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
-		u.setEmail(String.valueOf(Cookies.getCookie("email")));
-		*/
-		this.user = u;
-		
-		onLoad();
-	}
 
-	/**
-	 * Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
-	 */
 	public void onLoad() {
 
 		groupTextBox.setText(group.getGroupName());
@@ -174,17 +137,6 @@ public class EditGroup extends VerticalPanel {
 		userTable.setWidget(2, 2, userEmailTextBox);
 		userTable.setWidget(2, 3, addButton);
 
-<<<<<<< HEAD
-				allGroups.add(result.elementAt(g).getGroupName());
-				
-				//radioButtonVector.add(new RadioButton("Group "+g, allGroups.elementAt(g)));
-				checkBoxVector.add(new CheckBox(allGroups.elementAt(g)));
-
-				//RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
-				checkBoxVector.elementAt(g).addClickHandler(new UserCheckBoxClickHandler(checkBoxVector.elementAt(g)));
-				//groupNames.setStyleName("textbox");
-				checkBoxesGroup.add(checkBoxVector.elementAt(g));
-=======
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
 	}
@@ -207,7 +159,6 @@ public class EditGroup extends VerticalPanel {
 	 * @param group (Gruppe aus der der User geloescht werden soll)
 	 */
 	public void removeUserFromGroup(User user, Group group) {
->>>>>>> dev
 
 		try {
 			if (user == null || group == null) {
@@ -234,42 +185,8 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-<<<<<<< HEAD
-			editorVerwaltung.removeUserFromGroup(user, group, new AsyncCallback<Void>() {
-				@Override
-				public void onFailure(Throwable arg0) {
-					// TODO Auto-generated method stub
-					//Window.alert("Fehler: Gruppe konnte nicht verlassen werden");
-					GWT.log("Fehler: Gruppe konnte nicht verlassen werden!");
-				}
-				@Override
-				public void onSuccess(Void arg0) {
-					int trueIndex = 0;
-					int trueAnzahl = 0;
-					for(int i=0; i < allGroups.size(); i++) {
-						if(checkBoxVector.elementAt(i).getValue()==true) {
-							trueAnzahl++;
-							trueIndex = i;
-						}
-					}
-					if(trueAnzahl > 1) {
-						Window.alert("Fehler: Nur eine Gruppe auswählen");
-					} else if(trueAnzahl == 1) {
-						
-					allGroups.clear();
-					
-					editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsCallback());  //Aktualisierung Gruppen
-					
-					}
-					
-				
-				}
-				
-			});
-=======
 			removeUserFromGroup(user, group);
 
->>>>>>> dev
 		}
 
 	}
@@ -293,9 +210,6 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-<<<<<<< HEAD
-			seeUsersfromGroup(group);
-=======
 			DialogBox db = new DialogBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
@@ -404,7 +318,6 @@ public class EditGroup extends VerticalPanel {
 			GWT.log(userEmailTextBox.getText() + " passts?");
 
 			userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
->>>>>>> dev
 
 		}
 	}
@@ -430,9 +343,7 @@ public class EditGroup extends VerticalPanel {
 
 		}
 	}
-	/** Zurueck Button; laed die Seite "Scart.html" neu
-	 *
-	 */
+
 	class BackToClickHandler implements ClickHandler {
 
 		@Override
@@ -443,20 +354,12 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-<<<<<<< HEAD
-	class UserCheckBoxClickHandler implements ClickHandler {
-		CheckBox checkBox = null;
-
-		public UserCheckBoxClickHandler(CheckBox cB) {
-			this.checkBox = cB;
-=======
 	// CALLBACKS
 
 	class AllUserCallback implements AsyncCallback<Vector<User>> {
 
 		public void onFailure(Throwable caught) {
 			GWT.log(caught.getLocalizedMessage());
->>>>>>> dev
 		}
 
 		public void onSuccess(Vector<User> result) {
@@ -506,15 +409,7 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-<<<<<<< HEAD
-	public void seeUsersfromGroup(Group group) {
-		try {
-			if (group == null) {
-				throw new NullPointerException();
-			}
-=======
 	class UpdateGroupNameCallback implements AsyncCallback<Void> {
->>>>>>> dev
 
 		public void onFailure(Throwable caught) {
 		}
