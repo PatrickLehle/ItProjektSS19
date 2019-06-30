@@ -7,9 +7,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -51,8 +53,14 @@ public class CreateGroup extends VerticalPanel {
 	 *            (User-Objekt des Users der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
+		/* Cookies: ggf. entfernen
+		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		u.setEmail(String.valueOf(Cookies.getCookie("email")));
+		*/
+		
 		this.user = u;
-
+		
+		onLoad();
 	}
 
 	// TEXTBOXEN=======================================================
@@ -86,12 +94,14 @@ public class CreateGroup extends VerticalPanel {
 	User user = null; // User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden
 						// soll
 	Group createGroup = new Group();
+	
+	
+	
 
 	// METHODS==========================================================
 
-	// public CreateGroup(User user) { ALT
 	/**
-	 * Methode wird bei dem "Aufrufen" der Klasse gestartet
+	 * Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
 	 */
 	public void onLoad() {
 		super.onLoad();
@@ -190,6 +200,16 @@ public class CreateGroup extends VerticalPanel {
 															// verknuepfung von Group und User
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
+				
+				
+				// HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
+				// WENN COOKIES FUNKTIONIEREN
+				/*
+				user.setUsername("Franz");
+				user.setEmail("test@hotmail.de");
+				user.setId(1);
+				*/
+				
 				createGroup.setGroupName(groupName);
 
 				try {
@@ -297,5 +317,7 @@ public class CreateGroup extends VerticalPanel {
 			return true;
 		}
 	};
+	
+	
 
 }

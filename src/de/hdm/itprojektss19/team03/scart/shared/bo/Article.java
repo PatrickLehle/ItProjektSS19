@@ -25,7 +25,7 @@ public class Article extends BusinessObject {
 	private Timestamp modDat;
 	private Timestamp delDat;
 	private boolean fav;
-	private Boolean checkBoolean;
+	private Boolean checkBoolean; //Boolean ob der Artikel gekauft wurde oder nicht
 
 	// CONSTRUCTORS==========================================================
 	public Article(String name, int quantity, String unit, int retailerId) {
