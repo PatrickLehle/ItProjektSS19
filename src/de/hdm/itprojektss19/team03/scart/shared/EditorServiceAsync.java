@@ -84,6 +84,7 @@ public interface EditorServiceAsync {
 
 	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
+	void getAllGroceryListsByGroupVector(Vector<Group> g, AsyncCallback<Vector<GroceryList>> asyncCallback);
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);

@@ -12,6 +12,8 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
@@ -433,10 +435,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException {
+		try {
+			Vector<GroceryList> tempGrocery = new Vector<GroceryList>();
+			for(int i=0; i < g.size();i++) {
+				
+				tempGrocery.addAll(glMapper.findAllGroceryListByGroupId(g.elementAt(i).getId()));
+				
+			}
+			return tempGrocery;
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+		
+	}
 
 	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListsByUserId(userId);
+			
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);

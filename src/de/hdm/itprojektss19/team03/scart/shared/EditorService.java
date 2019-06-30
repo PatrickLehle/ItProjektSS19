@@ -283,6 +283,8 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException;
+	
+	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException;
 
 	// GROCERYLIST-ARTICLE===============================================================
 	/**
