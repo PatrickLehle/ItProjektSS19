@@ -154,8 +154,7 @@ public class RetailerMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement
-					.executeQuery("SELECT retailer.id, retailer.name FROM retailer, groups WHERE groupId=" + groupId);
+			ResultSet rs = statement.executeQuery("SELECT * FROM retailer WHERE groupId=" + groupId);
 
 			while (rs.next()) {
 				Retailer retailer = new Retailer();
@@ -185,7 +184,7 @@ public class RetailerMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
-		String insertSQL = "INSERT INTO retailer (id, name) VALUES (?,?)";
+		String insertSQL = "INSERT INTO retailer (id, name, groupId) VALUES (?,?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -198,6 +197,7 @@ public class RetailerMapper {
 			stmt = con.prepareStatement(insertSQL);
 			stmt.setInt(1, retailer.getId());
 			stmt.setString(2, retailer.getRetailerName());
+			stmt.setInt(3, retailer.getGroup().getId());
 			stmt.executeUpdate();
 
 		} catch (SQLException e2) {

@@ -126,7 +126,7 @@ public class GroceryListArticleMapper {
 
 			while (rs.next()) {
 				Article a = new Article();
-				a.setId(rs.getInt(3));
+				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString(4));
 				a.setCreationDat(rs.getTimestamp("creationDat"));
 				a.setModDat(rs.getTimestamp("modDat"));
@@ -140,6 +140,7 @@ public class GroceryListArticleMapper {
 				a.setGroupId(rs.getInt("groupId"));
 				a.setRetailerName(rs.getString(22));
 				result.addElement(a);
+				System.out.println(a.getName() + a.getId());
 			}
 			return result;
 		} catch (SQLException e2) {

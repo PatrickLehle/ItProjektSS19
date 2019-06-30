@@ -306,9 +306,10 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveArticle(Article a);
 	 * @param a
+	 * @return
 	 * @throws IllegalArgumentException
 	 */
-	public void saveArticle(Article a) throws IllegalArgumentException;
+	public Article saveArticle(Article a) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -316,7 +317,7 @@ public interface EditorService extends RemoteService {
 	 * @param a
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteArticle(Article a) throws IllegalArgumentException;
+	public Article deleteArticle(Article a) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -326,7 +327,7 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Article getArticleById(int articleId) throws IllegalArgumentException;
-	
+
 	/**
 	 * 
 	 * @param id
