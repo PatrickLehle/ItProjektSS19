@@ -29,7 +29,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * 
- * @author Julian Hofer, Marco Dell'Oso
+ * @author Julian Hofer, Marco Dell'Oso, bastiantilk
  *
  *         ToDo CSS Style Panels, Labels, Buttons, GroupUser Mapper
  */
@@ -88,77 +88,63 @@ public class GroupForm extends VerticalPanel {
 		this.add(navigation);
 		
 		//editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback); //Old Method
-		findAllGroceryListFromUser(user); //Temporaer, wenn es funktioniert bleibt es drin
+		
+		findAllGroceryListFromUser(user);
 	}
+	
 	/** Methode um alle GroceryLists des User zu finden
 	 * 
-	 * @param u /User Objekt)
+	 * @param u (User Objekt)
 	 * @return Vector mit den GroceryListen
 	 */
-	public Vector<GroceryList> findAllGroceryListFromUser(User u) {
+	public Vector<Group> findAllGroceryListFromUser(User u) {
 		
-		GWT.log(u.getId()+" "+u.getUsername()+" "+u.getEmail());
+		GWT.log(u.getId()+" "+u.getUsername()+" "+u.getEmail()); //@bastiantilk-Fehlercheck
 		
+		/** Sucht alle Gruppen des Users ueber die GroupUser Tabelle
+		 * 
+		 */
 		editorVerwaltung.findAllGroupsByUserId(u.getId(), new AsyncCallback<Vector<Group>>() {
 		
 			@Override
 			public void onFailure(Throwable arg0) {
-				Window.alert("Einkaufslisten von dem User konnten nicht gefunden werden");
+				Window.alert("Gruppen von dem User konnten nicht gefunden werden");
 			}
 
 			@Override
 			public void onSuccess(Vector<Group> arg0)  {
 				allGroups.clear();
 				allGroups = arg0;
-				GWT.log(allGroups.toString());
+				
+				GWT.log(allGroups.toString()); //@bastiantilk-Fehlercheck
 			
-				for(int i=0; i < arg0.size();i++) {
-					editorVerwaltung.findAllGroceryListByGroupId(arg0.get(i).getId(), new AsyncCallback<Vector<GroceryList>>() {
+				/** Sucht alle GroceryListen aus allen Gruppen des Users
+				 * 
+				 */
+				editorVerwaltung.getAllGroceryListsByGroupVector(allGroups,  new AsyncCallback<Vector<GroceryList>>() {
+				
+					@Override
+					public void onFailure(Throwable arg0) {
+						Window.alert("Einkaufslisten von dem User konnten nicht gefunden werden");
+					}
 
-						@Override
-						public void onFailure(Throwable arg0) {
-							GWT.log(arg0.toString()+"\n"+"Einkaufslisten der Gruppe konnten nicht gefunden werden");
-						}
-
-						@Override
-						public void onSuccess(Vector<GroceryList> arg0) {
-							// TODO Auto-generated method stub
-							allGrocery.addAll(arg0);
-							GWT.log(allGrocery.toString());
-							
-							
-						}
-					});
-					
-					GWT.log("2tens" + allGrocery.toString());
-					for (int g = 0; g < allGrocery.size(); g++) {
-						Group tempGroup = getGroupOfGroceryList(allGrocery.get(g));
-							if (!allGroups.contains(tempGroup)) {
-								
-								allGroups.add(tempGroup);
-								
-								GWT.log(tempGroup.toString());
-								
-								}
-							
-								GWT.log(tempGroup.toString());
-								//allGrocery.add(allGrocery.get(g));
-								
-								fillTree();
-							}
-				}
+					@Override
+					public void onSuccess(Vector<GroceryList> arg0)  {
+						allGrocery.clear();
+						allGrocery = arg0;
+						GWT.log(allGrocery.toString()); //@bastiantilk-Fehlercheck
+						GWT.log(allGrocery.get(0).getId()+" <- GlId/GroupId -> "+allGrocery.get(0).getGroupId()); //@bastiantilk-Fehlercheck
+						
+						fillTree();
+					}
+				});
+				
 			}
 		});
-					
-		return allGrocery;
+		return allGroups;			
 	}
-	
-	
-	
-	
-	
-	
-	
+
+	//Alt
 	AsyncCallback<Vector<GroceryList>> allGroupsCallback = new AsyncCallback<Vector<GroceryList>>() {
 
 		public void onFailure(Throwable e) {

@@ -260,6 +260,7 @@ public class GroceryListMapper {
 				gl.setGroceryListName(rs.getString("name"));
 				gl.setCreationDat(rs.getTimestamp("creationDat"));
 				gl.setModDat(rs.getTimestamp("modDat"));
+				gl.setGroupId(rs.getInt("groupId"));
 				result.addElement(gl);
 			}
 		} catch (SQLException e2) {
