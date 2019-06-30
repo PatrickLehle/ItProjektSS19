@@ -208,14 +208,14 @@ public class ReportFilterForm extends VerticalPanel {
 
 //END=========================================================================================================
 
-		editorVerwaltung.findAllGroups(new AllGroupsCallback());
-		editorVerwaltung.findAllRetailer(new AllRetailersCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(),new AllGroupsCallback());
+		editorVerwaltung.findAllRetailer( new AllRetailersCallback());
 
 		// TIMEFRAME-CHECK-FOR-CHANGE===================
 		Timer refresh = new Timer() {
 			public void run() {
-				editorVerwaltung.findAllGroups(new AllGroupsCallback());
-				editorVerwaltung.findAllRetailer(new AllRetailersCallback());
+				editorVerwaltung.findAllGroupsByUserId(user.getId(),new AllGroupsCallback());
+				editorVerwaltung.findAllRetailer( new AllRetailersCallback());
 			}
 		};
 		refresh.scheduleRepeating(1000);
@@ -265,6 +265,7 @@ public class ReportFilterForm extends VerticalPanel {
 				allGroupsS.clear();
 
 				for (int g = 0; g < result.size(); g++) {
+					
 					allGroupsS.add(result.elementAt(g).getGroupName());
 					CheckBox temp = new CheckBox(allGroupsS.elementAt(g));
 					temp.addClickHandler(new GroupCheckBoxClickHandler(temp, allGroups.get(g)));
