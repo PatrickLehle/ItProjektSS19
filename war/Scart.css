@@ -77,7 +77,8 @@ body {
 	width: 30px;
 	height: 30px;
 	border-radius: 200px;
-	text-align: center;
+	text-align: center;    
+	cursor: pointer;
 }
 
 .table-button1 {

@@ -136,7 +136,8 @@ public class ProfileForm extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
+			Label l = new HTML("<p> Möchten Sie die Änderung speichern? </p>");
+			db.setText("Profil löschen");
 
 			vp.add(l);
 			hp.add(yB);

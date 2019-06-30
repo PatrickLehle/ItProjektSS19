@@ -140,7 +140,6 @@ public class GroceryListArticleMapper {
 				a.setGroupId(rs.getInt("groupId"));
 				a.setRetailerName(rs.getString(22));
 				result.addElement(a);
-				System.out.println(a.getName() + a.getId());
 			}
 			return result;
 		} catch (SQLException e2) {

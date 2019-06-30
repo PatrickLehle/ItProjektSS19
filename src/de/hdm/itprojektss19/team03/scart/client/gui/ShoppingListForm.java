@@ -10,7 +10,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DecoratorPanel;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -78,10 +80,16 @@ public class ShoppingListForm extends HorizontalPanel {
 			Button editRetailer = new Button(
 					"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
 
+			Button deleteButton = new Button(
+					"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
+
 			editRetailer.setStyleName("icon-button");
+			deleteButton.setStyleName("icon-button");
+			deleteButton.addClickHandler(new DeleteRetailerClickHandler(r));
 			retailerHeader.addStyleName("h3");
 			headerPanel.add(retailerHeader);
 			headerPanel.add(editRetailer);
+			headerPanel.add(deleteButton);
 			headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
 			editRetailer.addClickHandler(new EditRetailerClickhandler(r, headerPanel));
 
@@ -103,6 +111,67 @@ public class ShoppingListForm extends HorizontalPanel {
 		outerPanel.setHorizontalAlignment(ALIGN_CENTER);
 		this.clear();
 		this.add(outerPanel);
+	}
+
+	class DeleteRetailerClickHandler implements ClickHandler {
+		Retailer retailer;
+
+		public DeleteRetailerClickHandler(Retailer r) {
+			retailer = r;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			Window.alert("c");
+			DialogBox db = new DialogBox();
+			Button yb = new Button("Ja", new YesButtonClickHandler(retailer, db));
+			Button nb = new Button("Nein", new NoButtonClickHandler(db));
+			HorizontalPanel hp = new HorizontalPanel();
+			VerticalPanel vp = new VerticalPanel();
+			vp.add(new HTML(
+					"<p>Soll der Einkaufsladen wirklich gelöscht werden? Dadruch gehen alle Artikel darin verloren.<p>"));
+			db.setAnimationEnabled(true);
+			db.setGlassEnabled(true);
+			db.center();
+			db.setText("Laden löschen");
+			hp.add(yb);
+			hp.add(nb);
+			vp.add(hp);
+			db.add(vp);
+			db.show();
+		}
+
+	}
+
+	class YesButtonClickHandler implements ClickHandler {
+		Retailer retailer;
+		DialogBox dialogBox;
+
+		public YesButtonClickHandler(Retailer r, DialogBox db) {
+			retailer = r;
+			dialogBox = db;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			editorService.deleteRetailer(retailer, new DeleteRetailerCallback());
+			dialogBox.hide();
+			dialogBox.clear();
+			dialogBox.removeFromParent();
+		}
+	}
+
+	class NoButtonClickHandler implements ClickHandler {
+		DialogBox dialogBox;
+
+		public NoButtonClickHandler(DialogBox db) {
+			dialogBox = db;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			dialogBox.hide();
+			dialogBox.clear();
+			dialogBox.removeFromParent();
+		}
+
 	}
 
 	class EditRetailerClickhandler implements ClickHandler {
@@ -145,6 +214,18 @@ public class ShoppingListForm extends HorizontalPanel {
 		public void onClick(ClickEvent arg0) {
 			retailer.setRetailerName(textbox.getValue());
 			editorService.saveRetailer(retailer, new UpdateRetailerCallback(panel));
+		}
+
+	}
+
+	class DeleteRetailerCallback implements AsyncCallback<Retailer> {
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to get retailers: " + t);
+		}
+
+		public void onSuccess(Retailer r) {
+			getData();
 		}
 
 	}
