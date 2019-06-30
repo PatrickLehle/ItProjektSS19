@@ -261,7 +261,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 	public Button getFavButtonFalseArticle() {
-		Button favBtnFalse = new Button("NOT ATM");
+		Button favBtnFalse = new Button("FAV FALSE"); // "<image src='/images/FAV_FALSE.png");
 
 		favBtnFalse.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -282,7 +282,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 	
 	public Button getFavButtonFalseBought() {
-		Button favBtnFalse = new Button("NOT ATM");
+		Button favBtnFalse = new Button("FAV FALSE"); // "<image src='/images/FAV_FALSE.png");
 
 		favBtnFalse.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -303,7 +303,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 	
 	public Button getFavButtonTrueArticle() {
-		Button favBtnTrue = new Button("FAVORITE TRUE");
+		Button favBtnTrue = new Button("FAV TRUE"); // "<image src='/images/FAV_TRUE.png");
 
 		favBtnTrue.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -324,7 +324,7 @@ public class GroceryListForm extends VerticalPanel {
 	}
 	
 	public Button getFavButtonTrueBought() {
-		Button favBtnTrue = new Button("FAVORITE TRUE");
+		Button favBtnTrue = new Button("FAV TRUE"); // "<image src='/images/FAV_TRUE.png");
 		
 		favBtnTrue.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
