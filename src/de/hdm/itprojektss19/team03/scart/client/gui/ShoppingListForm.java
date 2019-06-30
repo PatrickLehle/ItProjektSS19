@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import java.util.Collections;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -12,6 +13,7 @@ import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
@@ -49,6 +51,7 @@ public class ShoppingListForm extends HorizontalPanel {
 	private int articleCount;
 	private Vector<Retailer> retailers = new Vector<Retailer>();
 
+	private HorizontalPanel headerPanel = new HorizontalPanel();
 	private HorizontalPanel outerPanel = new HorizontalPanel();
 	private FlowPanel flowPanel = new FlowPanel();
 	private VerticalPanel retailerPanel;
@@ -66,18 +69,28 @@ public class ShoppingListForm extends HorizontalPanel {
 		flowPanel.clear();
 		outerPanel.clear();
 		outerPanel.add(addRetailerButton);
-
+		Collections.reverse(retailers);
 		for (Retailer r : retailers) {
+			headerPanel = new HorizontalPanel();
+			headerPanel.clear();
 
 			Label retailerHeader = new Label(r.getRetailerName());
+			Button editRetailer = new Button(
+					"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+
+			editRetailer.setStyleName("icon-button");
 			retailerHeader.addStyleName("h3");
+			headerPanel.add(retailerHeader);
+			headerPanel.add(editRetailer);
+			headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
+			editRetailer.addClickHandler(new EditRetailerClickhandler(r, headerPanel));
 
 			// todo add articles
 
 			retailerPanel = new VerticalPanel();
 			retailerPanel.clear();
 			retailerPanel.addStyleName("retailer-panel");
-			retailerPanel.add(retailerHeader);
+			retailerPanel.add(headerPanel);
 			retailerPanel.add(new GroceryListForm(user, group, articles, r));
 			decoPanel = new DecoratorPanel();
 			decoPanel.clear();
@@ -91,6 +104,76 @@ public class ShoppingListForm extends HorizontalPanel {
 		this.clear();
 		this.add(outerPanel);
 	}
+
+	class EditRetailerClickhandler implements ClickHandler {
+		Retailer retailer;
+		HorizontalPanel panel;
+
+		public EditRetailerClickhandler(Retailer r, HorizontalPanel p) {
+			retailer = r;
+			panel = p;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			TextBox retailerNameTextbox = new TextBox();
+			retailerNameTextbox.setWidth(panel.getWidget(0).getOffsetWidth() + "px");
+			panel.clear();
+			panel.setVerticalAlignment(ALIGN_MIDDLE);
+			retailerNameTextbox.setText(retailer.getRetailerName());
+			retailerNameTextbox.setStyleName("h3");
+			Button check = new Button(
+					"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
+			check.addClickHandler(new CheckClickhandler(retailer, retailerNameTextbox, panel));
+			check.setStyleName("icon-button");
+			panel.add(retailerNameTextbox);
+			panel.add(check);
+		}
+
+	};
+
+	class CheckClickhandler implements ClickHandler {
+		Retailer retailer;
+		HorizontalPanel panel;
+		TextBox textbox;
+
+		public CheckClickhandler(Retailer r, TextBox tb, HorizontalPanel p) {
+			retailer = r;
+			textbox = tb;
+			panel = p;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			retailer.setRetailerName(textbox.getValue());
+			editorService.saveRetailer(retailer, new UpdateRetailerCallback(panel));
+		}
+
+	}
+
+	class UpdateRetailerCallback implements AsyncCallback<Retailer> {
+		HorizontalPanel panel;
+
+		public UpdateRetailerCallback(HorizontalPanel p) {
+			panel = p;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to update GroceryList: " + t);
+		}
+
+		public void onSuccess(Retailer r) {
+			Label retailerHeader = new Label(r.getRetailerName());
+			panel.clear();
+			panel.setVerticalAlignment(ALIGN_MIDDLE);
+			retailerHeader.setText(r.getRetailerName());
+			retailerHeader.setStyleName("h3");
+			Button editRetailer = new Button(
+					"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+			editRetailer.addClickHandler(new EditRetailerClickhandler(r, panel));
+			editRetailer.setStyleName("icon-button");
+			panel.add(retailerHeader);
+			panel.add(editRetailer);
+		}
+	};
 
 	AsyncCallback<Vector<Article>> articleCallback = new AsyncCallback<Vector<Article>>() {
 		public void onFailure(Throwable t) {
