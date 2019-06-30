@@ -14,11 +14,11 @@ import java.util.Date;
  */
 public class Article extends BusinessObject {
 
-	private static final long serialVersionUID = 1L;
-	private String name = "";
+	private String name;
 	private int quantity;
 	private String unit;
 	private int retailerId;
+	private int groupId;
 	private String retailerName;
 	private int ownerId;
 	private Timestamp creationDat;
@@ -132,20 +132,20 @@ public class Article extends BusinessObject {
 		return this.retailerId;
 	}
 
-	public void setGroupId(int groupId) {
-		this.setId(groupId);
-	}
-
-	public int getGroupId() {
-		return ownerId;
-	}
-
 	public String getRetailerName() {
 		return retailerName;
 	}
 
 	public void setRetailerName(String retailerName) {
 		this.retailerName = retailerName;
+	}
+
+	public int getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(int groupID) {
+		this.groupId = groupID;
 	}
 
 }

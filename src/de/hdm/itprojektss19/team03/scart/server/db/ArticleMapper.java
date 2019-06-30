@@ -89,6 +89,38 @@ public class ArticleMapper {
 		}
 		return null;
 	}
+	
+	public Article findById(int id) throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT * FROM article WHERE id=" + id);
+
+			// Nur EIN Ergebnis, da id =PRIMARY-KEY
+			if (rs.next()) {
+				Article article = new Article();
+				article.setId(rs.getInt("id"));
+				article.setName(rs.getString("name"));
+				article.setQuantity(rs.getInt("quantity"));
+				article.setUnit(rs.getString("unit"));
+				article.setRetailerId(rs.getInt("retailerId"));
+				article.setOwnerId(rs.getInt("ownerId"));
+				article.setGroupId(rs.getInt("groupId"));
+				article.setCreationDat(rs.getTimestamp("creationDat"));
+				article.setModDat(rs.getTimestamp("modDat"));
+				article.setCheckBoolean(rs.getBoolean("boolean"));
+				article.setFav(rs.getBoolean("fav"));
+				article.setDelDat(rs.getTimestamp("delDat"));
+
+				return article;
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return null;
+	}
 
 	/**
 	 * Sucht alle Artikel

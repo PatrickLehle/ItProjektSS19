@@ -1,6 +1,5 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import java.sql.Timestamp;
 import java.util.Vector;
 
 import com.google.gwt.cell.client.EditTextCell;
@@ -12,7 +11,6 @@ import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -51,11 +49,6 @@ public class GroupForm extends VerticalPanel {
 	VerticalPanel navigation = new VerticalPanel();
 	HorizontalPanel outer = new HorizontalPanel();
 
-	// Images
-	Image loading1 = new Image();
-	Image loading2 = new Image();
-	Image loading3 = new Image();
-
 	// Labels
 	Label groupLabel = new Label("Gruppen");
 
@@ -68,14 +61,8 @@ public class GroupForm extends VerticalPanel {
 
 	public void onLoad() {
 		// super.onLoad();
-		loading1.setUrl("/images/fruits-banana.gif");
-		loading2.setUrl("/images/fruits-grape.gif");
-		loading3.setUrl("/images/fruits-melon.gif");
-		loadingPanel.add(loading1);
-		loadingPanel.add(loading2);
-		loadingPanel.add(loading3);
-		loadingPanel.setHorizontalAlignment(ALIGN_CENTER);
-		loadingPanel.setVerticalAlignment(ALIGN_MIDDLE);
+		loadingPanel.add(new LoadingForm());
+		outer.addStyleName("inner-content");
 
 		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
@@ -190,8 +177,7 @@ public class GroupForm extends VerticalPanel {
 			newGroceryList.addStyleName("tree-new-gl");
 			newGroceryList.addClickHandler(new NewGroceryListClickHandler(allGroups.get(i)));
 			groupTree.getItem(i).insertItem(0, newGroceryList);
-			
-			
+
 		}
 
 		groupTree.insertItem(0, newGroup);
@@ -247,19 +233,19 @@ public class GroupForm extends VerticalPanel {
 		}
 
 	}
-	
+
 	class NewGroceryListClickHandler implements ClickHandler {
-		//final GroceryList selection;
+		// final GroceryList selection;
 		final Group group;
 
 		public NewGroceryListClickHandler(Group g) {
-			//selection = gl;
+			// selection = gl;
 			group = g;
 		}
 
 		public void onClick(ClickEvent arg0) {
 			GroceryList groceryList = new GroceryList();
-			groceryList.setGroceryListName("Neue GroceryList");
+			groceryList.setGroceryListName("Neue Einkaufsliste");
 			groceryList.setOwnerId(user.getId());
 			groceryList.setGroupId(group.getId());
 			groceryList.setGroupName(group.getGroupName());
@@ -269,20 +255,19 @@ public class GroupForm extends VerticalPanel {
 					// TODO Auto-generated method stub
 					Window.alert("Neue Groceryliste konte nicht erstellt werden");
 				}
+
 				@Override
 				public void onSuccess(GroceryList arg0) {
 					// TODO Auto-generated method stub
-					Window.Location.reload(); //Springt zurueck zur Homepage,
-								// damit der Tree geleert wird und neu geladen werden kann
+					Window.Location.replace("/Scart.html"); // Springt zurueck zur Homepage,
+					// damit der Tree geleert wird und neu geladen werden kann
 				}
-				
+
 			});
 			/*
-			outer.clear();
-			outer.add(new ShoppingListForm(user, selection, group));
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(outer);
-			*/
+			 * outer.clear(); outer.add(new ShoppingListForm(user, selection, group));
+			 * RootPanel.get("content").clear(); RootPanel.get("content").add(outer);
+			 */
 		}
 
 	}

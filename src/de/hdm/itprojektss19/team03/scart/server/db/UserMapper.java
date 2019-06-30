@@ -218,7 +218,6 @@ public class UserMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(insertSQL);
-			// stmt.setInt(1, user.getId());
 			stmt.setString(1, user.getEmail());
 			stmt.setString(2, user.getUsername());
 
