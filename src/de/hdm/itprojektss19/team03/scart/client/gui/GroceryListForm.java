@@ -78,7 +78,7 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
 	ListBox userListBox = new ListBox();
-	Button setResponsibleUserBtn = new Button(retailer.getRetailerName());
+	Button setResponsibleUserBtn = new Button("retailer.getName() = DESTRUCTION");
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
