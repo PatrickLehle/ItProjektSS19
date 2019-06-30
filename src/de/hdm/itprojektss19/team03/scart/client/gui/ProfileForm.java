@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
@@ -8,6 +9,7 @@ import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -50,7 +52,7 @@ public class ProfileForm extends VerticalPanel {
 
 	// PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
-
+	HorizontalPanel outerPanel = new HorizontalPanel();
 	HorizontalPanel yourProfilePanel = new HorizontalPanel();
 	HorizontalPanel userNamePanel = new HorizontalPanel();
 	HorizontalPanel emailAdressPanel = new HorizontalPanel();
@@ -94,7 +96,10 @@ public class ProfileForm extends VerticalPanel {
 		saveButton.addClickHandler(new SaveButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
-		this.add(contentPanel);
+		editorService.generateIdenticons(user.getEmail(), 100, 100, new getImageCallback());
+		this.addStyleName("inner-content");
+		outerPanel.add(contentPanel);
+		this.add(outerPanel);
 
 	}
 
@@ -261,6 +266,26 @@ public class ProfileForm extends VerticalPanel {
 	 * Callbacks: ...
 	 *
 	 */
+
+	class getImageCallback implements AsyncCallback<String> {
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to get Profile Image: " + t);
+		}
+
+		public void onSuccess(String s) {
+			VerticalPanel panel = new VerticalPanel();
+			panel.setStyleName("profile-img-big");
+			Image image = new Image();
+			image.setUrl("data:image/png;base64," + s);
+			panel.clear();
+			panel.add(image);
+			outerPanel.clear();
+			outerPanel.add(panel);
+			outerPanel.add(contentPanel);
+		}
+
+	}
 
 	class FindUserByGMailCallback implements AsyncCallback<User> {
 
