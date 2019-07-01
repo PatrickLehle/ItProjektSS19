@@ -13,6 +13,7 @@ import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -572,30 +573,91 @@ public class ArticleMapper {
 		return result;
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws DatabaseException {
+	//REPORT-ARTICLE=============================================================================================
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(
-					"SELECT article.articleId, article.articleName, article.articleQuantity, article.articleUnit, article.articleRetailerId, article.articleOwnerId, article.articleCreationDat, article.articleModDat, article.articleBoolean, article.articleFav, article.articleDelDat FROM article WHERE articleFav="
-							+ true);
+			String s = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+					+ groups.get(0).getId() + s +")");
 
 			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt(17));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
 				Article a = new Article();
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
 				a.setUnit("articleUnit");
-				a.setRetailerId(rs.getInt("retailerId"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
-				a.setModDat(rs.getTimestamp("articlemodDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
 				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
 				a.setFav(rs.getBoolean("articleFav"));
 				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
 
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	//X-REPORT-ARTICLE-DATE======================================================================================
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)  throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			
+			String s = new String();
+			
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+							+ groups.get(0).getId() + s +") AND articleDelDat BETWEEN '" + start + "' AND '" + end + "'");
+
+			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
+				Article a = new Article();
+				a.setId(rs.getInt("articleId"));
+				a.setName(rs.getString("articleName"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit("articleUnit");
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
+				
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -604,5 +666,109 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+	
+	//X-REPORT-ARTICLE-DATE-RETAILER======================================================================================
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws DatabaseException{
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			
+			String s = new String();
+			String r = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			for (int j = 1; j < retailers.size(); j++) {
+				r = r + " OR " + retailers.get(j).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+							+ groups.get(0).getId() + s +") AND (retailer.retailerId= " + retailers.get(0).getId() + r + ") AND articleDelDat BETWEEN '" + start + "' AND '" + end + "'");
+
+			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
+				Article a = new Article();
+				a.setId(rs.getInt("articleId"));
+				a.setName(rs.getString("articleName"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit("articleUnit");
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
+				
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	//REPORT-ARTICLE-RETAILER======================================================================================
+		public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)  throws DatabaseException {
+			Connection con = DBConnection.connection();
+
+			Vector<Article> result = new Vector<Article>();
+			try {
+				Statement stmt = con.createStatement();
+				String s = new String();
+				String r = new String();
+				for (int i = 1; i < groups.size(); i++) {
+					s = s + " OR " + groups.get(i).getId();
+				}
+				for (int j = 1; j < retailers.size(); j++) {
+					r = r + " OR " + retailers.get(j).getId();
+				}
+				
+				ResultSet rs = stmt.executeQuery(
+						"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+						+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+								+ groups.get(0).getId() + s +") AND (retailer.retailerId= "+ retailers.get(0).getId() + r + ")");
+
+				while (rs.next()) {
+					Group group = new Group();
+					Retailer retailer = new Retailer();
+					group.setGroupName(rs.getString("groupName"));
+					group.setId(rs.getInt("groupId"));
+					retailer.setId(rs.getInt("retailerId"));
+					retailer.setRetailerName(rs.getString("retailerName"));
+					retailer.setGroup(group);
+					Article a = new Article();
+					a.setId(rs.getInt("articleId"));
+					a.setName(rs.getString("articleName"));
+					a.setQuantity(rs.getInt("articleQuantity"));
+					a.setUnit("articleUnit");
+					a.setOwnerId(rs.getInt("articleOwnerId"));
+					a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+					a.setModDat(rs.getTimestamp("articleModDat"));
+					a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+					a.setFav(rs.getBoolean("articleFav"));
+					a.setDelDat(rs.getTimestamp("articleDelDat"));
+					a.setRetailer(retailer);
+					
+					result.addElement(a);
+				}
+			} catch (SQLException e2) {
+				ServersideSettings.getLogger().severe(e2.getMessage());
+				throw new DatabaseException(e2);
+			}
+			return result;
+		}
+	
 
 }

@@ -14,6 +14,9 @@ import java.util.Date;
  */
 public class Article extends BusinessObject {
 
+
+	private static final long serialVersionUID = 1L;
+	
 	private String name;
 	private int quantity;
 	private String unit;
@@ -21,6 +24,7 @@ public class Article extends BusinessObject {
 	private int groupId;
 	private String retailerName;
 	private int ownerId;
+	private Retailer retailer;
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
@@ -28,11 +32,10 @@ public class Article extends BusinessObject {
 	private Boolean checkBoolean; //Boolean ob der Artikel gekauft wurde oder nicht
 
 	// CONSTRUCTORS==========================================================
-	public Article(String name, int quantity, String unit, int retailerId) {
+	public Article(String name, int quantity, String unit) {
 		this.name = name;
 		this.quantity = quantity;
 		this.unit = unit;
-		this.retailerId = retailerId;
 		creationDat.setTime(new Date().getTime());
 		modDat.setTime(new Date().getTime());
 		setFav(false);
@@ -123,22 +126,29 @@ public class Article extends BusinessObject {
 
 	// RETAILER======================================================
 
-	public void setRetailerId(int retailerId) {
-		this.retailerId = retailerId;
 
-	}
+//	}
 
-	public int getRetailerId() {
-		return this.retailerId;
-	}
+//	public int getRetailerId() {
+//		return this.retailerId;
+//	}
 
 	public String getRetailerName() {
 		return retailerName;
 	}
 
-	public void setRetailerName(String retailerName) {
-		this.retailerName = retailerName;
+	public void setRetailer(Retailer retailer) {
+		this.retailer = retailer;
 	}
+	
+	public void setRetailerId(int retailerId) {
+		this.retailer.setId(retailerId);
+	}
+	
+	public int getRetailerId() {
+		return retailer.getId();
+	}
+	
 
 	public int getGroupId() {
 		return groupId;
@@ -146,6 +156,21 @@ public class Article extends BusinessObject {
 
 	public void setGroupId(int groupID) {
 		this.groupId = groupID;
+	}
+	
+	public void setRetailerReport(Retailer retailer) {
+		this.retailer = retailer;
+	}
+	
+	public Retailer getRetailerReport() {
+		return retailer;
+	}
+	public void setRetailerIdReport(int retailerId) {
+		this.retailer.setId(retailerId);
+	}
+	
+	public int getRetailerIdReport() {
+		return retailer.getId();
 	}
 
 }
