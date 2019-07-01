@@ -12,8 +12,6 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
@@ -435,27 +433,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException {
 		try {
 			Vector<GroceryList> tempGrocery = new Vector<GroceryList>();
-			for(int i=0; i < g.size();i++) {
-				
+			for (int i = 0; i < g.size(); i++) {
+
 				tempGrocery.addAll(glMapper.findAllGroceryListByGroupId(g.elementAt(i).getId()));
-				
+
 			}
 			return tempGrocery;
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		
+
 	}
 
 	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListsByUserId(userId);
-			
+
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -480,27 +478,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Input fuer Article Attribute muss noch erledigt werden
 
 		try {
-			Article temp = new Article(); // Mit dem Input der Attribute muss hier ein neues Object mit den Attributen
-											// erstellt werden
-			this.aMapper.insert(temp);
-			// Ausgabe der Rueckgabe aus der insert Funktion fehlt
+			return this.aMapper.insert(a);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 	}
 
 	public Article saveArticle(Article a) throws IllegalArgumentException {
 		try {
 
 			this.aMapper.update(a);
+			return a;
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 
 	}
 
@@ -508,12 +502,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			aMapper.delete(a);
 			// Erfolgts Message fuer erfolgreiches Loeschen
+			return a;
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 	}
 
 	public Article getArticleById(int articleId) throws IllegalArgumentException {

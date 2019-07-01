@@ -61,16 +61,16 @@ public class GroceryListMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT * FROM grocerylist WHERE id=" + id);
+			ResultSet rs = statement.executeQuery("SELECT * FROM grocerylist WHERE groceryListId=" + id);
 
 			// Ergebnis wird nur ein Objekt sein
 			if (rs.next()) {
 				GroceryList gl = new GroceryList();
-				gl.setId(rs.getInt("id"));
-				gl.setGroceryListName(rs.getString("name"));
-				gl.setCreationDat(rs.getTimestamp("creationDat"));
-				gl.setModDat(rs.getTimestamp("modDat"));
-				gl.setGroupId(rs.getInt("groupId"));
+				gl.setId(rs.getInt("groceryListId"));
+				gl.setGroceryListName(rs.getString("groceryListName"));
+				gl.setCreationDat(rs.getTimestamp("groceryListCreationDat"));
+				gl.setModDat(rs.getTimestamp("groceryListModDat"));
+				gl.setGroupId(rs.getInt("groceryListGroupId"));
 				return gl;
 			}
 		} catch (SQLException e2) {
@@ -98,11 +98,11 @@ public class GroceryListMapper {
 			// Fuer jede gefundene GL wird ein neues Objekt erstellt
 			while (rs.next()) {
 				GroceryList gl = new GroceryList();
-				gl.setId(rs.getInt("id"));
-				gl.setGroceryListName(rs.getString("name"));
-				gl.setCreationDat(rs.getTimestamp("creationDat"));
-				gl.setModDat(rs.getTimestamp("modDat"));
-				gl.setGroupId(rs.getInt("groupId"));
+				gl.setId(rs.getInt("groceryListId"));
+				gl.setGroceryListName(rs.getString("groceryListName"));
+				gl.setCreationDat(rs.getTimestamp("groceryListCreationDat"));
+				gl.setModDat(rs.getTimestamp("groceryListModDat"));
+				gl.setGroupId(rs.getInt("groceryListGroupId"));
 
 				groceryLists.addElement(gl);
 			}
@@ -125,9 +125,9 @@ public class GroceryListMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String maxId = "SELECT MAX(id) AS maxid FROM grocerylist";
+		String maxId = "SELECT MAX(groceryListId) AS maxid FROM grocerylist";
 
-		String insert = "INSERT INTO grocerylist (id, name, creationDat, modDat,ownerId, groupId) VALUES (?,?,?,?,?,?)";
+		String insert = "INSERT INTO grocerylist (groceryListId, groceryListName, groceryListCreationDat, groceryListModDat,groceryListOwnerId, groceryListGroupId) VALUES (?,?,?,?,?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -168,7 +168,7 @@ public class GroceryListMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE grocerylist SET name=?, modDat=? WHERE id=?";
+		String updateSQL = "UPDATE grocerylist SET groceryListName=?, groceryListModDat=? WHERE groceryListId=?";
 
 		try {
 			con = DBConnection.connection();
@@ -199,7 +199,7 @@ public class GroceryListMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM groceryList " + "WHERE id=" + gl.getId());
+			stmt.executeUpdate("DELETE FROM groceryList " + "WHERE groceryListId=" + gl.getId());
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -211,7 +211,7 @@ public class GroceryListMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String select = "SELECT * FROM grocerylist WHERE name=?";
+		String select = "SELECT * FROM grocerylist WHERE groceryListName=?";
 
 		Vector<GroceryList> result = new Vector<GroceryList>();
 
@@ -224,11 +224,11 @@ public class GroceryListMapper {
 
 			while (rs.next()) {
 				GroceryList groceryList = new GroceryList();
-				groceryList.setId(rs.getInt("id"));
-				groceryList.setGroceryListName(rs.getString("name"));
-				groceryList.setCreationDat(rs.getTimestamp("creationDat"));
-				groceryList.setModDat(rs.getTimestamp("modDat"));
-				groceryList.setGroupId(rs.getInt("groupId"));
+				groceryList.setId(rs.getInt("groceryListId"));
+				groceryList.setGroceryListName(rs.getString("groceryListName"));
+				groceryList.setCreationDat(rs.getTimestamp("groceryListCreationDat"));
+				groceryList.setModDat(rs.getTimestamp("groceryListModDat"));
+				groceryList.setGroupId(rs.getInt("groceryListGroupId"));
 
 				result.addElement(gl);
 			}
@@ -244,7 +244,7 @@ public class GroceryListMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT * FROM grocerylist WHERE groupId= " + id;
+		String selectByKey = "SELECT * FROM grocerylist WHERE groceryListGroupId= " + id;
 
 		Vector<GroceryList> result = new Vector<GroceryList>();
 
@@ -256,11 +256,11 @@ public class GroceryListMapper {
 
 			while (rs.next()) {
 				GroceryList gl = new GroceryList();
-				gl.setId(rs.getInt("id"));
-				gl.setGroceryListName(rs.getString("name"));
-				gl.setCreationDat(rs.getTimestamp("creationDat"));
-				gl.setModDat(rs.getTimestamp("modDat"));
-				gl.setGroupId(rs.getInt("groupId"));
+				gl.setId(rs.getInt("groceryListId"));
+				gl.setGroceryListName(rs.getString("groceryListName"));
+				gl.setCreationDat(rs.getTimestamp("groceryListCreationDat"));
+				gl.setModDat(rs.getTimestamp("groceryListModDat"));
+				gl.setGroupId(rs.getInt("groceryListGroupId"));
 				result.addElement(gl);
 			}
 		} catch (SQLException e2) {
@@ -274,7 +274,7 @@ public class GroceryListMapper {
 		Connection con;
 		PreparedStatement stmt;
 
-		String selectByKey = "SELECT `grocerylist`.*, `groups`.* FROM `grocerylist`, `groups` WHERE `groups`.`id` = `grocerylist`.`groupId` AND `grocerylist`.`ownerId` = "
+		String selectByKey = "SELECT `grocerylist`.*, `groups`.* FROM `grocerylist`, `groups` WHERE `groups`.`groupId` = `grocerylist`.`groceryListGroupId` AND `grocerylist`.`groceryListOwnerId` = "
 				+ userId;
 
 		Vector<GroceryList> groceryList = new Vector<GroceryList>();

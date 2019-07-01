@@ -14,6 +14,7 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -83,9 +84,9 @@ public class ShoppingListForm extends HorizontalPanel {
 			Button deleteButton = new Button(
 					"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
 
-			editRetailer.setStyleName("icon-button");
 			deleteButton.setStyleName("icon-button");
 			deleteButton.addClickHandler(new DeleteRetailerClickHandler(r));
+			editRetailer.setStyleName("icon-button");
 			retailerHeader.addStyleName("h3");
 			headerPanel.add(retailerHeader);
 			headerPanel.add(editRetailer);
@@ -99,12 +100,13 @@ public class ShoppingListForm extends HorizontalPanel {
 			retailerPanel.clear();
 			retailerPanel.addStyleName("retailer-panel");
 			retailerPanel.add(headerPanel);
-			retailerPanel.add(new GroceryListForm(user, group, articles, r));
+			retailerPanel.add(new GroceryListForm(user, group, articles, r, groceryList));
 			decoPanel = new DecoratorPanel();
 			decoPanel.clear();
 			decoPanel.addStyleName("retailers-panel");
 			decoPanel.setWidget(retailerPanel);
 			flowPanel.add(decoPanel);
+			editorService.generateIdenticons(r.getUser().getEmail(), 25, 25, new GetPictureCallback(headerPanel));
 		}
 
 		outerPanel.add(flowPanel);
@@ -194,8 +196,14 @@ public class ShoppingListForm extends HorizontalPanel {
 					"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
 			check.addClickHandler(new CheckClickhandler(retailer, retailerNameTextbox, panel));
 			check.setStyleName("icon-button");
+			Button deleteButton = new Button(
+					"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
+
+			deleteButton.setStyleName("icon-button");
+			deleteButton.addClickHandler(new DeleteRetailerClickHandler(retailer));
 			panel.add(retailerNameTextbox);
 			panel.add(check);
+			panel.add(deleteButton);
 		}
 
 	};
@@ -251,12 +259,39 @@ public class ShoppingListForm extends HorizontalPanel {
 					"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
 			editRetailer.addClickHandler(new EditRetailerClickhandler(r, panel));
 			editRetailer.setStyleName("icon-button");
+			Button deleteButton = new Button(
+					"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
+
+			deleteButton.setStyleName("icon-button");
+			deleteButton.addClickHandler(new DeleteRetailerClickHandler(r));
 			panel.add(retailerHeader);
 			panel.add(editRetailer);
+			panel.add(deleteButton);
 		}
 	};
 
+	class GetPictureCallback implements AsyncCallback<String> {
+
+		HorizontalPanel hp = new HorizontalPanel();
+
+		public GetPictureCallback(HorizontalPanel p) {
+			hp = p;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to load image: " + t);
+		}
+
+		public void onSuccess(String s) {
+			Image image = new Image();
+			image.setUrl("data:image/png;base64," + s);
+			hp.add(image);
+		}
+
+	}
+
 	AsyncCallback<Vector<Article>> articleCallback = new AsyncCallback<Vector<Article>>() {
+
 		public void onFailure(Throwable t) {
 			Window.alert("Failed to retrieve Articles: " + t);
 		}
