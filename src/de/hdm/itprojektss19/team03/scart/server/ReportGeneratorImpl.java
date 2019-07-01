@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
@@ -144,7 +145,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		Vector<Article> receiver = new Vector<Article>();
 		
 		for (int i = 0; i < allArticles.size(); i++) {
-			
+				
 			for (int j = 0; j < allGroupsByUser.size(); j++) {
 				
 				if(allArticles.elementAt(i).getGroupId() == allGroupsByUser.elementAt(j).getId()) {
@@ -156,20 +157,21 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
-					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailerReport().getRetailerName()));
 					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
 					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
 					if(allArticles.elementAt(i).getDelDat() != null) {
 						row.addColumn(new Column(allArticles.elementAt(i).getDelDat().toString()));
 					}
 					report.addRow(row);	
+					
 				}
-
+	
 		return report;
-		
+	
 	}
 
-//ARTICLE-DATE-REPORT========================================================================================================================
+//X-ARTICLE-DATE-REPORT========================================================================================================================
 
 	public ArticleDateReport createStatisticAD(User user, Vector<Group> groups, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
@@ -216,7 +218,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
-					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailerReport().getRetailerName()));
 					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
 					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
 					if(allArticles.elementAt(i).getDelDat() != null) {
@@ -228,7 +230,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-//ARTICLE-RETAILER-REPORT====================================================================================================================
+//X-ARTICLE-RETAILER-REPORT====================================================================================================================
 	
 	public ArticleRetailerReport createStatisticAR(User u, Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
@@ -276,7 +278,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
-					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailerReport().getRetailerName()));
 					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
 					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
 					if(allArticles.elementAt(i).getDelDat() != null) {
@@ -288,7 +290,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-//ARTICLE-DATE-RETAILER-REPORT===============================================================================================================
+//X-ARTICLE-DATE-RETAILER-REPORT===============================================================================================================
 	
 	public ArticleDateRetailerReport createStatisticADR(User user, Vector<Group> groups, Vector<Retailer> retailers, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException {
@@ -334,7 +336,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 					Row row = new Row();
 					row.addColumn(new Column(allArticles.elementAt(i).getName()));
-					row.addColumn(new Column(allArticles.elementAt(i).getRetailer().getRetailerName()));
+					row.addColumn(new Column(allArticles.elementAt(i).getRetailerReport().getRetailerName()));
 					row.addColumn(new Column(allArticles.elementAt(i).getCreationDat().toString()));
 					row.addColumn(new Column(allArticles.elementAt(i).getModDat().toString()));
 					if(allArticles.elementAt(i).getDelDat() != null) {

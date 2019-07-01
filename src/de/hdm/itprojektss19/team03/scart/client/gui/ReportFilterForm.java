@@ -281,8 +281,19 @@ public class ReportFilterForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			if (disabledPeriodBtn.isDown() == true) {
 				pickPeriod.setStyleName("DisabledPeriodVPonClick");
+				lastWeekBtn.setEnabled(false);
+				lastMonthBtn.setEnabled(false);
+				start.setValue(firstPossDate);
+				end.setValue(today);
+				start.setEnabled(false);
+				end.setEnabled(false);
 			} else if (disabledPeriodBtn.isDown() == false) {
 				pickPeriod.setStyleName("PickPeriodVPanel");
+				lastWeekBtn.setEnabled(true);
+				lastMonthBtn.setEnabled(true);
+				start.setEnabled(true);
+				end.setEnabled(true);
+		
 			}
 		}
 	}
@@ -379,8 +390,19 @@ public class ReportFilterForm extends VerticalPanel {
 					
 					if(choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && disabledRetailerBtn.isDown() == true) {
 
+						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+
+						Date choosenStartDatePl1 = cStartDate;
+						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+
+						Date choosenEndDatePl1 = cEndDate;
+						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+						
 						if(choosenGroups.size() ==1) {
-						reportVerwaltung.createStatisticA(user, choosenGroups, new ArticleReportCallback());
+							reportVerwaltung.createStatisticAD(user, choosenGroups, cStartDateTS, cEndDateTS, choosenStartDatePl1TS, choosenEndDatePl1TS, new ArticleDateReportCallback());
 						}else {
 							Window.alert("Bitte nur eine Gruppe auswählen!");
 						}
