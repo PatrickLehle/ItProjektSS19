@@ -354,6 +354,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			Retailer r = new Retailer();
 			r.setGroup(group);
 			r.setRetailerName("Neuer Laden");
+			r.setUser(user);
 			editorService.createRetailer(r, newRetailerCallback);
 
 		}
