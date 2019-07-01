@@ -367,14 +367,34 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
 
+	//ARTICLE-REPORT=======================================================================
+	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #findAllArticleByFavouriteTRUE()
+	 *      #findAllArticleByFavouriteTRUE(Vector<Group> groups)
 	 * @return gibt alle Article die als Favoriten markiert sind zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException;
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)
+	 * @return gibt alle Article sowie zugehoerigen Retailer die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)
+	 * @return gibt alle Article sowie den zugehoerigen Zeitraum die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
 	// RETAILER===========================================================================
 
 	/**

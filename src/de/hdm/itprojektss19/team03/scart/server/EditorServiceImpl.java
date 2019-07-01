@@ -571,9 +571,39 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException {
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException {
 		try {
-			return this.aMapper.findAllArticleByFavouriteTRUE();
+			return this.aMapper.findAllArticleByFavouriteTRUE(groups);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByRetailerFavouriteTRUE(groups,retailers);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByDateFavouriteTRUE(groups, start, end);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByDateRetailerFavouriteTRUE(groups, retailers, start, end);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
