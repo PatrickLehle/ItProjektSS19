@@ -165,7 +165,6 @@ public class UserMapper {
 		try {
 			Connection con = null;
 			PreparedStatement stmt = null;
-			System.out.println(userEmail);
 
 			// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
 			String selectByKey = "SELECT * FROM user WHERE userEmail=?";
@@ -186,7 +185,6 @@ public class UserMapper {
 				u.setId(rs.getInt("userId"));
 				u.setEmail(rs.getString("userEmail"));
 				u.setUsername(rs.getString("userName"));
-				System.out.println(u.getEmail() + " " + u.getId());
 				return u;
 			} else {
 				throw new DatabaseException();

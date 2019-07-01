@@ -235,9 +235,6 @@ public class RetailerMapper {
 
 			if (rs.next()) {
 				retailer.setId(rs.getInt("maxid") + 1);
-				System.out.println("gggggggggggggggggggggggggg");
-				System.out.println(retailer.getRetailerName() + " " + retailer.getGroup().getId() + " "
-						+ retailer.getUser().getId());
 				// Jetzt erfolgt das Einfuegen des Objekts
 				stmt = con.prepareStatement(insertSQL);
 				stmt = con.prepareStatement(insertSQL);
