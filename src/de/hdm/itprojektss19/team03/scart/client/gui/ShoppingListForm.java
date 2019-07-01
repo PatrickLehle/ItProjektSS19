@@ -106,7 +106,8 @@ public class ShoppingListForm extends HorizontalPanel {
 			decoPanel.addStyleName("retailers-panel");
 			decoPanel.setWidget(retailerPanel);
 			flowPanel.add(decoPanel);
-			editorService.generateIdenticons(r.getUser().getEmail(), 25, 25, new GetPictureCallback(headerPanel));
+			editorService.generateIdenticons(r.getUser().getEmail(), 25, 25,
+					new GetPictureCallback(headerPanel, r.getUser()));
 		}
 
 		outerPanel.add(flowPanel);
@@ -273,9 +274,11 @@ public class ShoppingListForm extends HorizontalPanel {
 	class GetPictureCallback implements AsyncCallback<String> {
 
 		HorizontalPanel hp = new HorizontalPanel();
+		User user = new User();
 
-		public GetPictureCallback(HorizontalPanel p) {
+		public GetPictureCallback(HorizontalPanel p, User u) {
 			hp = p;
+			user = u;
 		}
 
 		public void onFailure(Throwable t) {
@@ -284,8 +287,12 @@ public class ShoppingListForm extends HorizontalPanel {
 
 		public void onSuccess(String s) {
 			Image image = new Image();
+			HorizontalPanel p = new HorizontalPanel();
 			image.setUrl("data:image/png;base64," + s);
-			hp.add(image);
+			p.addStyleName("profile-img-small");
+			p.add(image);
+			p.setTitle(user.getUsername());
+			hp.add(p);
 		}
 
 	}

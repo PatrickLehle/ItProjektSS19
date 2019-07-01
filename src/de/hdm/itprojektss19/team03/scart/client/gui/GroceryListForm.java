@@ -784,7 +784,6 @@ public class GroceryListForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Article result) {
-			Window.alert(result.getId() + "");
 			ev.addArticleToGroceryList(groceryList, result, new AddArticleToGroceryListCallback());
 			addBtnBoolean = false;
 		}
