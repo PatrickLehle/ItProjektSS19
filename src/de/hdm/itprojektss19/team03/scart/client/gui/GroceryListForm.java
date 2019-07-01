@@ -62,8 +62,6 @@ public class GroceryListForm extends VerticalPanel {
 	Button editBtn = new Button("<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
 	Button deleteBtn = new Button("<image src='/images/minusButton.png' width='16px' height='16px' align='center'/>");
 	Button checkBtn = new Button();
-	Button refreshBtn = new Button();
-	Button setResponsibleUserBtn = new Button();
 
 	Boolean addBtnBoolean = false;
 	Boolean editBtnBoolean = false;
@@ -72,7 +70,6 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox articleTextBox = new TextBox(); // Artikel
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
-	ListBox userListBox = new ListBox();
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
@@ -83,8 +80,6 @@ public class GroceryListForm extends VerticalPanel {
 	Vector<Retailer> retailerVector = new Vector<Retailer>();
 	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
 	Vector<User> userVector = new Vector<User>();
-
-	Label userRetailerLabel = new Label(); // "zuteilen f\u00fcr");
 
 	GroceryList groceryList; // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
@@ -107,25 +102,6 @@ public class GroceryListForm extends VerticalPanel {
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
-		userRetailerLabel.setText(Integer.toString(articleVector.size()));
-
-		// CALLBACKS=============================================
-		ev.getAllUserByGroupId(group.getId(), new AllUserCallback());
-		hpUserRetailer.add(userListBox);
-		hpUserRetailer.add(userRetailerLabel);
-		hpUserRetailer.add(setResponsibleUserBtn);
-		setResponsibleUserBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				for (int i = 0; i < articleVector.size(); i++) {
-					ev.getArticleByArticleId(articleVector.get(i).getId(), new GetArticleCallback());
-					if (article.getId() != 0) {
-						article.setOwnerId(userVector.get(userListBox.getSelectedIndex()).getId());
-						ev.saveArticle(article, new SetArticleOwnerCallback());
-					}
-				}
-			}
-		});
-		this.add(hpUserRetailer);
 
 		// zum laden/fuellen der Tabelle auf
 		boughtTable.setVisible(false);
@@ -156,17 +132,11 @@ public class GroceryListForm extends VerticalPanel {
 		hpButtons.add(editBtn);
 		hpButtons.add(deleteBtn);
 		hpButtons.add(checkBtn);
-		hpButtons.add(refreshBtn);
 
 		addBtn.addClickHandler(new AddClickHandler());
 		// editBtn.addClickHandler(new EditClickHandler());
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		checkBtn.addClickHandler(new CheckClickHandler());
-		refreshBtn.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				refreshTable();
-			}
-		});
 
 		quantityTextBox.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
@@ -191,7 +161,6 @@ public class GroceryListForm extends VerticalPanel {
 
 	public void refreshTable() {
 		ev.findAllArticleByGroceryListId(groceryList.getId(), new setArticleVectorCallback());
-		loadTable();
 	}
 
 	/**
@@ -269,52 +238,42 @@ public class GroceryListForm extends VerticalPanel {
 	// return retailerListBox;
 	// }
 	//
+
 	/**
 	 * @author tom
 	 * 
-	 *         getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
-	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
-	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
-	 *         und eine neue CheckBox wird kreiert getCbReturn.
-	 * 
+	 *         Schreibt die ausgewaehlte Zeile in die erste oder zweite Tabele wenn
+	 *         ein Artikel als gekauft oder nicht gekauft markiert wurde.
 	 */
-	public CheckBox getCbCheck() {
-		CheckBox cb = new CheckBox();
-		cb.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				rowIndex = articleTable.getCellForEvent(event).getRowIndex();
+	class getCbReturn extends CheckBox {
 
-				ev.getArticleByArticleId(Integer.parseInt(articleTable.getText(rowIndex, 0)), new GetArticleCallback());
-				if (article.getId() != 0) {
-					ev.deleteArticle(article, new SetCheckCallback());
-				}
+		public getCbReturn(Article a, int row) {
+			if (a.getDelDat() == null) {
+				this.setValue(false);
+			} else if (a.getDelDat() != null) {
+				this.setValue(true);
 			}
-		});
-		cb.setValue(false);
-		return cb;
+			this.addClickHandler(new CbCheckClickHandler(a, row));
+		}
 	}
 
-	/**
-	 * @author tom
-	 * 
-	 *         Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
-	 *         falscherweise als gekauft markiert wurde.
-	 */
-	public CheckBox getCbReturn() {
-		CheckBox cb = new CheckBox();
-		cb.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				rowIndex = boughtTable.getCellForEvent(event).getRowIndex();
+	class CbCheckClickHandler implements ClickHandler {
+		Article a;
+		int row;
 
-				ev.getArticleByArticleId(Integer.parseInt(boughtTable.getText(rowIndex, 0)), new GetArticleCallback());
-				if (article.getId() != 0) {
-					ev.deleteArticle(article, new SetCheckCallback());
-				}
+		public CbCheckClickHandler(Article a, int row) {
+			this.a = a;
+			this.row = row;
+		}
+
+		public void onClick(ClickEvent event) {
+			if (a.getDelDat() == null) {
+				ev.deleteArticle(a, new SetCheckCallback(row));
+			}else if (a.getDelDat() != null) {
+				a.setDelDat(null);
+				ev.deleteArticle(a, new SetCheckCallback(row));
 			}
-		});
-
-		cb.setValue(true);
-		return cb;
+		}
 	}
 
 	/**
@@ -325,18 +284,25 @@ public class GroceryListForm extends VerticalPanel {
 	 *         und loescht CheckBoxen aus der dem letzten Column.
 	 *
 	 */
-	public class CheckClickHandler implements ClickHandler {
-
+	class CheckClickHandler implements ClickHandler {
+//HIER
 		@Override
 		public void onClick(ClickEvent e) {
 			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false
 					&& addBtnBoolean == false) {
 				checkBtnBoolean = true;
-				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-					articleTable.setWidget(aNum, 5, getCbCheck());
-				}
-				for (int bNum = 1; bNum < boughtTable.getRowCount(); bNum++) {
-					boughtTable.setWidget(bNum, 5, getCbReturn());
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+							articleTable.setWidget(aNum, 5, new getCbReturn(articleVector.get(articleNum), articleNum));
+						}
+					} else if (articleVector.get(articleNum).getDelDat() != null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int bNum = 1; bNum < boughtTable.getRowCount(); bNum++) {
+							boughtTable.setWidget(bNum, 5, new getCbReturn(articleVector.get(articleNum), articleNum));
+						}
+					}
 				}
 			} else if (checkBtnBoolean == true) {
 				checkBtnBoolean = false;
@@ -556,21 +522,27 @@ public class GroceryListForm extends VerticalPanel {
 	 *         CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der
 	 *         Tabele.
 	 */
-	public CheckBox getCbDel() {
-		CheckBox cb = new CheckBox();
-		cb.addClickHandler(new ClickHandler() {
-			public void onClick(ClickEvent event) {
-				globalRow = articleTable.getCellForEvent(event).getRowIndex();
-				ev.getArticleByArticleId(Integer.parseInt(articleTable.getText(globalRow, 0)),
-						new GetArticleCallback());
-				if (article.getId() != 0) {
-					article.setCheckBoolean(true);
-					ev.saveArticle(article, new DeleteArticleCallback());
-				}
-			}
-		});
-		cb.setValue(false);
-		return cb;
+	class getCbDel extends CheckBox {
+		public getCbDel(Article a, int row) {
+			this.addClickHandler(new CbDeleteClickHandler(a, row));
+			this.setValue(false);
+		}
+	}
+
+	class CbDeleteClickHandler implements ClickHandler {
+		Article article;
+		int row;
+
+		public CbDeleteClickHandler(Article a, int row) {
+			this.article = a;
+			this.row = row;
+		}
+
+		public void onClick(ClickEvent e) {
+			article.setCheckBoolean(true);
+			ev.saveArticle(article, new DeleteArticleCallback(row));
+		}
+
 	}
 
 	/**
@@ -580,15 +552,20 @@ public class GroceryListForm extends VerticalPanel {
 	 *         false und schaut ob andere Buttons aktiv sind Ausgewaehlte Reihe wird
 	 *         aus der Tabele gel�scht.
 	 */
-	public class DeleteClickHandler implements ClickHandler {
+	class DeleteClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
 			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
 					&& addBtnBoolean == false) {
 				deleteBtnBoolean = true;
-				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-					articleTable.setWidget(aNum, 5, getCbDel());
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int i = 1; i < articleTable.getRowCount(); i++) {
+							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum), articleNum));
+						}
+					}
 				}
 			} else if (deleteBtnBoolean == true) {
 				refreshTable();
@@ -627,7 +604,7 @@ public class GroceryListForm extends VerticalPanel {
 	 *         TextBoxen hinzu in der man einen Neuen Artikel mit allen Atributen
 	 *         anlegen kann.
 	 */
-	public class AddClickHandler implements ClickHandler {
+	class AddClickHandler implements ClickHandler {
 
 		@Override
 		public void onClick(ClickEvent e) {
@@ -645,7 +622,7 @@ public class GroceryListForm extends VerticalPanel {
 					article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
 					article.setUnit(unitTextBox.getText());
 					article.setRetailerId(retailer.getId());
-					article.setOwnerId(userVector.get(userListBox.getSelectedIndex()).getId());
+					article.setOwnerId(retailer.getUser().getId());
 					article.setGroupId(group.getId());
 					article.setCheckBoolean(false);
 					// Change fav das fav fuer alle gleichnamigen gesetzt wird
@@ -687,20 +664,6 @@ public class GroceryListForm extends VerticalPanel {
 	// }
 	// }
 
-	class AllUserCallback implements AsyncCallback<Vector<User>> {
-
-		public void onFailure(Throwable caught) {
-		}
-
-		public void onSuccess(Vector<User> result) {
-			userVector = result;
-			for (int userNumber = 0; userNumber < userVector.size(); userNumber++) {
-				userListBox.addItem(userVector.get(userNumber).getUsername());
-			}
-			userListBox.setVisibleItemCount(1);
-		}
-	}
-
 	class GetArticleCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -712,61 +675,32 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	class SetCheckCallback implements AsyncCallback<Article> {
+		int row;
+
+		public SetCheckCallback(int row) {
+			this.row = row;
+		}
 
 		public void onFailure(Throwable caught) {
-			Window.alert("Fehler beim Loeschen");
-			refreshTable();
-			articleTable.setWidget(rowIndex, 5, getCbCheck());
 		}
 
 		public void onSuccess(Article result) {
 			refreshTable();
-			for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-				articleTable.setWidget(aNum, 5, getCbCheck());
-			}
-			for (int bNum = 1; bNum < boughtTable.getRowCount(); bNum++) {
-				boughtTable.setWidget(bNum, 5, getCbReturn());
-			}
-			Window.alert("123");
-
 		}
 	}
 
 	class DeleteArticleCallback implements AsyncCallback<Article> {
+		int row;
+
+		public DeleteArticleCallback(int row) {
+			this.row = row;
+		}
 
 		public void onFailure(Throwable caught) {
 		}
 
 		public void onSuccess(Article result) {
-			if (article.getCheckBoolean() == true) {
-				refreshTable();
-				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-					articleTable.setWidget(aNum, 5, getCbDel());
-				}
-			}
-			article = null;
-		}
-	}
-
-	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
-		int row;
-
-		public SaveArticleFavoriteCallback(int r) {
-			row = r;
-		}
-
-		public void onFailure(Throwable caught) {
-		}
-
-		public void onSuccess(Article a) {
-			// article = null;
-			// refreshTable();
-			if (a.getFav()) {
-				articleTable.setWidget(row, 6, new FavButton(a, false, row));
-			} else {
-				articleTable.setWidget(row, 6, new FavButton(a, true, row));
-
-			}
+			refreshTable();
 		}
 	}
 
@@ -809,6 +743,46 @@ public class GroceryListForm extends VerticalPanel {
 		public void onSuccess(Vector<Article> result) {
 			articleVector = result;
 			loadTable();
+			// CHANGE Callback zu Artikel aendern
+			if (deleteBtnBoolean == true && articleVector.size() != 0) {
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int i = 1; i < articleTable.getRowCount(); i++) {
+							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum), articleNum));
+						}
+					}
+				}
+			} else if (checkBtnBoolean == true) {
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+							articleTable.setWidget(aNum, 5, new getCbReturn(articleVector.get(articleNum), articleNum));
+						}
+					} else if (articleVector.get(articleNum).getDelDat() != null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int bNum = 1; bNum < boughtTable.getRowCount(); bNum++) {
+							boughtTable.setWidget(bNum, 5, new getCbReturn(articleVector.get(articleNum), articleNum));
+						}
+					}
+				}
+			}
+		}
+	}
+
+	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
+		int row;
+
+		public SaveArticleFavoriteCallback(int r) {
+			row = r;
+		}
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Article a) {
+			refreshTable();
 		}
 	}
 
