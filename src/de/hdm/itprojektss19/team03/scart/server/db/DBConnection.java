@@ -13,7 +13,7 @@ import com.google.appengine.api.utils.SystemProperty;
 public class DBConnection {
 
 	private static Connection con = null;
-	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
+	private static String googleUrl = "jdbc:google:mysql://norse-decoder-240009:europe-west1:itprojekt-ss19-scart?user=root&password=Login2019";
 	private static String localUrl = "jdbc:mysql://localhost:3306/itprojektss19?user=test&password=test";
 
 	private static final String username = "test";
