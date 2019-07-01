@@ -403,7 +403,7 @@ public class EditGroup extends VerticalPanel {
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 
-				// new User Textfield
+//				// new User Textfield
 				TextBox userNameTextBox = new TextBox();
 				TextBox userEmailTextBox = new TextBox();
 
@@ -412,7 +412,7 @@ public class EditGroup extends VerticalPanel {
 				deleteButton.addStyleName("table-button1");
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
 
-				// Add User Button
+//				// Add User Button
 				Button addButton = new Button("add");
 				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
 
@@ -422,7 +422,6 @@ public class EditGroup extends VerticalPanel {
 					userTable.setWidget(userNumber + 3, 2, deleteButton);
 
 				}
-				
 				userTable.setWidget(userNumber + 4, 0, userNameTextBox);
 				userTable.setWidget(userNumber + 4, 1, userEmailTextBox);
 				userTable.setWidget(userNumber + 4, 2, addButton);
@@ -458,11 +457,11 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Void arg0) {
 			GroupForm groupForm = new GroupForm(user);
-			groupForm.setStyleName("navigation");
+			
 			RootPanel.get("navigation").clear();
+			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").add(groupForm);
-//			RootPanel.get("content").clear();
-//			RootPanel.get("content").add(new EditGroup(user, group));
+			onLoad();
 
 		}
 

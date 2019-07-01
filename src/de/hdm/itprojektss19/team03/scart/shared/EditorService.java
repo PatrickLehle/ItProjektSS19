@@ -1,5 +1,6 @@
 package de.hdm.itprojektss19.team03.scart.shared;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Vector;
 
@@ -22,6 +23,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 @RemoteServiceRelativePath("editorservice")
 public interface EditorService extends RemoteService {
+	public String generateIdenticons(String text, int image_width, int image_height)
+			throws IllegalArgumentException, IOException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl #init();
@@ -211,7 +214,7 @@ public interface EditorService extends RemoteService {
 	 * @param gl
 	 * @throws IllegalArgumentException
 	 */
-	public void saveGroceryList(GroceryList gl) throws IllegalArgumentException;
+	public GroceryList saveGroceryList(GroceryList gl) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -219,7 +222,7 @@ public interface EditorService extends RemoteService {
 	 * @param gl
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteGroceryList(GroceryList gl) throws IllegalArgumentException;
+	public GroceryList deleteGroceryList(GroceryList gl) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -280,6 +283,8 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException;
+	
+	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException;
 
 	// GROCERYLIST-ARTICLE===============================================================
 	/**
@@ -306,6 +311,7 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #saveArticle(Article a);
 	 * @param a
+	 * @return
 	 * @throws IllegalArgumentException
 	 */
 	public Article saveArticle(Article a) throws IllegalArgumentException;
@@ -316,7 +322,7 @@ public interface EditorService extends RemoteService {
 	 * @param a
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteArticle(Article a) throws IllegalArgumentException;
+	public Article deleteArticle(Article a) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -326,6 +332,14 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Article getArticleById(int articleId) throws IllegalArgumentException;
+
+	/**
+	 * 
+	 * @param id
+	 * @return gibt einen vollstaendigen Article via id zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Article getArticleByArticleId(int id) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -353,14 +367,34 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
 
+	//ARTICLE-REPORT=======================================================================
+	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 *      #findAllArticleByFavouriteTRUE()
+	 *      #findAllArticleByFavouriteTRUE(Vector<Group> groups)
 	 * @return gibt alle Article die als Favoriten markiert sind zurueck
 	 * @throws IllegalArgumentException
 	 */
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException;
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)
+	 * @return gibt alle Article sowie zugehoerigen Retailer die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)
+	 * @return gibt alle Article sowie den zugehoerigen Zeitraum die als Favoriten markiert sind zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException;
+	
 	// RETAILER===========================================================================
 
 	/**
@@ -378,7 +412,7 @@ public interface EditorService extends RemoteService {
 	 * @param r
 	 * @throws IllegalArgumentException
 	 */
-	public void saveRetailer(Retailer r) throws IllegalArgumentException;
+	public Retailer saveRetailer(Retailer r) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
@@ -386,7 +420,7 @@ public interface EditorService extends RemoteService {
 	 * @param r
 	 * @throws IllegalArgumentException
 	 */
-	public void deleteRetailer(Retailer r) throws IllegalArgumentException;
+	public Retailer deleteRetailer(Retailer r) throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

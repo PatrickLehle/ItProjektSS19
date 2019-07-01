@@ -49,8 +49,8 @@ public class GroupMapper {
 			// fuer jede Gruppe die gefunden wird, wird ein neues G-Object erstellt
 			while (rs.next()) {
 				Group group = new Group();
-				group.setId(rs.getInt("id"));
-				group.setGroupName(rs.getString("name"));
+				group.setId(rs.getInt("groupId"));
+				group.setGroupName(rs.getString("groupName"));
 
 				groups.addElement(group);
 			}
@@ -76,12 +76,12 @@ public class GroupMapper {
 
 		try {
 			Statement statement = con.createStatement();
-			ResultSet rs = statement.executeQuery("SELECT id, name FROM groups WHERE id=" + groupId);
+			ResultSet rs = statement.executeQuery("SELECT * FROM groups WHERE groupId=" + groupId);
 			// Neues Group Objekt fuer gefundene ID
 			while (rs.next()) {
 				Group group = new Group();
-				group.setId(rs.getInt("id"));
-				group.setGroupName(rs.getString("name"));
+				group.setId(rs.getInt("groupId"));
+				group.setGroupName(rs.getString("groupName"));
 				return group;
 			}
 		} catch (SQLException e2) {
@@ -96,7 +96,7 @@ public class GroupMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String select = "SELECT * FROM groups WHERE name=?";
+		String select = "SELECT * FROM groups WHERE groupName=?";
 
 		Vector<Group> result = new Vector<Group>();
 
@@ -109,8 +109,8 @@ public class GroupMapper {
 
 			while (rs.next()) {
 				Group group = new Group();
-				group.setId(rs.getInt("id"));
-				group.setGroupName(rs.getString("name"));
+				group.setId(rs.getInt("groupId"));
+				group.setGroupName(rs.getString("groupName"));
 
 				result.addElement(g);
 			}
@@ -134,8 +134,8 @@ public class GroupMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String maxId = "SELECT MAX(id) AS maxid FROM groups";
-		String insert = "INSERT INTO groups (id, name) VALUES (?,?)";
+		String maxId = "SELECT MAX(groupId) AS maxid FROM groups";
+		String insert = "INSERT INTO groups (groupId, groupName) VALUES (?,?)";
 
 		try {
 			con = DBConnection.connection();
@@ -169,7 +169,7 @@ public class GroupMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String updateSQL = "UPDATE groups SET name=? WHERE id=?";
+		String updateSQL = "UPDATE groups SET groupName=? WHERE groupId=?";
 
 		try {
 			con = DBConnection.connection();
@@ -197,7 +197,7 @@ public class GroupMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String delete = "DELETE FROM groups WHERE id=?";
+		String delete = "DELETE FROM groups WHERE groupId=?";
 
 		try {
 			con = DBConnection.connection();

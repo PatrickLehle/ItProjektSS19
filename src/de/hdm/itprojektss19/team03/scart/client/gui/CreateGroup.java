@@ -7,9 +7,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
@@ -51,8 +53,14 @@ public class CreateGroup extends VerticalPanel {
 	 *            (User-Objekt des Users der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
+		/* Cookies: ggf. entfernen
+		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		u.setEmail(String.valueOf(Cookies.getCookie("email")));
+		*/
+		
 		this.user = u;
-
+		
+		onLoad();
 	}
 
 	// TEXTBOXEN=======================================================
@@ -86,12 +94,14 @@ public class CreateGroup extends VerticalPanel {
 	User user = null; // User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden
 						// soll
 	Group createGroup = new Group();
+	
+	
+	
 
 	// METHODS==========================================================
 
-	// public CreateGroup(User user) { ALT
 	/**
-	 * Methode wird bei dem "Aufrufen" der Klasse gestartet
+	 * Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
 	 */
 	public void onLoad() {
 		super.onLoad();
@@ -142,11 +152,7 @@ public class CreateGroup extends VerticalPanel {
 		this.add(contentBox);
 		// this.add(footer);
 
-		// CLICKHANDLER TO CREATE A GROUP=============================
-		/**
-		 * Click/Enter-Handler fuer den createGroup-Button
-		 * 
-		 * @author bastiantilk
+		/** Click/Enter-Handler fuer den createGroup-Button
 		 *
 		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -190,6 +196,16 @@ public class CreateGroup extends VerticalPanel {
 															// verknuepfung von Group und User
 				responseLabel.setVisible(true);
 				responseLabel.setText("");
+				
+				
+				// HARDCODED USER-OBJECT MUSS ENTFERNT WERDEN
+				// WENN COOKIES FUNKTIONIEREN
+				/*
+				user.setUsername("Franz");
+				user.setEmail("test@hotmail.de");
+				user.setId(1);
+				*/
+				
 				createGroup.setGroupName(groupName);
 
 				try {
@@ -204,7 +220,7 @@ public class CreateGroup extends VerticalPanel {
 						 * 
 						 */
 						public void onFailure(Throwable caught) {
-							Window.alert("Group could not be creater: " + caught);
+							Window.alert("Group could not be created: " + caught);
 						}
 
 						@Override
@@ -268,6 +284,9 @@ public class CreateGroup extends VerticalPanel {
 		});
 	}
 
+	/** Methode zum hinzufuegen eine (eigene) Einkaufsliste fuer die gerade erstellte Gruppe
+	 * 
+	 */
 	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
 
 		public void onSuccess(GroceryList gl) {
@@ -280,7 +299,7 @@ public class CreateGroup extends VerticalPanel {
 	};
 
 	/**
-	 * UEberprueft korrekte syntax der Eingabe
+	 * Ueberprueft auf korrekten Syntax der Eingabe
 	 * 
 	 * @param str
 	 * @return true, wenn der Name passt
@@ -297,5 +316,7 @@ public class CreateGroup extends VerticalPanel {
 			return true;
 		}
 	};
+	
+	
 
 }
