@@ -214,10 +214,10 @@ public class GroceryListForm extends VerticalPanel {
 				boughtTable.setText(trueCount, 3, articleVector.get(articleNumber).getUnit());
 				boughtTable.setText(trueCount, 4, articleVector.get(articleNumber).getRetailerName());
 				if (articleVector.get(articleNumber).getFav()) {
-					articleTable.setWidget(trueCount, 6,
+					boughtTable.setWidget(trueCount, 6,
 							new FavButton(articleVector.get(articleNumber), false, trueCount));
 				} else {
-					articleTable.setWidget(trueCount, 6,
+					boughtTable.setWidget(trueCount, 6,
 							new FavButton(articleVector.get(articleNumber), true, trueCount));
 				}
 				trueCount++;
