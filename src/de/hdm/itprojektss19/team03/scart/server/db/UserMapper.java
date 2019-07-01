@@ -205,25 +205,34 @@ public class UserMapper {
 	 * @throws DatabaseException
 	 */
 	public User insert(User user) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
+	    	Connection con = null;
+			PreparedStatement stmt = null;
 
-		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String insertSQL = "INSERT INTO user (userEmail, userName) VALUES (?,?)";
+			// SQL-Anweisung zum finden der naechsten Id
+			String maxId = "SELECT MAX(userId) AS maxid FROM user";
+			// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
+			String insert = "INSERT INTO user (userId, userEmail, userName) VALUES (?,?,?)";
 
-		try {
-			con = DBConnection.connection();
-			stmt = con.prepareStatement(insertSQL);
-			stmt.setString(1, user.getEmail());
-			stmt.setString(2, user.getUsername());
+			try {
+				con = DBConnection.connection();
+				stmt = con.prepareStatement(maxId);
+				ResultSet rs = stmt.executeQuery();
 
-			stmt.executeUpdate();
+				if (rs.next()) {
+					user.setId(rs.getInt("maxid") + 1);
+				}
+				stmt = con.prepareStatement(insert);
+				stmt.setInt(1, user.getId());
+				stmt.setString(2, user.getEmail());
+				stmt.setString(3, user.getUsername());
+				stmt.executeUpdate();
 
-			return user;
-		} catch (SQLException e2) {
-			ServersideSettings.getLogger().severe(e2.getMessage());
-			throw new DatabaseException(e2);
-		}
+				return user;
+
+			} catch (SQLException e2) {
+				ServersideSettings.getLogger().severe(e2.getMessage());
+				throw new DatabaseException(e2);
+			}
 
 	}
 

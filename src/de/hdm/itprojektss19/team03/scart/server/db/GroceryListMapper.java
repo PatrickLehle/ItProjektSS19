@@ -175,7 +175,7 @@ public class GroceryListMapper {
 			stmt = con.prepareStatement(updateSQL);
 
 			stmt.setString(1, gl.getGroceryListName());
-			stmt.setTimestamp(2, gl.getModDat());
+			stmt.setTimestamp(2, gl.getNewModDat());
 			stmt.setInt(3, gl.getId());
 
 			stmt.executeUpdate();
