@@ -4,26 +4,31 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.CheckBox;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.ToggleButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.datepicker.client.CalendarUtil;
 import com.google.gwt.user.datepicker.client.DateBox;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
+import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.ReportGeneratorAsync;
@@ -46,7 +51,7 @@ import de.hdm.itprojektss19.team03.scart.shared.report.SimpleReport;
  */
 public class ReportFilterForm extends VerticalPanel {
 
-	// INITIALISATION===========================================================
+//INITIALISATION===========================================================
 
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
@@ -57,16 +62,20 @@ public class ReportFilterForm extends VerticalPanel {
 	Retailer retailer = new Retailer();
 	ReportForm rForm = new ReportForm();
 	Vector<Group> allGroups = null;
+	Vector<Group> choosenGroups = new Vector<Group>();
 	Vector<Retailer> allRetailer = null;
+	Vector<Retailer> choosenRetailer = new Vector<Retailer>();
 	Vector<User> allUsers = null;
 
 	Vector<String> allGroupsS = new Vector<String>();
 	Vector<String> allRetailerS = new Vector<String>();
 	Vector<String> choosenGroupsS = new Vector<String>();
 	Vector<String> choosenRetailerS = new Vector<String>();
+	
 
 	Vector<ArticleReport> articleReport = new Vector<ArticleReport>();
 	Vector<ArticleDateReport> articleDateReport = new Vector<ArticleDateReport>();
+	Vector<ArticleRetailerReport> articleRetailerReport = new Vector<ArticleRetailerReport>();
 	Vector<ArticleDateRetailerReport> articleDateRetailerReport = new Vector<ArticleDateRetailerReport>();
 
 	Vector<SimpleReport> choosenReports = new Vector<SimpleReport>();
@@ -88,15 +97,20 @@ public class ReportFilterForm extends VerticalPanel {
 	@SuppressWarnings("deprecation")
 	Date dateAfterChosenStartDate = new Date(119, 0, 2);
 
-	// CONSTRUCTORS=====================================================================
+//CONSTRUCTORS=====================================================================
+
+	public ReportFilterForm() {
+		//Holen der Cookies aus der Session
+		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
+		user.setEmail(Cookies.getCookie("email"));	
+	}
 
 	public ReportFilterForm(final User cUser) {
 		this.user = cUser;
 
-		Window.alert(cUser.getEmail() + " id: " + cUser.getId());
 	}
 
-	// PANELS-LABELS-BUTTONS=============================================================
+//PANELS-LABELS-BUTTONS=============================================================	
 
 	// GROUPS-FILTER=======================
 	VerticalPanel pickGroup = new VerticalPanel();
@@ -120,14 +134,16 @@ public class ReportFilterForm extends VerticalPanel {
 	// RETAILER-PICKER===========================
 	VerticalPanel pickRetailer = new VerticalPanel();
 	ToggleButton disabledRetailerBtn = new ToggleButton("Filter Deaktivieren", "Filter Aktivieren");
-	Label retailerLbl = new Label("Retailer auswählen:");
+	Label retailerLbl = new Label("Einzelhändler auswählen:");
 	VerticalPanel checkBoxesRetailer = new VerticalPanel();
+	
 
 	// REPORT-BUTTON=============================
 	VerticalPanel reportBtnVP = new VerticalPanel();
 	Button getReportBtn = new Button("Report generieren");
+	
 
-	// METHODS===========================================================================
+//METHODS===========================================================================
 
 	@SuppressWarnings("deprecation")
 	public void onLoad() {
@@ -188,18 +204,18 @@ public class ReportFilterForm extends VerticalPanel {
 
 		// ROOT-BUTTONS=================
 		RootPanel.get("navigator").add(reportBtnVP);
-		// RootPanel.get("navigator").add(getReportBtn);
+//		RootPanel.get("navigator").add(getReportBtn);
 
-		// END=========================================================================================================
+//END=========================================================================================================
 
-		editorVerwaltung.findAllGroups(new AllGroupsCallback());
-		editorVerwaltung.findAllRetailer(new AllRetailersCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(),new AllGroupsCallback());
+		editorVerwaltung.findAllRetailer( new AllRetailersCallback());
 
 		// TIMEFRAME-CHECK-FOR-CHANGE===================
 		Timer refresh = new Timer() {
 			public void run() {
-				editorVerwaltung.findAllGroups(new AllGroupsCallback());
-				editorVerwaltung.findAllRetailer(new AllRetailersCallback());
+				editorVerwaltung.findAllGroupsByUserId(user.getId(),new AllGroupsCallback());
+				editorVerwaltung.findAllRetailer( new AllRetailersCallback());
 			}
 		};
 		refresh.scheduleRepeating(1000);
@@ -249,10 +265,12 @@ public class ReportFilterForm extends VerticalPanel {
 				allGroupsS.clear();
 
 				for (int g = 0; g < result.size(); g++) {
+					
 					allGroupsS.add(result.elementAt(g).getGroupName());
 					CheckBox temp = new CheckBox(allGroupsS.elementAt(g));
-					temp.addClickHandler(new GroupCheckBoxClickHandler(temp));
+					temp.addClickHandler(new GroupCheckBoxClickHandler(temp, allGroups.get(g)));
 					checkBoxesGroup.add(temp);
+				
 				}
 			}
 		}
@@ -263,8 +281,19 @@ public class ReportFilterForm extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			if (disabledPeriodBtn.isDown() == true) {
 				pickPeriod.setStyleName("DisabledPeriodVPonClick");
+				lastWeekBtn.setEnabled(false);
+				lastMonthBtn.setEnabled(false);
+				start.setValue(firstPossDate);
+				end.setValue(today);
+				start.setEnabled(false);
+				end.setEnabled(false);
 			} else if (disabledPeriodBtn.isDown() == false) {
 				pickPeriod.setStyleName("PickPeriodVPanel");
+				lastWeekBtn.setEnabled(true);
+				lastMonthBtn.setEnabled(true);
+				start.setEnabled(true);
+				end.setEnabled(true);
+		
 			}
 		}
 	}
@@ -294,7 +323,7 @@ public class ReportFilterForm extends VerticalPanel {
 				for (int g = 0; g < result.size(); g++) {
 					allRetailerS.add(result.elementAt(g).getRetailerName());
 					CheckBox temp = new CheckBox(allRetailerS.elementAt(g));
-					temp.addClickHandler(new RetailerCheckBoxClickHandler(temp));
+					temp.addClickHandler(new RetailerCheckBoxClickHandler(temp, allRetailer.get(g)));
 					checkBoxesRetailer.add(temp);
 				}
 			}
@@ -349,96 +378,129 @@ public class ReportFilterForm extends VerticalPanel {
 	public class getReportClickHandler implements ClickHandler {
 
 		@SuppressWarnings("deprecation")
-		public void onClick(ClickEvent event) {
+				public void onClick(ClickEvent event) {
 
-			cStartDate = start.getValue();
-			cStartDate.setHours(1);
+					cStartDate = start.getValue();
+					cStartDate.setHours(1);
 
-			cEndDate = end.getValue();
-			cEndDate.setHours(1);
+					cEndDate = end.getValue();
+					cEndDate.setHours(1);
+	
+//ARTICLE-REPORT=================================================================================================================================
+					
+					if(choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && disabledRetailerBtn.isDown() == true) {
 
-			// Nur Gruppen Report (Check)
-			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true
-					&& disabledRetailerBtn.isDown() == true) {
+						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
 
-				reportVerwaltung.createStatisticA(user, new ArticleReportCallback());
+						Date choosenStartDatePl1 = cStartDate;
+						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
 
-			}
+						Date choosenEndDatePl1 = cEndDate;
+						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+						
+						if(choosenGroups.size() ==1) {
+							reportVerwaltung.createStatisticAD(user, choosenGroups, cStartDateTS, cEndDateTS, choosenStartDatePl1TS, choosenEndDatePl1TS, new ArticleDateReportCallback());
+						}else {
+							Window.alert("Bitte nur eine Gruppe auswählen!");
+						}
+					}
 
-			// Gruppe mit Zeitraum Report (Check)
-			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null
-					&& cEndDate != null && disabledRetailerBtn.isDown() == true) {
-				Window.alert("Report von Gruppe mit Zeitraum wurde erstellt");
+//ARTICLE-DATE-REPORT=============================================================================================================================
+			
+					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null  && cEndDate != null && disabledRetailerBtn.isDown() == true) {
+						
+						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
 
-				Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
-				Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+						Date choosenStartDatePl1 = cStartDate;
+						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
 
-				Date choosenStartDatePl1 = cStartDate;
-				CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
-				Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+						Date choosenEndDatePl1 = cEndDate;
+						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
 
-				Date choosenEndDatePl1 = cEndDate;
-				CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
-				Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
+						if(choosenGroups.size() == 1) {
+							reportVerwaltung.createStatisticAD(user, choosenGroups, cStartDateTS, cEndDateTS, choosenStartDatePl1TS, choosenEndDatePl1TS, new ArticleDateReportCallback());
+						}else {
+							Window.alert("Bitte nur eine Gruppe auswählen!");
+						}
+					}
 
-				return;
-				// TODO
-			}
+//ARTICLE-DATE_RETAILER-REPORT=====================================================================================================================
+				
+					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null && cEndDate != null && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false ) {
+						
+						Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
+						Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
 
-			// Gruppe mit Zeitraum und Retailer (Check)
-			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == false && cStartDate != null
-					&& cEndDate != null && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false) {
-				Window.alert("Report von der Gruppe mit Zeitraum und des Retailers wurde erstellt");
+						Date choosenStartDatePl1 = cStartDate;
+						CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
+						Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
 
-				Timestamp cStartDateTS = new Timestamp(cStartDate.getTime());
-				Timestamp cEndDateTS = new Timestamp(cEndDate.getTime());
+						Date choosenEndDatePl1 = cEndDate;
+						CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
+						Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
 
-				Date choosenStartDatePl1 = cStartDate;
-				CalendarUtil.addDaysToDate(choosenStartDatePl1, 1);
-				Timestamp choosenStartDatePl1TS = new Timestamp(choosenStartDatePl1.getDate());
+						if(choosenGroups.size() == 1 && choosenRetailer.size() == 1) {
+							reportVerwaltung.createStatisticADR(user, choosenGroups, choosenRetailer, cStartDateTS, cEndDateTS, choosenStartDatePl1TS, choosenEndDatePl1TS, new ArticleDateRetailerReportCallback());
+						}else {
+							Window.alert("Bitte nur eine Gruppe und einen dazugehörigen Einzelhändler auswählen!");
+						}
+					}
+					
+//ARTICLE-RETAILER-REPORT==========================================================================================================================
+	
+					if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && choosenRetailerS.size() != 0 && disabledRetailerBtn.isDown() == false) {
+						
+						if(choosenGroups.size() ==1 && choosenRetailer.size() == 1) {
+							reportVerwaltung.createStatisticAR(user, choosenGroups, choosenRetailer, new ArticleRetailerReportCallback());
+							}else {
+								Window.alert("Bitte nur eine Gruppe und einen dazugehörigen Einzelhändler auswählen!");
+							}
+						
+					
+					}
 
-				Date choosenEndDatePl1 = cEndDate;
-				CalendarUtil.addDaysToDate(choosenEndDatePl1, 1);
-				Timestamp choosenEndDatePl1TS = new Timestamp(choosenEndDatePl1.getDate());
-
-				return;
-				// TODO
-			}
-
-			// Gruppe und Retailer (Check)
-			if (choosenGroupsS.size() != 0 && disabledPeriodBtn.isDown() == true && choosenRetailerS.size() != 0
-					&& disabledRetailerBtn.isDown() == false) {
-				Window.alert("Report von der Gruppe und des Retailers wurde erstellt");
-				// TODO
-				return;
-			}
-
-			if (cStartDate.equals(cEndDate)) {
-				Window.alert("Das Startdatum und Enddatum dürfen nicht das selbe sein.");
-				return;
-				// TODO
-			}
-
-			if (choosenGroupsS.size() == 0 || cStartDate == null || cEndDate == null
-					|| choosenRetailerS.size() == 0 && disabledRetailerBtn.isDown() == false) {
-				Window.alert("Bitte füllen Sie alle Felder aus.");
-				return;
-				// TODO
-			}
-
+					if (cStartDate.equals(cEndDate)) {
+						Window.alert("Das Startdatum und Enddatum dürfen nicht das selbe sein.");
+						return;
+						//TODO
+					}
+					
+					if (choosenGroupsS.size() == 0 || cStartDate == null || cEndDate == null || choosenRetailerS.size() == 0 && disabledRetailerBtn.isDown() == false ) {
+						Window.alert("Bitte füllen Sie alle Felder aus.");
+						return;
+						//TODO
+					}
+		
+				}
 		}
-	}
+	
+	
 
 	class GroupCheckBoxClickHandler implements ClickHandler {
 		CheckBox checkBox = null;
+		Group group;
 
-		public GroupCheckBoxClickHandler(CheckBox cB) {
+		public GroupCheckBoxClickHandler(CheckBox cB, Group g) {
 			this.checkBox = cB;
+			this.group = g;
 		}
 
 		public void onClick(ClickEvent event) {
+		
+			if(checkBox.getValue()) {
+				choosenGroups.add(group);
+			} else {
+				choosenGroups.remove(group);
+			}
+			
 			if (choosenGroupsS.contains(checkBox.getText())) {
-
+				
 				for (int i = 0; i < choosenGroupsS.size(); i++) {
 					if (choosenGroupsS.elementAt(i) == checkBox.getText()) {
 						choosenGroupsS.removeElementAt(i);
@@ -452,12 +514,20 @@ public class ReportFilterForm extends VerticalPanel {
 
 	class RetailerCheckBoxClickHandler implements ClickHandler {
 		CheckBox checkBox = null;
+		Retailer retailer;
 
-		public RetailerCheckBoxClickHandler(CheckBox cB) {
+		public RetailerCheckBoxClickHandler(CheckBox cB, Retailer r) {
 			this.checkBox = cB;
+			this.retailer = r;
 		}
 
 		public void onClick(ClickEvent event) {
+			if(checkBox.getValue()) {
+				choosenRetailer.add(retailer);
+			}else {
+				choosenRetailer.remove(retailer);
+			}
+			
 			if (choosenRetailerS.contains(checkBox.getText())) {
 
 				for (int i = 0; i < choosenRetailerS.size(); i++) {
@@ -469,9 +539,8 @@ public class ReportFilterForm extends VerticalPanel {
 				choosenRetailerS.add(checkBox.getText());
 			}
 		}
-
+		
 	}
-
 	class StartDateChangeHandler implements ValueChangeHandler<Date> {
 		public StartDateChangeHandler() {
 
@@ -542,8 +611,8 @@ public class ReportFilterForm extends VerticalPanel {
 			}
 		}
 	}
-	// ARTICLE-DATE-RETAILER-CALLBACK===================================================================
-
+//ARTICLE-DATE-RETAILER-CALLBACK===================================================================
+	
 	class ArticleDateRetailerReportCallback implements AsyncCallback<ArticleDateRetailerReport> {
 
 		public void onFailure(Throwable caught) {
@@ -557,8 +626,8 @@ public class ReportFilterForm extends VerticalPanel {
 			rForm.setReport(html);
 		}
 	}
-	// ARTICLE-RETAILER-CALLBACK========================================================================
-
+//ARTICLE-RETAILER-CALLBACK========================================================================
+	
 	class ArticleRetailerReportCallback implements AsyncCallback<ArticleRetailerReport> {
 
 		public void onFailure(Throwable caught) {
@@ -573,8 +642,8 @@ public class ReportFilterForm extends VerticalPanel {
 		}
 	}
 
-	// ARTICLE-DATE-CALLBACK============================================================================
-
+//ARTICLE-DATE-CALLBACK============================================================================
+	
 	class ArticleDateReportCallback implements AsyncCallback<ArticleDateReport> {
 
 		public void onFailure(Throwable caught) {
@@ -589,8 +658,8 @@ public class ReportFilterForm extends VerticalPanel {
 		}
 	}
 
-	// ARTICLE-CALLBACK=================================================================================
-
+//ARTICLE-CALLBACK=================================================================================
+	
 	class ArticleReportCallback implements AsyncCallback<ArticleReport> {
 
 		public void onFailure(Throwable caught) {

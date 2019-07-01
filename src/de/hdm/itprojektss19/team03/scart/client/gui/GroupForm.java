@@ -36,6 +36,7 @@ public class GroupForm extends VerticalPanel {
 	EditorServiceAsync editorVerwaltung = ClientsideSettings.getEditor();
 	LoginServiceAsync loginService = ClientsideSettings.getLoginService();
 
+	// VARIABLES
 	User user = new User();
 	Vector<GroceryList> allGrocery = new Vector<GroceryList>();
 	Vector<Group> allGroups = new Vector<Group>();
@@ -51,14 +52,23 @@ public class GroupForm extends VerticalPanel {
 
 	// Labels
 	Label groupLabel = new Label("Gruppen");
-
+	
+	// DEFAULT CONSTRUCTOR
+	public GroupForm() {
+		
+	}
+	// CONSTRUCTOR
 	public GroupForm(User u) {
 
 		this.user = u;
 
 		groupTree.addSelectionHandler(selectionHandler);
 	}
-
+	// METHODS
+	
+	/** Methode wird bei dem Aufrufen der Klasse/des Widgets gestartet
+	 * 
+	 */
 	public void onLoad() {
 		// super.onLoad();
 		loadingPanel.add(new LoadingForm());
@@ -81,21 +91,21 @@ public class GroupForm extends VerticalPanel {
 	
 	/** Methode um alle GroceryLists des User zu finden
 	 * 
-	 * @param u (User Objekt)
-	 * @return Vector mit den GroceryListen
+	 * @param u (User Objekt des aktuellen Users)
+	 * @return Vector mit den Einkaufslisten des Users
 	 */
-	public Vector<Group> findAllGroceryListFromUser(User u) {
+	public Vector<GroceryList> findAllGroceryListFromUser(User u) {
 		
 		GWT.log(u.getId()+" "+u.getUsername()+" "+u.getEmail()); //@bastiantilk-Fehlercheck
 		
 		/** Sucht alle Gruppen des Users ueber die GroupUser Tabelle
-		 * 
+		 * und fuegt diese dem allGroups-Vektor hinzu
 		 */
 		editorVerwaltung.findAllGroupsByUserId(u.getId(), new AsyncCallback<Vector<Group>>() {
 		
 			@Override
 			public void onFailure(Throwable arg0) {
-				Window.alert("Gruppen von dem User konnten nicht gefunden werden");
+				Window.alert("Fehler: Gruppen von dem User konnten nicht gefunden werden");
 			}
 
 			@Override
@@ -106,13 +116,13 @@ public class GroupForm extends VerticalPanel {
 				GWT.log(allGroups.toString()); //@bastiantilk-Fehlercheck
 			
 				/** Sucht alle GroceryListen aus allen Gruppen des Users
-				 * 
+				 * und fuegt diese dem allGrocery-Vector hinzu
 				 */
 				editorVerwaltung.getAllGroceryListsByGroupVector(allGroups,  new AsyncCallback<Vector<GroceryList>>() {
 				
 					@Override
 					public void onFailure(Throwable arg0) {
-						Window.alert("Einkaufslisten von dem User konnten nicht gefunden werden");
+						Window.alert("Fehler: Einkaufslisten von dem User konnten nicht gefunden werden");
 					}
 
 					@Override
@@ -128,7 +138,7 @@ public class GroupForm extends VerticalPanel {
 				
 			}
 		});
-		return allGroups;			
+		return allGrocery;			
 	}
 
 	//Alt
@@ -152,6 +162,10 @@ public class GroupForm extends VerticalPanel {
 		}
 	};
 
+	/** Fuellt das Tree-Widget mit den Gruppen(allGroups-Vektor) und 
+	 *  Einkaufslisten(allGrocery-Vektor)  bei Seitenaufruf/Aktualiserung
+	 * 
+	 */
 	public void fillTree() {
 		groupTree.setAnimationEnabled(true);
 		Label newGroup = new Label("+ Gruppe hinzufügen");
@@ -187,7 +201,12 @@ public class GroupForm extends VerticalPanel {
 		RootPanel.get("content").getElement().getStyle().setProperty("margin",
 				"0px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
 	}
-
+	
+	/**
+	 * 
+	 * @param gl (GroceryList-Objekt)
+	 * @return Group-Objekt (Gruppe in der die Einkaufsliste(Parameter) ist)
+	 */
 	public Group getGroupOfGroceryList(GroceryList gl) {
 		Group glGroup = new Group();
 		glGroup.setId(gl.getGroupId());
@@ -200,7 +219,11 @@ public class GroupForm extends VerticalPanel {
 		public void onSelection(SelectionEvent<TreeItem> event) {
 		}
 	};
-
+	
+	/** ClickHandler wenn auf eine Gruppe geklickt wird um diese zu editieren.
+	 * Ruft entsprechende Seite EditGroup auf
+	 *
+	 */
 	class GroupClickHandler implements ClickHandler {
 		final Group selection;
 
@@ -215,7 +238,11 @@ public class GroupForm extends VerticalPanel {
 			RootPanel.get("content").add(outer);
 		}
 	};
-
+	
+	/** ClickHandler wenn auf eine Einkaufsliste geklickt wird.
+	 * 	Es wird die entsprechende Seite ShoppingListForm geoeffnet
+	 *
+	 */
 	class GroceryListClickHandler implements ClickHandler {
 		final GroceryList selection;
 		final Group group;
@@ -233,7 +260,11 @@ public class GroupForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	/** ClickHandler wenn auf "+ Einkaufsliste hinzufügen" 
+	 * geklickt wird
+	 *
+	 */
 	class NewGroceryListClickHandler implements ClickHandler {
 		// final GroceryList selection;
 		final Group group;
@@ -253,7 +284,7 @@ public class GroupForm extends VerticalPanel {
 				@Override
 				public void onFailure(Throwable arg0) {
 					// TODO Auto-generated method stub
-					Window.alert("Neue Groceryliste konte nicht erstellt werden");
+					Window.alert("Fehler: Neue Groceryliste konte nicht erstellt werden");
 				}
 
 				@Override
@@ -271,7 +302,10 @@ public class GroupForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	/** ClickHandler wenn auf "+ Gruppe hinzufügen" geklickt wird
+	 * 
+	 */
 	ClickHandler createClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent arg0) {

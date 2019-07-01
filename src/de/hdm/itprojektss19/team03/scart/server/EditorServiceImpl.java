@@ -1,10 +1,17 @@
 package de.hdm.itprojektss19.team03.scart.server;
 
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.Vector;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import javax.imageio.ImageIO;
+
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
@@ -37,6 +44,60 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	public EditorServiceImpl() throws IllegalArgumentException {
 
+	}
+
+	/**
+	 * Generates Identicon
+	 * 
+	 * @source: https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android
+	 * 
+	 */
+	public String generateIdenticons(String text, int image_width, int image_height) {
+		int width = 5, height = 5;
+
+		byte[] hash = text.getBytes();
+
+		BufferedImage identicon = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		WritableRaster raster = identicon.getRaster();
+
+		int[] background = new int[] { 255, 255, 255, 0 };
+		int[] foreground = new int[] { hash[0] & 255, hash[1] & 255, hash[2] & 255, 255 };
+
+		for (int x = 0; x < width; x++) {
+			// Enforce horizontal symmetry
+			int i = x < 3 ? x : 4 - x;
+			for (int y = 0; y < height; y++) {
+				int[] pixelColor;
+				// toggle pixels based on bit being on/off
+				if ((hash[i] >> y & 1) == 1)
+					pixelColor = foreground;
+				else
+					pixelColor = background;
+				raster.setPixel(x, y, pixelColor);
+			}
+		}
+
+		BufferedImage finalImage = new BufferedImage(image_width, image_height, BufferedImage.TYPE_INT_ARGB);
+
+		// Scale image to the size you want
+		AffineTransform at = new AffineTransform();
+		at.scale(image_width / width, image_height / height);
+		AffineTransformOp op = new AffineTransformOp(at, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		finalImage = op.filter(identicon, finalImage);
+		try {
+			return encodeToString(finalImage, "png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	}
+
+	public static String encodeToString(BufferedImage image, String type) throws IOException {
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		ImageIO.write(image, "png", outputStream);
+		String encodedImage = Base64.getEncoder().encodeToString(outputStream.toByteArray());
+		return encodedImage;
 	}
 
 	// SERIALIZATION===========================================================================
@@ -298,7 +359,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public void saveGroceryList(GroceryList gl) throws IllegalArgumentException {
+	public GroceryList saveGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
 			this.glMapper.update(gl);
@@ -307,9 +368,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+		return gl;
 	}
 
-	public void deleteGroceryList(GroceryList gl) throws IllegalArgumentException {
+	public GroceryList deleteGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
 			this.glMapper.delete(gl);
@@ -317,6 +379,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		} catch (IllegalArgumentException | DatabaseException e) {
 			throw new IllegalArgumentException(e);
 		}
+		return gl;
 	}
 
 	public Vector<GroceryList> getGroceryListByOwner(User u) throws IllegalArgumentException {
@@ -370,27 +433,27 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException {
 		try {
 			Vector<GroceryList> tempGrocery = new Vector<GroceryList>();
-			for(int i=0; i < g.size();i++) {
-				
+			for (int i = 0; i < g.size(); i++) {
+
 				tempGrocery.addAll(glMapper.findAllGroceryListByGroupId(g.elementAt(i).getId()));
-				
+
 			}
 			return tempGrocery;
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		
+
 	}
 
 	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListsByUserId(userId);
-			
+
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -415,27 +478,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		// Input fuer Article Attribute muss noch erledigt werden
 
 		try {
-			Article temp = new Article(); // Mit dem Input der Attribute muss hier ein neues Object mit den Attributen
-											// erstellt werden
-			this.aMapper.insert(temp);
-			// Ausgabe der Rueckgabe aus der insert Funktion fehlt
+			return this.aMapper.insert(a);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 	}
 
 	public Article saveArticle(Article a) throws IllegalArgumentException {
 		try {
 
 			this.aMapper.update(a);
+			return a;
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 
 	}
 
@@ -443,12 +502,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			aMapper.delete(a);
 			// Erfolgts Message fuer erfolgreiches Loeschen
+			return a;
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
-		return a;
 	}
 
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
@@ -512,9 +571,39 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws IllegalArgumentException {
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException {
 		try {
-			return this.aMapper.findAllArticleByFavouriteTRUE();
+			return this.aMapper.findAllArticleByFavouriteTRUE(groups);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByRetailerFavouriteTRUE(groups,retailers);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByDateFavouriteTRUE(groups, start, end);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+	//REPORT======================================================================================================
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException {
+		try {
+			return this.aMapper.findAllArticleByDateRetailerFavouriteTRUE(groups, retailers, start, end);
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -534,7 +623,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	public void saveRetailer(Retailer r) throws IllegalArgumentException {
+	public Retailer saveRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
 			this.rMapper.update(r); // Speichert Retailer
@@ -543,9 +632,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+		return r;
 	}
 
-	public void deleteRetailer(Retailer r) throws IllegalArgumentException {
+	public Retailer deleteRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
 			this.rMapper.delete(r); // Löscht Retailer
@@ -554,6 +644,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+		return r;
 	}
 
 	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {

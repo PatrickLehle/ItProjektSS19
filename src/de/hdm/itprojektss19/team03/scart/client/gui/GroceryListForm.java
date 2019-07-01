@@ -39,11 +39,12 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class GroceryListForm extends VerticalPanel {
 
-	public GroceryListForm(User u, Group g, Vector<Article> a, Retailer r) {
+	public GroceryListForm(User u, Group g, Vector<Article> a, Retailer r, GroceryList gr) {
 		this.user = u;
 		this.group = g;
 		this.retailer = r;
 		this.articleVector = a;
+		this.groceryList = gr;
 	};
 
 	private User user;
@@ -84,7 +85,7 @@ public class GroceryListForm extends VerticalPanel {
 
 	Label userRetailerLabel = new Label("zuteilen f\u00fcr");
 
-	GroceryList groceryList = new GroceryList(); // Muss bei dem Aufruf der GUI-Seite uebergeben werden
+	GroceryList groceryList; // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
 
 	int trueCount = 1;
@@ -637,7 +638,6 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setWidget(i, 1, articleTextBox);
 				articleTable.setWidget(i, 2, quantityTextBox);
 				articleTable.setWidget(i, 3, unitTextBox);
-				articleTable.setText(i, 4, retailer.getRetailerName());
 			} else if (addBtnBoolean == true) {
 				if (textBoxesEmpty() == "false") {
 					article.setName(articleTextBox.getText());
@@ -650,10 +650,7 @@ public class GroceryListForm extends VerticalPanel {
 					// Change fav das fav fuer alle gleichnamigen gesetzt wird
 					article.setFav(false);
 					ev.createArticle(article, new AddArticleCallback());
-					if (article == null) {
-						ev.addArticleToGroceryList(groceryList, article, new AddArticleToGroceryListCallback());
-					}
-					addBtnBoolean = false;
+
 				} else if (textBoxesEmpty() == "true") {
 					addBtnBoolean = false;
 					articleTextBox.setText(null);
@@ -787,8 +784,8 @@ public class GroceryListForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Article result) {
-			// Change to Void
-			article = null;
+			ev.addArticleToGroceryList(groceryList, result, new AddArticleToGroceryListCallback());
+			addBtnBoolean = false;
 		}
 	}
 

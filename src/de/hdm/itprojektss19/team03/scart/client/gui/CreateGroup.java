@@ -152,11 +152,7 @@ public class CreateGroup extends VerticalPanel {
 		this.add(contentBox);
 		// this.add(footer);
 
-		// CLICKHANDLER TO CREATE A GROUP=============================
-		/**
-		 * Click/Enter-Handler fuer den createGroup-Button
-		 * 
-		 * @author bastiantilk
+		/** Click/Enter-Handler fuer den createGroup-Button
 		 *
 		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -224,7 +220,7 @@ public class CreateGroup extends VerticalPanel {
 						 * 
 						 */
 						public void onFailure(Throwable caught) {
-							Window.alert("Group could not be creater: " + caught);
+							Window.alert("Group could not be created: " + caught);
 						}
 
 						@Override
@@ -288,6 +284,9 @@ public class CreateGroup extends VerticalPanel {
 		});
 	}
 
+	/** Methode zum hinzufuegen eine (eigene) Einkaufsliste fuer die gerade erstellte Gruppe
+	 * 
+	 */
 	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
 
 		public void onSuccess(GroceryList gl) {
@@ -300,7 +299,7 @@ public class CreateGroup extends VerticalPanel {
 	};
 
 	/**
-	 * UEberprueft korrekte syntax der Eingabe
+	 * Ueberprueft auf korrekten Syntax der Eingabe
 	 * 
 	 * @param str
 	 * @return true, wenn der Name passt

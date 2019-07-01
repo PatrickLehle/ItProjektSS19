@@ -59,9 +59,10 @@ public class GroceryListArticleMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String article = "INSERT INTO grocerylistarticle (grocerylistid, articleid) VALUES (?,?)";
+		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId) VALUES (?,?)";
 
 		try {
+			System.out.println(a.getId() + " " + gl.getId());
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(article);
 			stmt.setInt(1, gl.getId());
@@ -90,7 +91,7 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum loeschen des Tupels aus der DB
-		String deleteSQL = "DELETE FROM grocerylistarticle WHERE grocerylistid=? AND articleid =?";
+		String deleteSQL = "DELETE FROM grocerylistarticle WHERE grocerylistId=? AND articleId =?";
 
 		try {
 			con = DBConnection.connection();
@@ -110,8 +111,8 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId = article.id JOIN grocerylist ON grocerylistarticle.grocerylistId "
-				+ "= grocerylist.id JOIN retailer ON retailer.id = article.id WHERE grocerylistarticle.grocerylistId= "
+		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId = article.articleId JOIN grocerylist ON grocerylistarticle.grocerylistId "
+				+ "= grocerylist.groceryListId JOIN retailer ON retailer.retailerId = article.articleId WHERE grocerylistarticle.grocerylistId= "
 				+ grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
@@ -121,26 +122,23 @@ public class GroceryListArticleMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			GroceryList gl = new GroceryList();
-			gl.setGroceryListName("name");
 
 			while (rs.next()) {
 				Article a = new Article();
 				a.setId(rs.getInt("articleId"));
-				a.setName(rs.getString(4));
-				a.setCreationDat(rs.getTimestamp("creationDat"));
-				a.setModDat(rs.getTimestamp("modDat"));
-				a.setCheckBoolean(rs.getBoolean("boolean"));
-				a.setRetailerId(rs.getInt("retailerId"));
-				a.setQuantity(rs.getInt("quantity"));
-				a.setUnit(rs.getString("unit"));
-				a.setDelDat(rs.getTimestamp("delDat"));
-				a.setOwnerId(rs.getInt("ownerId"));
-				a.setFav(rs.getBoolean("fav"));
-				a.setGroupId(rs.getInt("groupId"));
-				a.setRetailerName(rs.getString(22));
+				a.setName(rs.getString("articleName"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setRetailerId(rs.getInt("articleRetailerId"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit(rs.getString("articleUnit"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setGroupId(rs.getInt("articleGroupId"));
+				a.setRetailerName(rs.getString("retailerName"));
 				result.addElement(a);
-				System.out.println(a.getName() + a.getId());
 			}
 			return result;
 		} catch (SQLException e2) {
@@ -160,7 +158,7 @@ public class GroceryListArticleMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String deleteSQL = "DELETE FROM grocerylistarticle WHERE articleid=?";
+		String deleteSQL = "DELETE FROM grocerylistarticle WHERE articleId=?";
 
 		try {
 			con = DBConnection.connection();

@@ -16,6 +16,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public interface EditorServiceAsync {
+	void generateIdenticons(String text, int image_width, int image_height, AsyncCallback<String> asyncCallback);
 
 	void init(AsyncCallback<Void> callback);
 
@@ -65,9 +66,9 @@ public interface EditorServiceAsync {
 
 	void createGroceryList(GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
 
-	void saveGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
+	void saveGroceryList(GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
 
-	void deleteGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
+	void deleteGroceryList(GroceryList gl, AsyncCallback<GroceryList> asyncCallback);
 
 	void getGroceryListByOwner(User u, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
@@ -106,15 +107,23 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
-	void findAllArticleByFavouriteTRUE(AsyncCallback<Vector<Article>> asyncCallback);
+	//ARTICLE-REPORT==============================================================================
+	
+	void findAllArticleByFavouriteTRUE(Vector<Group> groups,AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups,Vector<Retailer> retailers,AsyncCallback<Vector<Article>> asyncCallback);
 
+	void findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
+	
 	// RETAILER===========================================================================
 
 	void createRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
 
-	void saveRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
+	void saveRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
 
-	void deleteRetailer(Retailer r, AsyncCallback<Void> asyncCallback);
+	void deleteRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
 
 	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
 

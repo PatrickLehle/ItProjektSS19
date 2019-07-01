@@ -69,15 +69,16 @@ body {
 }
 
 .icon-button {
-	margin: 10px !important;
+	margin: 5px !important;
 	border-style: none !important;
 	background: rgb(242, 210, 37) !important;
 	box-shadow: 0px 0px 5px rgba(242, 210, 37);
 	color: rgb(25, 31, 31) !important;
-	width: 40px;
-	height: 40px;
+	width: 30px;
+	height: 30px;
 	border-radius: 200px;
-	text-align: center;
+	text-align: center;    
+	cursor: pointer;
 }
 
 .table-button1 {
@@ -100,6 +101,16 @@ body {
 	margin: 1em;
 }
 
+.profile-img-big {
+	border: solid rgb(37, 40, 73) 2px;
+    padding: 5px;
+    margin-right: 1em;
+} 
+.profile-img-small {
+	border: solid rgb(37, 40, 73) 1px;
+    padding: 2px;
+} 
+
 .tree-group {
 	font-size: 1.5em;
 	font-weight: bold;
@@ -120,10 +131,6 @@ body {
 	font-size: 1.2em;
 	color: rgb(150, 150, 150) !important;
 	font-style: italic;
-}
-
-.icon-button {
-	
 }
 
 .h1 {

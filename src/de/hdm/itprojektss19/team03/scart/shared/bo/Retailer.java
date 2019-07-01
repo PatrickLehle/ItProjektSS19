@@ -15,6 +15,7 @@ public class Retailer extends BusinessObject implements IsSerializable {
 	private String retailerName;
 	private int retailerId;
 	private Group group;
+	private User user;
 
 	// CONSTRUCTORS===========================================================================
 
@@ -55,6 +56,14 @@ public class Retailer extends BusinessObject implements IsSerializable {
 
 	public void setGroup(Group group) {
 		this.group = group;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	// GROUP====================================================================================
