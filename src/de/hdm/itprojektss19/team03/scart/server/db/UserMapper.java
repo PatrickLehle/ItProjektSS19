@@ -208,7 +208,9 @@ public class UserMapper {
 	    	Connection con = null;
 			PreparedStatement stmt = null;
 
+			// SQL-Anweisung zum finden der naechsten Id
 			String maxId = "SELECT MAX(userId) AS maxid FROM user";
+			// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
 			String insert = "INSERT INTO user (userId, userEmail, userName) VALUES (?,?,?)";
 
 			try {
