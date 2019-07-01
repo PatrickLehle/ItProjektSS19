@@ -120,14 +120,14 @@ public class EditGroup extends VerticalPanel {
 
 	public void loadTable() {
 
-		// new User Textfield
-		TextBox userNameTextBox = new TextBox();
-		TextBox userEmailTextBox = new TextBox();
-
-		// Add User Button
-		Button addButton = new Button("add");
-		addButton.addStyleName("table-button1");
-		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
+//		// new User Textfield
+//		TextBox userNameTextBox = new TextBox();
+//		TextBox userEmailTextBox = new TextBox();
+//
+//		// Add User Button
+//		Button addButton = new Button("add");
+//		addButton.addStyleName("table-button1");
+//		addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
 
 		userTable.removeAllRows();
 		userTable.setStyleName("gwt-flextable");
@@ -137,9 +137,9 @@ public class EditGroup extends VerticalPanel {
 		userTable.setText(0, 2, "");
 		userTable.setText(1, 0, user.getUsername());
 		userTable.setText(1, 1, user.getEmail());
-		userTable.setWidget(2, 0, userNameTextBox);
-		userTable.setWidget(2, 1, userEmailTextBox);
-		userTable.setWidget(2, 2, addButton);
+//		userTable.setWidget(2, 0, userNameTextBox);
+//		userTable.setWidget(2, 1, userEmailTextBox);
+//		userTable.setWidget(2, 2, addButton);
 
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
@@ -404,8 +404,8 @@ public class EditGroup extends VerticalPanel {
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 
 //				// new User Textfield
-//				TextBox userNameTextBox = new TextBox();
-//				TextBox userEmailTextBox = new TextBox();
+				TextBox userNameTextBox = new TextBox();
+				TextBox userEmailTextBox = new TextBox();
 
 				// UserDelete Button
 				Button deleteButton = new Button("x");
@@ -413,8 +413,8 @@ public class EditGroup extends VerticalPanel {
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
 
 //				// Add User Button
-//				Button addButton = new Button("add");
-//				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
+				Button addButton = new Button("add");
+				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
 
 				if (allUsers.get(userNumber).getId() != user.getId()) {
 					userTable.setText(userNumber + 3, 0, allUsers.get(userNumber).getUsername());
@@ -422,6 +422,9 @@ public class EditGroup extends VerticalPanel {
 					userTable.setWidget(userNumber + 3, 2, deleteButton);
 
 				}
+				userTable.setWidget(userNumber + 4, 0, userNameTextBox);
+				userTable.setWidget(userNumber + 4, 1, userEmailTextBox);
+				userTable.setWidget(userNumber + 4, 2, addButton);
 
 			}
 
@@ -454,11 +457,11 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Void arg0) {
 			GroupForm groupForm = new GroupForm(user);
-			groupForm.setStyleName("navigation");
+			
 			RootPanel.get("navigation").clear();
+			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").add(groupForm);
-			RootPanel.get("content").clear();
-			RootPanel.get("content").add(new EditGroup(user, group));
+			onLoad();
 
 		}
 
