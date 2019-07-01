@@ -162,14 +162,14 @@ public class UserMapper {
 	 * @throws DatabaseException
 	 */
 	public User findUserByEmail(String userEmail) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-
-		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT * FROM user WHERE userEmail=?";
-		User u = new User();
-
 		try {
+			Connection con = null;
+			PreparedStatement stmt = null;
+			System.out.println(userEmail);
+
+			// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
+			String selectByKey = "SELECT * FROM user WHERE userEmail=?";
+			User u = new User();
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -186,14 +186,15 @@ public class UserMapper {
 				u.setId(rs.getInt("userId"));
 				u.setEmail(rs.getString("userEmail"));
 				u.setUsername(rs.getString("userName"));
-
+				System.out.println(u.getEmail() + " " + u.getId());
 				return u;
+			} else {
+				throw new DatabaseException();
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
 
 	/**
@@ -205,34 +206,34 @@ public class UserMapper {
 	 * @throws DatabaseException
 	 */
 	public User insert(User user) throws DatabaseException {
-	    	Connection con = null;
-			PreparedStatement stmt = null;
+		Connection con = null;
+		PreparedStatement stmt = null;
 
-			// SQL-Anweisung zum finden der naechsten Id
-			String maxId = "SELECT MAX(userId) AS maxid FROM user";
-			// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-			String insert = "INSERT INTO user (userId, userEmail, userName) VALUES (?,?,?)";
+		// SQL-Anweisung zum finden der naechsten Id
+		String maxId = "SELECT MAX(userId) AS maxid FROM user";
+		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
+		String insert = "INSERT INTO user (userId, userEmail, userName) VALUES (?,?,?)";
 
-			try {
-				con = DBConnection.connection();
-				stmt = con.prepareStatement(maxId);
-				ResultSet rs = stmt.executeQuery();
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(maxId);
+			ResultSet rs = stmt.executeQuery();
 
-				if (rs.next()) {
-					user.setId(rs.getInt("maxid") + 1);
-				}
-				stmt = con.prepareStatement(insert);
-				stmt.setInt(1, user.getId());
-				stmt.setString(2, user.getEmail());
-				stmt.setString(3, user.getUsername());
-				stmt.executeUpdate();
-
-				return user;
-
-			} catch (SQLException e2) {
-				ServersideSettings.getLogger().severe(e2.getMessage());
-				throw new DatabaseException(e2);
+			if (rs.next()) {
+				user.setId(rs.getInt("maxid") + 1);
 			}
+			stmt = con.prepareStatement(insert);
+			stmt.setInt(1, user.getId());
+			stmt.setString(2, user.getEmail());
+			stmt.setString(3, user.getUsername());
+			stmt.executeUpdate();
+
+			return user;
+
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
 
 	}
 
