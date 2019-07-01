@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -62,6 +63,7 @@ public class GroceryListForm extends VerticalPanel {
 	Button deleteBtn = new Button("<image src='/images/minusButton.png' width='16px' height='16px' align='center'/>");
 	Button checkBtn = new Button();
 	Button refreshBtn = new Button();
+	Button setResponsibleUserBtn = new Button();
 
 	Boolean addBtnBoolean = false;
 	Boolean editBtnBoolean = false;
@@ -71,7 +73,6 @@ public class GroceryListForm extends VerticalPanel {
 	TextBox quantityTextBox = new TextBox(); // Menge
 	TextBox unitTextBox = new TextBox(); // Mengeneinheit
 	ListBox userListBox = new ListBox();
-	Button setResponsibleUserBtn = new Button("retailer.getName() = DESTRUCTION");
 
 	FlexTable articleTable = new FlexTable();
 	FlexTable boughtTable = new FlexTable();
@@ -83,7 +84,7 @@ public class GroceryListForm extends VerticalPanel {
 	Vector<GroupUser> groupUserVector = new Vector<GroupUser>();
 	Vector<User> userVector = new Vector<User>();
 
-	Label userRetailerLabel = new Label("zuteilen f\u00fcr");
+	Label userRetailerLabel = new Label(); // "zuteilen f\u00fcr");
 
 	GroceryList groceryList; // Muss bei dem Aufruf der GUI-Seite uebergeben werden
 	GroceryListArticle groceryListArticle = new GroceryListArticle();
@@ -106,6 +107,7 @@ public class GroceryListForm extends VerticalPanel {
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
+		userRetailerLabel.setText(Integer.toString(articleVector.size()));
 
 		// CALLBACKS=============================================
 		ev.getAllUserByGroupId(group.getId(), new AllUserCallback());
@@ -128,16 +130,15 @@ public class GroceryListForm extends VerticalPanel {
 		// zum laden/fuellen der Tabelle auf
 		boughtTable.setVisible(false);
 		loadTable();
-		// Timer refresh = new Timer() {
-		// public void run() {
-		// if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean
-		// == false
-		// && addBtnBoolean == false) {
-		// refreshTable();
-		// }
-		// }
-		// };
-		// refresh.scheduleRepeating(1000);
+		Timer refresh = new Timer() {
+			public void run() {
+				if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false
+						&& addBtnBoolean == false) {
+					refreshTable();
+				}
+			}
+		};
+		refresh.scheduleRepeating(2000);
 		this.add(articleTable);
 		this.add(boughtTable);
 
@@ -189,8 +190,8 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public void refreshTable() {
-		ev.findAllArticleByGroceryListId(retailer.getId(), new setArticleVectorCallback());
-
+		ev.findAllArticleByGroceryListId(groceryList.getId(), new setArticleVectorCallback());
+		loadTable();
 	}
 
 	/**
