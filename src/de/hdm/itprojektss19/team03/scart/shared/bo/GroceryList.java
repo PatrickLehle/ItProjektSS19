@@ -1,6 +1,7 @@
 package de.hdm.itprojektss19.team03.scart.shared.bo;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Vector;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -26,6 +27,23 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	private String groupName;
 	private Vector<Article> articles = new Vector<Article>();
 
+// CONSTRUCTORS==========================================================
+		public GroceryList(String name, int quantity, int ownerId, int groupId, String groupname) {
+			
+			this.name = name;
+			creationDat.setTime(new Date().getTime());
+			modDat.setTime(new Date().getTime());
+			this.ownerId = ownerId;
+			this.groupId = groupId;
+			
+		}
+
+// Default Constructor
+		public GroceryList() {
+
+		}
+	
+	
 	public String getGroceryListName() {
 		return name;
 	}

@@ -14,17 +14,19 @@ import java.util.Date;
  */
 public class Article extends BusinessObject {
 
-	private static final long serialVersionUID = 1L;
-	private String name = "";
+	private String name;
 	private int quantity;
 	private String unit;
+	private int retailerId;
+	private int groupId;
+	private String retailerName;
 	private int ownerId;
 	private Retailer retailer;
 	private Timestamp creationDat;
 	private Timestamp modDat;
 	private Timestamp delDat;
 	private boolean fav;
-	private Boolean checkBoolean;
+	private Boolean checkBoolean; //Boolean ob der Artikel gekauft wurde oder nicht
 
 	// CONSTRUCTORS==========================================================
 	public Article(String name, int quantity, String unit) {
@@ -122,16 +124,14 @@ public class Article extends BusinessObject {
 	// RETAILER======================================================
 
 
-	public void setGroupId(int groupId) {
-		this.setId(groupId);
 	}
 
-	public int getGroupId() {
-		return ownerId;
+	public int getRetailerId() {
+		return this.retailerId;
 	}
 
-	public Retailer getRetailer() {
-		return retailer;
+	public String getRetailerName() {
+		return retailerName;
 	}
 
 	public void setRetailer(Retailer retailer) {
@@ -147,6 +147,12 @@ public class Article extends BusinessObject {
 	}
 	
 
+	public int getGroupId() {
+		return groupId;
+	}
 
+	public void setGroupId(int groupID) {
+		this.groupId = groupID;
+	}
 
 }

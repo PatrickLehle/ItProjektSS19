@@ -74,8 +74,8 @@ public class GroupUserMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(delete);
-			stmt.setInt(2, g.getId());
-			stmt.setInt(1, u.getId());
+			stmt.setInt(1, g.getId());
+			stmt.setInt(2, u.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -89,9 +89,9 @@ public class GroupUserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT groupuser.groupId, groups.name, user.id, user.name, "
-				+ "user.email FROM groupuser " + "JOIN user ON groupuser.userId = user.id " + "JOIN groups "
-				+ "ON groupuser.groupId = groups.id " + "WHERE groupuser.groupId= " + groupId;
+		String selectByKey = "SELECT groupuser.groupId, groups.groupName, user.userId, user.userName, "
+				+ "user.userEmail FROM groupuser " + "JOIN user ON groupuser.userId = user.userId " + "JOIN groups "
+				+ "ON groupuser.groupId = groups.groupId " + "WHERE groupuser.groupId= " + groupId;
 
 		Vector<User> result = new Vector<User>();
 
@@ -100,16 +100,14 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			User u = new User();
-			u.setUsername("name");
 
 			while (rs.next()) {
 				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
+				user.setId(rs.getInt("userId"));
+				user.setUsername(rs.getString("userName"));
+				user.setEmail(rs.getString("userEmail"));
 
-				result.addElement(u);
+				result.addElement(user);
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -141,9 +139,9 @@ public class GroupUserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT groupuser.groupId, groupuser.userId, groups.name,"
-				+ " user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id "
-				+ "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.userId=" + userId;
+		String selectByKey = "SELECT groupuser.groupId, groupuser.userId, groups.groupName,"
+				+ " user.userId, user.userName, user.userEmail FROM groupuser JOIN user ON groupuser.userId = user.userId "
+				+ "JOIN groups ON groupuser.groupId = groups.groupId WHERE groupuser.userId=" + userId;
 
 		Vector<Group> result = new Vector<Group>();
 
@@ -156,7 +154,7 @@ public class GroupUserMapper {
 			while (rs.next()) {
 				Group g = new Group();
 				g.setId(rs.getInt("groupId"));
-				g.setGroupName(rs.getString("name"));
+				g.setGroupName(rs.getString("groupName"));
 
 				result.addElement(g);
 			}
@@ -172,8 +170,8 @@ public class GroupUserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT user.id, user.name, user.email FROM groupuser JOIN user ON groupuser.userId = user.id "
-				+ "JOIN groups ON groupuser.groupId = groups.id WHERE groupuser.groupId=" + id;
+		String selectByKey = "SELECT user.userId, user.userName, user.userEmail FROM groupuser JOIN user ON groupuser.userId = user.userId "
+				+ "JOIN groups ON groupuser.groupId = groups.groupId WHERE groupuser.groupId=" + id;
 
 		Vector<User> result = new Vector<User>();
 
@@ -182,16 +180,12 @@ public class GroupUserMapper {
 			stmt = con.prepareStatement(selectByKey);
 
 			ResultSet rs = stmt.executeQuery();
-			User user = new User();
-			user.setId(rs.getInt("id"));
-			user.setUsername(rs.getString("name"));
-			user.setEmail(rs.getString("email"));
 
 			while (rs.next()) {
 				User u = new User();
-				u.setId(rs.getInt("id"));
-				u.setUsername(rs.getString("name"));
-				u.setEmail(rs.getString("email"));
+				u.setId(rs.getInt("userId"));
+				u.setUsername(rs.getString("userName"));
+				u.setEmail(rs.getString("userEmail"));
 
 				result.addElement(u);
 			}

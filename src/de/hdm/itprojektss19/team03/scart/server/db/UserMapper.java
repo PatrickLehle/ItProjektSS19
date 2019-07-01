@@ -55,9 +55,9 @@ public class UserMapper {
 			// Neues user Objekt f�r jede gefundene ID
 			while (rs.next()) {
 				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
+				user.setId(rs.getInt("userId"));
+				user.setUsername(rs.getString("userName"));
+				user.setEmail(rs.getString("userEmail"));
 				users.addElement(user);
 			}
 
@@ -80,7 +80,7 @@ public class UserMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String select = "SELECT * FROM user WHERE name=?";
+		String select = "SELECT * FROM user WHERE userName=?";
 
 		Vector<User> result = new Vector<User>();
 
@@ -93,9 +93,9 @@ public class UserMapper {
 
 			while (rs.next()) {
 				User user = new User();
-				user.setId(rs.getInt("id"));
-				user.setUsername(rs.getString("name"));
-				user.setEmail(rs.getString("email"));
+				user.setId(rs.getInt("userId"));
+				user.setUsername(rs.getString("userName"));
+				user.setEmail(rs.getString("userEmail"));
 
 				result.addElement(u);
 			}
@@ -120,7 +120,7 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT * FROM user WHERE id=?";
+		String selectByKey = "SELECT * FROM user WHERE userId=?";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -139,9 +139,9 @@ public class UserMapper {
 				User u = new User();
 
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
-				u.setId(rs.getInt(1));
-				u.setEmail(rs.getString(2));
-				u.setUsername(rs.getString(3));
+				u.setId(rs.getInt("userId"));
+				u.setEmail(rs.getString("userName"));
+				u.setUsername(rs.getString("userEmail"));
 
 				return u;
 			}
@@ -166,7 +166,8 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT `user`.*, `user`.`email` FROM `user` WHERE `user`.`email` = '" + userEmail + "'";
+		String selectByKey = "SELECT * FROM user WHERE userEmail=?";
+		User u = new User();
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -174,29 +175,25 @@ public class UserMapper {
 
 			// Aufbereitung des vorbereitenden Statements
 			stmt = con.prepareStatement(selectByKey);
-			// stmt.setString(1, userEmail);
+			stmt.setString(1, userEmail);
 
 			// Ausfuehren des SQL Statement
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 
-				// Ergebnis-Tupel in Objekt umwandeln
-				User u = new User();
-
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
-				u.setId(rs.getInt(1));
-				u.setEmail(rs.getString(2));
-				u.setUsername(rs.getString(3));
+				u.setId(rs.getInt("userId"));
+				u.setEmail(rs.getString("userName"));
+				u.setUsername(rs.getString("userEmail"));
 
 				return u;
-			} else {
-				throw new DatabaseException();
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
+		return null;
 	}
 
 	/**
@@ -212,12 +209,11 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String insertSQL = "INSERT INTO user (email, name) VALUES (?,?)";
+		String insertSQL = "INSERT INTO user (userEmail, userName) VALUES (?,?)";
 
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(insertSQL);
-			// stmt.setInt(1, user.getId());
 			stmt.setString(1, user.getEmail());
 			stmt.setString(2, user.getUsername());
 
@@ -244,7 +240,7 @@ public class UserMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum Einfuegen des Tupels in die DB
-		String updateSQL = "UPDATE user SET email=?, name=? WHERE id=?";
+		String updateSQL = "UPDATE user SET userEmail=?, userName=? WHERE userId=?";
 
 		try {
 			// Aufbau der DB-Verbindung
@@ -278,7 +274,7 @@ public class UserMapper {
 		try {
 			Statement stmt = con.createStatement();
 
-			stmt.executeUpdate("DELETE FROM user " + "WHERE id=" + user.getId());
+			stmt.executeUpdate("DELETE FROM user " + "WHERE userId=" + user.getId());
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
