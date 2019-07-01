@@ -523,24 +523,22 @@ public class GroceryListForm extends VerticalPanel {
 	 *         Tabele.
 	 */
 	class getCbDel extends CheckBox {
-		public getCbDel(Article a, int row) {
-			this.addClickHandler(new CbDeleteClickHandler(a, row));
+		public getCbDel(Article a) {
+			this.addClickHandler(new CbDeleteClickHandler(a));
 			this.setValue(false);
 		}
 	}
 
 	class CbDeleteClickHandler implements ClickHandler {
 		Article article;
-		int row;
 
-		public CbDeleteClickHandler(Article a, int row) {
+		public CbDeleteClickHandler(Article a) {
 			this.article = a;
-			this.row = row;
 		}
 
 		public void onClick(ClickEvent e) {
 			article.setCheckBoolean(true);
-			ev.saveArticle(article, new DeleteArticleCallback(row));
+			ev.saveArticle(article, new DeleteArticleCallback());
 		}
 
 	}
@@ -563,7 +561,7 @@ public class GroceryListForm extends VerticalPanel {
 					if (articleVector.get(articleNum).getDelDat() == null
 							&& articleVector.get(articleNum).getCheckBoolean() == false) {
 						for (int i = 1; i < articleTable.getRowCount(); i++) {
-							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum), articleNum));
+							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum)));
 						}
 					}
 				}
@@ -616,6 +614,7 @@ public class GroceryListForm extends VerticalPanel {
 				articleTable.setWidget(i, 1, articleTextBox);
 				articleTable.setWidget(i, 2, quantityTextBox);
 				articleTable.setWidget(i, 3, unitTextBox);
+				articleTable.setText(i, 4, retailer.getRetailerName());
 			} else if (addBtnBoolean == true) {
 				if (textBoxesEmpty() == "false") {
 					article.setName(articleTextBox.getText());
@@ -690,11 +689,6 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	class DeleteArticleCallback implements AsyncCallback<Article> {
-		int row;
-
-		public DeleteArticleCallback(int row) {
-			this.row = row;
-		}
 
 		public void onFailure(Throwable caught) {
 		}
@@ -743,13 +737,13 @@ public class GroceryListForm extends VerticalPanel {
 		public void onSuccess(Vector<Article> result) {
 			articleVector = result;
 			loadTable();
-			// CHANGE Callback zu Artikel aendern
+			// CHANGE
 			if (deleteBtnBoolean == true && articleVector.size() != 0) {
 				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
 					if (articleVector.get(articleNum).getDelDat() == null
 							&& articleVector.get(articleNum).getCheckBoolean() == false) {
 						for (int i = 1; i < articleTable.getRowCount(); i++) {
-							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum), articleNum));
+							articleTable.setWidget(i, 5, new getCbDel(articleVector.get(articleNum)));
 						}
 					}
 				}
