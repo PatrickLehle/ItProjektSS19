@@ -184,8 +184,8 @@ public class UserMapper {
 
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt("userId"));
-				u.setEmail(rs.getString("userName"));
-				u.setUsername(rs.getString("userEmail"));
+				u.setEmail(rs.getString("userEmail"));
+				u.setUsername(rs.getString("userName"));
 
 				return u;
 			}
