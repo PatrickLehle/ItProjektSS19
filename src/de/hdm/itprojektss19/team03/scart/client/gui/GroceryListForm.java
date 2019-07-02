@@ -34,8 +34,9 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 // TODO Change Constructor add GroceryList
 //		Zwei mal Klicken auf einmal aendern
 
-/** GUI-Seite der Einkaufsliste einer Gruppe. Hier koennen der Einkaufsliste
- * neue Artikel hinzugefuegt, eingekauft oder geloescht werden.
+/**
+ * GUI-Seite der Einkaufsliste einer Gruppe. Hier koennen der Einkaufsliste neue
+ * Artikel hinzugefuegt, eingekauft oder geloescht werden.
  * 
  * @author tom
  * @author bastiantilk
@@ -108,7 +109,7 @@ public class GroceryListForm extends VerticalPanel {
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
-		
+
 		articleTextBox.setVisibleLength(5);
 		quantityTextBox.setVisibleLength(5);
 		unitTextBox.setVisibleLength(5);
@@ -168,7 +169,8 @@ public class GroceryListForm extends VerticalPanel {
 		this.add(hpButtons);
 	}
 
-	/** Methode um die Tabelle bei Aenderungen neu zu laden
+	/**
+	 * Methode um die Tabelle bei Aenderungen neu zu laden
 	 * 
 	 */
 	public void refreshTable() {
@@ -246,11 +248,11 @@ public class GroceryListForm extends VerticalPanel {
 	// return retailerListBox;
 	// }
 	//
-	
+
 	/**
 	 * @author tom
 	 * 
-	 * getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
+	 *         getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
 	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
 	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
 	 *         und eine neue CheckBox wird kreiert getCbReturn.
@@ -262,11 +264,11 @@ public class GroceryListForm extends VerticalPanel {
 		retailerListBox.setItemSelected(1, true);
 		return retailerListBox;
 	}
-	
+
 	/**
 	 * @author tom
 	 * 
-	 * Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
+	 *         Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
 	 *         falscherweise als gekauft markiert wurde.
 	 * @return Es gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
@@ -342,7 +344,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-//Methoden zum Editieren eines Artikels====================================
+// Methoden zum Editieren eines Artikels====================================
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 1);
 		second = articleTable.getText(globalRow, 2);
@@ -365,18 +367,14 @@ public class GroceryListForm extends VerticalPanel {
 		unitTextBox.setText(null);
 	}
 
-	public void setTableTextFromTextBoxes() {
-		articleTable.setText(globalRow, 1, articleTextBox.getText());
-		articleTable.setText(globalRow, 2, quantityTextBox.getText());
-		articleTable.setText(globalRow, 3, unitTextBox.getText());
-		// articleTable.setText(globalRow, 4, getRetailerListBoxDisabled());
-	}
 
 	public void replaceUnchangedText() {
 		articleTable.setText(globalRow, 1, first);
 		articleTable.setText(globalRow, 2, second);
 		articleTable.setText(globalRow, 3, third);
-		// articleTable.setWidget(globalRow, 4, getRetailerListBoxDisabled());
+		// Warum geht das nicht??
+		Window.alert(retailer.getRetailerName());
+		articleTable.setText(globalRow, 4, retailer.getRetailerName());
 	}
 
 	public String textBoxesEmpty() {
@@ -399,8 +397,8 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	/**
-	 * @author tom
-	 *    CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der Tabelle.
+	 * @author tom CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus
+	 *         der Tabelle.
 	 * @return gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	public CheckBox getCbEdit() {
@@ -418,9 +416,8 @@ public class GroceryListForm extends VerticalPanel {
 						saveRowContent();
 						setTextBoxesContent();
 					} else if (textBoxesEmpty() == "false") {
-						ev.saveArticle(article, new saveEditedArticle());
+						ev.getArticleByArticleId(Integer.parseInt(articleTable.getText(finalGlobalRow, 0)), new GetArticleCallback());
 						setArticleAtributes();
-//						saveChangeOnDb123();
 						clearTextBoxes();
 						articleTable.removeCell(finalGlobalRow, 5);
 						articleTable.setWidget(finalGlobalRow, 5, getCbEdit());
@@ -451,7 +448,7 @@ public class GroceryListForm extends VerticalPanel {
 					}
 				} else {
 					if (textBoxesEmpty() == "false") {
-						ev.saveArticle(article, new saveEditedArticle2());
+						ev.getArticleByArticleId(Integer.parseInt(articleTable.getText(finalGlobalRow, 0)), new GetArticleCallback2());
 						setArticleAtributes();
 						clearTextBoxes();
 						globalRow = 0;
@@ -494,7 +491,7 @@ public class GroceryListForm extends VerticalPanel {
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
 				if (textBoxesEmpty() == "false") {
-					ev.saveArticle(article, new saveEditedArticle2());
+					ev.getArticleByArticleId(Integer.parseInt(articleTable.getText(finalGlobalRow, 0)), new GetArticleCallback2());
 					setArticleAtributes();
 					clearTextBoxes();
 				} else if (globalRow != 0) {
@@ -569,7 +566,9 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-	/** ClickHandler um ein Artikel zu favorisieren
+
+	/**
+	 * ClickHandler um ein Artikel zu favorisieren
 	 * 
 	 */
 	class FavClickHandler implements ClickHandler {
@@ -598,7 +597,6 @@ public class GroceryListForm extends VerticalPanel {
 	 */
 	class AddClickHandler implements ClickHandler {
 
-		@Override
 		public void onClick(ClickEvent e) {
 
 			if (deleteBtnBoolean == false && checkBtnBoolean == false && editBtnBoolean == false
@@ -638,11 +636,11 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	// //
 	// CALLBACKS============================================================
-	
-	/** Callback-Methode um alle Retailer der Gruppe aus der DB zu finden.
-	 *	Die RetailerListBox wird anschliessend mit den Retailern gefuellt.
+
+	/**
+	 * Callback-Methode um alle Retailer der Gruppe aus der DB zu finden. Die
+	 * RetailerListBox wird anschliessend mit den Retailern gefuellt.
 	 */
 	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
 
@@ -657,19 +655,60 @@ public class GroceryListForm extends VerticalPanel {
 			retailerListBox.setVisibleItemCount(1);
 			retailerListBox.setSelectedIndex(retailer.getId() - 1);
 			articleTable.setWidget(globalRow, 4, retailerListBox);
-			
+		}
+	}
+	
+	class GetRetailerCallback implements AsyncCallback<Retailer> {
+
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler Zeile 670");
+		}
+
+		public void onSuccess(Retailer result) {
+			article.setRetailerId(result.getId());
+			ev.saveArticle(article, new saveEditedArticle(result));
+		}
+	}
+	
+	class GetRetailerCallback2 implements AsyncCallback<Retailer> {
+
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler Zeile 673");
+		}
+
+		public void onSuccess(Retailer result) {
+			article.setRetailerId(result.getId());
+			ev.saveArticle(article, new saveEditedArticle2(result));
 		}
 	}
 
-//	class GetArticleCallback implements AsyncCallback<Article> {
-//
-//		public void onFailure(Throwable caught) {
-//		}
-//
-//		public void onSuccess(Article result) {
-//			
-//		}
-//	}
+	class GetArticleCallback implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler Zeile 692");
+		}
+
+		public void onSuccess(Article result) {
+			article = result;
+			article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
+			article.setUnit(unitTextBox.getText());
+			ev.getRetailerById(retailerListBox.getSelectedIndex(), new GetRetailerCallback());
+		}
+	}
+	
+	class GetArticleCallback2 implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+			Window.alert("Fehler Zeile 700");
+		}
+
+		public void onSuccess(Article result) {
+			article = result;
+			article.setQuantity(Integer.parseInt(quantityTextBox.getText()));
+			article.setUnit(unitTextBox.getText());
+			ev.getRetailerById(retailerListBox.getSelectedIndex(), new GetRetailerCallback2());
+		}
+	}
 
 	class GetArticleVectorByGroup implements AsyncCallback<Vector<Article>> {
 
@@ -710,9 +749,10 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	/** Callback-Methode um einen Artikel als gekauft/nicht-gekauft zu markieren.
-	 * 	Dies geschieht ueber die delDat-Variable die gesetzt/entfernt wird
-	 * 	Anschliessend wird die Tabelle aktualisiert
+	/**
+	 * Callback-Methode um einen Artikel als gekauft/nicht-gekauft zu markieren.
+	 * Dies geschieht ueber die delDat-Variable die gesetzt/entfernt wird
+	 * Anschliessend wird die Tabelle aktualisiert
 	 */
 	class SetCheckCallback implements AsyncCallback<Article> {
 		int row;
@@ -728,9 +768,10 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-	
-	/** CallBack um die ausgewaehlte Reihe aus der Tabelle zu loeschen.
-	 *  Anschliessend wir did eTabelle aktualisiert.       
+
+	/**
+	 * CallBack um die ausgewaehlte Reihe aus der Tabelle zu loeschen. Anschliessend
+	 * wir did eTabelle aktualisiert.
 	 */
 	class DeleteArticleCallback implements AsyncCallback<Article> {
 
@@ -752,9 +793,10 @@ public class GroceryListForm extends VerticalPanel {
 			addBtnBoolean = false;
 		}
 	}
-	
-	/** Callback-Methode um einen Artikel der Einkaufsliste hinzuzufuegen
-	 *	Anschliessend wird die Tabelle nue geladen
+
+	/**
+	 * Callback-Methode um einen Artikel der Einkaufsliste hinzuzufuegen
+	 * Anschliessend wird die Tabelle nue geladen
 	 */
 	class AddArticleToGroceryListCallback implements AsyncCallback<GroceryListArticle> {
 		public void onFailure(Throwable caught) {
@@ -764,9 +806,10 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-	
-	/** Callback-Methode um alle Artikel der Einkaufsliste in der DB zu finden
-	 *	Bei Erfolg wird die Tabelle mit den Artikeln der Einkaufsliste erneut geladen.
+
+	/**
+	 * Callback-Methode um alle Artikel der Einkaufsliste in der DB zu finden Bei
+	 * Erfolg wird die Tabelle mit den Artikeln der Einkaufsliste erneut geladen.
 	 */
 	class setArticleVectorCallback implements AsyncCallback<Vector<Article>> {
 		public void onFailure(Throwable caugth) {
@@ -785,7 +828,6 @@ public class GroceryListForm extends VerticalPanel {
 					}
 				}
 			} else if (deleteBtnBoolean == true && articleTable.getRowCount() == 1) {
-				loadTable();
 				deleteBtnBoolean = false;
 			} else if (checkBtnBoolean == true) {
 				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
@@ -801,12 +843,24 @@ public class GroceryListForm extends VerticalPanel {
 						}
 					}
 				}
+			}else if (editBtnBoolean == true && articleTable.getRowCount() > 1) {
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+							articleTable.setWidget(aNum, 5, getCbEdit());
+						}
+					}
+				}
+			} else if (editBtnBoolean == true && articleTable.getRowCount() == 1) {
+				editBtnBoolean = false;
 			}
 		}
 	}
-	
-	/** Callback-Methode um einen Artikel als Favorit zu markieren.
-	 *	Bei Erfolg wird die Tabelle neu geladen
+
+	/**
+	 * Callback-Methode um einen Artikel als Favorit zu markieren. Bei Erfolg wird
+	 * die Tabelle neu geladen
 	 */
 	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
 		Boolean fav;
@@ -846,32 +900,49 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-	
-	/** Methode um einen geaenderten Artikel in der DB zu updaten
+
+	/**
+	 * Methode um einen geaenderten Artikel in der DB zu updaten
 	 *
 	 */
 	class saveEditedArticle implements AsyncCallback<Article> {
+		Retailer r;
+		public saveEditedArticle(Retailer r) {
+			this.r = r;
+		}
 
 		public void onFailure(Throwable caught) {
+			Window.alert("Fehler Zeile 879");
 		}
 
 		public void onSuccess(Article result) {
 			articleTable.setText(finalGlobalRow, 1, articleTextBox.getText());
 			articleTable.setText(finalGlobalRow, 2, quantityTextBox.getText());
 			articleTable.setText(finalGlobalRow, 3, unitTextBox.getText());
-			// articleTable.setWidget(finalGlobalRow, 4, getRetailerListBoxDisabled());
+			articleTable.setText(finalGlobalRow, 4, r.getRetailerName());
+			refreshTable();
+			article = null;
 		}
 	}
 
 	class saveEditedArticle2 implements AsyncCallback<Article> {
-
+		Retailer r;
+		
+		public saveEditedArticle2(Retailer r) {
+			this.r = r;
+		}
+		
 		public void onFailure(Throwable caught) {
-			Window.alert(caught.getMessage());
+		Window.alert("Fehler Zeile 901");
 		}
 
 		public void onSuccess(Article result) {
-			setTableTextFromTextBoxes();
+			articleTable.setText(globalRow, 1, articleTextBox.getText());
+			articleTable.setText(globalRow, 2, quantityTextBox.getText());
+			articleTable.setText(globalRow, 3, unitTextBox.getText());
+			articleTable.setText(globalRow, 4, r.getRetailerName());
 			refreshTable();
+			article = null;
 		}
 	}
 
