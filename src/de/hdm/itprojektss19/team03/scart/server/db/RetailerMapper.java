@@ -223,7 +223,7 @@ public class RetailerMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
+		String maxIdSQL = "SELECT MAX(retailerId) AS maxid FROM retailer";
 		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId) VALUES (?,?,?,?)";
 
 		try {
@@ -245,7 +245,7 @@ public class RetailerMapper {
 			} else {
 				throw new DatabaseException(new SQLException("no next retailre for maxid"));
 			}
-	
+
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
