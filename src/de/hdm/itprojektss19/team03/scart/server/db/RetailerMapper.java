@@ -223,7 +223,7 @@ public class RetailerMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
+		String maxIdSQL = "SELECT MAX(retailerId) AS maxid FROM retailer";
 		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId) VALUES (?,?,?,?)";
 
 		try {
@@ -233,19 +233,23 @@ public class RetailerMapper {
 
 			if (rs.next()) {
 				retailer.setId(rs.getInt("maxid") + 1);
+				// Jetzt erfolgt das Einfuegen des Objekts
+				stmt = con.prepareStatement(insertSQL);
+				stmt = con.prepareStatement(insertSQL);
+				stmt.setInt(1, retailer.getId());
+				stmt.setString(2, retailer.getRetailerName());
+				stmt.setInt(3, retailer.getGroup().getId());
+				stmt.setInt(4, retailer.getUser().getId());
+				stmt.executeUpdate();
+				return retailer;
+			} else {
+				throw new DatabaseException(new SQLException("no next retailre for maxid"));
 			}
-			stmt = con.prepareStatement(insertSQL);
-			stmt.setInt(1, retailer.getId());
-			stmt.setString(2, retailer.getRetailerName());
-			stmt.setInt(3, retailer.getGroup().getId());
-			stmt.setInt(4, retailer.getUser().getId());
-			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return retailer;
 	}
 
 	/**

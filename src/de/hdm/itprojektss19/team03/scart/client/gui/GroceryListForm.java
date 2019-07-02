@@ -316,7 +316,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	 // alle Methoden fuer Editieren eines Artikels
+	// alle Methoden fuer Editieren eines Artikels
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 1);
 		second = articleTable.getText(globalRow, 2);
@@ -346,13 +346,6 @@ public class GroceryListForm extends VerticalPanel {
 		// articleTable.setText(globalRow, 4, getRetailerListBoxDisabled());
 	}
 
-	public void setTableTextFromFinalTextBox() {
-		articleTable.setText(finalGlobalRow, 1, articleTextBox.getText());
-		articleTable.setText(finalGlobalRow, 2, quantityTextBox.getText());
-		articleTable.setText(finalGlobalRow, 3, unitTextBox.getText());
-		// articleTable.setWidget(finalGlobalRow, 4, getRetailerListBoxDisabled());
-	}
-
 	public void replaceUnchangedText() {
 		articleTable.setText(globalRow, 1, first);
 		articleTable.setText(globalRow, 2, second);
@@ -379,9 +372,9 @@ public class GroceryListForm extends VerticalPanel {
 		article.setRetailerId(getRetailerListBox().getSelectedIndex());
 	}
 
-	public void saveChangeOnDb123() {
-		ev.saveArticle(article, new saveEditedArticle());
-	}
+//	public void saveChangeOnDb123() {
+//		ev.saveArticle(article, new saveEditedArticle());
+//	}
 
 	/**
 	 * @author tom
@@ -400,15 +393,15 @@ public class GroceryListForm extends VerticalPanel {
 		});
 		cb.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
 			public void onValueChange(ValueChangeEvent<Boolean> event) {
-				if (event.getValue() == true) {
+				if (event.getValue()) {
 					if (textBoxesEmpty() == "true") {
 						finalGlobalRow = globalRow;
 						saveRowContent();
 						setTextBoxesContent();
 					} else if (textBoxesEmpty() == "false") {
-						setTableTextFromFinalTextBox();
+						ev.saveArticle(article, new saveEditedArticle());
 						setArticleAtributes();
-						saveChangeOnDb123();
+//						saveChangeOnDb123();
 						clearTextBoxes();
 						articleTable.removeCell(finalGlobalRow, 5);
 						articleTable.setWidget(finalGlobalRow, 5, getCbEdit());
@@ -439,9 +432,8 @@ public class GroceryListForm extends VerticalPanel {
 					}
 				} else {
 					if (textBoxesEmpty() == "false") {
-						setTableTextFromTextBoxes();
+						ev.saveArticle(article, new saveEditedArticle2());
 						setArticleAtributes();
-						saveChangeOnDb123();
 						clearTextBoxes();
 						globalRow = 0;
 					} else {
@@ -458,46 +450,43 @@ public class GroceryListForm extends VerticalPanel {
 		return cb;
 	}
 
-	 /**
+	/**
 	 * @author tom
 	 *
-	 * ClickHandler fuer EditButton setzt Boolean des Buttons true und false
-	 * und schaut ob andere Buttons aktiv sind.
+	 *         ClickHandler fuer EditButton setzt Boolean des Buttons true und false
+	 *         und schaut ob andere Buttons aktiv sind.
 	 */
-	 public class EditClickHandler implements ClickHandler {
-	
-	 @Override
-	 public void onClick(ClickEvent event) {
-	 if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean
-	 == false
-	 && addBtnBoolean == false) {
-	 editBtnBoolean = true;
-	 globalRow = 0;
-	 for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-	 articleTable.setWidget(aNum, 5, getCbEdit());
-	 }
-	 } else if (editBtnBoolean == true) {
-	 editBtnBoolean = false;
-	 if (textBoxesEmpty() == "false") {
-	 setTableTextFromTextBoxes();
-	 setArticleAtributes();
-	 saveChangeOnDb123();
-	 clearTextBoxes();
-	 } else if (globalRow != 0) {
-	 replaceUnchangedText();
-	 clearTextBoxes();
-	 Window.alert("Änderung wurde nicht gespeichert");
-	 }
-	 //refreshTable();
-	 } else if (checkBtnBoolean == false || deleteBtnBoolean == false ||
-	 addBtnBoolean == false) {
-	 Window.alert("Bitte anderen Button deaktivieren.");
-	 } else {
-	 Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
-	 }
-	 }
-	 }
-	
+	public class EditClickHandler implements ClickHandler {
+
+		@Override
+		public void onClick(ClickEvent event) {
+			if (editBtnBoolean == false && checkBtnBoolean == false && deleteBtnBoolean == false
+					&& addBtnBoolean == false) {
+				editBtnBoolean = true;
+				globalRow = 0;
+				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+					articleTable.setWidget(aNum, 5, getCbEdit());
+				}
+			} else if (editBtnBoolean == true) {
+				editBtnBoolean = false;
+				if (textBoxesEmpty() == "false") {
+					ev.saveArticle(article, new saveEditedArticle2());
+					setArticleAtributes();
+					clearTextBoxes();
+				} else if (globalRow != 0) {
+					replaceUnchangedText();
+					clearTextBoxes();
+					Window.alert("Änderung wurde nicht gespeichert");
+				}
+				// refreshTable();
+			} else if (checkBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
+				Window.alert("Bitte anderen Button deaktivieren.");
+			} else {
+				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
+			}
+		}
+	}
+
 	/**
 	 * @author tom
 	 * 
@@ -715,7 +704,7 @@ public class GroceryListForm extends VerticalPanel {
 		public void onSuccess(Vector<Article> result) {
 			articleVector = result;
 			loadTable();
-			if (deleteBtnBoolean == true && articleVector.size() != 0) {
+			if (deleteBtnBoolean == true && articleTable.getRowCount() > 1) {
 				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
 					if (articleVector.get(articleNum).getDelDat() == null
 							&& articleVector.get(articleNum).getCheckBoolean() == false) {
@@ -724,6 +713,9 @@ public class GroceryListForm extends VerticalPanel {
 						}
 					}
 				}
+			} else if (deleteBtnBoolean == true && articleTable.getRowCount() == 1) {
+				loadTable();
+				deleteBtnBoolean = false;
 			} else if (checkBtnBoolean == true) {
 				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
 					if (articleVector.get(articleNum).getDelDat() == null
@@ -764,15 +756,28 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-	
+
 	class saveEditedArticle implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
 		}
 
 		public void onSuccess(Article result) {
-			
+			articleTable.setText(finalGlobalRow, 1, articleTextBox.getText());
+			articleTable.setText(finalGlobalRow, 2, quantityTextBox.getText());
+			articleTable.setText(finalGlobalRow, 3, unitTextBox.getText());
+			// articleTable.setWidget(finalGlobalRow, 4, getRetailerListBoxDisabled());
 		}
 	}
-	
+
+	class saveEditedArticle2 implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Article result) {
+			setTableTextFromTextBoxes();
+		}
+	}
+
 }
