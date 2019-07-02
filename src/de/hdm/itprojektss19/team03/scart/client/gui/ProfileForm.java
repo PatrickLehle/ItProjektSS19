@@ -18,16 +18,24 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-/**
- * ProfileForm: ...
- * 
- * 
+/** Die ProfileFOrm-Seite wird aufgerufen um Aenderungen an dem eigenen User
+ * durchzufuehren.
  * @author vanduyho
- *
  */
 
 public class ProfileForm extends VerticalPanel {
-
+// DEFAULT CONSTRUCTOR=============================================
+	/**
+	* Default Konstruktor der ProfileForm-Seite
+	*/
+	public ProfileForm() {
+	}
+	
+// CONSTRUCTOR=====================================================
+	/** Konstruktor der ProfileForm-Seite
+	 * 
+	 * @param u (User-Objekt des aktuellen Users)
+	 */
 	public ProfileForm(User u) {
 		user = u;
 	}
@@ -60,24 +68,15 @@ public class ProfileForm extends VerticalPanel {
 
 	EditorServiceAsync editorService = ClientsideSettings.getEditor();
 
-	/**
-	 * 
-	 * onLoad-Methode: ...
-	 *
+//METHODS=======================================================	
+	/** Diese Methode wird automatisch bei dem Aufruf der GUI-Seite gestartet
 	 */
-
 	public void onLoad() {
-
 		buildProfile();
-
 	}
 
-	/**
-	 * 
-	 * buildProfile-Methode: ...
-	 *
+	/** Die Methode zum aufbauen der GUI-Seite
 	 */
-
 	public void buildProfile() {
 
 		yourProfilePanel.add(yourProfileLabel);
@@ -103,12 +102,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-	/**
-	 * 
-	 * ClickHandler: ...
+	/** ClickHandler fuer den "edit"-Button um das eigene Profil zu bearbeiten
 	 *
 	 */
-
 	class EditButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
@@ -127,6 +123,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler fuer den "save"-Button, um Aenderungen abzuspeichern und
+	 * anschliessend auch in der DB zu aktualisieren.
+	 */
 	class SaveButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
@@ -155,6 +154,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler fuer den "delete"-Button um das eigene Profil zu loeschen
+	 * 
+	 */
 	class DeleteButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
@@ -177,11 +179,11 @@ public class ProfileForm extends VerticalPanel {
 			db.show();
 
 			db.add(vp);
-
 		}
-
 	}
 
+	/** ClickHandler um die Aenderungen zu bestaetigen
+	 */
 	class YesSaveButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -216,6 +218,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler um Aenderungen des eigenen Profils zu bestaetigen
+	 * 	Anschliessend wird der User in der DB geloescht.
+	 */
 	class YesDeleteButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -239,7 +244,10 @@ public class ProfileForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	/** ClickHandler um Aenderungen am eigenen Profil nicht zu uebernehmen.
+	 *
+	 */
 	class NoButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -262,12 +270,8 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-	/**
-	 * 
-	 * Callbacks: ...
-	 *
+	/** CallBack um das eigene Profilbild zu bekommen
 	 */
-
 	class getImageCallback implements AsyncCallback<String> {
 
 		public void onFailure(Throwable t) {
@@ -288,17 +292,17 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** CallBack um einen User anhand der E-Mail-Adresse in der DB zu finden.
+	 *	Bei Erfolg werden die Daten des Users aktualisiert.
+	 */
 	class FindUserByGMailCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
-			// TODO Auto-generated method stub
 
 		}
-
 		@Override
 		public void onSuccess(User arg0) {
-			// TODO Auto-generated method stub
 
 			String newUserName = userNameTB.getText();
 			String newEmailAdress = emailAdressTB.getText();
@@ -306,43 +310,37 @@ public class ProfileForm extends VerticalPanel {
 			editorService.createUser(newEmailAdress, new UpdateUserCallback());
 
 		}
-
 	}
-
+	
+	/** CallBack um einen neuen User in der DB zu erstellen.
+	 * 	Bei Erfolg wird die Seite neu aufgebaut.
+	 */
 	class UpdateUserCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSuccess(User arg0) {
-			// TODO Auto-generated method stub
 
 			buildProfile();
 
 		}
-
 	}
 
+	/** CallBack um einen User in der DB zu loeschen.
+	 * 	Bei Erfolg erscheint ein Window-Alert.
+	 */
 	class DeleteUserCallback implements AsyncCallback<Void> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
-			// TODO Auto-generated method stub
-
 		}
 
 		@Override
 		public void onSuccess(Void arg0) {
-			// TODO Auto-generated method stub
-
 			Window.alert("Ihr Profil wurde erfolgreich gelöscht!");
-
 		}
-
 	}
-
 }

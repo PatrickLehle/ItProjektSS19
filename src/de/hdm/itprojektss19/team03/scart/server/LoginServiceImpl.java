@@ -10,10 +10,10 @@ import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 
-/**
+/** Loginklasse im Server Package. Verweist auf 'LoginInfo'
+ *  in shared
  * 
- * @author bastiantilk Loginklasse im Server Package. Verweist auf 'LoginInfo'
- *         in shared
+ * @author bastiantilk 
  */
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {

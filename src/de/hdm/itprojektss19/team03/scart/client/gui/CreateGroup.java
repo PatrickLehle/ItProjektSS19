@@ -53,7 +53,7 @@ public class CreateGroup extends VerticalPanel {
 	 *            (User-Objekt des Users der die createUser-Seite aufrufen will)
 	 */
 	public CreateGroup(User u) {
-		/* Cookies: ggf. entfernen
+		/* Cookies:
 		u.setId(Integer.valueOf(Cookies.getCookie("userId")));
 		u.setEmail(String.valueOf(Cookies.getCookie("email")));
 		*/
@@ -91,8 +91,7 @@ public class CreateGroup extends VerticalPanel {
 	// HorizontalPanel footer = new HorizontalPanel();
 
 	// VARIABLES==========================================================
-	User user = null; // User-Variable die bei dem Aufrufen dieser Seite unbedingt uebergeben werden
-						// soll
+	User user = null; // User-Variable die bei dem Aufrufen dieser Seite uebergeben werden soll
 	Group createGroup = new Group();
 	
 	
@@ -300,9 +299,8 @@ public class CreateGroup extends VerticalPanel {
 
 	/**
 	 * Ueberprueft auf korrekten Syntax der Eingabe
-	 * 
 	 * @param str
-	 * @return true, wenn der Name passt
+	 * @return true, wenn der Name passt / false, wenn der Name nicht passt
 	 */
 	private Boolean checkName(String str) {
 		// \w -> nur Buchstaben oder Zahlen
