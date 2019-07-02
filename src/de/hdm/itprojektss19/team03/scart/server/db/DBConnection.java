@@ -8,16 +8,16 @@ import com.google.appengine.api.utils.SystemProperty;
 /**
  * Klasse zum Datenbankverbindung aufbauen und verwalten
  * 
- * @author Marco Dell'Oso, PatrickLehle
+ * @author Marco Dell'Oso, PatrickLehle, Julian Hofer
  */
 public class DBConnection {
 
 	private static Connection con = null;
-	private static String googleUrl = "jdbc:google:mysql://itpss19scart:sontactinstanz/scartdb";
+	private static String googleUrl = "jdbc:google:mysql://norse-decoder-240009:europe-west1:itprojekt-ss19-scart/itprojektss19?user=root&password=Login2019";
 	private static String localUrl = "jdbc:mysql://localhost:3306/itprojektss19?user=test&password=test";
 
-	private static final String username = "test";
-	private static final String password = "test";
+	private static final String username = "root";
+	private static final String password = "Login2019";
 
 	/**
 	 * Diese Methode gibt die aufgebaute DB-Verbindung zurück
@@ -41,7 +41,8 @@ public class DBConnection {
 					url = googleUrl;
 					user = username;
 					pass = password;
-				} else {
+				} 
+					else {
 					Class.forName("com.mysql.jdbc.Driver");
 					url = localUrl;
 					user = "test";
