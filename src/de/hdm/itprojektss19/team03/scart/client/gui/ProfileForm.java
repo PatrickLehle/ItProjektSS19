@@ -36,7 +36,9 @@ public class ProfileForm extends VerticalPanel {
 	// LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
 	Label userNameDescLabel = new Label("Name:");
+	Label userNameContLabel = new Label();
 	Label emailAdressDescLabel = new Label("E-Mail:");
+	Label emailAdressContLabel = new Label();
 
 	// BUTTONS================================================
 
@@ -85,13 +87,13 @@ public class ProfileForm extends VerticalPanel {
 	 */
 
 	public void buildProfile() {
-		
+				
 		yourProfilePanel.add(yourProfileLabel);
 		userNamePanel.add(userNameDescLabel);
-		Label userNameContLabel = new Label(user.getEmail());
+		userNameContLabel.setText(user.getEmail());
 		userNamePanel.add(userNameContLabel);
 		emailAdressPanel.add(emailAdressDescLabel);
-		Label emailAdressContLabel = new Label(user.getUsername());
+		emailAdressContLabel.setText(user.getUsername());
 		emailAdressPanel.add(emailAdressContLabel);
 
 		buttonPanel.add(editButton);
@@ -123,11 +125,15 @@ public class ProfileForm extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 			
-			userNameTB.setText(user.getUsername());
+			
+			userNameTB.setText(user.getEmail());
 			userNamePanel.add(userNameTB);
-
-			emailAdressTB.setText(user.getEmail());
+			userNamePanel.remove(userNameContLabel);
+			
+			emailAdressTB.setText(user.getUsername());
 			emailAdressPanel.add(emailAdressTB);
+			emailAdressPanel.remove(emailAdressContLabel);
+			
 			
 			buttonPanel.remove(editButton);
 			buttonPanel.remove(deleteButton);
