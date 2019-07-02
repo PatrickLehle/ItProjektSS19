@@ -43,7 +43,18 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 
 		}
 	
-	
+// Methods	
+		
+	/** Setzt die Modifikationszeit auf die aktuelle Zeit
+	 * 
+	 * @return (neu gesetzter) Modifikations-Timestamp
+	 */
+	public Timestamp getNewModDat() {
+		modDat.setTime(new Date().getTime());
+		return this.modDat;
+	}		
+		
+//Getter und Setter		
 	public String getGroceryListName() {
 		return name;
 	}
@@ -67,6 +78,8 @@ public class GroceryList extends BusinessObject implements IsSerializable {
 	public Timestamp getModDat() {
 		return this.modDat;
 	}
+	
+	
 
 	public void setOwnerId(int ownerId) {
 		this.ownerId = ownerId;

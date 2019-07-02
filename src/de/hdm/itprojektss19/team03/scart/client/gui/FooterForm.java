@@ -2,7 +2,9 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
-
+/** Footer der auf jeder Seite am unteren rand angezeigt wird
+ * 
+ */
 public class FooterForm extends HorizontalPanel {
 
 	public FooterForm() {
