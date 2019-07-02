@@ -164,6 +164,9 @@ public class GroceryListForm extends VerticalPanel {
 		this.add(hpButtons);
 	}
 
+	/** Methode um die Tabelle bei Aenderungen neu zu laden
+	 * 
+	 */
 	public void refreshTable() {
 		ev.findAllArticleByGroceryListId(groceryList.getId(), new setArticleVectorCallback());
 	}
@@ -230,6 +233,10 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
+	/** Methode um den Retailer des Artikels herauszufinden
+	 * 
+	 * @return ListBox-Objekt mit den genutzten Retailern
+	 */
 	public ListBox getRetailerListBox() {
 		ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
 		ev.getArticleByArticleId(globalRow, new GetArticleCallback());
@@ -316,7 +323,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	// alle Methoden fuer Editieren eines Artikels
+//Methoden zum Editieren eines Artikels====================================
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 1);
 		second = articleTable.getText(globalRow, 2);
@@ -546,7 +553,9 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	/** ClickHandler um ein Artikel zu favorisieren
+	 * 
+	 */
 	class FavClickHandler implements ClickHandler {
 		Article article;
 		Boolean fav;
@@ -616,7 +625,11 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	// //
-	// CALLBACKS===============================================================================================
+	// CALLBACKS============================================================
+	
+	/** Callback-Methode um alle Retailer der Gruppe aus der DB zu finden.
+	 *	Die RetailerListBox wird anschliessend mit den Retailern gefuellt.
+	 */
 	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
 
 		public void onFailure(Throwable caught) {
@@ -630,7 +643,11 @@ public class GroceryListForm extends VerticalPanel {
 			retailerListBox.setVisibleItemCount(1);
 		}
 	}
-
+	
+	/** Methoden-Callback um den Artikel anhand der Article-Id aus der DB zu finden.
+	 * 	Der gefundene Artikel wird der globalen "article"-Variable zugewiesen
+	 *
+	 */
 	class GetArticleCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -641,6 +658,10 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
+	/** Callback-Methode um einen Artikel als gekauft/nicht-gekauft zu markieren.
+	 * 	Dies geschieht ueber die delDat-Variable die gesetzt/entfernt wird
+	 * 	Anschliessend wird die Tabelle aktualisiert
+	 */
 	class SetCheckCallback implements AsyncCallback<Article> {
 		int row;
 
@@ -655,7 +676,10 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	
+	/** CallBack um die ausgewaehlte Reihe aus der Tabelle zu loeschen.
+	 *  Anschliessend wir did eTabelle aktualisiert.       
+	 */
 	class DeleteArticleCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -665,7 +689,9 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	/** Callback-Methode um den Owner einer Artikels festzulegen
+	 * 	Bei Erfolg wird daie globale "article"-Variable geleert
+	 */
 	class SetArticleOwnerCallback implements AsyncCallback<Article> {
 		public void onFailure(Throwable caught) {
 		}
@@ -674,7 +700,10 @@ public class GroceryListForm extends VerticalPanel {
 			article = null;
 		}
 	}
-
+	
+	/** Callback-Methode um einen Artikel in der DD anzulegen.
+	 *	Bei Erfolg wird der Artikel der aktuellen Einkaufsliste hinzugefuegt.
+	 */
 	class AddArticleCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -685,9 +714,11 @@ public class GroceryListForm extends VerticalPanel {
 			addBtnBoolean = false;
 		}
 	}
-
+	
+	/** Callback-Methode um einen Artikel der Einkaufsliste hinzuzufuegen
+	 *	Anschliessend wird die Tabelle nue geladen
+	 */
 	class AddArticleToGroceryListCallback implements AsyncCallback<GroceryListArticle> {
-
 		public void onFailure(Throwable caught) {
 		}
 
@@ -695,9 +726,11 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	
+	/** Callback-Methode um alle Artikel der Einkaufsliste in der DB zu finden
+	 *	Bei Erfolg wird die Tabelle mit den Artikeln der Einkaufsliste erneut geladen.
+	 */
 	class setArticleVectorCallback implements AsyncCallback<Vector<Article>> {
-
 		public void onFailure(Throwable caugth) {
 		}
 
@@ -733,7 +766,10 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	
+	/** Callback-Methode um einen Artikel als Favorit zu markieren.
+	 *	Bei Erfolg wird die Tabelle neu geladen
+	 */
 	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -743,7 +779,10 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	
+	/** Methode zum setzen des Bildes fuer den Fav-Button
+	 * 
+	 */
 	class FavButton extends Image {
 
 		public FavButton(Article a, Boolean f) {
@@ -756,7 +795,10 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	
+	/** Methode um einen geaenderten Artikel in der DB zu updaten
+	 *
+	 */
 	class saveEditedArticle implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {

@@ -25,7 +25,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-/**
+/** Die GroupForm-Seite stellt die Navigation der Gruppen
+ *  und Einkaufslisten dar die in einer Tree-Navigation dargestellt werden
  * 
  * @author Julian Hofer, Marco Dell'Oso, bastiantilk
  *
@@ -54,10 +55,17 @@ public class GroupForm extends VerticalPanel {
 	Label groupLabel = new Label("Gruppen");
 	
 	// DEFAULT CONSTRUCTOR
+	/**
+	 * Default Konstruktor der EditGroup-Seite
+	 */
 	public GroupForm() {
 		
 	}
 	// CONSTRUCTOR
+	/** Konstructor der GroupForm-Seite
+	 * 
+	 * @param u (User-Objekt des aktuellen Users)
+	 */
 	public GroupForm(User u) {
 
 		this.user = u;
@@ -202,7 +210,7 @@ public class GroupForm extends VerticalPanel {
 				"0px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
 	}
 	
-	/**
+	/** Methode um die Gruppe in der sich eine Einkaufsliste befindet herauszufinden
 	 * 
 	 * @param gl (GroceryList-Objekt)
 	 * @return Group-Objekt (Gruppe in der die Einkaufsliste(Parameter) ist)
@@ -222,7 +230,6 @@ public class GroupForm extends VerticalPanel {
 	
 	/** ClickHandler wenn auf eine Gruppe geklickt wird um diese zu editieren.
 	 * Ruft entsprechende Seite EditGroup auf
-	 *
 	 */
 	class GroupClickHandler implements ClickHandler {
 		final Group selection;
@@ -241,7 +248,6 @@ public class GroupForm extends VerticalPanel {
 	
 	/** ClickHandler wenn auf eine Einkaufsliste geklickt wird.
 	 * 	Es wird die entsprechende Seite ShoppingListForm geoeffnet
-	 *
 	 */
 	class GroceryListClickHandler implements ClickHandler {
 		final GroceryList selection;
@@ -263,7 +269,6 @@ public class GroupForm extends VerticalPanel {
 	
 	/** ClickHandler wenn auf "+ Einkaufsliste hinzufügen" 
 	 * geklickt wird
-	 *
 	 */
 	class NewGroceryListClickHandler implements ClickHandler {
 		// final GroceryList selection;
