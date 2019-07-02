@@ -51,14 +51,12 @@ public class ArticleMapper {
 		return articleMapper;
 	}
 
+	
 	/**
-	 * 
 	 * Sucht einen Artikel anhand seiner ID
-	 * 
-	 * @param zu
-	 *            Suchende id
+	 * @param id beschreibt die Eindeutigkeit eines Article Objekts via id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -128,7 +126,7 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAll() throws DatabaseException {
 
@@ -162,17 +160,13 @@ public class ArticleMapper {
 		}
 		return articles;
 	}
-
-	/*
-	 * Gibt einen Vektor mit allen Artikeln zurueck, die den Namen der im Parameter
-	 * uebergeben wurde haben.
+	
+	/**
 	 * 
-	 * @param Name des Artikels der gesucht werden soll
-	 * 
-	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem
-	 * gesucht wurde
-	 * 
-	 * @throws DatabaseException
+	 * @param name des Artikels der gesucht werden soll
+	 * @param a Vector von Articlen
+	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem gesucht wurde
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
 		Connection con = null;
@@ -211,13 +205,12 @@ public class ArticleMapper {
 		return result;
 	}
 
+	
 	/**
 	 * Sucht alle Artikel, die einem bestimmten Retailer haben, anhand der ID
-	 * 
-	 * @param Die
-	 *            ID des Retailers
+	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
 	 * @return Vector mit allen gefunden Artikeln des Retailers
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findArticleByRetailerId(int retailerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -251,13 +244,13 @@ public class ArticleMapper {
 		return articles;
 	}
 
+
+	
 	/**
 	 * Fuegt in der Datenbank einen neuen Artikel ein
-	 * 
-	 * @param Artikel-Objekt
-	 *            das in die DB eingef�gt werden soll
-	 * @return Der Eingef�gte Artikel mit aktueller ID
-	 * @throws DatabaseException
+	 * @param article beschreibt ein Article Objekt
+	 * @return Der Eingefuegte Artikel mit aktueller ID
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article insert(Article article) throws DatabaseException {
 		Connection con = null;
@@ -302,13 +295,12 @@ public class ArticleMapper {
 		return article;
 	}
 
+	
 	/**
 	 * Aendert einen Artikel in der Datenbank
-	 * 
-	 * @param Zu
-	 *            aendernder Artikel
+	 * @param article beschreibt ein Article Objekt
 	 * @return Geaenderter Artikel
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article update(Article article) throws DatabaseException {
 
@@ -343,13 +335,13 @@ public class ArticleMapper {
 		return article;
 	}
 
+
+	
 	/**
 	 * Loescht einen Artikel aus der Datenbank
-	 * 
-	 * @param Zu
-	 *            loeschender Artikel
-	 * 
-	 * @throws DatabaseException
+	 * @param article beschreibt ein Article Objekt
+	 * @return Es wird null zurueck gegeben, wenn der Artikel entfernt wurde.
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article delete(Article article) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -379,10 +371,10 @@ public class ArticleMapper {
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
 	 * 
-	 * @param start
-	 * @param end
+	 * @param start Datum
+	 * @param end Datum
 	 * @return Article-Vector
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -416,15 +408,15 @@ public class ArticleMapper {
 		return result;
 	}
 
+
+	
 	/**
-	 * @bastiantilk, PatrickLehle Gibt alle Artikel eines Retailers in einem
-	 * Zeitraum zurueck
-	 * 
-	 * @param start
-	 * @param end
-	 * @param r
+	 * Gibt alle Artikel eines Retailers in einem Zeitraum zurueck
+	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
+	 * @param start Datum
+	 * @param end Datum
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByDateRetailer(int retailerId, Timestamp start, Timestamp end)
 			throws DatabaseException {
@@ -472,8 +464,8 @@ public class ArticleMapper {
 	 * @param g
 	 *            Gruppen Objekt
 	 * @return Artikel-Vektor
-	 * @throws DatabaseException
-	 */
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */ 
 	public Vector<Article> findAllArticleByGroup(User u, Group g) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -507,6 +499,13 @@ public class ArticleMapper {
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param groupId beschreibt die Eindeutigkeit einer gruppe via id
+	 * @return gibt einen Vector von Articlen zurueck 
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -540,6 +539,12 @@ public class ArticleMapper {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param ownerId beschreibt die Eindeutigkeit eines Owners via id
+	 * @return gibt einen Vector Article zurueck
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -574,6 +579,12 @@ public class ArticleMapper {
 	}
 
 	//REPORT-ARTICLE=============================================================================================
+	/**
+	 * 
+	 * @param groups alle Gruppen die uebergeben werden
+	 * @return gibt einen Vector Article zurueck die Favourisiert wurden.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -619,6 +630,14 @@ public class ArticleMapper {
 	}
 	
 	//X-REPORT-ARTICLE-DATE======================================================================================
+	/**
+	 * 
+	 * @param groups Gruppen Vetor des Users
+	 * @param start Datum
+	 * @param end Datum
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und im gesuchten Zeitraum liegen
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)  throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -668,6 +687,16 @@ public class ArticleMapper {
 	}
 	
 	//X-REPORT-ARTICLE-DATE-RETAILER======================================================================================
+	
+	/**
+	 * 
+	 * @param groups ausgewaehlte Gruppen
+	 * @param retailers ausgewaehlte Retailer
+	 * @param start Datum
+	 * @param end Datum
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und im gesuchten Zeitraum liegen und den richtigen Retailer besitzen.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws DatabaseException{
 		Connection con = DBConnection.connection();
 
@@ -720,7 +749,15 @@ public class ArticleMapper {
 	}
 	
 	//REPORT-ARTICLE-RETAILER======================================================================================
-		public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)  throws DatabaseException {
+		
+	/**
+	 * 
+	 * @param groups  ausgewaehlte Gruppen
+	 * @param retailers ausgewaehlte Retailer
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und den richtigen Retailer besitzen.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)  throws DatabaseException {
 			Connection con = DBConnection.connection();
 
 			Vector<Article> result = new Vector<Article>();

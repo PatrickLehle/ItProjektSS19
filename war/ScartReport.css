@@ -263,5 +263,19 @@ button.gwt-Button {
 	border-top-left-radius: 10px !important;
 	width: auto;
 }
+.ReportLogin{
+    margin: 50px;
+ 	padding: 20px !important;
+ 	-moz-box-shadow: inset 0 0 4px #000000;
+	-webkit-box-shadow: inset 0 0 4px #000000;
+	background-color: #fbfc54!important;
+
+}
+.LoginContentReport{
+	position: justify;
+    margin: 50px !important;
+
+ 
+}
 
 

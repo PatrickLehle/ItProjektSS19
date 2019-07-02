@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
+import de.hdm.itprojektss19.team03.scart.client.gui.LoginForm;
 import de.hdm.itprojektss19.team03.scart.client.gui.ReportFilterForm;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.LoginServiceAsync;
@@ -32,7 +33,7 @@ public class ScartReport implements EntryPoint {
 	private LoginInfo loginInfo = new LoginInfo();
 	private VerticalPanel loginPanel = new VerticalPanel();
 	private Label loginLabel = new Label("Please Sign in with your Googlemail to access the ReportGenerator");
-	private Anchor signInLink = new Anchor("Sign in with Google");
+	private Anchor signInLink = new Anchor("Sign in with Google", "Scart.html");
 	HTML loginHTML = new HTML("<h7></h7>");
 	HTML scartHTML = new HTML("<h9>Scart-REPORT</h9>");
 
@@ -83,17 +84,13 @@ public class ScartReport implements EntryPoint {
 			 * loadLogin Methode laedt den Login fuer unseren Report
 			 */
 			private void loadLogin() {
-				signInLink.setHref(loginInfo.getLoginUrl());
-				loginPanel.add(loginHTML);
-				loginPanel.add(scartHTML);
-				loginPanel.add(loginLabel);
-				loginPanel.add(signInLink);
-				loginPanel.addStyleName("login");
+				HorizontalPanel content = new HorizontalPanel();
+				Anchor editorLink = new Anchor("Sign in with Google", "Scart.html");
+				content.add(editorLink);
+				RootPanel.get().add(content);
+				content.setStyleName("LoginContentReport");
+				editorLink.setStyleName("ReportLogin");
 
-				// Footer wird geclesred fuer unseren Container fuer den Login
-				RootPanel.get("footer").clear();
-				// LoginPanels in den <div> Container "content" hinzufuegen
-				RootPanel.get("content").add(loginPanel);
 
 			}
 

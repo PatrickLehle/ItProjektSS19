@@ -234,9 +234,25 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	/** Methode um den Retailer des Artikels herauszufinden
+	//
+	// public ListBox getRetailerListBox() {
+	// ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
+	// ev.getArticleByArticleId(globalRow, new GetArticleCallback());
+	// ev.getRetailerById(article.getRetailerId(), new GetRetailerCallback());
+	// retailerListBox.setItemSelected(retailer.getId() - 1, true);
+	// return retailerListBox;
+	// }
+	//
+	
+	/**
+	 * @author tom
 	 * 
-	 * @return ListBox-Objekt mit den genutzten Retailern
+	 * getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
+	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
+	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
+	 *         und eine neue CheckBox wird kreiert getCbReturn.
+	 * 
+	 * @return eine CheckBox wird zurueckgegeben
 	 */
 	public ListBox getRetailerListBox() {
 		ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
@@ -245,12 +261,13 @@ public class GroceryListForm extends VerticalPanel {
 		retailerListBox.setItemSelected(retailer.getId() - 1, true);
 		return retailerListBox;
 	}
-
+	
 	/**
 	 * @author tom
 	 * 
-	 *         Schreibt die ausgewaehlte Zeile in die erste oder zweite Tabele wenn
-	 *         ein Artikel als gekauft oder nicht gekauft markiert wurde.
+	 * Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
+	 *         falscherweise als gekauft markiert wurde.
+	 * @return Es gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	class getCbReturn extends CheckBox {
 
@@ -386,10 +403,8 @@ public class GroceryListForm extends VerticalPanel {
 
 	/**
 	 * @author tom
-	 *
-	 *         CheckBox fuer Editieren ClickHandler um die ausgewaehlte Reihe global
-	 *         zu speichern ValueChangeHandler um den Text in TextBoxen zu
-	 *         uebertragen und den Text aus TextBoxen zu speichern.
+	 *    CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der Tabelle.
+	 * @return gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	public CheckBox getCbEdit() {
 		CheckBox cb = new CheckBox();
