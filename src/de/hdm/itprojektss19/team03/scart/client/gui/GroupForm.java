@@ -26,7 +26,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /** Die GroupForm-Seite stellt die Navigation der Gruppen
- *  und Einkaufslisten dar die in einer Tree-Navigation dargestellt werden
+ *  und Einkaufslisten dar, die in einer Tree-Navigation geordnet werden
  * 
  * @author Julian Hofer, Marco Dell'Oso, bastiantilk
  *

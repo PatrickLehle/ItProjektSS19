@@ -35,13 +35,12 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 public class ShoppingListForm extends HorizontalPanel {
 // DEFAULT CONSTRUCTOR=============================================
 	/** Default Konstruktor der EditGroup-Seite
-	* 
 	*/
 	public ShoppingListForm() {
 	}
 	
 // CONSTRUCTOR=====================================================
-	/** KOnstruktor der ShoppingListForm-Seite
+	/** Konstruktor der ShoppingListForm-Seite
 	 * 
 	 * @param u (User-Objekt des aktuellen Users)
 	 * @param gl (GroceryList-Objekt der aktuellen Einkaufsliste)
@@ -53,7 +52,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		group = g;
 	}
 	
-	/** Methode wird bei Seitenaufruf automatische gestartet
+	/** Methode wird bei Seitenaufruf automatisch gestartet
 	 * 
 	 */
 	public void onLoad() {
@@ -165,10 +164,9 @@ public class ShoppingListForm extends HorizontalPanel {
 			db.add(vp);
 			db.show();
 		}
-
 	}
 
-	/** ClickHandler um loeschen eines Retailers zu bestaetigen
+	/** ClickHandler um das Loeschen eines Retailers zu bestaetigen
 	 */
 	class YesButtonClickHandler implements ClickHandler {
 		Retailer retailer;
@@ -186,7 +184,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 	}
 	
-	/** ClickHandler um loeschen eines Retailers abzubrechen
+	/** ClickHandler um das Loeschen eines Retailers abzubrechen
 	 */
 	class NoButtonClickHandler implements ClickHandler {
 		DialogBox dialogBox;

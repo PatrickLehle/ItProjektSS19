@@ -34,7 +34,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 // TODO Change Constructor add GroceryList
 //		Zwei mal Klicken auf einmal aendern
 
-/**
+/** GUI-Seite der Einkaufsliste einer Gruppe. Hier koennen der Einkaufsliste
+ * neue Artikel hinzugefuegt, eingekauft oder geloescht werden.
  * 
  * @author tom
  * @author bastiantilk

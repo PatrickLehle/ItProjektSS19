@@ -91,7 +91,9 @@ public class EditGroup extends VerticalPanel {
 		this.group = g;
 		// group.setId(1);
 	}
-
+	
+	/** Methode wird automatisch bei Seitenaufruf gestartet
+	 */
 	public void onLoad() {
 
 		groupTextBox.setText(group.getGroupName());
@@ -160,7 +162,8 @@ public class EditGroup extends VerticalPanel {
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
 	}
-	
+	/** Methode setzt den Group-Name in die groupTextBox
+	 */
 	public void setGroupNameLabel() {
 		groupTextBox.setText(group.getGroupName());
 
