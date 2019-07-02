@@ -216,7 +216,7 @@ public class ProfileForm extends VerticalPanel {
 
 			} else {
 
-				editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
+				editorService.updateUser(user, new UpdateUserCallback());
 
 			}
 
@@ -339,6 +339,8 @@ public class ProfileForm extends VerticalPanel {
 		public void onSuccess(User arg0) {
 			// TODO Auto-generated method stub
 
+			Window.alert("Ihr Profil wurde erfolgreich geändert!");
+			
 			buildProfile();
 
 		}
