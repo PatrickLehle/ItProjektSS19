@@ -20,17 +20,12 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
  * ProfileForm: ...
- * 
- * 
+ *  
  * @author vanduyho
  *
  */
 
 public class ProfileForm extends VerticalPanel {
-
-	public ProfileForm(User u) {
-		user = u;
-	}
 
 	User user = new User();
 
@@ -40,15 +35,14 @@ public class ProfileForm extends VerticalPanel {
 
 	// LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
-	Label userNameLabel = new Label("Name: ");
-	Label emailAdressLabel = new Label("E-Mail: ");
+	Label userNameDescLabel = new Label("Name:");
+	Label emailAdressDescLabel = new Label("E-Mail:");
 
 	// BUTTONS================================================
 
 	Button editButton = new Button("Profil bearbeiten");
 	Button deleteButton = new Button("Profil löschen");
 	Button saveButton = new Button("Änderung speichern");
-	Button nosaveButton = new Button();
 
 	// PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
@@ -59,6 +53,18 @@ public class ProfileForm extends VerticalPanel {
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 
 	EditorServiceAsync editorService = ClientsideSettings.getEditor();
+	
+	/**
+	 * 
+	 * Konstruktor: ...
+	 *
+	 */
+	
+	public ProfileForm(User u) {
+		
+		this.user = u;
+		
+	}
 
 	/**
 	 * 
@@ -79,10 +85,6 @@ public class ProfileForm extends VerticalPanel {
 	 */
 
 	public void buildProfile() {
-
-		yourProfilePanel.add(yourProfileLabel);
-		userNamePanel.add(userNameLabel);
-		emailAdressPanel.add(emailAdressLabel);
 
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
@@ -112,13 +114,13 @@ public class ProfileForm extends VerticalPanel {
 	class EditButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
-
+			
 			userNameTB.setText(user.getUsername());
 			userNamePanel.add(userNameTB);
 
 			emailAdressTB.setText(user.getEmail());
 			emailAdressPanel.add(emailAdressTB);
-
+			
 			buttonPanel.remove(editButton);
 			buttonPanel.remove(deleteButton);
 			contentPanel.add(saveButton);
