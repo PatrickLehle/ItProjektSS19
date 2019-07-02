@@ -107,7 +107,10 @@ public class GroceryListForm extends VerticalPanel {
 	// Wird bei dem Aufruf der Klasse/des Widgets automatisch ausgefuehrt
 	public void onLoad() {
 		super.onLoad();
-
+		
+		articleTextBox.setVisibleLength(5);
+		quantityTextBox.setVisibleLength(5);
+		unitTextBox.setVisibleLength(5);
 		// zum laden/fuellen der Tabelle auf
 		boughtTable.setVisible(false);
 		loadTable();
@@ -139,7 +142,7 @@ public class GroceryListForm extends VerticalPanel {
 		hpButtons.add(checkBtn);
 
 		addBtn.addClickHandler(new AddClickHandler());
-		// editBtn.addClickHandler(new EditClickHandler());
+		editBtn.addClickHandler(new EditClickHandler());
 		deleteBtn.addClickHandler(new DeleteClickHandler());
 		checkBtn.addClickHandler(new CheckClickHandler());
 
@@ -231,10 +234,8 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	public ListBox getRetailerListBox() {
-		ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
-		ev.getArticleByArticleId(globalRow, new GetArticleCallback());
-//	 ev.getRetailerById(article.getRetailerId(), new GetRetailerCallback());
-		retailerListBox.setItemSelected(retailer.getId() - 1, true);
+		ev.getAllRetailerByGroupId(group.getId(), new AllRetailersCallback());
+		retailerListBox.setItemSelected(1, true);
 		return retailerListBox;
 	}
 
@@ -330,7 +331,7 @@ public class GroceryListForm extends VerticalPanel {
 		articleTable.setWidget(globalRow, 1, articleTextBox);
 		articleTable.setWidget(globalRow, 2, quantityTextBox);
 		articleTable.setWidget(globalRow, 3, unitTextBox);
-		articleTable.setWidget(globalRow, 4, getRetailerListBox());
+		getRetailerListBox();
 	}
 
 	public void clearTextBoxes() {
@@ -372,10 +373,6 @@ public class GroceryListForm extends VerticalPanel {
 		article.setRetailerId(getRetailerListBox().getSelectedIndex());
 	}
 
-//	public void saveChangeOnDb123() {
-//		ev.saveArticle(article, new saveEditedArticle());
-//	}
-
 	/**
 	 * @author tom
 	 *
@@ -387,8 +384,7 @@ public class GroceryListForm extends VerticalPanel {
 		CheckBox cb = new CheckBox();
 		cb.addClickHandler(new ClickHandler() {
 			public void onClick(ClickEvent event) {
-				final int rowIndex = articleTable.getCellForEvent(event).getRowIndex();
-				globalRow = rowIndex;
+				globalRow = articleTable.getCellForEvent(event).getRowIndex();
 			}
 		});
 		cb.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
@@ -428,7 +424,7 @@ public class GroceryListForm extends VerticalPanel {
 							finalGlobalRow = globalRow;
 							setTextBoxesContent();
 						}
-						Window.alert("Änderung wurde nicht gespeichert");
+						Window.alert("Anderung wurde nicht gespeichert");
 					}
 				} else {
 					if (textBoxesEmpty() == "false") {
@@ -440,7 +436,7 @@ public class GroceryListForm extends VerticalPanel {
 						replaceUnchangedText();
 						clearTextBoxes();
 						articleTable.setWidget(globalRow, 5, getCbEdit());
-						Window.alert("Änderung wurde nicht gespeichert");
+						Window.alert("Anderung wurde nicht gespeichert");
 						globalRow = 0;
 					}
 				}
@@ -464,8 +460,13 @@ public class GroceryListForm extends VerticalPanel {
 					&& addBtnBoolean == false) {
 				editBtnBoolean = true;
 				globalRow = 0;
-				for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
-					articleTable.setWidget(aNum, 5, getCbEdit());
+				for (int articleNum = 0; articleNum < articleVector.size(); articleNum++) {
+					if (articleVector.get(articleNum).getDelDat() == null
+							&& articleVector.get(articleNum).getCheckBoolean() == false) {
+						for (int aNum = 1; aNum < articleTable.getRowCount(); aNum++) {
+							articleTable.setWidget(aNum, 5, getCbEdit());
+						}
+					}
 				}
 			} else if (editBtnBoolean == true) {
 				editBtnBoolean = false;
@@ -476,13 +477,12 @@ public class GroceryListForm extends VerticalPanel {
 				} else if (globalRow != 0) {
 					replaceUnchangedText();
 					clearTextBoxes();
-					Window.alert("Änderung wurde nicht gespeichert");
+					Window.alert("Anderung wurde nicht gespeichert");
 				}
-				// refreshTable();
+				refreshTable();
 			} else if (checkBtnBoolean == false || deleteBtnBoolean == false || addBtnBoolean == false) {
 				Window.alert("Bitte anderen Button deaktivieren.");
 			} else {
-				Window.alert("Ein Fehler ist aufgetreten, bitte versuchen sie es erneut.");
 			}
 		}
 	}
@@ -558,7 +558,7 @@ public class GroceryListForm extends VerticalPanel {
 
 		public void onClick(ClickEvent e) {
 			article.setFav(fav);
-			ev.saveArticle(article, new SaveArticleFavoriteCallback());
+			ev.saveArticle(article, new SaveArticleFavoriteCallback(fav));
 		}
 
 	}
@@ -593,9 +593,7 @@ public class GroceryListForm extends VerticalPanel {
 					article.setOwnerId(retailer.getUser().getId());
 					article.setGroupId(group.getId());
 					article.setCheckBoolean(false);
-					// Change fav das fav fuer alle gleichnamigen gesetzt wird
-					article.setFav(false);
-					ev.createArticle(article, new AddArticleCallback());
+					ev.getAllArticleByName(articleTextBox.getText(), group.getId(), new GetArticleVectorByGroup());
 
 				} else if (textBoxesEmpty() == "true") {
 					addBtnBoolean = false;
@@ -615,7 +613,6 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	// //
 	// CALLBACKS===============================================================================================
 	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
 
@@ -628,16 +625,58 @@ public class GroceryListForm extends VerticalPanel {
 				retailerListBox.addItem(retailerVector.get(retailerNumber).getRetailerName());
 			}
 			retailerListBox.setVisibleItemCount(1);
+			retailerListBox.setSelectedIndex(retailer.getId() - 1);
+			articleTable.setWidget(globalRow, 4, retailerListBox);
+			
 		}
 	}
 
-	class GetArticleCallback implements AsyncCallback<Article> {
+//	class GetArticleCallback implements AsyncCallback<Article> {
+//
+//		public void onFailure(Throwable caught) {
+//		}
+//
+//		public void onSuccess(Article result) {
+//			
+//		}
+//	}
+
+	class GetArticleVectorByGroup implements AsyncCallback<Vector<Article>> {
 
 		public void onFailure(Throwable caught) {
 		}
 
+		public void onSuccess(Vector<Article> result) {
+			if (addBtnBoolean) {
+				article.setFav(result.get(result.size() - 1).getFav());
+				ev.createArticle(article, new AddArticleCallback());
+			} else {
+				for (int i = 0; i < result.size(); i++) {
+					article.setId(result.get(i).getId());
+					Window.alert(article.getId() + "");
+					article.setName(result.get(i).getName());
+					article.setQuantity(result.get(i).getQuantity());
+					article.setUnit(result.get(i).getUnit());
+					article.setRetailerId(result.get(i).getRetailerId());
+					article.setOwnerId(result.get(i).getOwnerId());
+					article.setGroupId(result.get(i).getGroupId());
+					article.setCheckBoolean(result.get(i).getCheckBoolean());
+					ev.saveArticle(article, new saveArticleCallback());
+				}
+				refreshTable();
+			}
+		}
+	}
+
+	class saveArticleCallback implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+			Window.alert(article.getId() + caught.getMessage());
+
+		}
+
 		public void onSuccess(Article result) {
-			article = result;
+			Window.alert(article.getId() + "");
 		}
 	}
 
@@ -663,15 +702,6 @@ public class GroceryListForm extends VerticalPanel {
 
 		public void onSuccess(Article result) {
 			refreshTable();
-		}
-	}
-
-	class SetArticleOwnerCallback implements AsyncCallback<Article> {
-		public void onFailure(Throwable caught) {
-		}
-
-		public void onSuccess(Article result) {
-			article = null;
 		}
 	}
 
@@ -735,12 +765,28 @@ public class GroceryListForm extends VerticalPanel {
 	}
 
 	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
+		Boolean fav;
+
+		public SaveArticleFavoriteCallback(Boolean fav) {
+			this.fav = fav;
+		}
 
 		public void onFailure(Throwable caught) {
 		}
 
 		public void onSuccess(Article a) {
-			refreshTable();
+			ev.getAllArticleByName(a.getName(), group.getId(), new GetArticleVectorByGroup());
+
+		}
+	}
+
+	class SaveArticleFavoriteForGroupCallback implements AsyncCallback<Article> {
+
+		public void onFailure(Throwable caught) {
+		}
+
+		public void onSuccess(Article result) {
+
 		}
 	}
 
@@ -773,10 +819,12 @@ public class GroceryListForm extends VerticalPanel {
 	class saveEditedArticle2 implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
+			Window.alert(caught.getMessage());
 		}
 
 		public void onSuccess(Article result) {
 			setTableTextFromTextBoxes();
+			refreshTable();
 		}
 	}
 

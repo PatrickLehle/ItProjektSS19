@@ -106,6 +106,8 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
+	
+	void getAllArticleByName(String name, int groupId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	//ARTICLE-REPORT==============================================================================
 	

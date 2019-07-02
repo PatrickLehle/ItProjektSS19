@@ -366,6 +366,15 @@ public interface EditorService extends RemoteService {
 	 * @throws IllegalArgumentException
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
+	
+	/**
+	 * 
+	 * @param name
+	 * @param groupId
+	 * @return gibt alle Artikel eines Namens und Gruppe zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Article> getAllArticleByName(String name, int groupId) throws IllegalArgumentException;
 
 	//ARTICLE-REPORT=======================================================================
 	
