@@ -62,7 +62,21 @@ public interface EditorService extends RemoteService {
 	 * 
 	 */
 	public void deleteUser(User u) throws IllegalArgumentException, DatabaseException;
+	
+	
 
+	/**
+	 * 
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #updateUser(User u);
+	 * @param u beschreibt ein User Objekt
+	 * @return gibt upgedatete User zurück
+	 * @throws IllegalArgumentException ensteht bei der Übergabe eines nichterlaubten Arguments
+	 * @throws DatabaseException ensteht durch ein Attribut, dass nicht in der Datenbank vorhanden ist, aber dennoch gesetzt wurde
+	 * 
+	 */
+	public User updateUser(User u) throws IllegalArgumentException, DatabaseException;
+	
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getUserById(int userId);

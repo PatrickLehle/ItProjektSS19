@@ -27,6 +27,8 @@ public interface EditorServiceAsync {
 	void createUser(String emailAdress, AsyncCallback<User> asyncCallback);
 
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
+	
+	void updateUser(User u, AsyncCallback<User> asyncCallback);
 
 	void getUserById(int userId, AsyncCallback<User> asyncCallback);
 

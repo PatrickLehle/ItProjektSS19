@@ -134,7 +134,6 @@ public class ProfileForm extends VerticalPanel {
 			emailAdressPanel.add(emailAdressTB);
 			emailAdressPanel.remove(emailAdressContLabel);
 			
-			
 			buttonPanel.remove(editButton);
 			buttonPanel.remove(deleteButton);
 			contentPanel.add(saveButton);
@@ -152,8 +151,7 @@ public class ProfileForm extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<p> Möchten Sie die Änderung speichern? </p>");
-			db.setText("Profil löschen");
+			Label l = new HTML("<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -287,10 +285,13 @@ public class ProfileForm extends VerticalPanel {
 	class getImageCallback implements AsyncCallback<String> {
 
 		public void onFailure(Throwable t) {
+			
 			GWT.log("Failed to get Profile Image: " + t);
+			
 		}
 
 		public void onSuccess(String s) {
+			
 			VerticalPanel panel = new VerticalPanel();
 			panel.setStyleName("profile-img-big");
 			Image image = new Image();
@@ -300,6 +301,7 @@ public class ProfileForm extends VerticalPanel {
 			outerPanel.clear();
 			outerPanel.add(panel);
 			outerPanel.add(contentPanel);
+			
 		}
 
 	}

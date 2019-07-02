@@ -191,6 +191,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+
+	public User updateUser(User u) throws IllegalArgumentException, DatabaseException {
+		
+		try {
+			return uMapper.update(u);
+	
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 
 	public User getUserById(int userId) throws IllegalArgumentException {
 		try {
@@ -795,6 +807,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(ex);
 		}
 	}
+
+	
 
 	/**
 	 * @Override public Vector<Article> getArticleByRetailer(Retailer r) throws
