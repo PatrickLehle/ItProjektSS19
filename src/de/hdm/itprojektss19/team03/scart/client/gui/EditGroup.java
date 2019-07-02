@@ -90,7 +90,7 @@ public class EditGroup extends VerticalPanel {
 		groupLabel.addStyleName("h2");
 		deleteGroupButton.addClickHandler(new DeleteClickHandler(user, group));
 		deleteGroupButton.addStyleName("button");
-		safeGroupButton.addClickHandler(new SafeClickHandler());
+		safeGroupButton.addClickHandler(new YesSaveButtonClickHandler(null, group));
 		safeGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
@@ -232,64 +232,64 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-	class SafeClickHandler implements ClickHandler {
+//	class SafeClickHandler implements ClickHandler {
+//
+//		@Override
+//		public void onClick(ClickEvent arg0) {
+//			DialogBox db = new DialogBox();
+//			VerticalPanel vp = new VerticalPanel();
+//			HorizontalPanel hp = new HorizontalPanel();
+//			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, group));
+//			Button nB = new Button("Nein", new NoButtonClickHandler(db));
+//			Label l = new HTML(
+//					"<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
+//
+//			vp.add(l);
+//			hp.add(yB);
+//			hp.add(nB);
+//			vp.add(hp);
+//
+//			db.setGlassEnabled(true);
+//			db.setAnimationEnabled(true);
+//			db.center();
+//			db.show();
+//
+//			db.add(vp);
+//
+//		}
+//
+//	}
 
-		@Override
-		public void onClick(ClickEvent arg0) {
-			DialogBox db = new DialogBox();
-			VerticalPanel vp = new VerticalPanel();
-			HorizontalPanel hp = new HorizontalPanel();
-			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, group));
-			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML(
-					"<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
-
-			vp.add(l);
-			hp.add(yB);
-			hp.add(nB);
-			vp.add(hp);
-
-			db.setGlassEnabled(true);
-			db.setAnimationEnabled(true);
-			db.center();
-			db.show();
-
-			db.add(vp);
-
-		}
-
-	}
-
-	class NoButtonClickHandler implements ClickHandler {
-
-		DialogBox dbox = new DialogBox();
-
-		public NoButtonClickHandler(DialogBox db) {
-
-			this.dbox = db;
-
-		}
-
-		public void onClick(ClickEvent event) {
-
-			dbox.hide();
-			dbox.clear();
-			dbox.removeFromParent();
-			dbox.setAnimationEnabled(false);
-			dbox.setGlassEnabled(false);
-
-		}
-
-	}
+//	class NoButtonClickHandler implements ClickHandler {
+//
+//		DialogBox dbox = new DialogBox();
+//
+//		public NoButtonClickHandler(DialogBox db) {
+//
+//			this.dbox = db;
+//
+//		}
+//
+//		public void onClick(ClickEvent event) {
+//
+////			dbox.hide();
+////			dbox.clear();
+////			dbox.removeFromParent();
+////			dbox.setAnimationEnabled(false);
+////			dbox.setGlassEnabled(false);
+//
+//		}
+//
+//	}
 
 	class YesSaveButtonClickHandler implements ClickHandler {
 
-		DialogBox dbox = new DialogBox();
+//		DialogBox dbox = new DialogBox();
 		Group group = new Group();
 
 		public YesSaveButtonClickHandler(DialogBox db, Group g) {
 
-			this.dbox = db;
+//			this.dbox = db;
 			this.group = g;
 
 		}
@@ -299,11 +299,11 @@ public class EditGroup extends VerticalPanel {
 			String newGroupName = groupTextBox.getText();
 
 			group.setGroupName(newGroupName);
-			dbox.hide();
-			dbox.clear();
-			dbox.removeFromParent();
-			dbox.setAnimationEnabled(false);
-			dbox.setGlassEnabled(false);
+//			dbox.hide();
+//			dbox.clear();
+//			dbox.removeFromParent();
+//			dbox.setAnimationEnabled(false);
+//			dbox.setGlassEnabled(false);
 
 			editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback());
 
