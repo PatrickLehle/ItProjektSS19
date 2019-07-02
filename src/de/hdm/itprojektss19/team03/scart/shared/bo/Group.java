@@ -19,10 +19,7 @@ public class Group extends BusinessObject implements IsSerializable {
 
 //METHODS====================================================================
 	
-	/**
-	 * Holen des Namens einer Gruppe
-	 * @return name
-	 */
+	
 	public Group() {
 		
 	}
@@ -37,7 +34,7 @@ public class Group extends BusinessObject implements IsSerializable {
 
 	/**
 	 * Setzen eines Group Namens
-	 * @param name
+	 * @param name beschreibt den Namen einer Gruppe
 	 */
 	public void setGroupName(String name) {
 		this.name = name;
@@ -45,7 +42,7 @@ public class Group extends BusinessObject implements IsSerializable {
 	
 	/**
 	 * Setzen eines Statuses einer Group
-	 * @param status
+	 * @param status beschreibt den Status einer Gruppe
 	 */
 	public void setStatus(boolean status) {
 		//Hat noch keine sinnvolle implementierung <3
@@ -54,7 +51,7 @@ public class Group extends BusinessObject implements IsSerializable {
 	
 	/**
 	 * Holen eines Statuses einer Gruppe
-	 * @return
+	 * @return gibt den Status zurueck
 	 */
 	public boolean getStatus() {
 		//Hat noch keine sinnvolle implementierung <3

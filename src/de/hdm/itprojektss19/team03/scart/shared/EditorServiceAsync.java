@@ -85,6 +85,7 @@ public interface EditorServiceAsync {
 	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
 	void getAllGroceryListsByGroupVector(Vector<Group> g, AsyncCallback<Vector<GroceryList>> asyncCallback);
+	
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
@@ -140,27 +141,8 @@ public interface EditorServiceAsync {
 
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
-	// UNIT===========================================================================
-
-	// void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
-	//
-	// void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	//
-	// void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	//
-	// void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
-	//
-	// void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
-
-	// ENTRY===========================================================================
-
-	void createEntry(Entry e, AsyncCallback<Entry> asyncCallback);
-
-	void saveEntry(Entry e, AsyncCallback<Void> asyncCallback);
-
-	void deleteEntry(Entry e, AsyncCallback<Void> asyncCallback);
-
 	// GroceryListArticle===========================================================================
+	
 	void addArticleToGroceryList(GroceryList gl, Article a, AsyncCallback<GroceryListArticle> asyncCallback);
 
 	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);

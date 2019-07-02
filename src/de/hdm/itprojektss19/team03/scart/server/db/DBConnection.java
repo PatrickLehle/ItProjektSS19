@@ -20,7 +20,7 @@ public class DBConnection {
 	private static final String password = "Login2019";
 
 	/**
-	 * Diese Methode gibt die aufgebaute DB-Verbindung zurück
+	 * Diese Methode gibt die aufgebaute DB-Verbindung zurueck
 	 * 
 	 * @return con
 	 */

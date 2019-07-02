@@ -50,13 +50,10 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * 
 	 * Sucht eine Retailer anhand seiner ID
-	 * 
-	 * @param zu
-	 *            Suchende id
+	 * @param id beschreibt die Eindeutigkeit eines Retailers via id
 	 * @return Das Retailer-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Retailer findByKey(int id) throws DatabaseException {
 
@@ -95,10 +92,10 @@ public class RetailerMapper {
 	/**
 	 * Gibt einen Retailer via Namen zurueck
 	 * 
-	 * @param name
-	 * @param r
+	 * @param name beschreibt den Namen des Retailer Objekts
+	 * @param r beschreibt das Retailer Objekt
 	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Retailer> findRetailerByName(String name, Retailer r) throws DatabaseException {
 		Connection con = null;
@@ -141,7 +138,7 @@ public class RetailerMapper {
 	 * Sucht alle Retailers
 	 * 
 	 * @return Vector mit allen gefundenen Retailers
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Retailer> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -212,12 +209,10 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * F�gt in der Datenbank einen neuen Retailer ein
-	 * 
-	 * @param Retailer-Objekt
-	 *            das in die DB eingef�gt werden soll
-	 * @return Die Eingef�gte Retailer mit aktueller ID
-	 * @throws DatabaseException
+	 * Fuegt in der Datenbank einen neuen Retailer ein
+	 * @param retailer beschreibt den uebergebeben Retailer
+	 * @return Die Eingefuegte Retailer mit aktueller ID
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Retailer insert(Retailer retailer) throws DatabaseException {
 
@@ -252,13 +247,13 @@ public class RetailerMapper {
 		}
 	}
 
+
+	
 	/**
-	 * �ndert einen Retailer in der Datenbank
-	 * 
-	 * @param Zu
-	 *            �ndernder Retailer
-	 * @return Ge�nderter Retailer
-	 * @throws DatabaseException
+	 * aendert einen Retailer in der Datenbank
+	 * @param retailer beschreibt den uebergebenen Retailer
+	 * @return Die Rückgabe ist ein Retailer-Objekt mit seinen neuen Datensaetzen
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Retailer update(Retailer retailer) throws DatabaseException {
 
@@ -283,11 +278,9 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * L�scht einen Retailer aus der Datenbank
-	 * 
-	 * @param Zu
-	 *            l�schender Retailer
-	 * @throws DatabaseException
+	 * Loescht einen Retailer aus der Datenbank
+	 * @param retailer beschreibt den uebergenenen Retailer
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void delete(Retailer retailer) throws DatabaseException {
 		Connection con = DBConnection.connection();

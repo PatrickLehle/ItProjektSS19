@@ -44,12 +44,11 @@ public class RegistryForm extends VerticalPanel {
 
 	protected void onLoad() {
 	}
-
+	
 	/**
 	 * Konstruktor fuer die RegistryForm-Klasse.
-	 * 
-	 * @param u
-	 *            user der eigenloggt ist
+	 * @param logoutLink Link für den Logout
+	 * @param email Attribut Email des Users
 	 */
 	public RegistryForm(String logoutLink, String email) {
 		user.setEmail(email);
@@ -82,6 +81,10 @@ public class RegistryForm extends VerticalPanel {
 		;
 	}
 
+	/** Methode zum anlegen eines Neuen Users in der DB
+	 * 
+	 * @param u (User-Objekt des aktuellen Users)
+	 */
 	public void saveUser(User u) {
 
 		u.setUsername(nameTextbox.getValue());
@@ -103,7 +106,7 @@ public class RegistryForm extends VerticalPanel {
 	}
 
 	/**
-	 * UEberprueft korrekte syntax der Eingabe
+	 * Ueberprueft korrekte syntax der Eingabe
 	 * 
 	 * @param str
 	 * @return true, wenn der Name passt
@@ -120,7 +123,11 @@ public class RegistryForm extends VerticalPanel {
 			return true;
 		}
 	};
-
+	/** Methode um die Eingabe der E-Mail zu ueberpruefen
+	 * 
+	 * @param email
+	 * @return true, wenn die E-Mail passt / false, wenn der Syntax nicht stimmt
+	 */
 	private Boolean checkEmail(String email) {
 		if (!email.matches("^\\w+[\\w-\\.]*\\@\\w+((-\\w+)|(\\w*))\\.[a-z]{2,3}$")) {
 			return false;
@@ -129,6 +136,9 @@ public class RegistryForm extends VerticalPanel {
 		}
 	}
 
+	/** Callback-Methode um eine neue Gruppe zu erstellen.
+	 *  Bei Erfolg wird der (neue) User der Gruppe hinzugefuegt.
+	 */
 	AsyncCallback<Group> createGroupCallback = new AsyncCallback<Group>() {
 
 		public void onFailure(Throwable t) {
@@ -140,7 +150,10 @@ public class RegistryForm extends VerticalPanel {
 			editorService.addUserToGroup(user, g, addUserToGroupCallback);
 		}
 	};
-
+	
+	/** Callback-Methode um eine neue Einkaufsliste zu erstellen
+	 * 
+	 */
 	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
 
 		public void onFailure(Throwable t) {
@@ -152,6 +165,10 @@ public class RegistryForm extends VerticalPanel {
 		}
 	};
 
+	/** Callback-Methode um einen User in eine Gruppe hinzuzufuegen.
+	 * 	Bei Erfolg wird eine standart Einkaufsliste in der Gruppe erzeugt.
+	 * 	User wird mit einem GroupUser-BO mit der Gruppe verknuepft
+	 */
 	AsyncCallback<GroupUser> addUserToGroupCallback = new AsyncCallback<GroupUser>() {
 
 		public void onFailure(Throwable t) {
@@ -185,6 +202,10 @@ public class RegistryForm extends VerticalPanel {
 		}
 	};
 
+	/** ClickHandler fuer den "Registrieren"-Button
+	 * 	Die Methode checkt den Sntax des Usernamen und startet eine Callback 
+	 * 	um den User neun in der Db anzulegen.
+	 */
 	ClickHandler saveClickHandler = new ClickHandler() {
 
 		public void onClick(ClickEvent e) {

@@ -49,7 +49,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Generates Identicon
 	 * 
-	 * @source: https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android
+	 * @see <a href="https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
 	 * 
 	 */
 	public String generateIdenticons(String text, int image_width, int image_height) {
@@ -102,6 +102,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// SERIALIZATION===========================================================================
 
+	/**
+	 * Serialisierung
+	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -148,6 +151,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// INITIALIZATION===========================================================================
 
+	/**
+	 * Vollstaendiger Satz aller Mapper mit deren Hilfe die Administrationsklasse
+	 * EditorServiceImpl-Klasse mit der DB kommunizieren kann.
+	 */
 	public void init() throws IllegalArgumentException {
 
 		this.uMapper = UserMapper.userMapper();
@@ -162,6 +169,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// USER====================================================================================
 
+	/**
+	 * Erzeugen eines User Objekts. Der angelegte User 
+	 * wird anschliessend in der DB hinterlegt.
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @return gitb den User zurueck
+	 */
 	public User createUser(User u) throws Exception {
 		if (u != null) {
 			User user = uMapper.insert(u);
@@ -172,7 +186,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	@Override
+	/**
+	 * Erzeugen eines neuen Users im System via email Adresse
+	 */
 	public User createUser(String emailAdress) throws IllegalArgumentException, DatabaseException {
 
 		User user = new User();
@@ -181,6 +197,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return this.uMapper.insert(user);
 	}
 
+	/**
+	 * User wird aus dem System entfernt
+	 */
 	public void deleteUser(User u) throws IllegalArgumentException {
 
 		try {
@@ -192,6 +211,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Gibt einen User via der Eindeutigen Id wieder
+	 * 
+	 * @param userId beschreibt die Eindeutigkeit eines Users via id
+	 * @return gibt ein User Objekt zurueck
+	 */
 	public User getUserById(int userId) throws IllegalArgumentException {
 		try {
 			User foundUser = uMapper.getUserById(userId);
@@ -203,6 +228,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Gibt einen User via der Email Adresse zurueck
+	 * 
+	 * @param email beschreibt einen User via einer eindeutigen Email Adresse
+	 * @return gibt ein User Objekt zurueck
+	 */
 	public User getUserByGMail(String email) throws IllegalArgumentException {
 		try {
 			return uMapper.findUserByEmail(email);
@@ -213,7 +244,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
-	@Override
+	/**
+	 * Gibt ein Profil eines User Objekts zurueck
+	 * 
+	 * @param user beschreibt ein User Objekt
+	 * @return gibt einen User zurueck fuers aufrufen des Profils
+	 */
 	public User getOwnProfile(User user) throws IllegalArgumentException {
 		try {
 
@@ -227,6 +263,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// GROUP===========================================================================
 
+	/**
+	 * Gruppe wird erstellt und in der Datenbank hinterlegt
+	 * 
+	 * @param g beschreibt ein Gruppen Objekt
+	 * @return gibt ein erstelltes Gruppen Objekt zurueck
+	 */
 	public Group createGroup(Group g) throws IllegalArgumentException {
 		try {
 			return this.gMapper.insert(g);
@@ -238,6 +280,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Ein im nachhinein bearbeitetes Group Objekt wird erstellt
+	 * 
+	 * @param g beschreibt ein Group Objekt
+	 */
 	public void saveGroup(Group g) throws IllegalArgumentException {
 		try {
 
@@ -249,6 +296,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Loescht ein Gruppen Objekt aus der Datenbank
+	 * 
+	 * @param g beschreibt ein Gruppen Objekt
+	 */
 	public void deleteGroup(Group g) throws IllegalArgumentException {
 		try {
 
@@ -260,6 +312,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen eines Gruppen Objekts via Id
+	 * 
+	 * @param groupId beschreibt ein Eindeutiges Gruppen Objekt via Id
+	 * @return gibt ein Groppen Objekt zurueck
+	 */
 	public Group getGroupById(int groupId) throws IllegalArgumentException {
 		try {
 
@@ -272,6 +330,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Auslesen aller Gruppen eines Users
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @return gibt einen Vector von allen Gruppen des Users zurueck
+	 */
 	public Vector<Group> getAllGroupsByUser(User u) throws IllegalArgumentException {
 		try {
 
@@ -283,6 +347,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Hinzufuegen eines User Objekts in eine Gruppe
+	 * 
+	 * @param user beschreibt ein User Objekt
+	 * @param group beschreibt ein Group Objekt
+	 * @return gibt ein GroupUser Objekt zurueck
+	 */
 	public GroupUser addUserToGroup(User user, Group group) throws IllegalArgumentException {
 		try {
 
@@ -294,6 +365,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * User aus einer Gruppe entfernen
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param g beschreibt ein Gruppen Objekt
+	 */
 	public void leaveGroup(User u, Group g) throws IllegalArgumentException {
 		try {
 
@@ -305,11 +382,19 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller Gruppen aus der Datenbank
+	 * 
+	 * @return gibt einen Vector aller Gruppen aus der Datenbank zurueck
+	 */
 	public Vector<Group> findAllGroups() throws IllegalArgumentException, DatabaseException {
 		return gMapper.findAll();
 	}
 
-	@Override
+	/**
+	 * Beschreibt den Status einer Gruppe
+	 * 
+	 */
 	public Vector<Group> statusSharingGroup(Vector<Group> result) {
 		// TODO Auto-generated method stub
 		return null;
@@ -317,6 +402,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// GROUP-USER============================================================================
 
+	/**
+	 * Auslesen aller Gruppen in denen ein user sich befindet
+	 * 
+	 * @param id beschreibt die Eindeutigkeit eines User Objekts via id
+	 * @return gibt einen Vector von Gruppen eines Users zurueck in der er Mitglied ist
+	 */
 	public Vector<Group> findAllGroupsByUserId(int id) throws IllegalArgumentException {
 		try {
 			return guMapper.findAllGroupsByUserId(id);
@@ -326,7 +417,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
+	/**
+	 * Auslesen aller User in einer Gruppe via der groupId
+	 * 
+	 * @param id beschreibt die Eindeutigkeit einer Gruppe via id
+	 * @return gibt alle User zurueck die in der gesuchten Gruppe sich befinden
+	 */
 	public Vector<User> getAllUserByGroupId(int id) throws IllegalArgumentException {
 		try {
 			return guMapper.getAllUserByGroupId(id);
@@ -336,6 +433,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Entfernt einen User aus der ausgewaehlten Gruppe
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param g beschreib ein Gruppen Objekt
+	 */
 	public void removeUserFromGroup(User u, Group g) throws IllegalArgumentException {
 		try {
 
@@ -348,6 +451,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	// GROCERYLIST===========================================================================
 
+	/**
+	 * Erstellt eine GroceryList
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @return gibt ein erstelltes GroceryList Objekt zurueck
+	 */
 	public GroceryList createGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
@@ -359,6 +468,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Speichert eine GroceryList die Neuerungen enthaelt
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @return gibt ein gespeichertes GroceryList Objekt zurueck
+	 */
 	public GroceryList saveGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
@@ -371,6 +486,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return gl;
 	}
 
+	/**
+	 * Entfernt eine GroceryList aus der Datenbank
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @return gibt ein geloeschtes GrocceryList Objekt zurueck
+	 */
 	public GroceryList deleteGroceryList(GroceryList gl) throws IllegalArgumentException {
 		try {
 
@@ -382,11 +503,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return gl;
 	}
 
+	/**
+	 * Auslesen des Owners einer GroceryList via eines User Objekts
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @return gibt ein  Vector GroceryList Objekt des Users zurueck
+	 */
 	public Vector<GroceryList> getGroceryListByOwner(User u) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Auslesen einer Grocerylist via Id
+	 * 
+	 * @param groceryListId beschreibt die Eindeutigkeit eines GroceryList Objekts via id
+	 * @return gibt ein GroceryList Objekt zurueck
+	 */
 	public GroceryList getGroceryListById(int groceryListId) throws IllegalArgumentException {
 		try {
 
@@ -398,6 +531,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller GroceryList Objekte via GroupId
+	 * 
+	 * @param id beschreibt die Eindeutigkeit eines Gruppen Objekt via id
+	 * @return gibt ein GroceryList Vector Objekt zurueck
+	 */
 	public Vector<GroceryList> findAllGroceryListByGroupId(int id) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListByGroupId(id);
@@ -408,6 +547,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller GroceryList Objekte die in der Datenbank liegen
+	 * 
+	 * @return gibt alle GroceryList Objekte in der Datenbank zurueck
+	 */
 	public Vector<GroceryList> findAllGroceryLists() throws IllegalArgumentException {
 		try {
 			return glMapper.findAll();
@@ -417,11 +561,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Gibt den Status einer GroceryList zurueck
+	 * 
+	 * @param result beschreibt ein Vector GroceryList Objekt
+	 * @return gibt einen Vector GroceryList Objekt zurueck
+	 */
 	public Vector<GroceryList> statusSharingGroceryList(Vector<GroceryList> result) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * Auslesen einer GroceryList einer Gruppe
+	 * 
+	 * @param groceryListId beschreibt die EIndeutigkeit eines GroceryList Objekts via id
+	 * @return gibt eine Gruppe zurueck die zur uebergebenen GroceryList gehoert
+	 */
 	public Group getGroupByGroceryList(int groceryListId) throws IllegalArgumentException {
 
 		try {
@@ -434,6 +590,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen einer GroceryList via eines Group Vectors
+	 * 
+	 * @param g beschreibt einen Vector voller Gruppen
+	 * @return gibt einen Vector der dazugehoerigen GroceryList Objekte zurueck
+	 */
 	public Vector<GroceryList> getAllGroceryListsByGroupVector(Vector<Group> g) throws IllegalArgumentException {
 		try {
 			Vector<GroceryList> tempGrocery = new Vector<GroceryList>();
@@ -450,6 +612,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Auslesen aller GroceryList via User Id
+	 * 
+	 * @param userId beschreibt die Eindeutigkeit eines user Objekts via id
+	 * @return gibt alle GroceryList Objekte des uebergebenen Users zurueck
+	 */
 	public Vector<GroceryList> findAllGroceryListByUserId(int userId) throws IllegalArgumentException {
 		try {
 			return glMapper.findAllGroceryListsByUserId(userId);
@@ -462,6 +630,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// GROCERYLIST-ARTICLE===============================================================
 
+	/**
+	 * Auslesen aller Article Objekte eines GroceryList Objekts via id
+	 * 
+	 * @param id beschreibt die Eindeutigkeit eines GroceryList Objekts via id
+	 * @return gibt alle Article Objekte eines GroceryList Objekt zurueck
+	 */
 	public Vector<Article> findAllArticleByGroceryListId(int id) throws IllegalArgumentException {
 		try {
 			return this.glaMapper.findAllArticleByGroceryListId(id);
@@ -474,6 +648,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// ARTICLE===========================================================================
 
+	/**
+	 * Erstellt einen Article in der Datenbank
+	 * 
+	 * @param a beschreibt ein Article Objekt
+	 * @return gibt ein erstelltes Article Objekt zurueck
+	 */
 	public Article createArticle(Article a) throws IllegalArgumentException {
 		// Input fuer Article Attribute muss noch erledigt werden
 
@@ -486,6 +666,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Speichern eines zuvor erstellten Article Objekts
+	 * 
+	 * @param a beschreibt ein Article Objekt
+	 * @return gibt ein Article Objekt zurueck
+	 */
 	public Article saveArticle(Article a) throws IllegalArgumentException {
 		try {
 
@@ -498,6 +684,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Entfernen eines Article Objekt aus der Datenbank
+	 * 
+	 * @param a beschreibt ein Article Objekt
+	 * @return gibt ein geloeschtes Article Objekt zurueck
+	 */
 	public Article deleteArticle(Article a) throws IllegalArgumentException {
 		try {
 			aMapper.delete(a);
@@ -510,6 +702,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen eines Articles via der eindeutigen Id des Article Objekts
+	 * 
+	 * @param articleId beschreibt die Eindeutigkeit eines Article Objekts via id
+	 * @return gibt einen Article via der articleId zurueck
+	 */
 	public Article getArticleById(int articleId) throws IllegalArgumentException {
 		try {
 
@@ -521,6 +719,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen eines Articles via der eindeutigen Id des Article Objekts
+	 * 
+	 * @param id beschreibt die Eindeutigkeit eines Article Objekts via id
+	 * @return gibt einen Article via der id zurueck
+	 */
 	public Article getArticleByArticleId(int id) throws IllegalArgumentException {
 		try {
 
@@ -543,6 +747,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller Article in der Datenbank
+	 * 
+	 * @return gibt alle Article in der Datenbank zurueck
+	 */
 	public Vector<Article> findAllArticle() throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAll();
@@ -552,7 +761,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	//
+	/**
+	 * Auslesen aller Article via groupId zur Filterung im Report
+	 * 
+	 * @param groupId beschreibt ein eindeutiges Group Objekt via id
+	 * @return gibt alle Article einer Gruppe zurueck die zur groupId passen.
+	 */
 	public Vector<Article> findAllArticleByGroupIdReport(int groupId) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByGroupId(groupId);
@@ -562,6 +776,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller Article eines Owners via id
+	 * 
+	 * @param ownerId beschreibt einen Owner Objekt via id
+	 * @return gibt einen Vector mit Article Objekten zurueck
+	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByOwnerId(ownerId);
@@ -581,6 +801,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	//REPORT======================================================================================================
+	/**
+	 * AUslesen aller Article die als Favourite markiert sind
+	 * 
+	 * @param groups Vector der Gruppen Objekte die inm Report ausgewaehlt wurden
+	 * @return gibt alle Article Objkete der selektierten Gruppen zurueck
+	 */
 	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByFavouriteTRUE(groups);
@@ -590,6 +816,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 	//REPORT======================================================================================================
+	/**
+	 * Auslesen aller Article Objekte die als Favourite markiert sind und den selektierten
+	 * Retailer beinhalten
+	 * 
+	 * @param groups Vector der Gruppen Objekte enthaelt, die im Report ausgewaehlt wurden
+	 * @param retailers Vector der Retailer Objekte enthaelt, die im Report ausgewaehlt wurden
+	 * @return gibt alle Article Objkete der selektierten Gruppen sowie dazugehoerigen Retailer zurueck 
+	 */
 	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByRetailerFavouriteTRUE(groups,retailers);
@@ -600,6 +834,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	//REPORT======================================================================================================
+	/**
+	 * Auslesen aller Article Objekte die als Favourite markiert sind und den selektierten
+	 * Zeitraum beinhalten 
+	 * 
+	 * @param groups Vector der Gruppen Objekte enthaelt, die im Report ausgewaehlt wurden
+	 * @param start Datums Zeitraum der im Report ausgewahelt wurde
+	 * @param end Datums Zeitraum der im Report ausgewahelt wurde
+	 * @return gibt alle Article Objkete der selektierten Gruppen sowie dazugehoerigen Zeitraum zurueck 
+	 */
 	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByDateFavouriteTRUE(groups, start, end);
@@ -610,6 +853,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 	
 	//REPORT======================================================================================================
+	
+	/**
+ 	 * Auslesen aller Article Objekte die als Favourite markiert sind, einen selektierten
+	 * Zeitraum besitzen und einen dazugehoerigen Retailer beinhalten 
+	 * 
+	 * @param groups Vector der Gruppen Objekte enthaelt, die im Report ausgewaehlt wurden
+	 * @param start Datums Zeitraum der im Report ausgewahelt wurde
+	 * @param end Datums Zeitraum der im Report ausgewahelt wurde
+	 * @return gibt alle Article Objkete der selektierten Gruppen sowie dazugehoerigen Zeitraum zurueck 
+	 */
 	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws IllegalArgumentException {
 		try {
 			return this.aMapper.findAllArticleByDateRetailerFavouriteTRUE(groups, retailers, start, end);
@@ -621,6 +874,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	// RETAILER===========================================================================
 
+	/**
+	 * Erstellen eines Retailer Objekts und abspeichern in der Datenbank
+	 * 
+	 * @param r beschreibt ein Retailer Objekt
+	 * @return gibt einen erstellten Retailer in der Datenbank zurueck
+	 */
 	public Retailer createRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
@@ -632,10 +891,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Speichern eines upgedateten Retailer Objekts in der Datenbnk
+	 * 
+	 * @param r beschreibt ein Retailer Objekt
+	 * @return gibt ein ueberarbeitetes Retailer Objekt zurueck
+	 */
 	public Retailer saveRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
-			this.rMapper.update(r); // Speichert Retailer
+			this.rMapper.update(r); 
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -644,10 +909,16 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return r;
 	}
 
+	/**
+	 * Entfernen eines Retailer Objekts in der Datenbank
+	 * 
+	 * @param r beschreibt ein Retailer Objekt
+	 * @return gibt ein geloeschtes Retailer Objekt zurueck
+	 */
 	public Retailer deleteRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
-			this.rMapper.delete(r); // Löscht Retailer
+			this.rMapper.delete(r); 
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
@@ -656,9 +927,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		return r;
 	}
 
+	/**
+	 * Auslesen aller Retailer Objekte einer Groupe via der eindeutigen Group Id
+	 * 
+	 * @param groupId beschreibt die Eindeutigkeit eines gruppen Objekts via id
+	 * @return gibt alle Retailer Objekte zurueck die in der Gruppe sind.
+	 */
 	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {
 		try {
-			// CHANGE
 			return this.rMapper.getAllRetailersByGroupId(groupId);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
@@ -667,6 +943,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller Article Objekte eines uebergebenen Retailer Objekts
+	 * 
+	 * @param r beschreibt ein Retailer Objekt
+	 * @return gibt alle Article Objekte zurueck die den uebergebenen Retailer besitzen
+	 */
 	public Vector<Article> getAllArticleByRetailer(Retailer r) throws IllegalArgumentException {
 		try {
 
@@ -679,6 +961,13 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Auslesen aller Article Objekte die im angegebenen Zeitraum liegen
+	 * 
+	 * @param start Datums Zeitraum der im Report ausgewahelt wurde
+	 * @param end Datums Zeitraum der im Report ausgewahelt wurde
+	 * @return gibt alle Article Objekte zurueck die im angegebenen Zeitraum liegen
+	 */
 	public Vector<Article> getAllArticleByDate(Timestamp start, Timestamp end) throws IllegalArgumentException {
 		try {
 
@@ -691,6 +980,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * 
+	 * @param id beschreibt die Eindeutigkeit eines Retailer Objekts via id
+	 * @param start Datums Zeitraum der im Report ausgewahelt wurde
+	 * @param end Datums Zeitraum der im Report ausgewahelt wurde
+	 * @param r beschreibt ein Retailer Objekt
+	 * @return gibt alle Article Objekte zurueckd die im angegebenen Zeitraum liegen
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
+	 */
 	public Vector<Article> getAllArticleByDateRetailer(int id, Timestamp start, Timestamp end, Retailer r)
 			throws IllegalArgumentException {
 		try {
@@ -703,6 +1001,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Auslesen aller Retailer Objekte via der eindeutigen Id
+	 * 
+	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
+	 * @return gibt ein Retailer Objekt zurueck das zur uebergegebenen retailer Id passt.
+	 */
 	public Retailer getRetailerById(int retailerId) throws IllegalArgumentException {
 		try {
 
@@ -715,6 +1019,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Auslesen aller Retailer Objekte in der Datenbank
+	 * 
+	 * @return gibt alle Retailer Objekte in der Datenbank zurueck
+	 */
 	public Vector<Retailer> findAllRetailer() {
 		try {
 			return this.rMapper.findAll();
@@ -725,6 +1034,14 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	// GroceryListArticle===========================================================================
+	
+	/**
+	 * Ein Article Objekt eines GroceryList Objekts hinzufuegen
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt 
+	 * @param a beschreibt ein Article Objekt
+	 * @return gibt ein GroceryListArticle Objekt zurueck
+	 */
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) {
 		try {
 			return this.glaMapper.addArticleToGroceryList(gl, a);
@@ -734,6 +1051,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Loeschen eines Article Objekt aus eines GroceryList Objekts
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @param a beschreibt ein Article Objekt
+	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) {
 		try {
 			this.glaMapper.removeArticleFromGroceryList(gl, a);
@@ -743,6 +1066,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
+	/**
+	 * Auslesen aller Article Objekte eines GroceryList Objekts
+	 * 
+	 * @param groceryList beschreibt ein GroceryList Objekt
+	 * @return gibt einen Article Objekt Vector zurueck mit allen Article Objekten in einer GroceryList
+	 */
 	public Vector<Article> findAllArticleByGroceryList(GroceryList groceryList) {
 		try {
 			return this.glaMapper.findAllArticleByGroceryListId(groceryList.getId());
@@ -754,6 +1083,11 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	}
 
+	/**
+	 * Loeschen eines Article Objekts aus der Datenbank
+	 * 
+	 * @param a beschreibt ein Article Objekt
+	 */
 	public void deleteArticleFromAllLists(Article a) {
 		try {
 			this.glaMapper.deleteArticleFromAllLists(a);
@@ -763,91 +1097,4 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		}
 	}
 
-	// UNIT===========================================================================
-
-	// public Unit createUnit(Unit u) throws IllegalArgumentException{
-	// try {
-	// int temp1=0;
-	//
-	// for(int i=0; i<= unMapper.findAll().size(); i++) {
-	// if(unMapper.findAll().elementAt(i).getUnitName() == u.getUnitName()) {
-	// temp1++;
-	// }
-	// }
-	// if(temp1 ==0) {
-	// unMapper.insert(u);
-	// }
-	// return u; //Rueckgabewert vom Mapper wird noch nicht verarbeitet
-	// }catch(IllegalArgumentException e) {
-	// e.printStackTrace();
-	// return null;
-	// }
-	// }
-	//
-	//
-	//
-	// public void saveUnit(Unit u) throws IllegalArgumentException{
-	// this.unMapper.update(u);
-	// }
-	//
-	// public void deleteUnit(Unit u) throws IllegalArgumentException {
-	// this.unMapper.delete(u);
-	// }
-	//
-	// public Unit getUnitById(int unitId) throws IllegalArgumentException {
-	// return this.unMapper.findByKey(unitId);
-	//
-	// }
-	//
-	// public Unit getUnitByName(String unitName) throws IllegalArgumentException {
-	// return this.unMapper.findUnitByName(unitName);
-	//
-	// }
-
-	// ENTRY===========================================================================
-
-	public Entry createEntry(Entry e) throws IllegalArgumentException {
-		try {
-
-			return null;
-		} catch (IllegalArgumentException ex) {
-			ex.printStackTrace();
-			throw new IllegalArgumentException(ex);
-		}
-
-	}
-
-	public void saveEntry(Entry e) throws IllegalArgumentException {
-		try {
-
-		} catch (IllegalArgumentException ex) {
-			ex.printStackTrace();
-			throw new IllegalArgumentException(ex);
-		}
-	}
-
-	public void deleteEntry(Entry e) throws IllegalArgumentException {
-		try {
-
-		} catch (IllegalArgumentException ex) {
-			ex.printStackTrace();
-			throw new IllegalArgumentException(ex);
-		}
-	}
-
-	/**
-	 * @Override public Vector<Article> getArticleByRetailer(Retailer r) throws
-	 *           IllegalArgumentException { try { return
-	 *           aMapper.findArticleByRetailerId(r.getId());
-	 * 
-	 *           } catch(IllegalArgumentException ex) { ex.printStackTrace(); return
-	 *           null; } }
-	 */
-
-	// @Override
-	// public GroceryList getGroceryListById(Object groceryListId) throws
-	// IllegalArgumentException {
-	// // TODO Auto-generated method stub
-	// return null;
-	// }
 }

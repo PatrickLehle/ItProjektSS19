@@ -34,7 +34,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 // TODO Change Constructor add GroceryList
 //		Zwei mal Klicken auf einmal aendern
 
-/**
+/** GUI-Seite der Einkaufsliste einer Gruppe. Hier koennen der Einkaufsliste
+ * neue Artikel hinzugefuegt, eingekauft oder geloescht werden.
  * 
  * @author tom
  * @author bastiantilk
@@ -167,6 +168,9 @@ public class GroceryListForm extends VerticalPanel {
 		this.add(hpButtons);
 	}
 
+	/** Methode um die Tabelle bei Aenderungen neu zu laden
+	 * 
+	 */
 	public void refreshTable() {
 		ev.findAllArticleByGroceryListId(groceryList.getId(), new setArticleVectorCallback());
 	}
@@ -233,17 +237,38 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
+	//
+	// public ListBox getRetailerListBox() {
+	// ev.getAllRetailerByGroupId(1, new AllRetailersCallback());
+	// ev.getArticleByArticleId(globalRow, new GetArticleCallback());
+	// ev.getRetailerById(article.getRetailerId(), new GetRetailerCallback());
+	// retailerListBox.setItemSelected(retailer.getId() - 1, true);
+	// return retailerListBox;
+	// }
+	//
+	
+	/**
+	 * @author tom
+	 * 
+	 * getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
+	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
+	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
+	 *         und eine neue CheckBox wird kreiert getCbReturn.
+	 * 
+	 * @return eine CheckBox wird zurueckgegeben
+	 */
 	public ListBox getRetailerListBox() {
 		ev.getAllRetailerByGroupId(group.getId(), new AllRetailersCallback());
 		retailerListBox.setItemSelected(1, true);
 		return retailerListBox;
 	}
-
+	
 	/**
 	 * @author tom
 	 * 
-	 *         Schreibt die ausgewaehlte Zeile in die erste oder zweite Tabele wenn
-	 *         ein Artikel als gekauft oder nicht gekauft markiert wurde.
+	 * Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
+	 *         falscherweise als gekauft markiert wurde.
+	 * @return Es gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	class getCbReturn extends CheckBox {
 
@@ -317,7 +342,7 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	// alle Methoden fuer Editieren eines Artikels
+//Methoden zum Editieren eines Artikels====================================
 	public void saveRowContent() {
 		first = articleTable.getText(globalRow, 1);
 		second = articleTable.getText(globalRow, 2);
@@ -375,10 +400,8 @@ public class GroceryListForm extends VerticalPanel {
 
 	/**
 	 * @author tom
-	 *
-	 *         CheckBox fuer Editieren ClickHandler um die ausgewaehlte Reihe global
-	 *         zu speichern ValueChangeHandler um den Text in TextBoxen zu
-	 *         uebertragen und den Text aus TextBoxen zu speichern.
+	 *    CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der Tabelle.
+	 * @return gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	public CheckBox getCbEdit() {
 		CheckBox cb = new CheckBox();
@@ -546,7 +569,9 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	/** ClickHandler um ein Artikel zu favorisieren
+	 * 
+	 */
 	class FavClickHandler implements ClickHandler {
 		Article article;
 		Boolean fav;
@@ -613,7 +638,12 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
-	// CALLBACKS===============================================================================================
+	// //
+	// CALLBACKS============================================================
+	
+	/** Callback-Methode um alle Retailer der Gruppe aus der DB zu finden.
+	 *	Die RetailerListBox wird anschliessend mit den Retailern gefuellt.
+	 */
 	class AllRetailersCallback implements AsyncCallback<Vector<Retailer>> {
 
 		public void onFailure(Throwable caught) {
@@ -680,6 +710,10 @@ public class GroceryListForm extends VerticalPanel {
 		}
 	}
 
+	/** Callback-Methode um einen Artikel als gekauft/nicht-gekauft zu markieren.
+	 * 	Dies geschieht ueber die delDat-Variable die gesetzt/entfernt wird
+	 * 	Anschliessend wird die Tabelle aktualisiert
+	 */
 	class SetCheckCallback implements AsyncCallback<Article> {
 		int row;
 
@@ -694,7 +728,10 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	
+	/** CallBack um die ausgewaehlte Reihe aus der Tabelle zu loeschen.
+	 *  Anschliessend wir did eTabelle aktualisiert.       
+	 */
 	class DeleteArticleCallback implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
@@ -715,9 +752,11 @@ public class GroceryListForm extends VerticalPanel {
 			addBtnBoolean = false;
 		}
 	}
-
+	
+	/** Callback-Methode um einen Artikel der Einkaufsliste hinzuzufuegen
+	 *	Anschliessend wird die Tabelle nue geladen
+	 */
 	class AddArticleToGroceryListCallback implements AsyncCallback<GroceryListArticle> {
-
 		public void onFailure(Throwable caught) {
 		}
 
@@ -725,9 +764,11 @@ public class GroceryListForm extends VerticalPanel {
 			refreshTable();
 		}
 	}
-
+	
+	/** Callback-Methode um alle Artikel der Einkaufsliste in der DB zu finden
+	 *	Bei Erfolg wird die Tabelle mit den Artikeln der Einkaufsliste erneut geladen.
+	 */
 	class setArticleVectorCallback implements AsyncCallback<Vector<Article>> {
-
 		public void onFailure(Throwable caugth) {
 		}
 
@@ -763,7 +804,10 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	
+	/** Callback-Methode um einen Artikel als Favorit zu markieren.
+	 *	Bei Erfolg wird die Tabelle neu geladen
+	 */
 	class SaveArticleFavoriteCallback implements AsyncCallback<Article> {
 		Boolean fav;
 
@@ -802,7 +846,10 @@ public class GroceryListForm extends VerticalPanel {
 			}
 		}
 	}
-
+	
+	/** Methode um einen geaenderten Artikel in der DB zu updaten
+	 *
+	 */
 	class saveEditedArticle implements AsyncCallback<Article> {
 
 		public void onFailure(Throwable caught) {
