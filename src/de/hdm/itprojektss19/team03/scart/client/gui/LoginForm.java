@@ -13,13 +13,24 @@ public class LoginForm extends VerticalPanel {
 	private Image googleSignIn = new Image("/images/googleLogin.png");
 	private LoginInfo loginInfo = new LoginInfo();
 	private Label label = new Label("Logge dich mit deinem Google Konto ein oder erstelle ein neues Profil");
-
+	// DEFAULT CONSTRUCTOR=============================================
+	/**
+	 * Default Konstruktor der EditGroup-Seite
+	 */
+	public LoginForm() {
+	}
+// CONSTRUCTOR=====================================================	
+	/** Login-Seite von Google
+	 * 
+	 * @param loginURL
+	 */
 	public LoginForm(String loginURL) {
 		signInLink = new Anchor();
 		signInLink.setHref(loginURL);
 
 	}
-
+	/** Methode wird automatisch bei Seitenaufruf ausgefuehrt
+	 */
 	public void onLoad() {
 		super.onLoad();
 
