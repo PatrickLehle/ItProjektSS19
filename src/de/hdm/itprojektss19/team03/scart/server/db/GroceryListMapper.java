@@ -47,14 +47,12 @@ public class GroceryListMapper {
 		return groceryListMapper;
 	}
 
+	
 	/**
-	 * 
-	 * Sucht eine GroceryList anhand ihrer ID
-	 * 
-	 * @param zu
-	 *            Suchende id
+	 *  Sucht eine GroceryList anhand ihrer ID
+	 * @param id beschreibt die Eindeutigkeit einer grocerylist via id
 	 * @return Das GroceryList-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public GroceryList findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -84,7 +82,7 @@ public class GroceryListMapper {
 	 * Sucht alle groceryLists
 	 * 
 	 * @return Vector mit allen gefundenen groceryLists
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<GroceryList> findAll() throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -113,13 +111,12 @@ public class GroceryListMapper {
 		return groceryLists;
 	}
 
+	
 	/**
 	 * Fuegt in der Datenbank eine neue Einkaufsliste ein
-	 * 
-	 * @param GL-Objekt
-	 *            das in die DB eingefuegt werden soll
+	 * @param gl beschreibt ein GroceryList Objekt
 	 * @return Die Eingefuegte GL mit aktueller ID
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public GroceryList insert(GroceryList gl) throws DatabaseException {
 		Connection con = null;
@@ -156,13 +153,12 @@ public class GroceryListMapper {
 		return gl;
 	}
 
+	
 	/**
 	 * Aendert eine Einkaufsliste in der Datenbank
-	 * 
-	 * @param Zu
-	 *            aendernde GL
+	 * @param gl beschreibt ein groceryList Objekt
 	 * @return Geaenderte GL
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public GroceryList update(GroceryList gl) throws DatabaseException {
 		Connection con = null;
@@ -186,12 +182,11 @@ public class GroceryListMapper {
 		return gl;
 	}
 
+
 	/**
 	 * Loescht eine GL aus der Datenbank
-	 * 
-	 * @param Zu
-	 *            loeschende GL
-	 * @throws DatabaseException
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void delete(GroceryList gl) throws DatabaseException {
 		Connection con = DBConnection.connection();

@@ -268,14 +268,16 @@ public class GroceryListForm extends VerticalPanel {
 	// return retailerListBox;
 	// }
 	//
+	
 	/**
 	 * @author tom
 	 * 
-	 *         getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
+	 * getCbCheck: CheckBox und ClickHandler die bei dem kaufen eines
 	 *         Artikels aufgerufen werden. CheckBox wird im letzem Column generiert
 	 *         Ausgewaehlte Reihe wird geloescht und in die zweite Tabelle kopiert
 	 *         und eine neue CheckBox wird kreiert getCbReturn.
 	 * 
+	 * @return eine CheckBox wird zurueckgegeben
 	 */
 	public CheckBox getCbCheck() {
 		CheckBox cb = new CheckBox();
@@ -292,12 +294,13 @@ public class GroceryListForm extends VerticalPanel {
 		cb.setValue(false);
 		return cb;
 	}
-
+	
 	/**
 	 * @author tom
 	 * 
-	 *         Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
+	 * Schreibt die ausgewaehlte Zeile in die erste Tabele fals ein Artikel
 	 *         falscherweise als gekauft markiert wurde.
+	 * @return Es gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	public CheckBox getCbReturn() {
 		CheckBox cb = new CheckBox();
@@ -349,12 +352,6 @@ public class GroceryListForm extends VerticalPanel {
 
 		}
 	}
-
-	/**
-	 * @author tom
-	 * 
-	 *         setzt Atribute die in mehreren ClickHandlern gebraucht werden.
-	 */
 
 	//
 	// // alle Methoden fuer Editieren eines Artikels
@@ -549,11 +546,11 @@ public class GroceryListForm extends VerticalPanel {
 	// }
 	// }
 	//
+	
 	/**
 	 * @author tom
-	 * 
-	 *         CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der
-	 *         Tabele.
+	 *    CheckBox fuer DeleteButton. Loescht die ausgewaehlte Reihe aus der Tabelle.
+	 * @return gibt eine cB zurueck die true oder false gesetzt wurde.
 	 */
 	public CheckBox getCbDel() {
 		CheckBox cb = new CheckBox();

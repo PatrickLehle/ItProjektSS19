@@ -44,12 +44,11 @@ public class RegistryForm extends VerticalPanel {
 
 	protected void onLoad() {
 	}
-
+	
 	/**
 	 * Konstruktor fuer die RegistryForm-Klasse.
-	 * 
-	 * @param u
-	 *            user der eigenloggt ist
+	 * @param logoutLink Link für den Logout
+	 * @param email Attribut Email des Users
 	 */
 	public RegistryForm(String logoutLink, String email) {
 		user.setEmail(email);
