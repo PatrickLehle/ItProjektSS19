@@ -19,7 +19,6 @@ import de.hdm.itprojektss19.team03.scart.server.db.GroceryListArticleMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroceryListMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.GroupUserMapper;
-//import de.hdm.itprojektss19.team03.scart.server.db.UnitMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.RetailerMapper;
 import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
@@ -30,7 +29,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
-//import de.hdm.itprojektss19.team03.scart.shared.bo.Unit;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -176,7 +174,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * hinterlegt.
 	 * 
 	 * @param u beschreibt ein User Objekt
-	 * @return gitb den User zurueck
+	 * @return gibt den User zurueck
 	 */
 	public User createUser(User u) throws Exception {
 		if (u != null) {
@@ -190,6 +188,10 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * Erzeugen eines neuen Users im System via email Adresse
+	 * 
+	 * @param emailAdress beschreibt die Email Adresse eines Users im System
+	 * 
+	 * @return user gibt einen User zurueck der zum Uebergabe Parameter passt zurueck.
 	 */
 	public User createUser(String emailAdress) throws IllegalArgumentException, DatabaseException {
 
@@ -201,6 +203,9 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 
 	/**
 	 * User wird aus dem System entfernt
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * 
 	 */
 	public void deleteUser(User u) throws IllegalArgumentException {
 
