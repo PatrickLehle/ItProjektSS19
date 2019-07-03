@@ -3,19 +3,16 @@ package de.hdm.itprojektss19.team03.scart.client.gui;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ChangeEvent;
-import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -26,9 +23,10 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-/** Die EditGroup-Form wird aufgerufen wenn etwas an der Gruppe geaendert werden soll
- * 	oder User der Gruppe hinzugefuegt werden sollen. Zudem erlaubt es einem User selbst
- * 	aus der jeweiligen Gruppe auszutreten
+/**
+ * Die EditGroup-Form wird aufgerufen wenn etwas an der Gruppe geaendert werden
+ * soll oder User der Gruppe hinzugefuegt werden sollen. Zudem erlaubt es einem
+ * User selbst aus der jeweiligen Gruppe auszutreten
  * 
  * @author Julian Hofer, bastiantilk
  *
@@ -52,7 +50,7 @@ public class EditGroup extends VerticalPanel {
 
 	// PANELS
 	VerticalPanel groupFormPanel = new VerticalPanel();
-	VerticalPanel userPanel = new VerticalPanel();
+	ScrollPanel userPanel = new ScrollPanel();
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	HorizontalPanel groupNameHPanel = new HorizontalPanel();
 
@@ -70,7 +68,7 @@ public class EditGroup extends VerticalPanel {
 	Button safeGroupButton = new Button("Änderungen speichern");
 	Button backToGroupButton = new Button("Zurück");
 	Button deleteUserButton = new Button("Entfernen");
-	
+
 	// DEFAULT CONSTRUCTOR=============================================
 	/**
 	 * Default Konstruktor der EditGroup-Seite
@@ -78,21 +76,22 @@ public class EditGroup extends VerticalPanel {
 	public EditGroup() {
 
 	}
-	
+
 // CONSTRUCTOR=====================================================
 	/**
-	* Konstruktor der EditGroup-Seite
-	* 
-	* @param User u (User-Objekt des Users der die EditUser-Seite aufrufen will)
-	* @param Group g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
-	*/
+	 * Konstruktor der EditGroup-Seite
+	 * 
+	 * @param User  u (User-Objekt des Users der die EditUser-Seite aufrufen will)
+	 * @param Group g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
+	 */
 	public EditGroup(User u, Group g) {
 		this.user = u;
 		this.group = g;
 		// group.setId(1);
 	}
-	
-	/** Methode wird automatisch bei Seitenaufruf gestartet
+
+	/**
+	 * Methode wird automatisch bei Seitenaufruf gestartet
 	 */
 	public void onLoad() {
 
@@ -105,7 +104,7 @@ public class EditGroup extends VerticalPanel {
 		groupLabel.addStyleName("h2");
 		deleteGroupButton.addClickHandler(new DeleteClickHandler(user, group));
 		deleteGroupButton.addStyleName("button");
-		safeGroupButton.addClickHandler(new YesSaveButtonClickHandler(null, group));
+		safeGroupButton.addClickHandler(new YesSaveButtonClickHandler(group));
 		safeGroupButton.addStyleName("button");
 		backToGroupButton.addClickHandler(new BackToClickHandler());
 		backToGroupButton.addStyleName("button");
@@ -127,14 +126,11 @@ public class EditGroup extends VerticalPanel {
 
 		loadTable();
 
-		// editorVerwaltung.findAllGroupsByUserId(user.getId(), new
-		// AllGroupsCallback());
-		// editorVerwaltung.findAllGroupsByUserId(1, new AllGroupsCallback());
-
 	}
 
-	/** Methode um die Tabelle bei dem Aufrufen der GUI-Seite zu fuellen oder
-	 * 	die Tabelle neu zu laden nachdem Aenderungen durchgefuehrt wurden
+	/**
+	 * Methode um die Tabelle bei dem Aufrufen der GUI-Seite zu fuellen oder die
+	 * Tabelle neu zu laden nachdem Aenderungen durchgefuehrt wurden
 	 */
 	public void loadTable() {
 
@@ -162,16 +158,14 @@ public class EditGroup extends VerticalPanel {
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
 	}
-	/** Methode setzt den Group-Name in die groupTextBox
+
+	/**
+	 * Methode setzt den Group-Name in die groupTextBox
 	 */
 	public void setGroupNameLabel() {
 		groupTextBox.setText(group.getGroupName());
 
 	}
-
-//	public void getDeleteUserButton() {
-//		DeleteUserClickHandler 
-//	}
 
 	/**
 	 * Methode um einen User u aus einer Gruppe g zu entfernen. Gruppe und User
@@ -194,12 +188,13 @@ public class EditGroup extends VerticalPanel {
 			Window.alert(e.toString() + "\n" + "User/Group ist null");
 		}
 	}
-	
-	/** Methode um einen neuen User der Gruppe hinzuzufuegen
+
+	/**
+	 * Methode um einen neuen User der Gruppe hinzuzufuegen
 	 * 
 	 * @param userEmail (TextBox-Objekt der E-Mail des Users der eingeladen wird)
-	 * @param userName	(TextBox-Objekt der Username des Users der eingeladen wird)
-	 * @param group		(Gruppen-Objekt der Gruppe zu der der User eingeladen wird))
+	 * @param userName  (TextBox-Objekt der Username des Users der eingeladen wird)
+	 * @param group     (Gruppen-Objekt der Gruppe zu der der User eingeladen wird))
 	 */
 	public void addUser(TextBox userEmail, TextBox userName, Group group) {
 		TextBox userEmailTextBox = new TextBox();
@@ -208,17 +203,18 @@ public class EditGroup extends VerticalPanel {
 		User nuser = new User();
 		uemail = userEmailTextBox.getText();
 		nuser.setEmail(uemail);
-		
+
 		if (nuser.getEmail() == user.getEmail()) {
 			Window.alert("Es handelt sich um deine eigene Email Adresse");
 		}
-		
-		//GWT.log(nuser.getEmail() + " cannot find Gmail3");
+
+		// GWT.log(nuser.getEmail() + " cannot find Gmail3");
 		editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
 
 	}
-	
-	/** ClickHandler um einen User aus einer Gruppe zu entfernen
+
+	/**
+	 * ClickHandler um einen User aus einer Gruppe zu entfernen
 	 * 
 	 */
 	class DeleteClickHandler implements ClickHandler {
@@ -231,13 +227,15 @@ public class EditGroup extends VerticalPanel {
 			this.user = u;
 			// user.setId(1);
 		}
+
 		@Override
 		public void onClick(ClickEvent arg0) {
 			removeUserFromGroup(user, group);
 		}
 	}
-	
-	/** ClickHandler um einen User aus einer Gruppe zu entfernen
+
+	/**
+	 * ClickHandler um einen User aus einer Gruppe zu entfernen
 	 * 
 	 */
 	class DeleteUserClickHandler implements ClickHandler {
@@ -255,68 +253,17 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-//	class SafeClickHandler implements ClickHandler {
-//
-//		@Override
-//		public void onClick(ClickEvent arg0) {
-//			DialogBox db = new DialogBox();
-//			VerticalPanel vp = new VerticalPanel();
-//			HorizontalPanel hp = new HorizontalPanel();
-//			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db, group));
-//			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-//			Label l = new HTML(
-//					"<h1> Änderungen speichern</h1> <p> Sollen alle Änderungen gespeichert werden? </p> <br>");
-//
-//			vp.add(l);
-//			hp.add(yB);
-//			hp.add(nB);
-//			vp.add(hp);
-//
-//			db.setGlassEnabled(true);
-//			db.setAnimationEnabled(true);
-//			db.center();
-//			db.show();
-//
-//			db.add(vp);
-//
-//		}
-//
-//	}
-
-//	class NoButtonClickHandler implements ClickHandler {
-//
-//		DialogBox dbox = new DialogBox();
-//
-//		public NoButtonClickHandler(DialogBox db) {
-//
-//			this.dbox = db;
-//
-//		}
-//
-//		public void onClick(ClickEvent event) {
-//
-////			dbox.hide();
-////			dbox.clear();
-////			dbox.removeFromParent();
-////			dbox.setAnimationEnabled(false);
-////			dbox.setGlassEnabled(false);
-//
-//		}
-//
-//	}
-
-	/** ClickHandler um Aenderungen zu speichern und die Gruppe in der DB updaten
+	/**
+	 * ClickHandler um Aenderungen zu speichern und die Gruppe in der DB updaten
 	 * 
 	 *
 	 */
 	class YesSaveButtonClickHandler implements ClickHandler {
 
-//		DialogBox dbox = new DialogBox();
 		Group group = new Group();
 
-		public YesSaveButtonClickHandler(DialogBox db, Group g) {
+		public YesSaveButtonClickHandler(Group g) {
 
-//			this.dbox = db;
 			this.group = g;
 
 		}
@@ -326,43 +273,23 @@ public class EditGroup extends VerticalPanel {
 			String newGroupName = groupTextBox.getText();
 
 			group.setGroupName(newGroupName);
-//			dbox.hide();
-//			dbox.clear();
-//			dbox.removeFromParent();
-//			dbox.setAnimationEnabled(false);
-//			dbox.setGlassEnabled(false);
 
 			editorVerwaltung.saveGroup(group, new UpdateGroupNameCallback());
 
 		}
 	}
 
-	/** ClickHandler um einen User der Gruppe hinzuzufuegen
+	/**
+	 * ClickHandler um einen User der Gruppe hinzuzufuegen
 	 * 
 	 *
 	 */
 	class AddUserClickHandler implements ClickHandler {
 
 		Group groups = new Group();
-//		GroupUser gu = new GroupUser();
 		User users = new User();
 		TextBox userEmailTextBox = new TextBox();
 		TextBox userNameTextBox = new TextBox();
-
-//		public AddUserClickHandler(User u, Group g) {
-//			this.user = u;
-//			this.group = g;
-//			
-//		}
-
-//		public AddUserClickHandler(String userName, String userEmail, Group group) {
-////			this.group = group;
-//			
-//			users.setUsername(userName);
-//			users.setEmail(userEmail);	
-//			GWT.log(userEmail +" cannot find Gmail1");
-//			
-//		}
 
 		public AddUserClickHandler(TextBox userEmail, TextBox userName, Group group) {
 			// TODO Auto-generated constructor stub
@@ -375,39 +302,11 @@ public class EditGroup extends VerticalPanel {
 
 		public void onClick(ClickEvent arg0) {
 			GWT.log(userEmailTextBox.getText() + " passts?");
-			
+
 			addUser(userEmailTextBox, userNameTextBox, groups);
-			
-			//userEmailTextBox.addChangeHandler(new EmailChangeHandler(userEmailTextBox.getText()));
 
 		}
 	}
-	
-
-//	class EmailChangeHandler implements ChangeHandler {
-//		String uemail;
-//		User nuser = new User();
-//
-//		public EmailChangeHandler(String email) {
-//			uemail = email;
-//
-//			nuser.setEmail(uemail);
-//			if (nuser.getEmail() == user.getEmail()) {
-//				Window.alert("Es handelt sich um deine eigene Email Adresse");
-//			}
-//
-//			//GWT.log(nuser.getEmail() + " cannot find Gmail3");
-//			editorVerwaltung.getUserByGMail(nuser.getEmail(), new FindUserByGmailCallback());
-//
-//		}
-//
-//		@Override
-//		public void onChange(ChangeEvent arg0) {
-////			String email = userEmailTextBox.getText();
-////			nuser.setEmail(email);
-//
-//		}
-//	}
 
 	class BackToClickHandler implements ClickHandler {
 
@@ -419,8 +318,9 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	/** Callback-Methode um alle User der Gruppe zu finden und die Tabelle/Buttons
-	 * 	mit den Usern zu fuellen
+	/**
+	 * Callback-Methode um alle User der Gruppe zu finden und die Tabelle/Buttons
+	 * mit den Usern zu fuellen
 	 *
 	 */
 	class AllUserCallback implements AsyncCallback<Vector<User>> {
@@ -431,7 +331,7 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Vector<User> result) {
 			allUsers = result;
-			//User user = new User();
+			// User user = new User();
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 
@@ -446,7 +346,7 @@ public class EditGroup extends VerticalPanel {
 
 //				// Add User Button
 				Button addButton = new Button("add");
-				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group)); 
+				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
 
 				if (allUsers.get(userNumber).getId() != user.getId()) {
 					userTable.setText(userNumber + 3, 0, allUsers.get(userNumber).getUsername());
@@ -463,14 +363,15 @@ public class EditGroup extends VerticalPanel {
 		}
 
 	}
-	
-	/** Callback-Methode um einen User anhand der E-Mail-Adresse in der Db zu finden
+
+	/**
+	 * Callback-Methode um einen User anhand der E-Mail-Adresse in der Db zu finden
 	 * 
 	 */
 	class FindUserByGmailCallback implements AsyncCallback<User> {
 
 		public void onFailure(Throwable caught) {
-			
+
 			Window.alert("Prüfe ob die Email Adresse richtig geschrieben ist und die Person bereits registriert ist");
 			GWT.log(user.getEmail() + " cannot find Gemail");
 		}
@@ -483,8 +384,9 @@ public class EditGroup extends VerticalPanel {
 
 		}
 	}
-	
-	/** Callback-Methode um den Namen der Gruppe bei Aenderung zu aktualisieren
+
+	/**
+	 * Callback-Methode um den Namen der Gruppe bei Aenderung zu aktualisieren
 	 * 
 	 */
 	class UpdateGroupNameCallback implements AsyncCallback<Void> {
@@ -494,7 +396,7 @@ public class EditGroup extends VerticalPanel {
 
 		public void onSuccess(Void arg0) {
 			GroupForm groupForm = new GroupForm(user);
-			
+
 			RootPanel.get("navigation").clear();
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").add(groupForm);
@@ -504,8 +406,9 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	/** Callback-Methode um einen User einer Gruppe hinzuzufuegen.
-	 * 	Der User wird hierbei mit dem GroupUser-BO mit der Gruppe verknuepft
+	/**
+	 * Callback-Methode um einen User einer Gruppe hinzuzufuegen. Der User wird
+	 * hierbei mit dem GroupUser-BO mit der Gruppe verknuepft
 	 */
 	class AddUserCallback implements AsyncCallback<GroupUser> {
 
@@ -523,7 +426,8 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-	/** Callback-Methode um einen User aus der Gruppe zu entfernen
+	/**
+	 * Callback-Methode um einen User aus der Gruppe zu entfernen
 	 * 
 	 */
 	class RemoveUserFromGroupCallback implements AsyncCallback<Void> {
@@ -534,7 +438,7 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Void arg0) {
-			GroupForm groupForm = new GroupForm(user);			
+			GroupForm groupForm = new GroupForm(user);
 			RootPanel.get("navigation").clear();
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").add(groupForm);
@@ -544,71 +448,3 @@ public class EditGroup extends VerticalPanel {
 	}
 
 }
-
-//	public void seeUsersfromGroup(User user, Group group) {
-//	try {
-//		if (user == null || group == null) {
-//			throw new NullPointerException();
-//		}
-//
-//		editorVerwaltung.getAllUserByGroupId(group.getId(), new AsyncCallback<Vector<User>>() {
-//
-//			public void onFailure(Throwable a) {
-//				Window.alert("Die User dieser Gruppe konnten nicht angezeigt werden." + a);
-//			}
-//
-//			@Override
-//			public void onSuccess(Vector<User> result) {
-//				Window.alert("Das sind die User der ausgewählten Gruppe.");
-//				for (int g = 0; g < result.size(); g++) {
-//
-//					allUsers.add(result.elementAt(g).getUsername());
-//
-//					RadioButton userNames = new RadioButton("userNames", allUsers.elementAt(g));
-//					// userNames.addClickHandler(new UserCheckBoxClickHandler(userNames));
-//					userNames.setStyleName("textbox");
-//					userPanel.add(userNames);
-//
-//				}
-//			}
-//		});
-//	} catch (NullPointerException e) {
-//		Window.alert(e.toString() + "\n" + "User/Group ist null");
-//	}
-//}
-
-//	class AllGroupsCallback implements AsyncCallback<Vector<Group>> {
-//
-//		public void onFailure(Throwable e) {
-//			Window.alert("Error getting Groups: " + e);
-//		}
-//
-//		public void onSuccess(Vector<Group> result) {
-//			// Window.alert(result.get(0).getGroupName());
-//			for (int g = 0; g < result.size(); g++) {
-//
-//				allGroups.add(result.elementAt(g).getGroupName());
-//				RadioButton groupNames = new RadioButton("groupNames", allGroups.elementAt(g));
-//				groupNames.addClickHandler(new GroupCheckBoxClickHandler(groupNames));
-//				groupNames.setStyleName("textbox");
-//				checkBoxesGroup.add(groupNames);
-//
-//			}
-//
-//		}
-//	}
-
-//	class GroupCheckBoxClickHandler implements ClickHandler {
-//		CheckBox checkBox = null;
-//
-//		public GroupCheckBoxClickHandler(CheckBox cB) {
-//			this.checkBox = cB;
-//		}
-//
-//		@Override
-//		public void onClick(ClickEvent event) {
-//			choosenGroups.contains(checkBox.getText());
-//
-//		}
-//
-//	}
