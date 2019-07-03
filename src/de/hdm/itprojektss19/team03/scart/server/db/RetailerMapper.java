@@ -50,13 +50,11 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * 
 	 * Sucht eine Retailer anhand seiner ID
 	 * 
-	 * @param zu
-	 *            Suchende id
+	 * @param id beschreibt die Eindeutigkeit eines Retailers via id
 	 * @return Das Retailer-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer findByKey(int id) throws DatabaseException {
 
@@ -95,10 +93,10 @@ public class RetailerMapper {
 	/**
 	 * Gibt einen Retailer via Namen zurueck
 	 * 
-	 * @param name
-	 * @param r
+	 * @param name beschreibt den Namen des Retailer Objekts
+	 * @param r beschreibt das Retailer Objekt
 	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
-	 * @throws DatabaseException
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findRetailerByName(String name, Retailer r) throws DatabaseException {
 		Connection con = null;
@@ -141,7 +139,7 @@ public class RetailerMapper {
 	 * Sucht alle Retailers
 	 * 
 	 * @return Vector mit allen gefundenen Retailers
-	 * @throws DatabaseException
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -178,6 +176,14 @@ public class RetailerMapper {
 		return retailers;
 	}
 
+	/**
+	 * 
+	 * Gibt alle Retailer einer Gruppe zurueck
+	 * 
+	 * @param groupId Die besagte Gruppe
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		Vector<Retailer> retailers = new Vector<Retailer>();
@@ -212,18 +218,58 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * F�gt in der Datenbank einen neuen Retailer ein
 	 * 
-	 * @param Retailer-Objekt
-	 *            das in die DB eingef�gt werden soll
-	 * @return Die Eingef�gte Retailer mit aktueller ID
-	 * @throws DatabaseException
+	 * Gibt alle Retailer einer GroceryList zurueck
+	 * 
+	 * @param groupId Die besagte GroceryList
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
+	public Vector<Retailer> getAllRetailersByGroceryListId(int groceryListId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT * FROM retailer JOIN user ON user.userId = retailer.retailerUserId JOIN groups ON groups.groupId = retailer.retailerGroupId WHERE retailerGroupId="
+							+ groceryListId);
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setEmail(rs.getString("userEmail"));
+				user.setUsername(rs.getString("userName"));
+				Group group = new Group();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * Fuegt in der Datenbank einen neuen Retailer ein
+	 * 
+	 * @param retailer beschreibt den uebergebeben Retailer
+	 * @return Die Eingefuegte Retailer mit aktueller ID
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer insert(Retailer retailer) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String maxIdSQL = "SELECT MAX(id) AS maxid FROM retailer";
+		String maxIdSQL = "SELECT MAX(retailerId) AS maxid FROM retailer";
 		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId) VALUES (?,?,?,?)";
 
 		try {
@@ -233,28 +279,31 @@ public class RetailerMapper {
 
 			if (rs.next()) {
 				retailer.setId(rs.getInt("maxid") + 1);
+				// Jetzt erfolgt das Einfuegen des Objekts
+				stmt = con.prepareStatement(insertSQL);
+				stmt = con.prepareStatement(insertSQL);
+				stmt.setInt(1, retailer.getId());
+				stmt.setString(2, retailer.getRetailerName());
+				stmt.setInt(3, retailer.getGroup().getId());
+				stmt.setInt(4, retailer.getUser().getId());
+				stmt.executeUpdate();
+				return retailer;
+			} else {
+				throw new DatabaseException(new SQLException("no next retailre for maxid"));
 			}
-			stmt = con.prepareStatement(insertSQL);
-			stmt.setInt(1, retailer.getId());
-			stmt.setString(2, retailer.getRetailerName());
-			stmt.setInt(3, retailer.getGroup().getId());
-			stmt.setInt(4, retailer.getUser().getId());
-			stmt.executeUpdate();
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return retailer;
 	}
 
 	/**
-	 * �ndert einen Retailer in der Datenbank
+	 * aendert einen Retailer in der Datenbank
 	 * 
-	 * @param Zu
-	 *            �ndernder Retailer
-	 * @return Ge�nderter Retailer
-	 * @throws DatabaseException
+	 * @param retailer beschreibt den uebergebenen Retailer
+	 * @return Die Rückgabe ist ein Retailer-Objekt mit seinen neuen Datensaetzen
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer update(Retailer retailer) throws DatabaseException {
 
@@ -279,11 +328,10 @@ public class RetailerMapper {
 	}
 
 	/**
-	 * L�scht einen Retailer aus der Datenbank
+	 * Loescht einen Retailer aus der Datenbank
 	 * 
-	 * @param Zu
-	 *            l�schender Retailer
-	 * @throws DatabaseException
+	 * @param retailer beschreibt den uebergenenen Retailer
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public void delete(Retailer retailer) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -297,6 +345,13 @@ public class RetailerMapper {
 		}
 	}
 
+	/**
+	 * Gibt den Retailer mit einer bestimmten ID zurueck
+	 * 
+	 * @param id nach dieser ID wird gesucht
+	 * @return ein Retailer Objekt
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Retailer findById(int id) throws DatabaseException {
 
 		Connection con = null;

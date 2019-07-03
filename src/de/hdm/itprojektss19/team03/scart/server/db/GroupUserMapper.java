@@ -31,7 +31,7 @@ public class GroupUserMapper {
 	 * Hier wird geprueft ob eine Klasse schon vorhanden ist. Methoden werden nur
 	 * ueber diese statische Methode aufgerufen
 	 * 
-	 * @return
+	 * @return Beziehung zwischen Group und User wird hier zurueck gegeben
 	 */
 	public static GroupUserMapper groupUserMapper() {
 		if (groupUserMapper == null) {

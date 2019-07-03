@@ -1,6 +1,5 @@
 package de.hdm.itprojektss19.team03.scart.client.gui;
 
-import java.util.Collections;
 import java.util.Vector;
 
 import com.google.gwt.core.client.GWT;
@@ -34,16 +33,34 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class ShoppingListForm extends HorizontalPanel {
 
+	/**
+	 * Konstruktor der ShoppingListForm-Seite
+	 * 
+	 * @param u (User-Objekt des aktuellen Users)
+	 * @param gl (GroceryList-Objekt der aktuellen Einkaufsliste)
+	 * @param g (Gruppen-Objekt der Gruppe in der sich die Einkaufsliste befindet)
+	 */
 	public ShoppingListForm(User u, GroceryList gl, Group g) {
 		user = u;
 		groceryList = gl;
 		group = g;
 	}
 
+	/**
+	 * Methode wird bei Seitenaufruf automatisch gestartet
+	 * 
+	 */
 	public void onLoad() {
 		this.clear();
-		this.add(new LoadingForm());
-		getData();
+		outerPanel.clear();
+		retailersPanel.clear();
+
+		addRetailerButton.setStyleName("button");
+		addRetailerButton.addClickHandler(new addRetailerClickHandler());
+		outerPanel.add(addRetailerButton);
+		outerPanel.add(retailersPanel);
+		this.add(outerPanel);
+		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
 	}
 
 	private EditorServiceAsync editorService = GWT.create(EditorService.class);
@@ -51,71 +68,56 @@ public class ShoppingListForm extends HorizontalPanel {
 	private User user;
 	private Group group;
 	private GroceryList groceryList;
-	private int articleCount;
-	private Vector<Retailer> retailers = new Vector<Retailer>();
 
-	private HorizontalPanel headerPanel = new HorizontalPanel();
-	private HorizontalPanel outerPanel = new HorizontalPanel();
-	private FlowPanel flowPanel = new FlowPanel();
-	private VerticalPanel retailerPanel;
-	private DecoratorPanel decoPanel;
+	private FlowPanel retailersPanel = new FlowPanel();
+	private VerticalPanel outerPanel = new VerticalPanel();
 	private Button addRetailerButton = new Button("Laden einfügen");
 
-	private void getData() {
+	/**
+	 * Methode zum Erstellen der GUI-Seite
+	 * 
+	 * @param articles (Vector mit Artikel-Objekten)
+	 * @param retailer Retailer
+	 */
+	public void createForms(Vector<Article> articles, Retailer retailer) {
+		GWT.log("run once");
+		DecoratorPanel decoPanel = new DecoratorPanel();
+		HorizontalPanel headerPanel = new HorizontalPanel();
+		VerticalPanel retailerPanel = new VerticalPanel();
 
-		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
+		Label retailerHeader = new Label(retailer.getRetailerName());
+		Button editRetailer = new Button(
+				"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+
+		Button deleteButton = new Button(
+				"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
+
+		deleteButton.setStyleName("icon-button");
+		deleteButton.addClickHandler(new DeleteRetailerClickHandler(retailer));
+		editRetailer.setStyleName("icon-button");
+		retailerHeader.addStyleName("h3");
+		headerPanel.add(retailerHeader);
+		headerPanel.add(editRetailer);
+		headerPanel.add(deleteButton);
+		headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
+		editRetailer.addClickHandler(new EditRetailerClickhandler(retailer, headerPanel));
+
+		retailerPanel.addStyleName("retailer-panel");
+		retailerPanel.add(headerPanel);
+		retailerPanel.add(new GroceryListForm(user, group, articles, retailer, groceryList));
+
+		decoPanel.addStyleName("retailers-panel");
+		decoPanel.setWidget(retailerPanel);
+
+		editorService.generateIdenticons(retailer.getUser().getEmail(), 25, 25,
+				new GetPictureCallback(headerPanel, retailer.getUser()));
+
+		retailersPanel.add(decoPanel);
 	}
 
-	public void createForms(Vector<Article> articles) {
-		addRetailerButton.setStyleName("button");
-		addRetailerButton.addClickHandler(new addRetailerClickHandler());
-		flowPanel.clear();
-		outerPanel.clear();
-		outerPanel.add(addRetailerButton);
-		Collections.reverse(retailers);
-		for (Retailer r : retailers) {
-			headerPanel = new HorizontalPanel();
-			headerPanel.clear();
-
-			Label retailerHeader = new Label(r.getRetailerName());
-			Button editRetailer = new Button(
-					"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
-
-			Button deleteButton = new Button(
-					"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
-
-			deleteButton.setStyleName("icon-button");
-			deleteButton.addClickHandler(new DeleteRetailerClickHandler(r));
-			editRetailer.setStyleName("icon-button");
-			retailerHeader.addStyleName("h3");
-			headerPanel.add(retailerHeader);
-			headerPanel.add(editRetailer);
-			headerPanel.add(deleteButton);
-			headerPanel.setVerticalAlignment(ALIGN_MIDDLE);
-			editRetailer.addClickHandler(new EditRetailerClickhandler(r, headerPanel));
-
-			// todo add articles
-
-			retailerPanel = new VerticalPanel();
-			retailerPanel.clear();
-			retailerPanel.addStyleName("retailer-panel");
-			retailerPanel.add(headerPanel);
-			retailerPanel.add(new GroceryListForm(user, group, articles, r, groceryList));
-			decoPanel = new DecoratorPanel();
-			decoPanel.clear();
-			decoPanel.addStyleName("retailers-panel");
-			decoPanel.setWidget(retailerPanel);
-			flowPanel.add(decoPanel);
-			editorService.generateIdenticons(r.getUser().getEmail(), 25, 25,
-					new GetPictureCallback(headerPanel, r.getUser()));
-		}
-
-		outerPanel.add(flowPanel);
-		outerPanel.setHorizontalAlignment(ALIGN_CENTER);
-		this.clear();
-		this.add(outerPanel);
-	}
-
+	/**
+	 * ClickHandler um einen Retailer zu entfernen
+	 */
 	class DeleteRetailerClickHandler implements ClickHandler {
 		Retailer retailer;
 
@@ -124,7 +126,6 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onClick(ClickEvent arg0) {
-			Window.alert("c");
 			DialogBox db = new DialogBox();
 			Button yb = new Button("Ja", new YesButtonClickHandler(retailer, db));
 			Button nb = new Button("Nein", new NoButtonClickHandler(db));
@@ -142,9 +143,11 @@ public class ShoppingListForm extends HorizontalPanel {
 			db.add(vp);
 			db.show();
 		}
-
 	}
 
+	/**
+	 * ClickHandler um das Loeschen eines Retailers zu bestaetigen
+	 */
 	class YesButtonClickHandler implements ClickHandler {
 		Retailer retailer;
 		DialogBox dialogBox;
@@ -162,6 +165,9 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 	}
 
+	/**
+	 * ClickHandler um das Loeschen eines Retailers abzubrechen
+	 */
 	class NoButtonClickHandler implements ClickHandler {
 		DialogBox dialogBox;
 
@@ -177,6 +183,9 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	}
 
+	/**
+	 * ClickHander um einen Retailer zu bearbeiten
+	 */
 	class EditRetailerClickhandler implements ClickHandler {
 		Retailer retailer;
 		HorizontalPanel panel;
@@ -227,6 +236,10 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	}
 
+	/**
+	 * Callback-Methode um einen Retailer zu loeschen Bei Erfolg wird die Seite neu
+	 * geladen
+	 */
 	class DeleteRetailerCallback implements AsyncCallback<Retailer> {
 
 		public void onFailure(Throwable t) {
@@ -234,11 +247,15 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Retailer r) {
-			getData();
+			onLoad();
 		}
 
 	}
 
+	/**
+	 * Callback-Methode um einen Retailer zu loeschen. Bei Erfolg wird die Seite
+	 * angepasst
+	 */
 	class UpdateRetailerCallback implements AsyncCallback<Retailer> {
 		HorizontalPanel panel;
 
@@ -271,6 +288,10 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 	};
 
+	/**
+	 * Callback-Methode um Identicons zu erstellen. Bei Erfolg wird das Bild
+	 * erneuert.
+	 */
 	class GetPictureCallback implements AsyncCallback<String> {
 
 		HorizontalPanel hp = new HorizontalPanel();
@@ -297,32 +318,26 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	}
 
-	AsyncCallback<Vector<Article>> articleCallback = new AsyncCallback<Vector<Article>>() {
+	class ArticleCallback implements AsyncCallback<Vector<Article>> {
+		Retailer retailer;
+
+		public ArticleCallback(Retailer r) {
+			retailer = r;
+		}
 
 		public void onFailure(Throwable t) {
 			Window.alert("Failed to retrieve Articles: " + t);
 		}
 
 		public void onSuccess(Vector<Article> articles) {
-			articleCount = articles.size();
-			for (int i = 0; i < articleCount; i++) {
-
-				// Retailer r = new Retailer();
-				// r.setId(articles.get(i).getRetailerId());
-				// r.setRetailerName((articles.get(i).getRetailerName()));
-				// r.setGroup(group);
-				// r.setRetailerId(articles.get(i).getRetailerId());
-				//
-				// if (!retailers.contains(r)) {
-				// retailers.add(r);
-				// }
-
-			}
-
-			createForms(articles);
+			createForms(articles, retailer);
 		}
-	};
+	}
 
+	/**
+	 * Callback um die Retailer der Gruppe aus der DB zu finden. Bei Erfolg werden
+	 * die Artikel der Einkaufsliste gesucht.
+	 */
 	AsyncCallback<Vector<Retailer>> retailerCallback = new AsyncCallback<Vector<Retailer>>() {
 
 		public void onFailure(Throwable t) {
@@ -330,33 +345,36 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Vector<Retailer> r) {
-			retailers = r;
-			editorService.findAllArticleByGroceryList(groceryList, articleCallback);
+			for (Retailer retailer : r) {
+				editorService.findAllArticleByGroceryListIdAndRetailerId(groceryList.getId(), retailer.getId(),
+						new ArticleCallback(retailer));
+			}
 		}
 	};
 
+	/**
+	 * Callback-Methode um einen neuen Retailer in der DB anzulegen
+	 */
 	AsyncCallback<Retailer> newRetailerCallback = new AsyncCallback<Retailer>() {
-
 		public void onFailure(Throwable t) {
 			GWT.log("Failed to add Retailer: " + t);
 		}
 
 		public void onSuccess(Retailer r) {
-			retailers.add(r);
-			getData();
+			onLoad();
 		}
-
 	};
 
+	/**
+	 * ClickHandler um einen neuen Retailer anzulegen.
+	 */
 	class addRetailerClickHandler implements ClickHandler {
-
 		public void onClick(ClickEvent arg0) {
 			Retailer r = new Retailer();
 			r.setGroup(group);
+			r.setUser(user);
 			r.setRetailerName("Neuer Laden");
 			editorService.createRetailer(r, newRetailerCallback);
-
 		}
 	}
-
 }

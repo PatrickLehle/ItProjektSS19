@@ -48,7 +48,7 @@ public class GroupUser extends BusinessObject {
 	
 	/**
 	 * Holen der userId eines Users
-	 * @return
+	 * @return gibt die Id eines Users zurueck
 	 */
 	public int getUserId() {
 		return userId;
@@ -57,7 +57,7 @@ public class GroupUser extends BusinessObject {
   //SETTER========================================================================
 	/**
 	 * Hier wird die Id einer Gruppe gesetzt
-	 * @param groupId
+	 * @param groupId beschreibt die Eindeutidkeit einer Gruppe
 	 */
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
@@ -65,7 +65,7 @@ public class GroupUser extends BusinessObject {
 	
 	/**
 	 * Hier wird die Id eines Users gesetzt
-	 * @param userId
+	 * @param userId beschreibt die Eindeutigkeit eines Users
 	 */
 	public void setUserId(int userId) {
 		this.userId = userId;

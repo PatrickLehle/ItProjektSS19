@@ -47,13 +47,12 @@ public class GroceryListArticleMapper {
 	 * <code>GroceryList</code>. DIe ZUordnung wird durch einen zusammengesetzten
 	 * Primaerschluessel realisiert
 	 * 
-	 * @param gl
-	 *            fuer das GroceryListobjekt
-	 * @param a
-	 *            fuer das Articleobjekt
+	 * @param gl fuer das GroceryListobjekt
+	 * @param a fuer das Articleobjekt
 	 * 
 	 * @return null
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
@@ -62,7 +61,6 @@ public class GroceryListArticleMapper {
 		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId) VALUES (?,?)";
 
 		try {
-			System.out.println(a.getId() + " " + gl.getId());
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(article);
 			stmt.setInt(1, gl.getId());
@@ -79,11 +77,10 @@ public class GroceryListArticleMapper {
 	/**
 	 * Loeschen eines Articles zu einer zugewiesenen GroceryList.
 	 * 
-	 * @param gl
-	 *            GroceryList-Objekt
-	 * @param a
-	 *            Article-Objekt
-	 * @throws DatabaseException
+	 * @param gl beschreibt ein GroceryList-Objekt
+	 * @param a beschereibt Article-Objekt
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
@@ -105,6 +102,13 @@ public class GroceryListArticleMapper {
 		}
 	}
 
+	/**
+	 * Findet alle Artikel einer Einkaufsliste (wer hätte es gedacht...)
+	 * 
+	 * @param grocerylistId
+	 * @return
+	 * @throws DatabaseException
+	 */
 	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) throws DatabaseException {
 
 		Connection con = null;
@@ -148,11 +152,64 @@ public class GroceryListArticleMapper {
 	}
 
 	/**
+	 * Findet alle Artikel eines Retailers einer Einkaufsliste
+	 * 
+	 * @param grocerylistId
+	 * @return
+	 * @throws DatabaseException
+	 */
+	public Vector<Article> findAllArticleByGroceryListIdAndRetailerId(int grocerylistId, int retailerId)
+			throws DatabaseException {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum auslesen der Tupel aus der DB
+		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId "
+				+ "= article.articleId JOIN grocerylist ON grocerylistarticle.grocerylistId = "
+				+ "grocerylist.groceryListId JOIN retailer ON retailer.retailerId "
+				+ "= article.articleId WHERE grocerylistarticle.grocerylistId = " + grocerylistId
+				+ " AND retailer.retailerId =  " + retailerId;
+
+		Vector<Article> result = new Vector<Article>();
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(selectByKey);
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setId(rs.getInt("articleId"));
+				a.setName(rs.getString("articleName"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setRetailerId(rs.getInt("articleRetailerId"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit(rs.getString("articleUnit"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setGroupId(rs.getInt("articleGroupId"));
+				a.setRetailerName(rs.getString("retailerName"));
+				result.addElement(a);
+			}
+			return result;
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+	}
+
+	/**
 	 * Entfernt einen ausgewaehlten Article aus allen GroceryLists
 	 * 
-	 * @param a
-	 *            das zu loeschende Objekt von allen existierenden Listen
-	 * @throws DatabaseException
+	 * @param a beschreibt ein Aritcle Objekt das zu loeschende Objekt von allen
+	 *            existierenden Listen
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void deleteArticleFromAllLists(Article a) throws DatabaseException {
 
