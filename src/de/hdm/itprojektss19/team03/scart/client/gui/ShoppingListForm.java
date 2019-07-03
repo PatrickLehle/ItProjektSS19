@@ -33,13 +33,28 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  *
  */
 public class ShoppingListForm extends HorizontalPanel {
-
+// DEFAULT CONSTRUCTOR=============================================
+	/** Default Konstruktor der EditGroup-Seite
+	*/
+	public ShoppingListForm() {
+	}
+	
+// CONSTRUCTOR=====================================================
+	/** Konstruktor der ShoppingListForm-Seite
+	 * 
+	 * @param u (User-Objekt des aktuellen Users)
+	 * @param gl (GroceryList-Objekt der aktuellen Einkaufsliste)
+	 * @param g (Gruppen-Objekt der Gruppe in der sich die Einkaufsliste befindet)
+	 */
 	public ShoppingListForm(User u, GroceryList gl, Group g) {
 		user = u;
 		groceryList = gl;
 		group = g;
 	}
-
+	
+	/** Methode wird bei Seitenaufruf automatisch gestartet
+	 * 
+	 */
 	public void onLoad() {
 		this.clear();
 		this.add(new LoadingForm());
@@ -61,11 +76,16 @@ public class ShoppingListForm extends HorizontalPanel {
 	private DecoratorPanel decoPanel;
 	private Button addRetailerButton = new Button("Laden einfügen");
 
+	/** Sucht alle Retailer der aktuellen Gruppe
+	 */
 	private void getData() {
-
 		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
 	}
 
+	/** Methode zum Erstellen der GUI-Seite
+	 * 
+	 * @param articles (Vector mit Artikel-Objekten)
+	 */
 	public void createForms(Vector<Article> articles) {
 		addRetailerButton.setStyleName("button");
 		addRetailerButton.addClickHandler(new addRetailerClickHandler());
@@ -116,6 +136,8 @@ public class ShoppingListForm extends HorizontalPanel {
 		this.add(outerPanel);
 	}
 
+	/** ClickHandler um einen Retailer zu entfernen
+	 */
 	class DeleteRetailerClickHandler implements ClickHandler {
 		Retailer retailer;
 
@@ -142,9 +164,10 @@ public class ShoppingListForm extends HorizontalPanel {
 			db.add(vp);
 			db.show();
 		}
-
 	}
 
+	/** ClickHandler um das Loeschen eines Retailers zu bestaetigen
+	 */
 	class YesButtonClickHandler implements ClickHandler {
 		Retailer retailer;
 		DialogBox dialogBox;
@@ -153,7 +176,6 @@ public class ShoppingListForm extends HorizontalPanel {
 			retailer = r;
 			dialogBox = db;
 		}
-
 		public void onClick(ClickEvent arg0) {
 			editorService.deleteRetailer(retailer, new DeleteRetailerCallback());
 			dialogBox.hide();
@@ -161,7 +183,9 @@ public class ShoppingListForm extends HorizontalPanel {
 			dialogBox.removeFromParent();
 		}
 	}
-
+	
+	/** ClickHandler um das Loeschen eines Retailers abzubrechen
+	 */
 	class NoButtonClickHandler implements ClickHandler {
 		DialogBox dialogBox;
 
@@ -177,6 +201,8 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	}
 
+	/** ClickHander um einen Retailer zu bearbeiten
+	 */
 	class EditRetailerClickhandler implements ClickHandler {
 		Retailer retailer;
 		HorizontalPanel panel;
@@ -226,7 +252,9 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 	}
-
+	/** Callback-Methode um einen Retailer zu loeschen
+	 *	Bei Erfolg wird die Seite neu geladen
+	 */
 	class DeleteRetailerCallback implements AsyncCallback<Retailer> {
 
 		public void onFailure(Throwable t) {
@@ -238,7 +266,9 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 	}
-
+	/** Callback-Methode um einen Retailer zu loeschen.
+	 *	Bei Erfolg wird die Seite angepasst
+	 */
 	class UpdateRetailerCallback implements AsyncCallback<Retailer> {
 		HorizontalPanel panel;
 
@@ -270,7 +300,10 @@ public class ShoppingListForm extends HorizontalPanel {
 			panel.add(deleteButton);
 		}
 	};
-
+	
+	/** Callback-Methode um Identicons zu erstellen.
+	 *	Bei Erfolg wird das Bild erneuert.
+	 */
 	class GetPictureCallback implements AsyncCallback<String> {
 
 		HorizontalPanel hp = new HorizontalPanel();
@@ -322,7 +355,9 @@ public class ShoppingListForm extends HorizontalPanel {
 			createForms(articles);
 		}
 	};
-
+	/** Callback um die Retailer der Gruppe aus der DB zu finden.
+	 * 	Bei Erfolg werden die Artikel der Einkaufsliste gesucht.
+	 */
 	AsyncCallback<Vector<Retailer>> retailerCallback = new AsyncCallback<Vector<Retailer>>() {
 
 		public void onFailure(Throwable t) {
@@ -334,29 +369,25 @@ public class ShoppingListForm extends HorizontalPanel {
 			editorService.findAllArticleByGroceryList(groceryList, articleCallback);
 		}
 	};
-
+	/** Callback-Methode um einen neuen Retailer in der DB anzulegen
+	 */
 	AsyncCallback<Retailer> newRetailerCallback = new AsyncCallback<Retailer>() {
-
 		public void onFailure(Throwable t) {
 			GWT.log("Failed to add Retailer: " + t);
 		}
-
 		public void onSuccess(Retailer r) {
 			retailers.add(r);
 			getData();
 		}
-
 	};
-
+	/** ClickHandler um einen neuen Retailer anzulegen.
+	 */
 	class addRetailerClickHandler implements ClickHandler {
-
 		public void onClick(ClickEvent arg0) {
 			Retailer r = new Retailer();
 			r.setGroup(group);
 			r.setRetailerName("Neuer Laden");
 			editorService.createRetailer(r, newRetailerCallback);
-
 		}
 	}
-
 }

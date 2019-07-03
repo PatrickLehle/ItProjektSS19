@@ -13,6 +13,7 @@ import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
+import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 /**
@@ -50,14 +51,12 @@ public class ArticleMapper {
 		return articleMapper;
 	}
 
+	
 	/**
-	 * 
 	 * Sucht einen Artikel anhand seiner ID
-	 * 
-	 * @param zu
-	 *            Suchende id
+	 * @param id beschreibt die Eindeutigkeit eines Article Objekts via id
 	 * @return Das Artikel-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article findByKey(int id) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -127,7 +126,7 @@ public class ArticleMapper {
 	 * Sucht alle Artikel
 	 * 
 	 * @return Vector mit allen gefundenen Artikeln
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAll() throws DatabaseException {
 
@@ -161,23 +160,19 @@ public class ArticleMapper {
 		}
 		return articles;
 	}
-
-	/*
-	 * Gibt einen Vektor mit allen Artikeln zurueck, die den Namen der im Parameter
-	 * uebergeben wurde haben.
+	
+	/**
 	 * 
-	 * @param Name des Artikels der gesucht werden soll
-	 * 
-	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem
-	 * gesucht wurde
-	 * 
-	 * @throws DatabaseException
+	 * @param name des Artikels der gesucht werden soll
+	 * @param a Vector von Articlen
+	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem gesucht wurde
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
-	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
+	public Vector<Article> findArticleByName(String name, int groupId) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String select = "SELECT * FROM article WHERE articleName=?";
+		String select = "SELECT * FROM article WHERE articleName=? AND articleGroupId=?";
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -185,6 +180,7 @@ public class ArticleMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(select);
 			stmt.setString(1, name);
+			stmt.setInt(2, groupId);
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -194,14 +190,14 @@ public class ArticleMapper {
 				article.setName(rs.getString("articleName"));
 				article.setQuantity(rs.getInt("articleQuantity"));
 				article.setUnit(rs.getString("articleUnit"));
-				article.setRetailerId(rs.getInt("retailerId"));
+				article.setRetailerId(rs.getInt("articleRetailerId"));
 				article.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				article.setModDat(rs.getTimestamp("articlemodDat"));
 				article.setCheckBoolean(rs.getBoolean("articleBoolean"));
 				article.setFav(rs.getBoolean("articleFav"));
 				article.setDelDat(rs.getTimestamp("articleDelDat"));
 
-				result.addElement(a);
+				result.addElement(article);
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
@@ -210,13 +206,12 @@ public class ArticleMapper {
 		return result;
 	}
 
+	
 	/**
 	 * Sucht alle Artikel, die einem bestimmten Retailer haben, anhand der ID
-	 * 
-	 * @param Die
-	 *            ID des Retailers
+	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
 	 * @return Vector mit allen gefunden Artikeln des Retailers
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findArticleByRetailerId(int retailerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -250,13 +245,13 @@ public class ArticleMapper {
 		return articles;
 	}
 
+
+	
 	/**
 	 * Fuegt in der Datenbank einen neuen Artikel ein
-	 * 
-	 * @param Artikel-Objekt
-	 *            das in die DB eingef�gt werden soll
-	 * @return Der Eingef�gte Artikel mit aktueller ID
-	 * @throws DatabaseException
+	 * @param article beschreibt ein Article Objekt
+	 * @return Der Eingefuegte Artikel mit aktueller ID
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article insert(Article article) throws DatabaseException {
 		Connection con = null;
@@ -301,13 +296,12 @@ public class ArticleMapper {
 		return article;
 	}
 
+	
 	/**
 	 * Aendert einen Artikel in der Datenbank
-	 * 
-	 * @param Zu
-	 *            aendernder Artikel
+	 * @param article beschreibt ein Article Objekt
 	 * @return Geaenderter Artikel
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article update(Article article) throws DatabaseException {
 
@@ -342,13 +336,13 @@ public class ArticleMapper {
 		return article;
 	}
 
+
+	
 	/**
 	 * Loescht einen Artikel aus der Datenbank
-	 * 
-	 * @param Zu
-	 *            loeschender Artikel
-	 * 
-	 * @throws DatabaseException
+	 * @param article beschreibt ein Article Objekt
+	 * @return Es wird null zurueck gegeben, wenn der Artikel entfernt wurde.
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Article delete(Article article) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -378,10 +372,10 @@ public class ArticleMapper {
 	/**
 	 * Gibt alle Article in einem Interval zweier Timestamps zurueck
 	 * 
-	 * @param start
-	 * @param end
+	 * @param start Datum
+	 * @param end Datum
 	 * @return Article-Vector
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByDate(Timestamp start, Timestamp end) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -415,15 +409,15 @@ public class ArticleMapper {
 		return result;
 	}
 
+
+	
 	/**
-	 * @bastiantilk, PatrickLehle Gibt alle Artikel eines Retailers in einem
-	 * Zeitraum zurueck
-	 * 
-	 * @param start
-	 * @param end
-	 * @param r
+	 * Gibt alle Artikel eines Retailers in einem Zeitraum zurueck
+	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
+	 * @param start Datum
+	 * @param end Datum
 	 * @return Vektor aller Artikel des Retailers in dem Zeitraum
-	 * @throws DatabaseException
+	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByDateRetailer(int retailerId, Timestamp start, Timestamp end)
 			throws DatabaseException {
@@ -471,8 +465,8 @@ public class ArticleMapper {
 	 * @param g
 	 *            Gruppen Objekt
 	 * @return Artikel-Vektor
-	 * @throws DatabaseException
-	 */
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */ 
 	public Vector<Article> findAllArticleByGroup(User u, Group g) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -506,6 +500,13 @@ public class ArticleMapper {
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param groupId beschreibt die Eindeutigkeit einer gruppe via id
+	 * @return gibt einen Vector von Articlen zurueck 
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -539,6 +540,12 @@ public class ArticleMapper {
 		return result;
 	}
 
+	/**
+	 * 
+	 * @param ownerId beschreibt die Eindeutigkeit eines Owners via id
+	 * @return gibt einen Vector Article zurueck
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
@@ -572,30 +579,105 @@ public class ArticleMapper {
 		return result;
 	}
 
-	public Vector<Article> findAllArticleByFavouriteTRUE() throws DatabaseException {
+	//REPORT-ARTICLE=============================================================================================
+	/**
+	 * 
+	 * @param groups alle Gruppen die uebergeben werden
+	 * @return gibt einen Vector Article zurueck die Favourisiert wurden.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllArticleByFavouriteTRUE(Vector<Group> groups) throws DatabaseException {
 		Connection con = DBConnection.connection();
 
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(
-					"SELECT article.articleId, article.articleName, article.articleQuantity, article.articleUnit, article.articleRetailerId, article.articleOwnerId, article.articleCreationDat, article.articleModDat, article.articleBoolean, article.articleFav, article.articleDelDat FROM article WHERE articleFav="
-							+ true);
+			String s = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery("SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+					+ groups.get(0).getId() + s +")");
 
 			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt(17));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
 				Article a = new Article();
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
 				a.setUnit("articleUnit");
-				a.setRetailerId(rs.getInt("retailerId"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
-				a.setModDat(rs.getTimestamp("articlemodDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
 				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
 				a.setFav(rs.getBoolean("articleFav"));
 				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
 
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	//X-REPORT-ARTICLE-DATE======================================================================================
+	/**
+	 * 
+	 * @param groups Gruppen Vetor des Users
+	 * @param start Datum
+	 * @param end Datum
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und im gesuchten Zeitraum liegen
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)  throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			
+			String s = new String();
+			
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+							+ groups.get(0).getId() + s +") AND articleDelDat BETWEEN '" + start + "' AND '" + end + "'");
+
+			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
+				Article a = new Article();
+				a.setId(rs.getInt("articleId"));
+				a.setName(rs.getString("articleName"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit("articleUnit");
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
+				
 				result.addElement(a);
 			}
 		} catch (SQLException e2) {
@@ -604,5 +686,127 @@ public class ArticleMapper {
 		}
 		return result;
 	}
+	
+	//X-REPORT-ARTICLE-DATE-RETAILER======================================================================================
+	
+	/**
+	 * 
+	 * @param groups ausgewaehlte Gruppen
+	 * @param retailers ausgewaehlte Retailer
+	 * @param start Datum
+	 * @param end Datum
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und im gesuchten Zeitraum liegen und den richtigen Retailer besitzen.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end) throws DatabaseException{
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			
+			String s = new String();
+			String r = new String();
+			for (int i = 1; i < groups.size(); i++) {
+				s = s + " OR " + groups.get(i).getId();
+			}
+			for (int j = 1; j < retailers.size(); j++) {
+				r = r + " OR " + retailers.get(j).getId();
+			}
+			
+			ResultSet rs = stmt.executeQuery(
+					"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+					+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+							+ groups.get(0).getId() + s +") AND (retailer.retailerId= " + retailers.get(0).getId() + r + ") AND articleDelDat BETWEEN '" + start + "' AND '" + end + "'");
+
+			while (rs.next()) {
+				Group group = new Group();
+				Retailer retailer = new Retailer();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroup(group);
+				Article a = new Article();
+				a.setId(rs.getInt("articleId"));
+				a.setName(rs.getString("articleName"));
+				a.setQuantity(rs.getInt("articleQuantity"));
+				a.setUnit("articleUnit");
+				a.setOwnerId(rs.getInt("articleOwnerId"));
+				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+				a.setModDat(rs.getTimestamp("articleModDat"));
+				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+				a.setFav(rs.getBoolean("articleFav"));
+				a.setDelDat(rs.getTimestamp("articleDelDat"));
+				a.setRetailer(retailer);
+				
+				result.addElement(a);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+		return result;
+	}
+	
+	//REPORT-ARTICLE-RETAILER======================================================================================
+		
+	/**
+	 * 
+	 * @param groups  ausgewaehlte Gruppen
+	 * @param retailers ausgewaehlte Retailer
+	 * @return gibt einen Vector Article zurueck die Favourisiert sind und den richtigen Retailer besitzen.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers)  throws DatabaseException {
+			Connection con = DBConnection.connection();
+
+			Vector<Article> result = new Vector<Article>();
+			try {
+				Statement stmt = con.createStatement();
+				String s = new String();
+				String r = new String();
+				for (int i = 1; i < groups.size(); i++) {
+					s = s + " OR " + groups.get(i).getId();
+				}
+				for (int j = 1; j < retailers.size(); j++) {
+					r = r + " OR " + retailers.get(j).getId();
+				}
+				
+				ResultSet rs = stmt.executeQuery(
+						"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
+						+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
+								+ groups.get(0).getId() + s +") AND (retailer.retailerId= "+ retailers.get(0).getId() + r + ")");
+
+				while (rs.next()) {
+					Group group = new Group();
+					Retailer retailer = new Retailer();
+					group.setGroupName(rs.getString("groupName"));
+					group.setId(rs.getInt("groupId"));
+					retailer.setId(rs.getInt("retailerId"));
+					retailer.setRetailerName(rs.getString("retailerName"));
+					retailer.setGroup(group);
+					Article a = new Article();
+					a.setId(rs.getInt("articleId"));
+					a.setName(rs.getString("articleName"));
+					a.setQuantity(rs.getInt("articleQuantity"));
+					a.setUnit("articleUnit");
+					a.setOwnerId(rs.getInt("articleOwnerId"));
+					a.setCreationDat(rs.getTimestamp("articleCreationDat"));
+					a.setModDat(rs.getTimestamp("articleModDat"));
+					a.setCheckBoolean(rs.getBoolean("articleBoolean"));
+					a.setFav(rs.getBoolean("articleFav"));
+					a.setDelDat(rs.getTimestamp("articleDelDat"));
+					a.setRetailer(retailer);
+					
+					result.addElement(a);
+				}
+			} catch (SQLException e2) {
+				ServersideSettings.getLogger().severe(e2.getMessage());
+				throw new DatabaseException(e2);
+			}
+			return result;
+		}
+	
 
 }

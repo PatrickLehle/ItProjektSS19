@@ -6,7 +6,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -87,6 +86,7 @@ public interface EditorServiceAsync {
 	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
 	void getAllGroceryListsByGroupVector(Vector<Group> g, AsyncCallback<Vector<GroceryList>> asyncCallback);
+
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
@@ -109,7 +109,20 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
 
-	void findAllArticleByFavouriteTRUE(AsyncCallback<Vector<Article>> asyncCallback);
+	void getAllArticleByName(String name, int groupId, AsyncCallback<Vector<Article>> asyncCallback);
+
+	// ARTICLE-REPORT==============================================================================
+
+	void findAllArticleByFavouriteTRUE(Vector<Group> groups, AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start,
+			Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
 
 	// RETAILER===========================================================================
 
@@ -132,27 +145,8 @@ public interface EditorServiceAsync {
 
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
-	// UNIT===========================================================================
-
-	// void createUnit(Unit u, AsyncCallback <Unit> asyncCallback);
-	//
-	// void saveUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	//
-	// void deleteUnit(Unit u, AsyncCallback<Void> asyncCallback);
-	//
-	// void getUnitById(int unitId, AsyncCallback<Unit> asyncCallback);
-	//
-	// void getUnitByName(String unitName, AsyncCallback<Unit> asyncCallback);
-
-	// ENTRY===========================================================================
-
-	void createEntry(Entry e, AsyncCallback<Entry> asyncCallback);
-
-	void saveEntry(Entry e, AsyncCallback<Void> asyncCallback);
-
-	void deleteEntry(Entry e, AsyncCallback<Void> asyncCallback);
-
 	// GroceryListArticle===========================================================================
+
 	void addArticleToGroceryList(GroceryList gl, Article a, AsyncCallback<GroceryListArticle> asyncCallback);
 
 	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);

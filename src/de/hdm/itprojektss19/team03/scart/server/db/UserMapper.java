@@ -41,7 +41,7 @@ public class UserMapper {
 	 * Sucht alle User
 	 * 
 	 * @return Vector mit allen gefundenen Usern
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<User> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -71,10 +71,10 @@ public class UserMapper {
 	/**
 	 * Gibt einen Vecotr aller User mit dem selben Namen zurueck
 	 * 
-	 * @param name
-	 * @param u
-	 * @return Vecotr mit allen Usern die den selben Namen tragen
-	 * @throws DatabaseException
+	 * @param name beschreibt den Namen des Users
+	 * @param u beschreibt den uebergebenen User
+	 * @return Vector mit allen Usern die den selben Namen tragen
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<User> findUserByName(String name, User u) throws DatabaseException {
 		Connection con = null;
@@ -109,11 +109,9 @@ public class UserMapper {
 
 	/**
 	 * Sucht einen User anhand der eindeutigen ID
-	 * 
-	 * @param Die
-	 *            ID des Users
-	 * @return User mit der entsprechenden ID
-	 * @throws DatabaseException
+	 * @param userId beschreibt die Eindeutigkeit eines Users via id
+	 * @return  User mit der entsprechenden ID
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User getUserById(int userId) throws DatabaseException {
 		Connection con = null;
@@ -140,8 +138,8 @@ public class UserMapper {
 
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt("userId"));
-				u.setEmail(rs.getString("userName"));
-				u.setUsername(rs.getString("userEmail"));
+				u.setEmail(rs.getString("userEmail"));
+				u.setUsername(rs.getString("userName"));
 
 				return u;
 			}
@@ -152,24 +150,21 @@ public class UserMapper {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Sucht alle User anhand der Email
-	 * 
-	 * @param Die
-	 *            Email des Users
+	 * @param userEmail beschreibt den user via der hinterlegten Email Adresse
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User findUserByEmail(String userEmail) throws DatabaseException {
-		Connection con = null;
-		PreparedStatement stmt = null;
-
-		// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
-		String selectByKey = "SELECT * FROM user WHERE userEmail=?";
-		User u = new User();
-
 		try {
+			Connection con = null;
+			PreparedStatement stmt = null;
+
+			// SQL-Anweisung zum auslesen des Nutzertupels aus der DB
+			String selectByKey = "SELECT * FROM user WHERE userEmail=?";
+			User u = new User();
 			// Aufbau der DB-Verbindung
 			con = DBConnection.connection();
 
@@ -184,42 +179,49 @@ public class UserMapper {
 
 				// Setzen der Attribute den Datensaetzen aus der DB entsprechend
 				u.setId(rs.getInt("userId"));
-				u.setEmail(rs.getString("userName"));
-				u.setUsername(rs.getString("userEmail"));
-
+				u.setEmail(rs.getString("userEmail"));
+				u.setUsername(rs.getString("userName"));
 				return u;
+			} else {
+				throw new DatabaseException();
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
-
+	
 	/**
 	 * F�gt in der Datenbank einen neuen User ein
-	 * 
-	 * @param User-Objekt
-	 *            das in die DB eingef�gt werden soll
-	 * @return Der Eingef�gte User mit aktueller ID
-	 * @throws DatabaseException
+	 * @param user beschreibt den uebergebenen User
+	 * @return User wird zurück gegeben
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User insert(User user) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
+		// SQL-Anweisung zum finden der naechsten Id
+		String maxId = "SELECT MAX(userId) AS maxid FROM user";
 		// SQL-Anweisung zum Einfuegen des neuen Nutzertupels in die DB
-		String insertSQL = "INSERT INTO user (userEmail, userName) VALUES (?,?)";
+		String insert = "INSERT INTO user (userId, userEmail, userName) VALUES (?,?,?)";
 
 		try {
 			con = DBConnection.connection();
-			stmt = con.prepareStatement(insertSQL);
-			stmt.setString(1, user.getEmail());
-			stmt.setString(2, user.getUsername());
+			stmt = con.prepareStatement(maxId);
+			ResultSet rs = stmt.executeQuery();
 
+			if (rs.next()) {
+				user.setId(rs.getInt("maxid") + 1);
+			}
+			stmt = con.prepareStatement(insert);
+			stmt.setInt(1, user.getId());
+			stmt.setString(2, user.getEmail());
+			stmt.setString(3, user.getUsername());
 			stmt.executeUpdate();
 
 			return user;
+
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
@@ -227,13 +229,12 @@ public class UserMapper {
 
 	}
 
+	
 	/**
-	 * Ein user wird in der DB nachträglich auf den neusten Stand gebracht
-	 * 
-	 * @param Zu
-	 *            �ndernder User
-	 * @return Ge�nderter User
-	 * @throws DatabaseException
+	 * User wird in der Datenbank nachträglich auf den neusten Stand gebracht
+	 * @param user beschreibt den uebergebenen User
+	 * @return gibt den upgedateten User zurueck
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User update(User user) throws DatabaseException {
 		Connection con = null;
@@ -262,11 +263,9 @@ public class UserMapper {
 	}
 
 	/**
-	 * L�scht einen User aus der Datenbank
-	 * 
-	 * @param Zu
-	 *            l�schender User
-	 * @throws DatabaseException
+	 * Löschen eines Users aus der Datenbank
+	 * @param user beschreibt den uebergebenen User
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void delete(User user) throws DatabaseException {
 		Connection con = DBConnection.connection();

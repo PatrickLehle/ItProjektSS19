@@ -40,8 +40,7 @@ public class ReportForm extends VerticalPanel{
 	public ReportForm(User u) {
 		this.user = u;
 		user.setId(Integer.valueOf(Cookies.getCookie("userId")));
-		user.setEmail(Cookies.getCookie("email"));	
-		Window.alert(user.getEmail()+" "+user.getId()+ "Test");
+		user.setEmail(Cookies.getCookie("email"));
 	}
 	
 //LABELS==============================================================
@@ -92,9 +91,10 @@ public class ReportForm extends VerticalPanel{
 		mainHP.setWidth("100%");
 		mainHP.setCellWidth(filterVP, "20%");
 		mainHP.setHorizontalAlignment(ALIGN_CENTER);
-		
+
 		RootPanel.get().add(headerHP);
 		RootPanel.get().add(mainHP);
+		
 		
 //		this.add(header);
 //		this.add(main);

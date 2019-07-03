@@ -22,7 +22,6 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  * ProfileForm: ...
  *  
  * @author vanduyho
- *
  */
 
 public class ProfileForm extends VerticalPanel {
@@ -68,24 +67,15 @@ public class ProfileForm extends VerticalPanel {
 		
 	}
 
-	/**
-	 * 
-	 * onLoad-Methode: ...
-	 *
+//METHODS=======================================================	
+	/** Diese Methode wird automatisch bei dem Aufruf der GUI-Seite gestartet
 	 */
-
 	public void onLoad() {
-
 		buildProfile();
-
 	}
 
-	/**
-	 * 
-	 * buildProfile-Methode: ...
-	 *
+	/** Die Methode zum aufbauen der GUI-Seite
 	 */
-
 	public void buildProfile() {
 		
 		yourProfilePanel.add(yourProfileLabel);
@@ -114,12 +104,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-	/**
-	 * 
-	 * ClickHandler: ...
+	/** ClickHandler fuer den "edit"-Button um das eigene Profil zu bearbeiten
 	 *
 	 */
-
 	class EditButtonClickHandler implements ClickHandler {
 		
 		public void onClick(ClickEvent event) {
@@ -142,6 +129,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler fuer den "save"-Button, um Aenderungen abzuspeichern und
+	 * anschliessend auch in der DB zu aktualisieren.
+	 */
 	class SaveButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
@@ -169,6 +159,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler fuer den "delete"-Button um das eigene Profil zu loeschen
+	 * 
+	 */
 	class DeleteButtonClickHandler implements ClickHandler {
 
 		public void onClick(ClickEvent event) {
@@ -191,11 +184,11 @@ public class ProfileForm extends VerticalPanel {
 			db.show();
 
 			db.add(vp);
-
 		}
-
 	}
 
+	/** ClickHandler um die Aenderungen zu bestaetigen
+	 */
 	class YesSaveButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -231,6 +224,9 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
+	/** ClickHandler um Aenderungen des eigenen Profils zu bestaetigen
+	 * 	Anschliessend wird der User in der DB geloescht.
+	 */
 	class YesDeleteButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -254,7 +250,10 @@ public class ProfileForm extends VerticalPanel {
 		}
 
 	}
-
+	
+	/** ClickHandler um Aenderungen am eigenen Profil nicht zu uebernehmen.
+	 *
+	 */
 	class NoButtonClickHandler implements ClickHandler {
 
 		DialogBox dbox = new DialogBox();
@@ -277,12 +276,8 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-	/**
-	 * 
-	 * Callbacks: ...
-	 *
+	/** CallBack um das eigene Profilbild zu bekommen
 	 */
-
 	class getImageCallback implements AsyncCallback<String> {
 
 		public void onFailure(Throwable t) {
@@ -321,14 +316,15 @@ public class ProfileForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(User arg0) {
-			// TODO Auto-generated method stub
 
 			Window.alert("Ihr Profil wurde erfolgreich geändert!");
 
 		}
-
 	}
 
+	/** CallBack um einen User in der DB zu loeschen.
+	 * 	Bei Erfolg erscheint ein Window-Alert.
+	 */
 	class DeleteUserCallback implements AsyncCallback<Void> {
 
 		@Override
@@ -342,12 +338,7 @@ public class ProfileForm extends VerticalPanel {
 
 		@Override
 		public void onSuccess(Void arg0) {
-			// TODO Auto-generated method stub
-
 			Window.alert("Ihr Profil wurde erfolgreich gelöscht!");
-
 		}
-
 	}
-
 }

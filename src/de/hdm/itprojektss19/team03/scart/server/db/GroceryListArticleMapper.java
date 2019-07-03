@@ -47,13 +47,11 @@ public class GroceryListArticleMapper {
 	 * <code>GroceryList</code>. DIe ZUordnung wird durch einen zusammengesetzten
 	 * Primaerschluessel realisiert
 	 * 
-	 * @param gl
-	 *            fuer das GroceryListobjekt
-	 * @param a
-	 *            fuer das Articleobjekt
+	 * @param gl fuer das GroceryListobjekt
+	 * @param a  fuer das Articleobjekt
 	 * 
 	 * @return null
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public GroceryListArticle addArticleToGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
@@ -62,7 +60,6 @@ public class GroceryListArticleMapper {
 		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId) VALUES (?,?)";
 
 		try {
-			System.out.println(a.getId() + " " + gl.getId());
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(article);
 			stmt.setInt(1, gl.getId());
@@ -79,11 +76,9 @@ public class GroceryListArticleMapper {
 	/**
 	 * Loeschen eines Articles zu einer zugewiesenen GroceryList.
 	 * 
-	 * @param gl
-	 *            GroceryList-Objekt
-	 * @param a
-	 *            Article-Objekt
-	 * @throws DatabaseException
+	 * @param gl beschreibt ein GroceryList-Objekt
+	 * @param a beschereibt Article-Objekt
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void removeArticleFromGroceryList(GroceryList gl, Article a) throws DatabaseException {
 
@@ -150,9 +145,9 @@ public class GroceryListArticleMapper {
 	/**
 	 * Entfernt einen ausgewaehlten Article aus allen GroceryLists
 	 * 
-	 * @param a
+	 * @param a beschreibt ein Aritcle Objekt
 	 *            das zu loeschende Objekt von allen existierenden Listen
-	 * @throws DatabaseException
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void deleteArticleFromAllLists(Article a) throws DatabaseException {
 
