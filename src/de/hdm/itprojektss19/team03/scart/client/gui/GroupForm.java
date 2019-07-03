@@ -47,7 +47,7 @@ public class GroupForm extends VerticalPanel {
 	VerticalPanel groupsPanel = new VerticalPanel();
 	VerticalPanel groupBtnPanel = new VerticalPanel();
 	HorizontalPanel loadingPanel = new HorizontalPanel();
-	ScrollPanel scrollPanel = new ScrollPanel(groupsPanel);
+	ScrollPanel scrollPanel = new ScrollPanel();
 	VerticalPanel navigation = new VerticalPanel();
 	HorizontalPanel outer = new HorizontalPanel();
 
@@ -81,15 +81,19 @@ public class GroupForm extends VerticalPanel {
 		// super.onLoad();
 		loadingPanel.add(new LoadingForm());
 		outer.addStyleName("inner-content");
-
+		
+		
 		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
 		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
-
+		
+		
 		navigation.setHorizontalAlignment(ALIGN_LEFT);
 		navigation.setVerticalAlignment(ALIGN_TOP);
-		navigation.add(groupLabel);
+		scrollPanel.add(groupLabel);
+		navigation.add(scrollPanel);
 		navigation.add(loadingPanel);
+		
 		this.add(navigation);
 		
 		//editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback); //Old Method

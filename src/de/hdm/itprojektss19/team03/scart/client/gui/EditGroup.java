@@ -16,6 +16,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
@@ -52,7 +53,7 @@ public class EditGroup extends VerticalPanel {
 
 	// PANELS
 	VerticalPanel groupFormPanel = new VerticalPanel();
-	VerticalPanel userPanel = new VerticalPanel();
+	ScrollPanel userPanel = new ScrollPanel();
 	HorizontalPanel btnPanel = new HorizontalPanel();
 	HorizontalPanel groupNameHPanel = new HorizontalPanel();
 
