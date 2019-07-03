@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Vector;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import de.hdm.itprojektss19.team03.scart.server.db.ArticleMapper;
@@ -29,13 +28,14 @@ import de.hdm.itprojektss19.team03.scart.shared.report.Column;
 import de.hdm.itprojektss19.team03.scart.shared.report.Row;
 
 /**
+ * Implementierung des serverseitigen RPC-Services fuer den Report
  * 
  * @author bastiantilk, PatrickLehle
  *
  */
 public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportGenerator {
 
-	// INITIALIZATION========================================================
+	//INITIALIZATION========================================================
 	private static final long serialVersionUID = 1L;
 	private EditorService editorService = null;
 	private LoginService loginInfo = null;
@@ -112,6 +112,14 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 
 //ARTICLE-REPORT============================================================================================================================	
 	
+	/**
+	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users generiert.
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
+	 * 
+	 * @return report gibt einen Report von Favourisierten, gekauften Articlen zurueck.
+	 */
 	public ArticleReport createStatisticA(User u, Vector<Group> groups) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
@@ -171,8 +179,20 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	
 	}
 
-//X-ARTICLE-DATE-REPORT========================================================================================================================
+//ARTICLE-DATE-REPORT========================================================================================================================
 
+	/**
+	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users mit Zeitraum generiert.
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
+	 * @param choosenStartDate ausgewaehltes Start Datum
+	 * @param choosenEndDate ausgewaehltes End Datum
+	 * @param choosenStartDatePl1TS ausgewaehltes Start Datum
+	 * @param choosenEndDatePl1TS ausgewaehltes End Datum
+	 * 
+	 * @return report gibt einen Report von favourisierten, gekauften Articlen mit dessen Zeitraum zurueck.
+	 */
 	public ArticleDateReport createStatisticAD(User user, Vector<Group> groups, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) {
 		if (this.getEditorService() == null) {
@@ -230,8 +250,17 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-//X-ARTICLE-RETAILER-REPORT====================================================================================================================
+//ARTICLE-RETAILER-REPORT====================================================================================================================
 	
+	/**
+	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users mit dessen Retailer generiert.
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
+	 * @param retailers beschreibt ein Retailer Objekt
+	 * 
+	 * @return report gibt einen Report von Favourisierten, gekauften Articlen mit dessen Retailern zurueck.
+	 */
 	public ArticleRetailerReport createStatisticAR(User u, Vector<Group> groups, Vector<Retailer> retailers) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {
 			return null;
@@ -290,8 +319,21 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 		return report;
 	}
 
-//X-ARTICLE-DATE-RETAILER-REPORT===============================================================================================================
+//ARTICLE-DATE-RETAILER-REPORT===============================================================================================================
 	
+	/**
+	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users mit dessen Retailer und Zeitraum generiert.
+	 * 
+	 * @param u beschreibt ein User Objekt
+	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
+	 * @param retailers beschreibt ein Retailer Objekt
+	 * @param choosenStartDate ausgewaehltes Start Datum
+	 * @param choosenEndDate ausgewaehltes End Datum
+	 * @param choosenStartDatePl1TS ausgewaehltes Start Datum
+	 * @param choosenEndDatePl1TS ausgewaehltes End Datum
+	 * 
+	 * @return report gibt einen Report von favourisierten, gekauften Articlen mit dessen Retailern und des Zeitraumes zurueck.
+	 */
 	public ArticleDateRetailerReport createStatisticADR(User user, Vector<Group> groups, Vector<Retailer> retailers, Timestamp choosenStartDate, Timestamp choosenEndDate,
 			Timestamp choosenStartDatePl1TS, Timestamp choosenEndDatePl1TS) throws IllegalArgumentException {
 		if (this.getEditorService() == null) {

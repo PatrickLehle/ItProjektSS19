@@ -168,11 +168,11 @@ public class ArticleMapper {
 	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem gesucht wurde
 	 * @throws DatabaseException  Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
-	public Vector<Article> findArticleByName(String name, Article a) throws DatabaseException {
+	public Vector<Article> findArticleByName(String name, int groupId) throws DatabaseException {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String select = "SELECT * FROM article WHERE articleName=?";
+		String select = "SELECT * FROM article WHERE articleName=? AND articleGroupId=?";
 
 		Vector<Article> result = new Vector<Article>();
 
@@ -180,6 +180,7 @@ public class ArticleMapper {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(select);
 			stmt.setString(1, name);
+			stmt.setInt(2, groupId);
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -189,14 +190,14 @@ public class ArticleMapper {
 				article.setName(rs.getString("articleName"));
 				article.setQuantity(rs.getInt("articleQuantity"));
 				article.setUnit(rs.getString("articleUnit"));
-				article.setRetailerId(rs.getInt("retailerId"));
+				article.setRetailerId(rs.getInt("articleRetailerId"));
 				article.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				article.setModDat(rs.getTimestamp("articlemodDat"));
 				article.setCheckBoolean(rs.getBoolean("articleBoolean"));
 				article.setFav(rs.getBoolean("articleFav"));
 				article.setDelDat(rs.getTimestamp("articleDelDat"));
 
-				result.addElement(a);
+				result.addElement(article);
 			}
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
