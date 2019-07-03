@@ -1138,5 +1138,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-
+	
+	/**
+	 * Loeschen aller Article Objekt aus einem GroceryList Objekt
+	 * 
+	 * @param gl beschreibt ein GroceryList Objekt
+	 */
+	public void deleteAllArticlesFromGroceryList(GroceryList gl) {
+		try {
+			this.glaMapper.removeAllArticlesFromGroceryList(gl);
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 }
