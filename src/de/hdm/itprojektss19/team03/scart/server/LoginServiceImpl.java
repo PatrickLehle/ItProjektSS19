@@ -10,14 +10,15 @@ import de.hdm.itprojektss19.team03.scart.server.db.UserMapper;
 import de.hdm.itprojektss19.team03.scart.shared.LoginService;
 import de.hdm.itprojektss19.team03.scart.shared.bo.LoginInfo;
 
-/** Loginklasse im Server Package. Verweist auf 'LoginInfo'
- *  in shared
- * 
+/**
+ *  Serverseitiger RPC-Service fuer den Login.
+ *  
  * @author bastiantilk 
  */
 
 public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
-	public static long serialVersionUID;
+	
+	public static final long serialVersionUID = 1L;
 
 	public LoginInfo login(String requestUri) {
 		UserService userService = UserServiceFactory.getUserService();
