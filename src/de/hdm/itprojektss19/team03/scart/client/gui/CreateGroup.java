@@ -39,7 +39,6 @@ public class CreateGroup extends VerticalPanel {
 	// DEFAULT CONSTRUCTOR=============================================
 	/**
 	 * Default Konstruktor der createGroup-Seite
-	 * 
 	 */
 	public CreateGroup() {
 
@@ -151,8 +150,8 @@ public class CreateGroup extends VerticalPanel {
 		this.add(contentBox);
 		// this.add(footer);
 
-		/** Click/Enter-Handler fuer den createGroup-Button
-		 *
+		/** 
+		 * Click/Enter-Handler fuer den createGroup-Button
 		 */
 		class MyHandler implements ClickHandler, KeyUpHandler {
 			/*
@@ -283,8 +282,8 @@ public class CreateGroup extends VerticalPanel {
 		});
 	}
 
-	/** Methode zum hinzufuegen eine (eigene) Einkaufsliste fuer die gerade erstellte Gruppe
-	 * 
+	/** 
+	 * Methode zum hinzufuegen eine (eigene) Einkaufsliste fuer die gerade erstellte Gruppe
 	 */
 	AsyncCallback<GroceryList> groceryListCallback = new AsyncCallback<GroceryList>() {
 

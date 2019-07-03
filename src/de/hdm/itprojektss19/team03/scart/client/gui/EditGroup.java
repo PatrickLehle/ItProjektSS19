@@ -26,7 +26,8 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroupUser;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-/** Die EditGroup-Form wird aufgerufen wenn etwas an der Gruppe geaendert werden soll
+/** 
+ * Die EditGroup-Form wird aufgerufen wenn etwas an der Gruppe geaendert werden soll
  * 	oder User der Gruppe hinzugefuegt werden sollen. Zudem erlaubt es einem User selbst
  * 	aus der jeweiligen Gruppe auszutreten
  * 
@@ -92,7 +93,8 @@ public class EditGroup extends VerticalPanel {
 		// group.setId(1);
 	}
 	
-	/** Methode wird automatisch bei Seitenaufruf gestartet
+	/** 
+	 * Methode wird automatisch bei Seitenaufruf gestartet
 	 */
 	public void onLoad() {
 
@@ -133,8 +135,9 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	/** Methode um die Tabelle bei dem Aufrufen der GUI-Seite zu fuellen oder
-	 * 	die Tabelle neu zu laden nachdem Aenderungen durchgefuehrt wurden
+	/** 
+	 * Methode um die Tabelle bei dem Aufrufen der GUI-Seite zu fuellen oder
+	 * die Tabelle neu zu laden nachdem Aenderungen durchgefuehrt wurden
 	 */
 	public void loadTable() {
 
@@ -162,7 +165,8 @@ public class EditGroup extends VerticalPanel {
 		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
 
 	}
-	/** Methode setzt den Group-Name in die groupTextBox
+	/** 
+	 * Methode setzt den Group-Name in die groupTextBox
 	 */
 	public void setGroupNameLabel() {
 		groupTextBox.setText(group.getGroupName());
@@ -218,7 +222,8 @@ public class EditGroup extends VerticalPanel {
 
 	}
 	
-	/** ClickHandler um einen User aus einer Gruppe zu entfernen
+	/** 
+	 * ClickHandler um einen User aus einer Gruppe zu entfernen
 	 * 
 	 */
 	class DeleteClickHandler implements ClickHandler {
@@ -237,7 +242,8 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 	
-	/** ClickHandler um einen User aus einer Gruppe zu entfernen
+	/** 
+	 * ClickHandler um einen User aus einer Gruppe zu entfernen
 	 * 
 	 */
 	class DeleteUserClickHandler implements ClickHandler {
@@ -305,9 +311,8 @@ public class EditGroup extends VerticalPanel {
 //
 //	}
 
-	/** ClickHandler um Aenderungen zu speichern und die Gruppe in der DB updaten
-	 * 
-	 *
+	/** 
+	 * ClickHandler um Aenderungen zu speichern und die Gruppe in der DB updaten
 	 */
 	class YesSaveButtonClickHandler implements ClickHandler {
 
@@ -337,9 +342,8 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-	/** ClickHandler um einen User der Gruppe hinzuzufuegen
-	 * 
-	 *
+	/** 
+	 * ClickHandler um einen User der Gruppe hinzuzufuegen
 	 */
 	class AddUserClickHandler implements ClickHandler {
 
@@ -419,9 +423,9 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	/** Callback-Methode um alle User der Gruppe zu finden und die Tabelle/Buttons
+	/** 
+	 * Callback-Methode um alle User der Gruppe zu finden und die Tabelle/Buttons
 	 * 	mit den Usern zu fuellen
-	 *
 	 */
 	class AllUserCallback implements AsyncCallback<Vector<User>> {
 
@@ -464,8 +468,8 @@ public class EditGroup extends VerticalPanel {
 
 	}
 	
-	/** Callback-Methode um einen User anhand der E-Mail-Adresse in der Db zu finden
-	 * 
+	/** 
+	 * Callback-Methode um einen User anhand der E-Mail-Adresse in der Db zu finden
 	 */
 	class FindUserByGmailCallback implements AsyncCallback<User> {
 
@@ -484,8 +488,8 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 	
-	/** Callback-Methode um den Namen der Gruppe bei Aenderung zu aktualisieren
-	 * 
+	/** 
+	 * Callback-Methode um den Namen der Gruppe bei Aenderung zu aktualisieren
 	 */
 	class UpdateGroupNameCallback implements AsyncCallback<Void> {
 
@@ -504,7 +508,8 @@ public class EditGroup extends VerticalPanel {
 
 	}
 
-	/** Callback-Methode um einen User einer Gruppe hinzuzufuegen.
+	/** 
+	 * Callback-Methode um einen User einer Gruppe hinzuzufuegen.
 	 * 	Der User wird hierbei mit dem GroupUser-BO mit der Gruppe verknuepft
 	 */
 	class AddUserCallback implements AsyncCallback<GroupUser> {
@@ -523,8 +528,8 @@ public class EditGroup extends VerticalPanel {
 		}
 	}
 
-	/** Callback-Methode um einen User aus der Gruppe zu entfernen
-	 * 
+	/** 
+	 * Callback-Methode um einen User aus der Gruppe zu entfernen
 	 */
 	class RemoveUserFromGroupCallback implements AsyncCallback<Void> {
 

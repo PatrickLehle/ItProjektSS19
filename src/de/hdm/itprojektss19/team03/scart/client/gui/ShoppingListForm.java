@@ -73,6 +73,17 @@ public class ShoppingListForm extends HorizontalPanel {
 	private VerticalPanel outerPanel = new VerticalPanel();
 	private Button addRetailerButton = new Button("Laden einfügen");
 
+//Change GroceryList Name
+	HorizontalPanel changeGlNamePanel = new HorizontalPanel(); //HorizontalPanel wo Label, Textbox und Button zum aendern des GroceryListnamen enthalten sind
+
+    	//Elemente zum anendern des GroceryList Namen
+		//TODO: Stylenames zuordnen fuer diese Elemente
+		Label glChangeNameLabel = new Label("Einkaufsliste umbenennen:");
+		TextBox glChangeNameTextbox = new TextBox();
+		Button glChangeNameButton = new Button("Ändern");	
+		
+	
+	
 	/**
 	 * Methode zum Erstellen der GUI-Seite
 	 * 
