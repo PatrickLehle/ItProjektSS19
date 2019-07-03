@@ -307,33 +307,13 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-//	class FindUserByGMailCallback implements AsyncCallback<User> {
-//
-//		@Override
-//		public void onFailure(Throwable arg0) {
-//			// TODO Auto-generated method stub
-//
-//		}
-//
-//		@Override
-//		public void onSuccess(User arg0) {
-//			// TODO Auto-generated method stub
-//
-//			String newEmailAdress = emailAdressTB.getText();
-//
-//			editorService.createUser(newEmailAdress, new UpdateUserCallback());
-//
-//		}
-//
-//	}
-
 	class UpdateUserCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
 			// TODO Auto-generated method stub
 			
-//			Window.alert("Ihr Profil wurde nicht erfolgreich geändert!");
+			Window.alert("Ihr Profil wurde nicht erfolgreich geändert!");
 			
 			Window.alert(arg0.getMessage());
 			
@@ -344,8 +324,6 @@ public class ProfileForm extends VerticalPanel {
 			// TODO Auto-generated method stub
 
 			Window.alert("Ihr Profil wurde erfolgreich geändert!");
-			
-//			buildProfile();
 
 		}
 
@@ -357,9 +335,8 @@ public class ProfileForm extends VerticalPanel {
 		public void onFailure(Throwable arg0) {
 			// TODO Auto-generated method stub
 			
-//			Window.alert("Ihr Profil wurde nicht erfolgreich gelöscht!");
+			Window.alert("Ihr Profil wurde nicht erfolgreich gelöscht!");
 			
-			Window.alert(arg0.getMessage());
 
 		}
 
