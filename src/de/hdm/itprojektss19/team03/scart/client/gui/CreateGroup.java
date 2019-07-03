@@ -35,7 +35,6 @@ public class CreateGroup extends VerticalPanel {
 	// DEFAULT CONSTRUCTOR=============================================
 	/**
 	 * Default Konstruktor der createGroup-Seite
-	 * 
 	 */
 	public CreateGroup() {
 

@@ -89,6 +89,9 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
 
+	void findAllArticleByGroceryListIdAndRetailerId(int groceryListId, int retailerId,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
 	// ARTICLE===========================================================================
 
 	void createArticle(Article a, AsyncCallback<Article> asyncCallback);
@@ -152,4 +155,6 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroceryList(GroceryList groceryList, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
+	
+	void deleteAllArticlesFromGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
 }

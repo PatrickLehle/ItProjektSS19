@@ -51,9 +51,10 @@ public class RetailerMapper {
 
 	/**
 	 * Sucht eine Retailer anhand seiner ID
+	 * 
 	 * @param id beschreibt die Eindeutigkeit eines Retailers via id
 	 * @return Das Retailer-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer findByKey(int id) throws DatabaseException {
 
@@ -95,7 +96,7 @@ public class RetailerMapper {
 	 * @param name beschreibt den Namen des Retailer Objekts
 	 * @param r beschreibt das Retailer Objekt
 	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findRetailerByName(String name, Retailer r) throws DatabaseException {
 		Connection con = null;
@@ -138,7 +139,7 @@ public class RetailerMapper {
 	 * Sucht alle Retailers
 	 * 
 	 * @return Vector mit allen gefundenen Retailers
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -175,6 +176,14 @@ public class RetailerMapper {
 		return retailers;
 	}
 
+	/**
+	 * 
+	 * Gibt alle Retailer einer Gruppe zurueck
+	 * 
+	 * @param groupId Die besagte Gruppe
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		Vector<Retailer> retailers = new Vector<Retailer>();
@@ -209,10 +218,52 @@ public class RetailerMapper {
 	}
 
 	/**
+	 * 
+	 * Gibt alle Retailer einer GroceryList zurueck
+	 * 
+	 * @param groupId Die besagte GroceryList
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
+	public Vector<Retailer> getAllRetailersByGroceryListId(int groceryListId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT * FROM retailer JOIN user ON user.userId = retailer.retailerUserId JOIN groups ON groups.groupId = retailer.retailerGroupId WHERE retailerGroupId="
+							+ groceryListId);
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setEmail(rs.getString("userEmail"));
+				user.setUsername(rs.getString("userName"));
+				Group group = new Group();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
 	 * Fuegt in der Datenbank einen neuen Retailer ein
+	 * 
 	 * @param retailer beschreibt den uebergebeben Retailer
 	 * @return Die Eingefuegte Retailer mit aktueller ID
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer insert(Retailer retailer) throws DatabaseException {
 
@@ -247,13 +298,12 @@ public class RetailerMapper {
 		}
 	}
 
-
-	
 	/**
 	 * aendert einen Retailer in der Datenbank
+	 * 
 	 * @param retailer beschreibt den uebergebenen Retailer
 	 * @return Die Rückgabe ist ein Retailer-Objekt mit seinen neuen Datensaetzen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer update(Retailer retailer) throws DatabaseException {
 
@@ -279,8 +329,9 @@ public class RetailerMapper {
 
 	/**
 	 * Loescht einen Retailer aus der Datenbank
+	 * 
 	 * @param retailer beschreibt den uebergenenen Retailer
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public void delete(Retailer retailer) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -294,6 +345,13 @@ public class RetailerMapper {
 		}
 	}
 
+	/**
+	 * Gibt den Retailer mit einer bestimmten ID zurueck
+	 * 
+	 * @param id nach dieser ID wird gesucht
+	 * @return ein Retailer Objekt
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Retailer findById(int id) throws DatabaseException {
 
 		Connection con = null;

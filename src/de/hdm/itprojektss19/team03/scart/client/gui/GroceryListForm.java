@@ -16,7 +16,6 @@ import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -174,7 +173,8 @@ public class GroceryListForm extends VerticalPanel {
 	 * 
 	 */
 	public void refreshTable() {
-		ev.findAllArticleByGroceryListId(groceryList.getId(), new setArticleVectorCallback());
+		ev.findAllArticleByGroceryListIdAndRetailerId(groceryList.getId(), retailer.getId(),
+				new setArticleVectorCallback());
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class GroceryListForm extends VerticalPanel {
 	 *
 	 */
 	class CheckClickHandler implements ClickHandler {
-//HIER
+		// HIER
 		@Override
 		public void onClick(ClickEvent e) {
 			if (checkBtnBoolean == false && editBtnBoolean == false && deleteBtnBoolean == false
