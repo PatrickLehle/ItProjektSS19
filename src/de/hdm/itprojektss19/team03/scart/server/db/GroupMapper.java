@@ -35,7 +35,8 @@ public class GroupMapper {
 	 * Sucht alle Gruppen
 	 * 
 	 * @return Vector mit allen gefundenen Gruppen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *                           Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Group> findAll() throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -61,12 +62,13 @@ public class GroupMapper {
 		return groups;
 	}
 
-
 	/**
 	 * Sucht alle Groups anhand der ID
+	 * 
 	 * @param groupId beschreibt die Eindeutigkeit einer Gruppe via Id
 	 * @return Vector mit allen gefunden Groups mit entsprechender Id
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *                           Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Group findByGroupId(int groupId) throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -121,9 +123,11 @@ public class GroupMapper {
 
 	/**
 	 * Fuegt in der Datenbank eine neue Gruppe ein
+	 * 
 	 * @param group beschreibt ein Gruppen Objekt
 	 * @return Die Eingefuegte Gruppe mit aktueller ID
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *                           Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Group insert(Group group) throws DatabaseException {
 
@@ -152,12 +156,14 @@ public class GroupMapper {
 		}
 		return group;
 	}
-	
+
 	/**
 	 * Aendert einen Geruppe in der Datenbank
+	 * 
 	 * @param group beschreibt ein Gruppen Objekt
 	 * @return Geaenderte Gruppe
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *                           Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Group update(Group group) throws DatabaseException {
 		Connection con = null;
@@ -179,11 +185,13 @@ public class GroupMapper {
 		}
 		return group;
 	}
-	
+
 	/**
 	 * Loescht eine Gruppe aus der Datenbank
+	 * 
 	 * @param group beschreibt ein Gruppen Objekt
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *                           Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void delete(Group group) throws DatabaseException {
 		Connection con = null;
