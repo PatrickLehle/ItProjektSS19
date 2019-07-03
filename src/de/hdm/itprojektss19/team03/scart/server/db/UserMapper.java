@@ -253,12 +253,12 @@ public class UserMapper {
 
 			// Ausfuehren des SQL-Statements
 			stmt.executeUpdate();
+			return user;
 
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return user;
 	}
 
 	/**

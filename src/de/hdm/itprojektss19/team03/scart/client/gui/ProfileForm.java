@@ -87,7 +87,7 @@ public class ProfileForm extends VerticalPanel {
 	 */
 
 	public void buildProfile() {
-				
+		
 		yourProfilePanel.add(yourProfileLabel);
 		userNamePanel.add(userNameDescLabel);
 		userNameContLabel.setText(user.getEmail());
@@ -105,7 +105,6 @@ public class ProfileForm extends VerticalPanel {
 		contentPanel.add(buttonPanel);
 
 		editButton.addClickHandler(new EditButtonClickHandler());
-		saveButton.addClickHandler(new SaveButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
 		editorService.generateIdenticons(user.getEmail(), 100, 100, new getImageCallback());
@@ -122,9 +121,8 @@ public class ProfileForm extends VerticalPanel {
 	 */
 
 	class EditButtonClickHandler implements ClickHandler {
-
+		
 		public void onClick(ClickEvent event) {
-			
 			
 			userNameTB.setText(user.getEmail());
 			userNamePanel.add(userNameTB);
@@ -137,6 +135,8 @@ public class ProfileForm extends VerticalPanel {
 			buttonPanel.remove(editButton);
 			buttonPanel.remove(deleteButton);
 			contentPanel.add(saveButton);
+			
+			saveButton.addClickHandler(new SaveButtonClickHandler());
 
 		}
 
@@ -208,14 +208,15 @@ public class ProfileForm extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 
-			String newEmailAdress = emailAdressTB.getText();
-
-			if (newEmailAdress.length() > 20) {
+			if (emailAdressTB.getText().length() > 20) {
 
 				Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 
 			} else {
-
+				
+				user.setUsername(userNameTB.getValue());
+				user.setEmail(emailAdressTB.getValue());
+				
 				editorService.updateUser(user, new UpdateUserCallback());
 
 			}
@@ -306,33 +307,36 @@ public class ProfileForm extends VerticalPanel {
 
 	}
 
-	class FindUserByGMailCallback implements AsyncCallback<User> {
-
-		@Override
-		public void onFailure(Throwable arg0) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void onSuccess(User arg0) {
-			// TODO Auto-generated method stub
-
-			String newUserName = userNameTB.getText();
-			String newEmailAdress = emailAdressTB.getText();
-
-			editorService.createUser(newEmailAdress, new UpdateUserCallback());
-
-		}
-
-	}
+//	class FindUserByGMailCallback implements AsyncCallback<User> {
+//
+//		@Override
+//		public void onFailure(Throwable arg0) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//		@Override
+//		public void onSuccess(User arg0) {
+//			// TODO Auto-generated method stub
+//
+//			String newEmailAdress = emailAdressTB.getText();
+//
+//			editorService.createUser(newEmailAdress, new UpdateUserCallback());
+//
+//		}
+//
+//	}
 
 	class UpdateUserCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
 			// TODO Auto-generated method stub
-
+			
+//			Window.alert("Ihr Profil wurde nicht erfolgreich geändert!");
+			
+			Window.alert(arg0.getMessage());
+			
 		}
 
 		@Override
@@ -341,7 +345,7 @@ public class ProfileForm extends VerticalPanel {
 
 			Window.alert("Ihr Profil wurde erfolgreich geändert!");
 			
-			buildProfile();
+//			buildProfile();
 
 		}
 
@@ -352,6 +356,10 @@ public class ProfileForm extends VerticalPanel {
 		@Override
 		public void onFailure(Throwable arg0) {
 			// TODO Auto-generated method stub
+			
+//			Window.alert("Ihr Profil wurde nicht erfolgreich gelöscht!");
+			
+			Window.alert(arg0.getMessage());
 
 		}
 
