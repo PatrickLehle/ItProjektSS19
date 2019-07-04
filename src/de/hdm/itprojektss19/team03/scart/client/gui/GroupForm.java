@@ -109,13 +109,13 @@ public class GroupForm extends VerticalPanel {
 		 */
 		editorVerwaltung.findAllGroupsByUserId(u.getId(), new AsyncCallback<Vector<Group>>() {
 
-			public void onFailure(Throwable arg0) {
-				Window.alert("Fehler: Gruppen von dem User konnten nicht gefunden werden");
+			public void onFailure(Throwable t) {
+				Window.alert("Fehler: Gruppen von dem User konnten nicht gefunden werden: " + t);
 			}
 
-			public void onSuccess(Vector<Group> arg0) {
+			public void onSuccess(Vector<Group> g) {
 				allGroups.clear();
-				allGroups = arg0;
+				allGroups = g;
 
 				GWT.log(allGroups.toString()); // @bastiantilk-Fehlercheck
 
@@ -125,13 +125,13 @@ public class GroupForm extends VerticalPanel {
 				 */
 				editorVerwaltung.getAllGroceryListsByGroupVector(allGroups, new AsyncCallback<Vector<GroceryList>>() {
 
-					public void onFailure(Throwable arg0) {
-						Window.alert("Fehler: Einkaufslisten von dem User konnten nicht gefunden werden");
+					public void onFailure(Throwable t) {
+						Window.alert("Fehler: Einkaufslisten von dem User konnten nicht gefunden werden: " + t);
 					}
 
-					public void onSuccess(Vector<GroceryList> arg0) {
+					public void onSuccess(Vector<GroceryList> gl) {
 						allGrocery.clear();
-						allGrocery = arg0;
+						allGrocery = gl;
 
 						fillTree();
 					}
@@ -288,9 +288,7 @@ public class GroupForm extends VerticalPanel {
 				}
 
 				public void onSuccess(GroceryList arg0) {
-
-					Window.Location.replace("/Scart.html"); // Springt zurueck zur Homepage,
-					// damit der Tree geleert wird und neu geladen werden kann
+					onLoad();
 				}
 
 			});
