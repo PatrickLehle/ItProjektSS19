@@ -13,6 +13,18 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public class ToolbarForm extends HorizontalPanel {
 
+	/**
+	 * Default Konsturktor, falls kein User angemeldet ist
+	 */
+	public ToolbarForm() {
+		this.addStyleName("toolbar");
+	}
+
+	/**
+	 * Konstruktor, der aufgerufen wird, falls ein User angemeldet ist
+	 * 
+	 * @param user User Obejekt des angemeldeten Users
+	 */
 	public ToolbarForm(User user) {
 		Anchor reportGeneratorLink = new Anchor("", "ScartReport.html");
 		Button reportBtn = new Button("Report Generator");

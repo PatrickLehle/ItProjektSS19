@@ -38,25 +38,25 @@ public class Scart implements EntryPoint {
 	private ScrollPanel navigationPanel = new ScrollPanel();
 
 	/**
-	 * startet, sobald das Modul geladen wird.
+	 * Startet, sobald das Modul geladen wird. Prüft zunaechst, ob ein Nutzer
+	 * eingeloggt ist
 	 */
 	public void onModuleLoad() {
 
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
 			public void onFailure(Throwable err) {
-				GWT.log("Failed to login: " + err.getMessage());
+				GWT.log("Failed to login, trying again: " + err.getMessage());
+				onModuleLoad();
 			}
 
 			public void onSuccess(final LoginInfo logInfo) {
-				/**
-				 * Check if the user is logged in
-				 */
 				if (logInfo.isLoggedIn()) {
 
 					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
 
 						public void onFailure(Throwable caught) {
+
 							RegistryForm registryFrom = new RegistryForm(logInfo.getLogoutUrl(),
 									logInfo.getEmailAddress());
 							RootPanel.get("content").clear();
@@ -81,15 +81,21 @@ public class Scart implements EntryPoint {
 	}
 
 	/**
-	 * Load the login Form into content panel
+	 * Laed die LoginForm in das Content Panel
+	 * 
+	 * @param logURL Die logout URL wird von google gesetzt
 	 */
 	private void login(String logURL) {
+		RootPanel.get("header").clear();
+		RootPanel.get("header").add(new ToolbarForm());
 		LoginForm loginForm = new LoginForm(logURL);
 		RootPanel.get("content").add(loginForm);
 	}
 
 	/**
-	 * Add content to content panel
+	 * Fuegt den Inhalt der Seite dem Content Panel hinzu
+	 * 
+	 * @param user Das User Objekt
 	 */
 	private void loadPage(User user) {
 		ToolbarForm toolbar = new ToolbarForm(user);
