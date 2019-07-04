@@ -73,6 +73,32 @@ public class GroceryListArticleMapper {
 		}
 		return null;
 	}
+	
+	/**
+	 * Loeschen aller Article zu einer zugewiesenen GroceryList.
+	 * 
+	 * @param gl beschreibt ein GroceryList-Objekt
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public void removeAllArticlesFromGroceryList(GroceryList gl) throws DatabaseException {
+
+		Connection con = null;
+		PreparedStatement stmt = null;
+
+		// SQL-Anweisung zum loeschen des Tupels aus der DB
+		String deleteSQL = "DELETE FROM grocerylistarticle WHERE grocerylistId=?";
+
+		try {
+			con = DBConnection.connection();
+			stmt = con.prepareStatement(deleteSQL);
+			stmt.setInt(1, gl.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+	}
 
 	/**
 	 * Loeschen eines Articles zu einer zugewiesenen GroceryList.

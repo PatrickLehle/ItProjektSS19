@@ -630,5 +630,13 @@ public interface EditorService extends RemoteService {
 	 *             erlaubten Arguments.
 	 */
 	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
-
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #deleteAllArticlesFromGroceryList(GroceryList gl);
+	 * 
+	 * @param gl
+	 * @throws IllegalArgumentException
+	 */
+	public void deleteAllArticlesFromGroceryList(GroceryList gl) throws IllegalArgumentException;
 }
