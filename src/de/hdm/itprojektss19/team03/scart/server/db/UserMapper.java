@@ -41,7 +41,8 @@ public class UserMapper {
 	 * Sucht alle User
 	 * 
 	 * @return Vector mit allen gefundenen Usern
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<User> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -74,7 +75,8 @@ public class UserMapper {
 	 * @param name beschreibt den Namen des Users
 	 * @param u beschreibt den uebergebenen User
 	 * @return Vector mit allen Usern die den selben Namen tragen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<User> findUserByName(String name, User u) throws DatabaseException {
 		Connection con = null;
@@ -109,9 +111,11 @@ public class UserMapper {
 
 	/**
 	 * Sucht einen User anhand der eindeutigen ID
+	 * 
 	 * @param userId beschreibt die Eindeutigkeit eines Users via id
-	 * @return  User mit der entsprechenden ID
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @return User mit der entsprechenden ID
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User getUserById(int userId) throws DatabaseException {
 		Connection con = null;
@@ -150,12 +154,14 @@ public class UserMapper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Sucht alle User anhand der Email
+	 * 
 	 * @param userEmail beschreibt den user via der hinterlegten Email Adresse
 	 * @return Vector mit allen gefunden Usern mit entsprechender Email
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User findUserByEmail(String userEmail) throws DatabaseException {
 		try {
@@ -190,12 +196,14 @@ public class UserMapper {
 			throw new DatabaseException(e2);
 		}
 	}
-	
+
 	/**
 	 * F�gt in der Datenbank einen neuen User ein
+	 * 
 	 * @param user beschreibt den uebergebenen User
 	 * @return User wird zurück gegeben
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User insert(User user) throws DatabaseException {
 		Connection con = null;
@@ -229,12 +237,13 @@ public class UserMapper {
 
 	}
 
-	
 	/**
 	 * User wird in der Datenbank nachträglich auf den neusten Stand gebracht
+	 * 
 	 * @param user beschreibt den uebergebenen User
 	 * @return gibt den upgedateten User zurueck
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public User update(User user) throws DatabaseException {
 		Connection con = null;
@@ -264,8 +273,10 @@ public class UserMapper {
 
 	/**
 	 * Löschen eines Users aus der Datenbank
+	 * 
 	 * @param user beschreibt den uebergebenen User
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void delete(User user) throws DatabaseException {
 		Connection con = DBConnection.connection();

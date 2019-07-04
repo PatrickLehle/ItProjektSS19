@@ -74,6 +74,13 @@ public class ShoppingListForm extends HorizontalPanel {
 	private Button addRetailerButton = new Button("Laden einfügen");
 
 	/**
+	 * Sucht alle Retailer der aktuellen Gruppe
+	 */
+	private void getData() {
+		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
+	}
+
+	/**
 	 * Methode zum Erstellen der GUI-Seite
 	 * 
 	 * @param articles (Vector mit Artikel-Objekten)
@@ -332,8 +339,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		public void onSuccess(Vector<Article> articles) {
 			createForms(articles, retailer);
 		}
-	}
-
+	};
 	/**
 	 * Callback um die Retailer der Gruppe aus der DB zu finden. Bei Erfolg werden
 	 * die Artikel der Einkaufsliste gesucht.
@@ -351,7 +357,6 @@ public class ShoppingListForm extends HorizontalPanel {
 			}
 		}
 	};
-
 	/**
 	 * Callback-Methode um einen neuen Retailer in der DB anzulegen
 	 */

@@ -48,7 +48,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Generates Identicon
 	 * 
-	 * @throws IOException
+	 * @see <a href="https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
 	 * 
 	 * @see <a href=
 	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
