@@ -46,7 +46,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Generates Identicon
 	 * 
-	 * @throws IOException
+	 * @see <a href="https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
 	 * 
 	 * @see <a href=
 	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
@@ -212,6 +212,18 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 		try {
 			uMapper.delete(u);
 
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+	
+
+	public User updateUser(User u) throws IllegalArgumentException, DatabaseException {
+		
+		try {
+			return uMapper.update(u);
+	
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);

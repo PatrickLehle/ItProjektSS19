@@ -18,27 +18,13 @@ import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
-/** Die ProfileFOrm-Seite wird aufgerufen um Aenderungen an dem eigenen User
- * durchzufuehren.
+/**
+ * ProfileForm: ...
+ *  
  * @author vanduyho
  */
 
 public class ProfileForm extends VerticalPanel {
-// DEFAULT CONSTRUCTOR=============================================
-	/**
-	* Default Konstruktor der ProfileForm-Seite
-	*/
-	public ProfileForm() {
-	}
-	
-// CONSTRUCTOR=====================================================
-	/** Konstruktor der ProfileForm-Seite
-	 * 
-	 * @param u (User-Objekt des aktuellen Users)
-	 */
-	public ProfileForm(User u) {
-		user = u;
-	}
 
 	User user = new User();
 
@@ -48,15 +34,16 @@ public class ProfileForm extends VerticalPanel {
 
 	// LABELS=================================================
 	Label yourProfileLabel = new Label("Dein Profil");
-	Label userNameLabel = new Label("Name: ");
-	Label emailAdressLabel = new Label("E-Mail: ");
+	Label userNameDescLabel = new Label("Name:");
+	Label userNameContLabel = new Label();
+	Label emailAdressDescLabel = new Label("E-Mail:");
+	Label emailAdressContLabel = new Label();
 
 	// BUTTONS================================================
 
 	Button editButton = new Button("Profil bearbeiten");
 	Button deleteButton = new Button("Profil löschen");
 	Button saveButton = new Button("Änderung speichern");
-	Button nosaveButton = new Button();
 
 	// PANELS=================================================
 	VerticalPanel contentPanel = new VerticalPanel();
@@ -67,6 +54,18 @@ public class ProfileForm extends VerticalPanel {
 	HorizontalPanel buttonPanel = new HorizontalPanel();
 
 	EditorServiceAsync editorService = ClientsideSettings.getEditor();
+	
+	/**
+	 * 
+	 * Konstruktor: ...
+	 *
+	 */
+	
+	public ProfileForm(User u) {
+		
+		this.user = u;
+		
+	}
 
 //METHODS=======================================================	
 	/** Diese Methode wird automatisch bei dem Aufruf der GUI-Seite gestartet
@@ -78,10 +77,14 @@ public class ProfileForm extends VerticalPanel {
 	/** Die Methode zum aufbauen der GUI-Seite
 	 */
 	public void buildProfile() {
-
+		
 		yourProfilePanel.add(yourProfileLabel);
-		userNamePanel.add(userNameLabel);
-		emailAdressPanel.add(emailAdressLabel);
+		userNamePanel.add(userNameDescLabel);
+		userNameContLabel.setText(user.getEmail());
+		userNamePanel.add(userNameContLabel);
+		emailAdressPanel.add(emailAdressDescLabel);
+		emailAdressContLabel.setText(user.getUsername());
+		emailAdressPanel.add(emailAdressContLabel);
 
 		buttonPanel.add(editButton);
 		buttonPanel.add(deleteButton);
@@ -92,7 +95,6 @@ public class ProfileForm extends VerticalPanel {
 		contentPanel.add(buttonPanel);
 
 		editButton.addClickHandler(new EditButtonClickHandler());
-		saveButton.addClickHandler(new SaveButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
 		editorService.generateIdenticons(user.getEmail(), 100, 100, new getImageCallback());
@@ -106,18 +108,22 @@ public class ProfileForm extends VerticalPanel {
 	 *
 	 */
 	class EditButtonClickHandler implements ClickHandler {
-
+		
 		public void onClick(ClickEvent event) {
-
-			userNameTB.setText(user.getUsername());
+			
+			userNameTB.setText(user.getEmail());
 			userNamePanel.add(userNameTB);
-
-			emailAdressTB.setText(user.getEmail());
+			userNamePanel.remove(userNameContLabel);
+			
+			emailAdressTB.setText(user.getUsername());
 			emailAdressPanel.add(emailAdressTB);
-
+			emailAdressPanel.remove(emailAdressContLabel);
+			
 			buttonPanel.remove(editButton);
 			buttonPanel.remove(deleteButton);
 			contentPanel.add(saveButton);
+			
+			saveButton.addClickHandler(new SaveButtonClickHandler());
 
 		}
 
@@ -135,8 +141,7 @@ public class ProfileForm extends VerticalPanel {
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesSaveButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoButtonClickHandler(db));
-			Label l = new HTML("<p> Möchten Sie die Änderung speichern? </p>");
-			db.setText("Profil löschen");
+			Label l = new HTML("<h1> Änderung speichern </h1> <p> Möchten Sie die Änderung speichern? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -196,15 +201,16 @@ public class ProfileForm extends VerticalPanel {
 
 		public void onClick(ClickEvent event) {
 
-			String newEmailAdress = emailAdressTB.getText();
-
-			if (newEmailAdress.length() > 20) {
+			if (emailAdressTB.getText().length() > 20) {
 
 				Window.alert("Ihre E-Mail darf nicht länger als 20 Zeichen sein!");
 
 			} else {
-
-				editorService.getUserByGMail(newEmailAdress, new FindUserByGMailCallback());
+				
+				user.setUsername(userNameTB.getValue());
+				user.setEmail(emailAdressTB.getValue());
+				
+				editorService.updateUser(user, new UpdateUserCallback());
 
 			}
 
@@ -275,10 +281,13 @@ public class ProfileForm extends VerticalPanel {
 	class getImageCallback implements AsyncCallback<String> {
 
 		public void onFailure(Throwable t) {
+			
 			GWT.log("Failed to get Profile Image: " + t);
+			
 		}
 
 		public void onSuccess(String s) {
+			
 			VerticalPanel panel = new VerticalPanel();
 			panel.setStyleName("profile-img-big");
 			Image image = new Image();
@@ -288,43 +297,27 @@ public class ProfileForm extends VerticalPanel {
 			outerPanel.clear();
 			outerPanel.add(panel);
 			outerPanel.add(contentPanel);
+			
 		}
 
 	}
 
-	/** CallBack um einen User anhand der E-Mail-Adresse in der DB zu finden.
-	 *	Bei Erfolg werden die Daten des Users aktualisiert.
-	 */
-	class FindUserByGMailCallback implements AsyncCallback<User> {
-
-		@Override
-		public void onFailure(Throwable arg0) {
-
-		}
-		@Override
-		public void onSuccess(User arg0) {
-
-			String newUserName = userNameTB.getText();
-			String newEmailAdress = emailAdressTB.getText();
-
-			editorService.createUser(newEmailAdress, new UpdateUserCallback());
-
-		}
-	}
-	
-	/** CallBack um einen neuen User in der DB zu erstellen.
-	 * 	Bei Erfolg wird die Seite neu aufgebaut.
-	 */
 	class UpdateUserCallback implements AsyncCallback<User> {
 
 		@Override
 		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
+			
+			Window.alert("Ihr Profil wurde nicht erfolgreich geändert!");
+			
+			Window.alert(arg0.getMessage());
+			
 		}
 
 		@Override
 		public void onSuccess(User arg0) {
 
-			buildProfile();
+			Window.alert("Ihr Profil wurde erfolgreich geändert!");
 
 		}
 	}
@@ -336,6 +329,11 @@ public class ProfileForm extends VerticalPanel {
 
 		@Override
 		public void onFailure(Throwable arg0) {
+			// TODO Auto-generated method stub
+			
+			Window.alert("Ihr Profil wurde nicht erfolgreich gelöscht!");
+			
+
 		}
 
 		@Override
