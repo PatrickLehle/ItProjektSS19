@@ -74,19 +74,17 @@ public class GroupForm extends VerticalPanel {
 		// super.onLoad();
 		loadingPanel.add(new LoadingForm());
 		outer.addStyleName("inner-content");
-		
-		
+
 		groupsPanel.setHorizontalAlignment(ALIGN_LEFT);
 		groupLabel.addStyleName("h1");
 		groupLabel.setHorizontalAlignment(ALIGN_CENTER);
-		
-		
+
 		navigation.setHorizontalAlignment(ALIGN_LEFT);
 		navigation.setVerticalAlignment(ALIGN_TOP);
 		scrollPanel.add(groupLabel);
 		navigation.add(scrollPanel);
 		navigation.add(loadingPanel);
-		
+
 		this.add(navigation);
 
 		// editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
@@ -111,12 +109,10 @@ public class GroupForm extends VerticalPanel {
 		 */
 		editorVerwaltung.findAllGroupsByUserId(u.getId(), new AsyncCallback<Vector<Group>>() {
 
-			@Override
 			public void onFailure(Throwable arg0) {
 				Window.alert("Fehler: Gruppen von dem User konnten nicht gefunden werden");
 			}
 
-			@Override
 			public void onSuccess(Vector<Group> arg0) {
 				allGroups.clear();
 				allGroups = arg0;
@@ -129,17 +125,13 @@ public class GroupForm extends VerticalPanel {
 				 */
 				editorVerwaltung.getAllGroceryListsByGroupVector(allGroups, new AsyncCallback<Vector<GroceryList>>() {
 
-					@Override
 					public void onFailure(Throwable arg0) {
 						Window.alert("Fehler: Einkaufslisten von dem User konnten nicht gefunden werden");
 					}
 
-					@Override
 					public void onSuccess(Vector<GroceryList> arg0) {
 						allGrocery.clear();
 						allGrocery = arg0;
-						GWT.log(allGrocery.toString()); // @bastiantilk-Fehlercheck
-						GWT.log(allGrocery.get(0).getId() + " <- GlId/GroupId -> " + allGrocery.get(0).getGroupId()); // @bastiantilk-Fehlercheck
 
 						fillTree();
 					}
@@ -244,7 +236,7 @@ public class GroupForm extends VerticalPanel {
 
 		public void onClick(ClickEvent arg0) {
 			outer.clear();
-			outer.add(new EditGroup(user, selection));
+			outer.add(new EditGroupForm(user, selection));
 			RootPanel.get("content").clear();
 			RootPanel.get("content").add(outer);
 		}
@@ -289,15 +281,14 @@ public class GroupForm extends VerticalPanel {
 			groceryList.setGroupId(group.getId());
 			groceryList.setGroupName(group.getGroupName());
 			editorVerwaltung.createGroceryList(groceryList, new AsyncCallback<GroceryList>() {
-				@Override
+
 				public void onFailure(Throwable arg0) {
-					// TODO Auto-generated method stub
+
 					Window.alert("Fehler: Neue Groceryliste konte nicht erstellt werden");
 				}
 
-				@Override
 				public void onSuccess(GroceryList arg0) {
-					// TODO Auto-generated method stub
+
 					Window.Location.replace("/Scart.html"); // Springt zurueck zur Homepage,
 					// damit der Tree geleert wird und neu geladen werden kann
 				}
