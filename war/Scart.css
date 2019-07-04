@@ -1,228 +1,243 @@
-body {
-	height: 100%;
-	width: 100%;
-	top: 0;
-	left: 0;
-	padding: 0px;
-	margin: 0px !important;
-	font-family: 'Raleway', sans-serif !important;
-}
-
-* {
-	font-family: 'Raleway', sans-serif !important;
-}
-
-.content {
-	height: 100%;
-	padding: 0px;
-	margin: 0px;
-	margin-top: 100px;
-}
-
-.inner-content {
-	padding-top: 120px;
-	margin-bottom: 70px;
-}
-
-.navigation {
-	padding-right: 1em;
-	position: fixed !important;
-	-moz-box-shadow: 0 0 10px #000000;
-	-webkit-box-shadow: 0 0 10px #000000;
-	box-shadow: 0 0 10px #000000;
-	margin-bottom: 80px;
-	margin-top: 50px;
-}
-
-.text {
-	margin-bottom: 0.2em;
-}
-
-.textbox {
-	margin: 0.5em;
-	text-align: center;
-	color: rgb(25, 31, 31);
-}
-
-.textbox-big {
-	margin: 1em;
-	text-align: center;
-	width: 200px;
-	height: 20px;
-	font-size: 1.17em;
-	font-weight: bold;
-	color: rgb(25, 31, 31);
-}
-
-/* overwrite gwt basic button*/
-.button {
-	margin: 10px !important;
-	width: 180px;
-	height: 40px;
-	color: rgb(25, 31, 31) !important;
-	box-shadow: 0px 0px 5px rgba(242, 210, 37);
-	font-size: 1.2em;
-	border-style: none !important;
-	font-weight: bold !important;
-	/* Old browsers */
-	background: rgb(242, 210, 37) !important;
-}
-
-.icon-button {
-	margin: 5px !important;
-	border-style: none !important;
-	background: rgb(242, 210, 37) !important;
-	box-shadow: 0px 0px 5px rgba(242, 210, 37);
-	color: rgb(25, 31, 31) !important;
-	width: 30px;
-	height: 30px;
-	border-radius: 200px;
-	text-align: center;    
-	cursor: pointer;
-}
-
-.table-button1 {
-	background: grey;
-	color: black;
-	border: 1px solid #555555;
-}
-
-.table-button1:hover {
-	background: rgb(242, 210, 37) !important;
-	color: white;
-}
-
-.retailer-panel {
-	width: 100px;
-	margin-left: 20px;
-}
-
-.retailers-panel {
-	margin: 1em;
-}
-
-.profile-img-big {
-	border: solid rgb(37, 40, 73) 2px;
-    padding: 5px;
-    margin-right: 1em;
-} 
-.profile-img-small {
-	border: solid rgb(37, 40, 73) 1px;
-    padding: 2px;
-} 
-
-.tree-group {
-	font-size: 1.5em;
-	font-weight: bold;
-}
-
-.tree-grocery {
-	font-size: 1.2em;
-}
-
-.tree-new-group {
-	font-size: 1.5em;
-	color: rgb(150, 150, 150) !important;
-	font-weight: bold;
-	font-style: italic;
-}
-
-.tree-new-gl {
-	font-size: 1.2em;
-	color: rgb(150, 150, 150) !important;
-	font-style: italic;
-}
-
-.h1 {
-	display: block;
-	font-size: 2em;
-	margin-top: 0.67em;
-	margin-bottom: 0.67em;
-	margin-left: 0;
-	margin-right: 0;
-	font-weight: bold;
-}
-
-.h2 {
-	display: block;
-	font-size: 1.5em;
-	margin-top: 0.83em;
-	margin-bottom: 0.83em;
-	margin-left: 0;
-	margin-right: 0;
-	font-weight: bold;
-}
-
-.h3 {
-	display: block;
-	font-size: 1.17em;
-	margin-top: 1em;
-	margin-bottom: 1em;
-	margin-left: 0;
-	margin-right: 0;
-	font-weight: bold;
-}
-
-.h4 {
-	display: block;
-	font-size: 1em;
-	margin-top: 1.33em;
-	margin-bottom: 1.33em;
-	margin-left: 0;
-	margin-right: 0;
-	font-weight: bold;
-}
-
-.logo {
-	height: 250px;
-	width: 250px;
-}
-
-.logo-toolbar {
-	height: 70px;
-	width: 70px;
-	padding: 10px;
-}
-
-.signinwithgoogle {
-	margin-top: 1em;
-	height: 50px;
-}
-
-.login-text {
-	font-size: 2em;
-}
-
-.login-panel {
-	border: 1px solid #BBBBBB;
-	margin: 3em;
-	padding: auto;
-	width: 50%;
-	height: 50%;
-}
-
-.toolbar {
-	background: url(/images/scartbannerblue.jpg);
-	background-size: cover;
-	-moz-box-shadow: 0 0 10px #000000;
-	-webkit-box-shadow: 0 0 10px #000000;
-	box-shadow: 0 0 10px #000000;
-	width: 100%;
-	height: 100px;
-	border-radius: 3px;
-	position: fixed;
-	top: 0;
-}
-
-.footer {
-	position: fixed;
-	background: rgb(37, 40, 73);
-	bottom: 0;
-	width: 100%;
-	color: antiquewhite;
-	height: 60px;
-	text-align: center;
-	-moz-box-shadow: 0 0 10px #000000;
-	-webkit-box-shadow: 0 0 10px #000000;
-	box-shadow: 0 0 10px #000000;
-}
+    body {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        padding: 0px;
+        margin: 0px !important;
+        font-family: 'Raleway', sans-serif !important;
+    }
+    
+    * {
+        font-family: 'Raleway', sans-serif !important;
+    }
+    
+    .content {
+        height: 100%;
+        padding: 0px;
+        margin: 0px;
+        margin-top: 120px;
+        text-align: -webkit-center;
+    }
+    
+    .inner-content {
+        padding-top: 120px;
+        margin-bottom: 70px;
+    }
+    
+    .navigation {
+        padding-right: 1em;
+        position: fixed !important;
+        -moz-box-shadow: 0 0 10px #000000;
+        -webkit-box-shadow: 0 0 10px #000000;
+        box-shadow: 0 0 10px #000000;
+        margin-bottom: 80px;
+        margin-top: 50px;
+    }
+    
+    .text {
+        margin-bottom: 0.2em;
+    }
+    
+    .textbox {
+        margin: 0.5em;
+        text-align: center;
+        color: rgb(25, 31, 31);
+    }
+    
+    .textbox-big {
+        margin: 1em;
+        text-align: center;
+        width: 200px;
+        height: 20px;
+        font-size: 1.17em;
+        font-weight: bold;
+        color: rgb(25, 31, 31);
+    }
+    /* overwrite gwt basic button*/
+    
+    .button {
+        margin: 10px !important;
+        width: 180px;
+        height: 40px;
+        color: rgb(25, 31, 31) !important;
+        box-shadow: 0px 0px 5px rgba(242, 210, 37);
+        font-size: 1.2em;
+        border-style: none !important;
+        font-weight: bold !important;
+        /* Old browsers */
+        background: rgb(242, 210, 37) !important;
+        cursor: pointer;
+    }
+    
+    .icon-button {
+        margin: 5px !important;
+        border-style: none !important;
+        background: rgb(242, 210, 37) !important;
+        box-shadow: 0px 0px 5px rgba(242, 210, 37);
+        color: rgb(25, 31, 31) !important;
+        width: 30px;
+        height: 30px;
+        border-radius: 200px;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    .table-button1 {
+        background: grey;
+        color: black;
+        border: 1px solid #555555;
+    }
+    
+    .table-button1:hover {
+        background: rgb(242, 210, 37) !important;
+        color: white;
+    }
+    
+    .retailer-panel {
+        width: 100px;
+        margin-left: 20px;
+    }
+    
+    .retailers-panel {
+        margin: 1em;
+    }
+    
+    .profile-img-big {
+        border: solid rgb(37, 40, 73) 2px;
+        padding: 5px;
+        margin-right: 1em;
+    }
+    
+    .profile-img-small {
+        border: solid rgb(37, 40, 73) 1px;
+        padding: 2px;
+    }
+    
+    .tree-group {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    
+    .tree-grocery {
+        font-size: 1.2em;
+    }
+    
+    .tree-new-group {
+        font-size: 1.5em;
+        color: rgb(150, 150, 150) !important;
+        font-weight: bold;
+        font-style: italic;
+    }
+    
+    .tree-new-gl {
+        font-size: 1.2em;
+        color: rgb(150, 150, 150) !important;
+        font-style: italic;
+    }
+    
+    .h1 {
+        display: block;
+        font-size: 2em;
+        margin-top: 0.67em;
+        margin-bottom: 0.67em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+        text-align: -webkit-center;
+    }
+    
+    .h2 {
+        display: block;
+        font-size: 1.5em;
+        margin-top: 0.83em;
+        margin-bottom: 0.83em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+        text-align: -webkit-center;
+    }
+    
+    .h3 {
+        display: block;
+        font-size: 1.17em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+        text-align: -webkit-center;
+    }
+    
+    .h4 {
+        display: block;
+        font-size: 1em;
+        margin-top: 1.33em;
+        margin-bottom: 1.33em;
+        margin-left: 0;
+        margin-right: 0;
+        font-weight: bold;
+        text-align: -webkit-center;
+    }
+    
+    .logo {
+        height: 250px;
+        width: 250px;
+    }
+    
+    .logo-toolbar {
+        height: 70px;
+        width: 70px;
+        padding: 10px;
+    }
+    
+    .signinwithgoogle {
+        margin-top: 1em;
+        height: 50px;
+    }
+    
+    .align-center {
+        text-align: -webkit-center;
+    }
+    
+    .align-left {
+     text-align: -webkit-left;
+        }
+    
+    .login-text {
+        font-size: 2em;
+    }
+    
+    .login-panel {
+        border: 1px solid #BBBBBB;
+        margin: 3em;
+        padding: auto;
+        width: 50%;
+        height: 50%;
+    }
+    
+    .toolbar {
+        background: url(/images/scartbannerblue.jpg);
+        background-size: cover;
+        -moz-box-shadow: 0 0 10px #000000;
+        -webkit-box-shadow: 0 0 10px #000000;
+        box-shadow: 0 0 10px #000000;
+        width: 100%;
+        height: 100px;
+        border-radius: 3px;
+        position: fixed;
+        top: 0;
+    }
+    
+    .footer {
+        position: fixed;
+        background: rgb(37, 40, 73);
+        bottom: 0;
+        width: 100%;
+        color: antiquewhite;
+        height: 60px;
+        text-align: center;
+        -moz-box-shadow: 0 0 10px #000000;
+        -webkit-box-shadow: 0 0 10px #000000;
+        box-shadow: 0 0 10px #000000;
+    }

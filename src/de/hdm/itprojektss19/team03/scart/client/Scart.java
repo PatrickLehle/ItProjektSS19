@@ -42,7 +42,6 @@ public class Scart implements EntryPoint {
 	 * eingeloggt ist
 	 */
 	public void onModuleLoad() {
-
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
 			public void onFailure(Throwable err) {
@@ -56,7 +55,8 @@ public class Scart implements EntryPoint {
 					editorService.getUserByGMail(logInfo.getEmailAddress(), new AsyncCallback<User>() {
 
 						public void onFailure(Throwable caught) {
-
+							RootPanel.get("header").clear();
+							RootPanel.get("header").add(new ToolbarForm());
 							RegistryForm registryFrom = new RegistryForm(logInfo.getLogoutUrl(),
 									logInfo.getEmailAddress());
 							RootPanel.get("content").clear();
