@@ -2,7 +2,6 @@ package de.hdm.itprojektss19.team03.scart.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -46,7 +45,7 @@ public class Scart implements EntryPoint {
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
 			public void onFailure(Throwable err) {
-				Window.alert(err.getMessage());
+				GWT.log("Failed to login: " + err.getMessage());
 			}
 
 			public void onSuccess(final LoginInfo logInfo) {

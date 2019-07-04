@@ -6,7 +6,6 @@ import java.util.Vector;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
-import de.hdm.itprojektss19.team03.scart.shared.bo.Entry;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
@@ -27,6 +26,8 @@ public interface EditorServiceAsync {
 	void createUser(String emailAdress, AsyncCallback<User> asyncCallback);
 
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
+	
+	void updateUser(User u, AsyncCallback<User> asyncCallback);
 
 	void getUserById(int userId, AsyncCallback<User> asyncCallback);
 
@@ -85,10 +86,13 @@ public interface EditorServiceAsync {
 	void findAllGroceryListByUserId(int userId, AsyncCallback<Vector<GroceryList>> asyncCallback);
 
 	void getAllGroceryListsByGroupVector(Vector<Group> g, AsyncCallback<Vector<GroceryList>> asyncCallback);
-	
+
 	// GROCERYLIST-ARTICLE=================================================================
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByGroceryListIdAndRetailerId(int groceryListId, int retailerId,
+			AsyncCallback<Vector<Article>> asyncCallback);
 
 	// ARTICLE===========================================================================
 
@@ -107,19 +111,22 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroupIdReport(int groupId, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void findAllArticleByOwnerId(int ownerId, AsyncCallback<Vector<Article>> asyncCallback);
-	
+
 	void getAllArticleByName(String name, int groupId, AsyncCallback<Vector<Article>> asyncCallback);
 
-	//ARTICLE-REPORT==============================================================================
-	
-	void findAllArticleByFavouriteTRUE(Vector<Group> groups,AsyncCallback<Vector<Article>> asyncCallback);
-	
-	void findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups,Vector<Retailer> retailers,AsyncCallback<Vector<Article>> asyncCallback);
+	// ARTICLE-REPORT==============================================================================
 
-	void findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
-	
-	void findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start, Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
-	
+	void findAllArticleByFavouriteTRUE(Vector<Group> groups, AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
+	void findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers, Timestamp start,
+			Timestamp end, AsyncCallback<Vector<Article>> asyncCallback);
+
 	// RETAILER===========================================================================
 
 	void createRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
@@ -142,7 +149,7 @@ public interface EditorServiceAsync {
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
 	// GroceryListArticle===========================================================================
-	
+
 	void addArticleToGroceryList(GroceryList gl, Article a, AsyncCallback<GroceryListArticle> asyncCallback);
 
 	void removeArticleFromGroceryList(GroceryList gl, Article a, AsyncCallback<Void> asyncCallback);
@@ -150,4 +157,6 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroceryList(GroceryList groceryList, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
+	
+	void deleteAllArticlesFromGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
 }

@@ -66,6 +66,4 @@ public class Retailer extends BusinessObject implements IsSerializable {
 		this.user = user;
 	}
 
-	// GROUP====================================================================================
-
 }
