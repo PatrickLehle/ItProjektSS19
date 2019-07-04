@@ -73,7 +73,7 @@ public class GroceryListArticleMapper {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Loeschen aller Article zu einer zugewiesenen GroceryList.
 	 * 
@@ -191,11 +191,11 @@ public class GroceryListArticleMapper {
 		PreparedStatement stmt = null;
 
 		// SQL-Anweisung zum auslesen der Tupel aus der DB
-		String selectByKey = "SELECT * FROM grocerylistarticle JOIN article ON grocerylistarticle.articleId "
-				+ "= article.articleId JOIN grocerylist ON grocerylistarticle.grocerylistId = "
-				+ "grocerylist.groceryListId JOIN retailer ON retailer.retailerId "
-				+ "= article.articleId WHERE grocerylistarticle.grocerylistId = " + grocerylistId
-				+ " AND retailer.retailerId =  " + retailerId;
+		String selectByKey = "SELECT\r\n" + "    *\r\n" + "FROM\r\n" + "    article\r\n"
+				+ "JOIN retailer ON retailer.retailerId = article.articleRetailerId\r\n"
+				+ "JOIN grocerylistarticle ON grocerylistarticle.articleId = article.articleId\r\n" + "WHERE\r\n"
+				+ "    article.articleRetailerId = " + retailerId + " AND grocerylistarticle.grocerylistId = "
+				+ grocerylistId;
 
 		Vector<Article> result = new Vector<Article>();
 
