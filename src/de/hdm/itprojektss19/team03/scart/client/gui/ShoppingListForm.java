@@ -15,13 +15,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.NoButtonClickHandler;
-import de.hdm.itprojektss19.team03.scart.client.gui.ProfileForm.YesDeleteButtonClickHandler;
-import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
@@ -37,6 +35,28 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 public class ShoppingListForm extends HorizontalPanel {
 
+	private EditorServiceAsync editorService = GWT.create(EditorService.class);
+
+	private User user;
+	private Group group;
+	private GroceryList groceryList;
+	int GWTBugFixing;
+
+	private FlowPanel retailersPanel = new FlowPanel();
+	private VerticalPanel outerPanel = new VerticalPanel();
+	private Button addRetailerButton = new Button("Laden einfügen");
+
+	// Change GroceryList Name
+	HorizontalPanel changeGlNamePanel = new HorizontalPanel();
+
+	// Elemente zum anendern des GroceryList Namen
+	Label glNameLabel = new Label();
+	TextBox glChangeNameTextbox = new TextBox();
+	Button editGroceryListButton = new Button(
+			"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+	Button deleteGroceryListButton = new Button(
+			"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
+
 	/**
 	 * Konstruktor der ShoppingListForm-Seite
 	 * 
@@ -48,6 +68,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		user = u;
 		groceryList = gl;
 		group = g;
+		GWTBugFixing = 0;
 	}
 
 	/**
@@ -55,27 +76,26 @@ public class ShoppingListForm extends HorizontalPanel {
 	 * 
 	 */
 	public void onLoad() {
+		if (GWTBugFixing > 0) {
+			return;
+		}
+		GWTBugFixing++;
 		this.clear();
 		outerPanel.clear();
 		retailersPanel.clear();
-		
-//Buttons, Label und Panels fuer die Aenderung der GL Namens und Loeschung
-		glDeleteButton.setStyleName("button");
-		glDeleteButton.addClickHandler(new DeleteGlClickHandler(groceryList));
-		glChangeNameButton.setStyleName("button");
-		glChangeNameButton.addClickHandler(new ChangeGlNameButtonClickHandler(groceryList, glChangeNameTextbox.getText()));
-		glChangeNameLabel.setStyleName("text");
-		glChangeNameTextbox.setText(groceryList.getGroceryListName());
-		glChangeNameTextbox.setStyleName("textbox");
-		
-		//glChangeNameLabel.setVerticalAlignment(ALIGN_MIDDLE);
-		//glChangeNameTextbox.setVerticalAlignment(ALIGN_MIDDLE);
-		
-		changeGlNamePanel.add(glChangeNameLabel); //Elemente fuer die Aenderung des GroceryList-Namen
-		changeGlNamePanel.add(glChangeNameTextbox);
-		changeGlNamePanel.add(glChangeNameButton);
-		changeGlNamePanel.add(glDeleteButton);
-		changeGlNamePanel.setStyleName("gl-change-panel");
+		changeGlNamePanel.clear();
+
+		// Buttons, Label und Panels fuer die Aenderung der GL Namens und Loeschung
+		deleteGroceryListButton.setStyleName("icon-button");
+		deleteGroceryListButton.addClickHandler(new DeleteGlClickHandler(groceryList));
+		editGroceryListButton.setStyleName("icon-button");
+		editGroceryListButton.addClickHandler(new ChangeGlNameButtonClickHandler(groceryList, changeGlNamePanel));
+		glNameLabel.setStyleName("h1");
+		glNameLabel.setText(groceryList.getGroceryListName());
+
+		changeGlNamePanel.add(glNameLabel); // Elemente fuer die Aenderung des GroceryList-Namen
+		changeGlNamePanel.add(editGroceryListButton);
+		changeGlNamePanel.add(deleteGroceryListButton);
 		changeGlNamePanel.setVerticalAlignment(ALIGN_MIDDLE);
 		outerPanel.add(changeGlNamePanel);
 
@@ -87,35 +107,6 @@ public class ShoppingListForm extends HorizontalPanel {
 		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
 	}
 
-	private EditorServiceAsync editorService = GWT.create(EditorService.class);
-
-	private User user;
-	private Group group;
-	private GroceryList groceryList;
-
-	private FlowPanel retailersPanel = new FlowPanel();
-	private VerticalPanel outerPanel = new VerticalPanel();
-	private Button addRetailerButton = new Button("Laden einfügen");
-
-//Change GroceryList Name
-	HorizontalPanel changeGlNamePanel = new HorizontalPanel(); //HorizontalPanel wo Label, Textbox und Button zum aendern des GroceryListnamen enthalten sind
-
-    	//Elemente zum anendern des GroceryList Namen
-		//TODO: Stylenames zuordnen fuer diese Elemente
-		Label glChangeNameLabel = new Label("Einkaufsliste umbenennen:");
-		TextBox glChangeNameTextbox = new TextBox();
-		Button glChangeNameButton = new Button("Ändern");	
-		Button glDeleteButton = new Button("Einkaufsliste löschen");
-		
-	
-	
-	/**
-	 * Sucht alle Retailer der aktuellen Gruppe
-	 */
-	private void getData() {
-		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
-	}
-
 	/**
 	 * Methode zum Erstellen der GUI-Seite
 	 * 
@@ -123,17 +114,15 @@ public class ShoppingListForm extends HorizontalPanel {
 	 * @param retailer Retailer
 	 */
 	public void createForms(Vector<Article> articles, Retailer retailer) {
-		GWT.log("run once");
+		Button editRetailer = new Button(
+				"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
+		Button deleteButton = new Button(
+				"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
 		DecoratorPanel decoPanel = new DecoratorPanel();
 		HorizontalPanel headerPanel = new HorizontalPanel();
 		VerticalPanel retailerPanel = new VerticalPanel();
 
 		Label retailerHeader = new Label(retailer.getRetailerName());
-		Button editRetailer = new Button(
-				"<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
-
-		Button deleteButton = new Button(
-				"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
 
 		deleteButton.setStyleName("icon-button");
 		deleteButton.addClickHandler(new DeleteRetailerClickHandler(retailer));
@@ -155,8 +144,6 @@ public class ShoppingListForm extends HorizontalPanel {
 		editorService.generateIdenticons(retailer.getUser().getEmail(), 25, 25,
 				new GetPictureCallback(headerPanel, retailer.getUser()));
 
-		
-		
 		retailersPanel.add(decoPanel);
 	}
 
@@ -263,6 +250,9 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	};
 
+	/*
+	 * Clickhandler, um einen Retailer zu speichern
+	 */
 	class CheckClickhandler implements ClickHandler {
 		Retailer retailer;
 		HorizontalPanel panel;
@@ -292,6 +282,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Retailer r) {
+			GWTBugFixing = 0;
 			onLoad();
 		}
 
@@ -378,6 +369,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			createForms(articles, retailer);
 		}
 	};
+
 	/**
 	 * Callback um die Retailer der Gruppe aus der DB zu finden. Bei Erfolg werden
 	 * die Artikel der Einkaufsliste gesucht.
@@ -389,6 +381,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Vector<Retailer> r) {
+
 			for (Retailer retailer : r) {
 				editorService.findAllArticleByGroceryListIdAndRetailerId(groceryList.getId(), retailer.getId(),
 						new ArticleCallback(retailer));
@@ -404,6 +397,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Retailer r) {
+			GWTBugFixing = 0;
 			onLoad();
 		}
 	};
@@ -420,61 +414,100 @@ public class ShoppingListForm extends HorizontalPanel {
 			editorService.createRetailer(r, newRetailerCallback);
 		}
 	}
-	
+
 	/**
 	 * ClickHandler um den Namen der Einkaufsliste zu aendern
 	 */
-	public class ChangeGlNameButtonClickHandler implements ClickHandler {
-		public ChangeGlNameButtonClickHandler(GroceryList g, String glName) {
-			groceryList = g;
+	class ChangeGlNameButtonClickHandler implements ClickHandler {
+		GroceryList gl;
+		Panel panel;
+
+		public ChangeGlNameButtonClickHandler(GroceryList g, Panel p) {
+			gl = g;
+			panel = p;
 		}
-		@Override
+
 		public void onClick(ClickEvent e) {
-			if(glChangeNameTextbox.getText() != null && glChangeNameTextbox.getText() !="" && glChangeNameTextbox.getText().length() < 100) {
-				final GroceryList failSafeGl = groceryList;
+			Button saveButton = new Button(
+					"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
+			saveButton.setStyleName("icon-button");
+			saveButton.addClickHandler(new SaveGLClickhandler(gl, panel));
+			glChangeNameTextbox.setWidth(glNameLabel.getOffsetWidth() + "px");
+			panel.clear();
+			glChangeNameTextbox.setStyleName("h1");
+			glChangeNameTextbox.addStyleName("tesxtbox");
+			glChangeNameTextbox.setText(gl.getGroceryListName());
+			panel.add(glChangeNameTextbox);
+			panel.add(saveButton);
+		}
+	}
 
-				groceryList.setGroceryListName(glChangeNameTextbox.getText());
+	/**
+	 * Clickhanbler, um den geänderten Name einer GroceryList zu bestätigen
+	 *
+	 */
+	class SaveGLClickhandler implements ClickHandler {
+		GroceryList gl;
+		Panel panel;
 
-				editorService.saveGroceryList(groceryList, new AsyncCallback<GroceryList>() {
-				@Override
-				public void onFailure(Throwable arg0) {
+		public SaveGLClickhandler(GroceryList g, Panel p) {
+			gl = g;
+			panel = p;
+		}
 
-					groceryList.setGroceryListName(failSafeGl.getGroceryListName());
-					Window.alert("Fehler: Einkaufsliste konnte nicht umbenannt werden");
-				}
-				@Override
-				public void onSuccess(GroceryList arg0) {
-					Window.alert("Einkaufsliste wurde in "+arg0.getGroceryListName()+" umbenannt");
-					//ggf. noch temporaere Loesung
-					Window.Location.replace("/Scart.html");
-					
-					//RootPanel.get("navigation").clear();
-					//RootPanel.get("navigation").add(new GroupForm(user));
-				}
-		});
+		public void onClick(ClickEvent arg0) {
+			if (glChangeNameTextbox.getText() != null && glChangeNameTextbox.getText() != ""
+					&& glChangeNameTextbox.getText().length() < 30) {
+				final GroceryList failSafeGl = gl;
+
+				gl.setGroceryListName(glChangeNameTextbox.getText());
+
+				editorService.saveGroceryList(gl, new AsyncCallback<GroceryList>() {
+
+					public void onFailure(Throwable arg0) {
+						groceryList.setGroceryListName(failSafeGl.getGroceryListName());
+						Window.alert("Fehler: Einkaufsliste konnte nicht umbenannt werden");
+					}
+
+					public void onSuccess(GroceryList arg0) {
+						GWTBugFixing = 0;
+						onLoad();
+						GroupForm groupForm = new GroupForm(user);
+						groupForm.addStyleName("navigation");
+						groupForm.setHeight("100%");
+						RootPanel.get("navigation").clear();
+						RootPanel.get("navigation").add(groupForm);
+
+					}
+				});
 			} else {
 				Window.alert("Fehler: Geben Sie einen passenden Namen für die Einkaufsliste ein");
 			}
+		}
+
 	}
-}
+
 	/**
-	 * ClickHandler um eine Einkaufsliste zu loeschen.
-	 * Der User muss auch Owner der Einkaufsliste sein, um diese loeschen zu koennen.
+	 * ClickHandler um eine Einkaufsliste zu loeschen. Der User muss auch Owner der
+	 * Einkaufsliste sein, um diese loeschen zu koennen.
+	 * 
 	 * @author vanduyho (DialogBox)
 	 */
-	public class DeleteGlClickHandler implements ClickHandler {
+	class DeleteGlClickHandler implements ClickHandler {
 		public DeleteGlClickHandler(GroceryList g) {
 			groceryList = g;
 		}
-		@Override
+
 		public void onClick(ClickEvent e) {
-			//if(groceryList.getOwnerId()==user.getId()) {   //If-Abfrage evtl. noetig damit nicht jeder loeschen kann
+			// if(groceryList.getOwnerId()==user.getId()) { //If-Abfrage evtl. noetig damit
+			// nicht jeder loeschen kann
 			DialogBox db = new DialogBox();
 			VerticalPanel vp = new VerticalPanel();
 			HorizontalPanel hp = new HorizontalPanel();
 			Button yB = new Button("Ja", new YesDeleteButtonClickHandler(db));
 			Button nB = new Button("Nein", new NoDeleteButtonClickHandler(db));
-			Label l = new HTML("<h1> Einkaufsliste löschen </h1> <p> Möchten Sie diese Einkaufsliste endgültig löschen? </p> <br>");
+			Label l = new HTML(
+					"<h1> Einkaufsliste löschen </h1> <p> Möchten Sie diese Einkaufsliste endgültig löschen? </p> <br>");
 
 			vp.add(l);
 			hp.add(yB);
@@ -488,25 +521,27 @@ public class ShoppingListForm extends HorizontalPanel {
 
 			db.add(vp);
 			/*
-			} else {
-				Window.alert("Fehler: Sie sind "+user.getId()+". Besitzer ist aber "+groceryList.getOwnerId()+". Sie sind nicht der Besitzer dieser Einkaufsliste");
-			}
-			*/
+			 * } else { Window.alert("Fehler: Sie sind "+user.getId()+". Besitzer ist aber "
+			 * +groceryList.getOwnerId()
+			 * +". Sie sind nicht der Besitzer dieser Einkaufsliste"); }
+			 */
+		}
 	}
-}
+
 	/**
 	 * ClickHandler um das Loeschen der Einkaufsliste zu bestaetigen
 	 */
 	class YesDeleteButtonClickHandler implements ClickHandler {
 		DialogBox dbox = new DialogBox();
+
 		public YesDeleteButtonClickHandler(DialogBox db) {
 			this.dbox = db;
 		}
-		
+
 		public void onClick(ClickEvent event) {
-			
+
 			DeleteGroceryList(group, groceryList);
-			
+
 			dbox.hide();
 			dbox.clear();
 			dbox.removeFromParent();
@@ -520,9 +555,11 @@ public class ShoppingListForm extends HorizontalPanel {
 	 */
 	class NoDeleteButtonClickHandler implements ClickHandler {
 		DialogBox dbox = new DialogBox();
+
 		public NoDeleteButtonClickHandler(DialogBox db) {
 			this.dbox = db;
 		}
+
 		public void onClick(ClickEvent event) {
 			dbox.hide();
 			dbox.clear();
@@ -531,9 +568,10 @@ public class ShoppingListForm extends HorizontalPanel {
 			dbox.setGlassEnabled(false);
 		}
 	}
-	
+
 	/**
 	 * Methode um eine Einkaufsliste sicher aus der Datenbank zu loeschen
+	 * 
 	 * @param g beschreibt ein Group Objekt
 	 * @param gl beschreibt ein GroceryList Objekt
 	 */
@@ -541,28 +579,29 @@ public class ShoppingListForm extends HorizontalPanel {
 		final Group tempGroup = g;
 		final GroceryList tempgGroceryList = gl;
 		try {
-			if(tempGroup != null && tempGroup.getId()>0) {
+			if (tempGroup != null && tempGroup.getId() > 0) {
 				editorService.findAllGroceryListByGroupId(tempGroup.getId(), new AsyncCallback<Vector<GroceryList>>() {
-					@Override
+
 					public void onFailure(Throwable arg0) {
 						Window.alert("Fehler: Einkaufslisten der Gruppe konnten nicht gefunden werden.");
 					}
-					@Override
+
 					public void onSuccess(Vector<GroceryList> arg0) {
-						if(arg0.size()>1) {
+						if (arg0.size() > 1) {
 							editorService.deleteAllArticlesFromGroceryList(tempgGroceryList, new AsyncCallback<Void>() {
-								@Override
+
 								public void onFailure(Throwable arg0) {
-									Window.alert("Fehler: Die Einkaufsliste konnte vor dem löschen nicht geleert werden.");
+									Window.alert(
+											"Fehler: Die Einkaufsliste konnte vor dem löschen nicht geleert werden.");
 								}
-								@Override
+
 								public void onSuccess(Void arg0) {
 									editorService.deleteGroceryList(tempgGroceryList, new AsyncCallback<GroceryList>() {
-										@Override
+
 										public void onFailure(Throwable arg0) {
 											Window.alert("Fehler: Die Einkaufsliste konnte nicht gelöscht werden.");
 										}
-										@Override
+
 										public void onSuccess(GroceryList arg0) {
 											Window.alert("Die Einkaufsliste wurde gelöscht");
 											Window.Location.replace("/Scart.html");
@@ -577,13 +616,13 @@ public class ShoppingListForm extends HorizontalPanel {
 						}
 					}
 				});
-				} else {
-					Window.alert("Das Group-Objekt ist null");
-				}
-		} catch(IllegalArgumentException e) { 
+			} else {
+				Window.alert("Das Group-Objekt ist null");
+			}
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new IllegalArgumentException(e); 
+			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 }

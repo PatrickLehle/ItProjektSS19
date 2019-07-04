@@ -314,17 +314,17 @@ public class RetailerMapper {
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
-
+			System.out.println("retailer: " + retailer.getGroup().getId());
 			stmt.setString(1, retailer.getRetailerName());
-			stmt.setInt(2, retailer.getId());
-			stmt.setInt(3, retailer.getGroup().getId());
-			stmt.setInt(4, retailer.getUser().getId());
+			stmt.setInt(2, retailer.getGroup().getId());
+			stmt.setInt(3, retailer.getUser().getId());
+			stmt.setInt(4, retailer.getId());
 			stmt.executeUpdate();
+			return retailer;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return retailer;
 	}
 
 	/**

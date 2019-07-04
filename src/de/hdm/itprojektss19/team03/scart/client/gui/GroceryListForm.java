@@ -64,7 +64,8 @@ public class GroceryListForm extends VerticalPanel {
 
 	Button addBtn = new Button("<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
 	Button editBtn = new Button("<image src='/images/editButton.png' width='16px' height='16px' align='center'/>");
-	Button deleteBtn = new Button("<image src='/images/minusButton.png' width='16px' height='16px' align='center'/>");
+	Button deleteBtn = new Button(
+			"<image src='/images/trash-can-outline.png' width='16px' height='16px' align='center'/>");
 	Button checkBtn = new Button();
 
 	Boolean addBtnBoolean = false;

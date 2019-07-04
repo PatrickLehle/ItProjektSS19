@@ -284,7 +284,7 @@ public class GroupForm extends VerticalPanel {
 
 				public void onFailure(Throwable arg0) {
 
-					Window.alert("Fehler: Neue Groceryliste konte nicht erstellt werden");
+					Window.alert("Fehler: Neue Groceryliste konnte nicht erstellt werden");
 				}
 
 				public void onSuccess(GroceryList arg0) {
