@@ -42,7 +42,7 @@ public class EditGroup extends VerticalPanel {
 	User user = new User();
 
 	Vector<Group> GrouptoUpdate = new Vector<Group>();
-//	Vector<String> allGroups = new Vector<String>();
+	Vector<Group> allGroups = new Vector<Group>();
 //	Vector<Integer> allGroupIds = new Vector<Integer>();
 //	Vector<String> choosenGroups = new Vector<String>();
 	Vector<User> allUsers = new Vector<User>();
@@ -177,16 +177,8 @@ public class EditGroup extends VerticalPanel {
 	 */
 	public void removeUserFromGroup(User user, Group group) {
 
-		try {
-			if (user == null || group == null) {
-				throw new NullPointerException();
-			}
-			GWT.log(user.getId() + " delete");
-			editorVerwaltung.removeUserFromGroup(user, group, new RemoveUserFromGroupCallback());
+		editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsByUserCallback(user, group));
 
-		} catch (NullPointerException e) {
-			Window.alert(e.toString() + "\n" + "User/Group ist null");
-		}
 	}
 
 	/**
@@ -230,7 +222,9 @@ public class EditGroup extends VerticalPanel {
 
 		@Override
 		public void onClick(ClickEvent arg0) {
-			removeUserFromGroup(user, group);
+			// removeUserFromGroup(user, group);
+			editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsByUserCallback(user, group));
+			GWT.log("clickhandler2");
 		}
 	}
 
@@ -248,7 +242,9 @@ public class EditGroup extends VerticalPanel {
 		}
 
 		public void onClick(ClickEvent arg0) {
-			removeUserFromGroup(user, group);
+			// removeUserFromGroup(user, group);
+			editorVerwaltung.findAllGroupsByUserId(user.getId(), new AllGroupsByUserCallback(user, group));
+			GWT.log("clickhandler2");
 
 		}
 	}
@@ -443,7 +439,45 @@ public class EditGroup extends VerticalPanel {
 			groupForm.setStyleName("navigation");
 			RootPanel.get("navigation").add(groupForm);
 			onLoad();
-			Window.alert("User wurde aus der Gruppe gelöscht.");
+			Window.alert("User wurde aus der Gruppe gelöscht!");
+		}
+	}
+
+	class AllGroupsByUserCallback implements AsyncCallback<Vector<Group>> {
+		User user = new User();
+		Group group = new Group();
+
+		public AllGroupsByUserCallback(User u, Group g) {
+			this.user = u;
+			this.group = g;
+
+		}
+
+		@Override
+		public void onFailure(Throwable arg0) {
+			Window.alert("Gruppen des User konnten nicht gefunden werden");
+
+		}
+
+		@Override
+		public void onSuccess(Vector<Group> groups) {
+			allGroups = groups;
+
+			try {
+
+//				if (allGroups.size() > 1) {
+				editorVerwaltung.removeUserFromGroup(user, group, new RemoveUserFromGroupCallback());
+
+//				}
+//					else {
+//					String lastGroup = allGroups.get(1).getGroupName();
+//					Window.alert("Die Gruppe " + lastGroup
+//							+ " ist deine/seine letzte Gruppe und kann nicht gelöscht werden.");
+//				}
+			} catch (NullPointerException e) {
+				Window.alert(e.toString() + "\n" + "User konnte nicht gelöscht werden");
+			}
+
 		}
 	}
 
