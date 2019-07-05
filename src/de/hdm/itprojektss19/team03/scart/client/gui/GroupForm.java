@@ -72,6 +72,9 @@ public class GroupForm extends VerticalPanel {
 	 */
 	public void onLoad() {
 		// super.onLoad();
+		navigation.clear();
+		groupsPanel.clear();
+
 		loadingPanel.add(new LoadingForm());
 		outer.addStyleName("inner-content");
 
@@ -81,11 +84,11 @@ public class GroupForm extends VerticalPanel {
 
 		navigation.setHorizontalAlignment(ALIGN_LEFT);
 		navigation.setVerticalAlignment(ALIGN_TOP);
-		scrollPanel.add(groupLabel);
-		navigation.add(scrollPanel);
+		navigation.add(groupLabel);
 		navigation.add(loadingPanel);
+		scrollPanel.setWidget(navigation);
 
-		this.add(navigation);
+		this.add(scrollPanel);
 
 		// editorVerwaltung.findAllGroceryListByUserId(user.getId(), allGroupsCallback);
 		// //Old Method

@@ -209,26 +209,24 @@ public class GroceryListForm extends VerticalPanel {
 		for (articleNumber = 0; articleNumber < articleVector.size(); articleNumber++) {
 			if (articleVector.get(articleNumber).getDelDat() == null
 					&& articleVector.get(articleNumber).getCheckBoolean() == false) {
-				articleTable.setText(falseCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				articleTable.setText(falseCount, 1, articleVector.get(articleNumber).getName());
 				articleTable.setText(falseCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				articleTable.setText(falseCount, 3, articleVector.get(articleNumber).getUnit());
 				if (articleVector.get(articleNumber).getFav()) {
-					articleTable.setWidget(falseCount, 5, new FavButton(articleVector.get(articleNumber), false));
+					articleTable.setWidget(falseCount, 0, new FavButton(articleVector.get(articleNumber), false));
 				} else {
-					articleTable.setWidget(falseCount, 5, new FavButton(articleVector.get(articleNumber), true));
+					articleTable.setWidget(falseCount, 0, new FavButton(articleVector.get(articleNumber), true));
 				}
 				falseCount++;
 			} else if (articleVector.get(articleNumber).getDelDat() != null
 					&& articleVector.get(articleNumber).getCheckBoolean() == false) {
-				boughtTable.setText(trueCount, 0, Integer.toString(articleVector.get(articleNumber).getId()));
 				boughtTable.setText(trueCount, 1, articleVector.get(articleNumber).getName());
 				boughtTable.setText(trueCount, 2, Integer.toString(articleVector.get(articleNumber).getQuantity()));
 				boughtTable.setText(trueCount, 3, articleVector.get(articleNumber).getUnit());
 				if (articleVector.get(articleNumber).getFav()) {
-					boughtTable.setWidget(trueCount, 5, new FavButton(articleVector.get(articleNumber), false));
+					boughtTable.setWidget(trueCount, 0, new FavButton(articleVector.get(articleNumber), false));
 				} else {
-					boughtTable.setWidget(trueCount, 5, new FavButton(articleVector.get(articleNumber), true));
+					boughtTable.setWidget(trueCount, 0, new FavButton(articleVector.get(articleNumber), true));
 				}
 				trueCount++;
 				visibleNum = trueCount;

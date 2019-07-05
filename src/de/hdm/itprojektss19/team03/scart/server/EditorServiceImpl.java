@@ -46,7 +46,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	/**
 	 * Generates Identicon
 	 * 
-	 * @see <a href="https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
+	 * @see <a href=
+	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
 	 * 
 	 * @see <a href=
 	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
@@ -191,7 +192,8 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * 
 	 * @param emailAdress beschreibt die Email Adresse eines Users im System
 	 * 
-	 * @return user gibt einen User zurueck der zum Uebergabe Parameter passt zurueck.
+	 * @return user gibt einen User zurueck der zum Uebergabe Parameter passt
+	 *         zurueck.
 	 */
 	public User createUser(String emailAdress) throws IllegalArgumentException, DatabaseException {
 
@@ -217,13 +219,12 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
 
 	public User updateUser(User u) throws IllegalArgumentException, DatabaseException {
-		
+
 		try {
 			return uMapper.update(u);
-	
+
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -999,6 +1000,25 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
+	 * Auslesen aller einzigartigen Retailer Objekte einer Groupe und eines
+	 * Retailers
+	 * 
+	 * @param group GruppenObjekt
+	 * @param gl GroceryListObjekt
+	 * @return gibt alle Retailer Objekte zurueck die in der Gruppe sind.
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group group, GroceryList gl)
+			throws IllegalArgumentException {
+		try {
+			return this.rMapper.getAllDistinctRetailerByGroupAndGroceryList(group, gl);
+
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	/**
 	 * Auslesen aller Article Objekte eines uebergebenen Retailer Objekts
 	 * 
 	 * @param r beschreibt ein Retailer Objekt
@@ -1155,7 +1175,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	/**
 	 * Loeschen aller Article Objekt aus einem GroceryList Objekt
 	 * 

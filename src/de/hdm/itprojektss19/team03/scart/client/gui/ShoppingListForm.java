@@ -104,7 +104,8 @@ public class ShoppingListForm extends HorizontalPanel {
 		outerPanel.add(addRetailerButton);
 		outerPanel.add(retailersPanel);
 		this.add(outerPanel);
-		editorService.getAllRetailerByGroupId(group.getId(), retailerCallback);
+		Window.alert(group.getId() + " group, " + groceryList.getId() + " gl");
+		editorService.getAllDistinctRetailerByGroupAndGroceryList(group, groceryList, retailerCallback);
 	}
 
 	/**

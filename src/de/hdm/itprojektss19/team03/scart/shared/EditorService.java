@@ -65,8 +65,6 @@ public interface EditorService extends RemoteService {
 	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public void deleteUser(User u) throws IllegalArgumentException, DatabaseException;
-	
-	
 
 	/**
 	 * 
@@ -74,12 +72,14 @@ public interface EditorService extends RemoteService {
 	 *      #updateUser(User u);
 	 * @param u beschreibt ein User Objekt
 	 * @return gibt upgedatete User zurück
-	 * @throws IllegalArgumentException ensteht bei der Übergabe eines nichterlaubten Arguments
-	 * @throws DatabaseException ensteht durch ein Attribut, dass nicht in der Datenbank vorhanden ist, aber dennoch gesetzt wurde
+	 * @throws IllegalArgumentException ensteht bei der Übergabe eines
+	 *             nichterlaubten Arguments
+	 * @throws DatabaseException ensteht durch ein Attribut, dass nicht in der
+	 *             Datenbank vorhanden ist, aber dennoch gesetzt wurde
 	 * 
 	 */
 	public User updateUser(User u) throws IllegalArgumentException, DatabaseException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #getUserById(int userId);
@@ -602,6 +602,17 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException;
 
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 
+	 * @param group GruppenObjekt
+	 * @param gl GroceryList Objekt
+	 * @return gibt alle eindeutigen Retailer einer Gruppe zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group group, GroceryList gl)
+			throws IllegalArgumentException;
+
 	// GroceryListArticle===========================================================================
 
 	/**
@@ -644,7 +655,7 @@ public interface EditorService extends RemoteService {
 	 *             erlaubten Arguments.
 	 */
 	public void deleteArticleFromAllLists(Article a) throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteAllArticlesFromGroceryList(GroceryList gl);

@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -223,7 +224,7 @@ public class RetailerMapper {
 	 * 
 	 * @param groupId Die besagte GroceryList
 	 * @return einen Vector aus gefundenen Retailers
-	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 * @throws DatabaseException Falls die Datenbankabfrage fehlschlaegt
 	 */
 	public Vector<Retailer> getAllRetailersByGroceryListId(int groceryListId) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -244,6 +245,48 @@ public class RetailerMapper {
 				Group group = new Group();
 				group.setGroupName(rs.getString("groupName"));
 				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * Gibt alle einzigartigen Retailer nach Gruppe und GroceryList aus
+	 * 
+	 * @param g Group
+	 * @param gr GroceryList
+	 * @return Vector aus gefundenen retailern
+	 * @throws DatabaseException DatabaseException Falls die Datenbankabfrage
+	 *             fehlschlaegt
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group g, GroceryList gr)
+			throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT DISTINCT retailerId, retailerName, retailerGroupId, retailerUserId FROM retailer JOIN "
+							+ "article ON retailer.retailerId = article.articleRetailerId JOIN grocerylistarticle ON "
+							+ "grocerylistarticle.articleId = article.articleId WHERE grocerylistarticle.grocerylistId = "
+							+ gr.getId() + " AND article.articleGroupId = " + g.getId());
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("retailerUserId"));
+				Group group = new Group();
+				group.setId(rs.getInt("retailerGroupId"));
 				retailer.setId(rs.getInt("retailerId"));
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setUser(user);
