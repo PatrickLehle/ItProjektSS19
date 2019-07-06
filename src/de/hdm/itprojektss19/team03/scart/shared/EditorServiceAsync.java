@@ -136,6 +136,8 @@ public interface EditorServiceAsync {
 	void deleteRetailer(Retailer r, AsyncCallback<Retailer> asyncCallback);
 
 	void findAllRetailer(AsyncCallback<Vector<Retailer>> asyncCallback);
+	
+	void findAllRetailerReport(AsyncCallback<Vector<Retailer>> asyncCallback);
 
 	void getAllRetailerByGroupId(int groupId, AsyncCallback<Vector<Retailer>> asyncCallback);
 

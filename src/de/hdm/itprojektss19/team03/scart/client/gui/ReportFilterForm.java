@@ -209,7 +209,7 @@ public class ReportFilterForm extends VerticalPanel {
 //END=========================================================================================================
 
 		editorVerwaltung.findAllGroupsByUserId(user.getId(),new AllGroupsCallback());
-		editorVerwaltung.findAllRetailer( new AllRetailersCallback());
+		editorVerwaltung.findAllRetailerReport( new AllRetailersCallback());
 
 		// TIMEFRAME-CHECK-FOR-CHANGE===================
 		Timer refresh = new Timer() {
