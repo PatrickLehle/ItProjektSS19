@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 01. Jul 2019 um 01:11
+-- Erstellungszeit: 04. Jul 2019 um 11:30
 -- Server-Version: 5.7.24-log
 -- PHP-Version: 7.2.10
 
@@ -28,19 +28,19 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `article`
 --
 
-
-DROP DATABASE itprojektss19;
-CREATE DATABASE itprojektss19;
+DROP DATABASE itprojektss19; 
+CREATE DATABASE itprojektss19; 
 USE itprojektss19;
+
 
 CREATE TABLE `article` (
   `articleId` int(100) NOT NULL,
   `articleName` varchar(100) NOT NULL,
   `articleQuantity` int(100) NOT NULL,
   `articleUnit` varchar(100) NOT NULL,
-  `articleRetailerId` int(100) NOT NULL,
-  `articleOwnerId` int(100) NOT NULL,
-  `articleGroupId` int(11) NOT NULL,
+  `articleRetailerId` int(100) DEFAULT NULL,
+  `articleOwnerId` int(100) DEFAULT NULL,
+  `articleGroupId` int(11) DEFAULT NULL,
   `articleCreationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `articleModDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `articleBoolean` tinyint(1) NOT NULL,
@@ -59,7 +59,7 @@ CREATE TABLE `grocerylist` (
   `groceryListName` varchar(100) NOT NULL,
   `groceryListCreationDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `groceryListModDat` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `groceryListOwnerId` int(100) NOT NULL,
+  `groceryListOwnerId` int(100) DEFAULT NULL,
   `groceryListGroupId` int(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -71,7 +71,8 @@ CREATE TABLE `grocerylist` (
 
 CREATE TABLE `grocerylistarticle` (
   `grocerylistId` int(11) NOT NULL,
-  `articleId` int(11) NOT NULL
+  `articleId` int(11) NOT NULL,
+  `retailerId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -106,7 +107,7 @@ CREATE TABLE `retailer` (
   `retailerId` int(100) NOT NULL,
   `retailerName` varchar(100) NOT NULL,
   `retailerGroupId` int(11) NOT NULL,
-  `retailerUserId` int(11) NOT NULL
+  `retailerUserId` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -147,7 +148,8 @@ ALTER TABLE `grocerylist`
 --
 ALTER TABLE `grocerylistarticle`
   ADD PRIMARY KEY (`articleId`,`grocerylistId`) USING BTREE,
-  ADD KEY `grocerylistId` (`grocerylistId`);
+  ADD KEY `grocerylistId` (`grocerylistId`),
+  ADD KEY `grocerylistarticle_ibfk_3` (`retailerId`);
 
 --
 -- Indizes für die Tabelle `groups`
@@ -191,13 +193,13 @@ ALTER TABLE `article`
 -- AUTO_INCREMENT für Tabelle `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  MODIFY `groceryListId` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `groceryListId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `groupId` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `groupId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `retailer`
@@ -209,7 +211,7 @@ ALTER TABLE `retailer`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `userId` int(100) NOT NULL AUTO_INCREMENT;
+  MODIFY `userId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints der exportierten Tabellen
@@ -219,39 +221,38 @@ ALTER TABLE `user`
 -- Constraints der Tabelle `article`
 --
 ALTER TABLE `article`
-  ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`articleOwnerId`) REFERENCES `user` (`userId`),
-  ADD CONSTRAINT `article_ibfk_2` FOREIGN KEY (`articleOwnerId`) REFERENCES `user` (`userId`),
-  ADD CONSTRAINT `groupId` FOREIGN KEY (`articleGroupId`) REFERENCES `groups` (`groupId`),
-  ADD CONSTRAINT `retailerArticle` FOREIGN KEY (`articleRetailerId`) REFERENCES `retailer` (`retailerId`);
+  ADD CONSTRAINT `article_ibfk_1` FOREIGN KEY (`articleOwnerId`) REFERENCES `user` (`userId`) ON DELETE SET NULL,
+  ADD CONSTRAINT `groupId` FOREIGN KEY (`articleGroupId`) REFERENCES `groups` (`groupId`) ON DELETE SET NULL,
+  ADD CONSTRAINT `retailerArticle` FOREIGN KEY (`articleRetailerId`) REFERENCES `retailer` (`retailerId`) ON DELETE SET NULL;
 
 --
 -- Constraints der Tabelle `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groceryListOwnerId`) REFERENCES `user` (`userId`),
-  ADD CONSTRAINT `groupGrocerylist` FOREIGN KEY (`groceryListGroupId`) REFERENCES `groups` (`groupId`),
-  ADD CONSTRAINT `owner` FOREIGN KEY (`groceryListOwnerId`) REFERENCES `user` (`userId`);
+  ADD CONSTRAINT `grocerylist_ibfk_1` FOREIGN KEY (`groceryListOwnerId`) REFERENCES `user` (`userId`) ON DELETE SET NULL,
+  ADD CONSTRAINT `groupGrocerylist` FOREIGN KEY (`groceryListGroupId`) REFERENCES `groups` (`groupId`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `grocerylistarticle`
 --
 ALTER TABLE `grocerylistarticle`
-  ADD CONSTRAINT `grocerylistarticle_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`articleId`),
-  ADD CONSTRAINT `grocerylistarticle_ibfk_2` FOREIGN KEY (`grocerylistId`) REFERENCES `grocerylist` (`groceryListId`);
+  ADD CONSTRAINT `grocerylistarticle_ibfk_1` FOREIGN KEY (`articleId`) REFERENCES `article` (`articleId`) ON DELETE CASCADE,
+  ADD CONSTRAINT `grocerylistarticle_ibfk_2` FOREIGN KEY (`grocerylistId`) REFERENCES `grocerylist` (`groceryListId`) ON DELETE CASCADE,
+  ADD CONSTRAINT `grocerylistarticle_ibfk_3` FOREIGN KEY (`retailerId`) REFERENCES `retailer` (`retailerId`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `groupuser`
 --
 ALTER TABLE `groupuser`
-  ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`groupId`),
-  ADD CONSTRAINT `groupuser_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`);
+  ADD CONSTRAINT `groupuser_ibfk_1` FOREIGN KEY (`groupId`) REFERENCES `groups` (`groupId`) ON DELETE CASCADE,
+  ADD CONSTRAINT `groupuser_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`userId`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `retailer`
 --
 ALTER TABLE `retailer`
-  ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`retailerGroupId`) REFERENCES `groups` (`groupId`),
-  ADD CONSTRAINT `retailer_ibfk_2` FOREIGN KEY (`retailerUserId`) REFERENCES `user` (`userId`);
+  ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`retailerGroupId`) REFERENCES `groups` (`groupId`) ON DELETE CASCADE,
+  ADD CONSTRAINT `retailer_ibfk_2` FOREIGN KEY (`retailerUserId`) REFERENCES `user` (`userId`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

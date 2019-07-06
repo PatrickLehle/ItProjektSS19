@@ -15,7 +15,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
 
 public interface EditorServiceAsync {
-	void generateIdenticons(String text, int image_width, int image_height, AsyncCallback<String> asyncCallback);
+	void generateIdenticons(User u, int image_width, int image_height, AsyncCallback<String> asyncCallback);
 
 	void init(AsyncCallback<Void> callback);
 
@@ -26,6 +26,8 @@ public interface EditorServiceAsync {
 	void createUser(String emailAdress, AsyncCallback<User> asyncCallback);
 
 	void deleteUser(User u, AsyncCallback<Void> asyncCallback);
+
+	void updateUser(User u, AsyncCallback<User> asyncCallback);
 
 	void getUserById(int userId, AsyncCallback<User> asyncCallback);
 
@@ -89,6 +91,9 @@ public interface EditorServiceAsync {
 
 	void findAllArticleByGroceryListId(int id, AsyncCallback<Vector<Article>> asyncCallback);
 
+	void findAllArticleByGroceryListIdAndRetailerId(int groceryListId, int retailerId,
+			AsyncCallback<Vector<Article>> asyncCallback);
+
 	// ARTICLE===========================================================================
 
 	void createArticle(Article a, AsyncCallback<Article> asyncCallback);
@@ -143,6 +148,11 @@ public interface EditorServiceAsync {
 
 	void getRetailerById(int retailerId, AsyncCallback<Retailer> asyncCallback);
 
+	void getAllDistinctRetailerByGroupAndGroceryList(Group group, GroceryList gl,
+			AsyncCallback<Vector<Retailer>> asyncCallback);
+
+	void getAllDistinctRetailerByGroceryList(GroceryList gl, AsyncCallback<Vector<Retailer>> asyncCallback);
+
 	// GroceryListArticle===========================================================================
 
 	void addArticleToGroceryList(GroceryList gl, Article a, AsyncCallback<GroceryListArticle> asyncCallback);
@@ -152,4 +162,6 @@ public interface EditorServiceAsync {
 	void findAllArticleByGroceryList(GroceryList groceryList, AsyncCallback<Vector<Article>> asyncCallback);
 
 	void deleteArticleFromAllLists(Article a, AsyncCallback<Void> asyncCallback);
+
+	void deleteAllArticlesFromGroceryList(GroceryList gl, AsyncCallback<Void> asyncCallback);
 }

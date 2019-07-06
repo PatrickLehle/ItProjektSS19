@@ -9,6 +9,7 @@ import java.util.Vector;
 
 import de.hdm.itprojektss19.team03.scart.server.ServersideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.DatabaseException;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -51,9 +52,10 @@ public class RetailerMapper {
 
 	/**
 	 * Sucht eine Retailer anhand seiner ID
+	 * 
 	 * @param id beschreibt die Eindeutigkeit eines Retailers via id
 	 * @return Das Retailer-Objekt, falls ein passendes gefunden wurde.
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer findByKey(int id) throws DatabaseException {
 
@@ -80,6 +82,7 @@ public class RetailerMapper {
 				retailer.setUser(user);
 				retailer.setId(rs.getInt("retailerId"));
 				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				return retailer;
 			}
 		} catch (SQLException e2) {
@@ -95,7 +98,7 @@ public class RetailerMapper {
 	 * @param name beschreibt den Namen des Retailer Objekts
 	 * @param r beschreibt das Retailer Objekt
 	 * @return Ergebnis Vector aller Retailer mit dem selben Namen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findRetailerByName(String name, Retailer r) throws DatabaseException {
 		Connection con = null;
@@ -125,6 +128,7 @@ public class RetailerMapper {
 				group.setId(rs.getInt("groupId"));
 				retailer.setGroup(group);
 				retailer.setUser(user);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				result.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -138,7 +142,7 @@ public class RetailerMapper {
 	 * Sucht alle Retailers
 	 * 
 	 * @return Vector mit allen gefundenen Retailers
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Vector<Retailer> findAll() throws DatabaseException {
 		// DB-Verbindung herstellen
@@ -164,6 +168,7 @@ public class RetailerMapper {
 				retailer.setId(rs.getInt("retailerId"));
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailer.setUser(user);
 				retailers.addElement(retailer);
 			}
@@ -175,6 +180,14 @@ public class RetailerMapper {
 		return retailers;
 	}
 
+	/**
+	 * 
+	 * Gibt alle Retailer einer Gruppe zurueck
+	 * 
+	 * @param groupId Die besagte Gruppe
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Vector<Retailer> getAllRetailersByGroupId(int groupId) throws DatabaseException {
 		Connection con = DBConnection.connection();
 		Vector<Retailer> retailers = new Vector<Retailer>();
@@ -198,6 +211,131 @@ public class RetailerMapper {
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setUser(user);
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * 
+	 * Gibt alle Retailer einer GroceryList zurueck
+	 * 
+	 * @param groupId Die besagte GroceryList
+	 * @return einen Vector aus gefundenen Retailers
+	 * @throws DatabaseException Falls die Datenbankabfrage fehlschlaegt
+	 */
+	public Vector<Retailer> getAllRetailersByGroceryListId(int groceryListId) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT * FROM retailer JOIN user ON user.userId = retailer.retailerUserId JOIN groups ON groups.groupId = retailer.retailerGroupId WHERE retailerGroupId="
+							+ groceryListId);
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("userId"));
+				user.setEmail(rs.getString("userEmail"));
+				user.setUsername(rs.getString("userName"));
+				Group group = new Group();
+				group.setGroupName(rs.getString("groupName"));
+				group.setId(rs.getInt("groupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * Gibt alle einzigartigen Retailer nach Gruppe und GroceryList aus
+	 * 
+	 * @param g Group
+	 * @param gr GroceryList
+	 * @return Vector aus gefundenen retailern
+	 * @throws DatabaseException DatabaseException Falls die Datenbankabfrage
+	 *             fehlschlaegt
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group g, GroceryList gr)
+			throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT DISTINCT retailer.retailerId, retailer.retailerName, retailer.retailerGroupId, retailer.retailerUserId FROM retailer JOIN "
+							+ "article ON retailer.retailerId = article.articleRetailerId JOIN grocerylistarticle ON "
+							+ "grocerylistarticle.articleId = article.articleId WHERE grocerylistarticle.grocerylistId = "
+							+ gr.getId() + " AND article.articleGroupId = " + g.getId());
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("retailerUserId"));
+				Group group = new Group();
+				group.setId(rs.getInt("retailerGroupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * Gibt alle einzigartigen Retailer nach GroceryList aus
+	 * 
+	 * @param gr GroceryList
+	 * @return Vector aus gefundenen retailern
+	 * @throws DatabaseException DatabaseException Falls die Datenbankabfrage
+	 *             fehlschlaegt
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroceryList(GroceryList gr) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT DISTINCT retailer.retailerId, retailer.retailerName, "
+					+ "retailer.retailerGroupId, retailer.retailerGroceryListId, "
+					+ "retailer.retailerUserId FROM retailer WHERE retailer.retailerGroceryListId =" + gr.getId());
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("retailerUserId"));
+				Group group = new Group();
+				group.setId(rs.getInt("retailerGroupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailers.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -210,16 +348,17 @@ public class RetailerMapper {
 
 	/**
 	 * Fuegt in der Datenbank einen neuen Retailer ein
+	 * 
 	 * @param retailer beschreibt den uebergebeben Retailer
 	 * @return Die Eingefuegte Retailer mit aktueller ID
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer insert(Retailer retailer) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(retailerId) AS maxid FROM retailer";
-		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId) VALUES (?,?,?,?)";
+		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId, retailerGroceryListId) VALUES (?,?,?,?, ?)";
 
 		try {
 			con = DBConnection.connection();
@@ -235,6 +374,7 @@ public class RetailerMapper {
 				stmt.setString(2, retailer.getRetailerName());
 				stmt.setInt(3, retailer.getGroup().getId());
 				stmt.setInt(4, retailer.getUser().getId());
+				stmt.setInt(5, retailer.getGroceryListId());
 				stmt.executeUpdate();
 				return retailer;
 			} else {
@@ -247,40 +387,41 @@ public class RetailerMapper {
 		}
 	}
 
-
-	
 	/**
 	 * aendert einen Retailer in der Datenbank
+	 * 
 	 * @param retailer beschreibt den uebergebenen Retailer
 	 * @return Die Rückgabe ist ein Retailer-Objekt mit seinen neuen Datensaetzen
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public Retailer update(Retailer retailer) throws DatabaseException {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String update = "UPDATE retailer SET retailerName=?, retailerGroupId=?, retailerUserId=? WHERE retailerId=?";
+		String update = "UPDATE retailer SET retailerName=?, retailerGroupId=?, retailerUserId=?, retailerGroceryListId=? WHERE retailerId=?";
 
 		try {
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(update);
-
+			System.out.println("retailer: " + retailer.getGroup().getId());
 			stmt.setString(1, retailer.getRetailerName());
-			stmt.setInt(2, retailer.getId());
-			stmt.setInt(3, retailer.getGroup().getId());
-			stmt.setInt(4, retailer.getUser().getId());
+			stmt.setInt(2, retailer.getGroup().getId());
+			stmt.setInt(3, retailer.getUser().getId());
+			stmt.setInt(4, retailer.getId());
+			stmt.setInt(5, retailer.getGroceryListId());
 			stmt.executeUpdate();
+			return retailer;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return retailer;
 	}
 
 	/**
 	 * Loescht einen Retailer aus der Datenbank
+	 * 
 	 * @param retailer beschreibt den uebergenenen Retailer
-	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
 	 */
 	public void delete(Retailer retailer) throws DatabaseException {
 		Connection con = DBConnection.connection();
@@ -294,6 +435,13 @@ public class RetailerMapper {
 		}
 	}
 
+	/**
+	 * Gibt den Retailer mit einer bestimmten ID zurueck
+	 * 
+	 * @param id nach dieser ID wird gesucht
+	 * @return ein Retailer Objekt
+	 * @throws DatabaseException Falls die Datenbankabfrage Fehlschlaegt
+	 */
 	public Retailer findById(int id) throws DatabaseException {
 
 		Connection con = null;
@@ -318,6 +466,7 @@ public class RetailerMapper {
 				user.setUsername(rs.getString("userName"));
 				r.setId(rs.getInt("retailerId"));
 				r.setRetailerName(rs.getString("retailerName"));
+				r.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				r.setGroup(group);
 				r.setUser(user);
 				return r;
