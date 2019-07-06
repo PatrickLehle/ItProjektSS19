@@ -8,9 +8,11 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
@@ -19,6 +21,7 @@ import com.google.gwt.user.client.ui.Panel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -104,8 +107,7 @@ public class ShoppingListForm extends HorizontalPanel {
 		outerPanel.add(addRetailerButton);
 		outerPanel.add(retailersPanel);
 		this.add(outerPanel);
-		Window.alert(group.getId() + " group, " + groceryList.getId() + " gl");
-		editorService.getAllDistinctRetailerByGroupAndGroceryList(group, groceryList, retailerCallback);
+		editorService.getAllDistinctRetailerByGroceryList(groceryList, retailerCallback);
 	}
 
 	/**
@@ -141,9 +143,7 @@ public class ShoppingListForm extends HorizontalPanel {
 
 		decoPanel.addStyleName("retailers-panel");
 		decoPanel.setWidget(retailerPanel);
-
-		editorService.generateIdenticons(retailer.getUser().getEmail(), 25, 25,
-				new GetPictureCallback(headerPanel, retailer.getUser()));
+		editorService.generateIdenticons(retailer.getUser(), 25, 25, new GetPictureCallback(headerPanel, retailer));
 
 		retailersPanel.add(decoPanel);
 	}
@@ -265,7 +265,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			panel = p;
 		}
 
-		public void onClick(ClickEvent arg0) {
+		public void onClick(ClickEvent c) {
 			retailer.setRetailerName(textbox.getValue());
 			editorService.saveRetailer(retailer, new UpdateRetailerCallback(panel));
 		}
@@ -332,11 +332,15 @@ public class ShoppingListForm extends HorizontalPanel {
 	class GetPictureCallback implements AsyncCallback<String> {
 
 		HorizontalPanel hp = new HorizontalPanel();
-		User user = new User();
+		Retailer retailer;
 
-		public GetPictureCallback(HorizontalPanel p, User u) {
+		public GetPictureCallback(HorizontalPanel p, Retailer r) {
 			hp = p;
-			user = u;
+			retailer = r;
+		}
+
+		public GetPictureCallback(HorizontalPanel p) {
+			hp = p;
 		}
 
 		public void onFailure(Throwable t) {
@@ -345,16 +349,124 @@ public class ShoppingListForm extends HorizontalPanel {
 
 		public void onSuccess(String s) {
 			Image image = new Image();
+			FocusPanel f = new FocusPanel();
 			HorizontalPanel p = new HorizontalPanel();
+			f.setWidget(p);
 			image.setUrl("data:image/png;base64," + s);
 			p.addStyleName("profile-img-small");
 			p.add(image);
-			p.setTitle(user.getUsername());
-			hp.add(p);
+			if (retailer != null) {
+				p.setTitle(retailer.getUser().getUsername());
+				f.addClickHandler(new ChangeRetailerUserMenuClickhandler(retailer));
+			}
+			hp.add(f);
 		}
 
 	}
 
+	class ChangeRetailerUserMenuClickhandler implements ClickHandler {
+		Retailer retailer;
+
+		public ChangeRetailerUserMenuClickhandler(Retailer r) {
+			retailer = r;
+		}
+
+		public void onClick(ClickEvent event) {
+			Widget source = (Widget) event.getSource();
+			int left = source.getAbsoluteLeft() + 10;
+			int top = source.getAbsoluteTop() + 10;
+			editorService.getAllUserByGroupId(group.getId(), new GetAllUsersByGroupCallback(left, top, retailer));
+
+		}
+
+	}
+
+	class GetAllUsersByGroupCallback implements AsyncCallback<Vector<User>> {
+		Retailer retailer;
+		int left;
+		int top;
+
+		public GetAllUsersByGroupCallback(int l, int t, Retailer r) {
+			left = l;
+			top = t;
+			retailer = r;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to get pcitures: " + t);
+		}
+
+		public void onSuccess(Vector<User> userVec) {
+
+			DecoratedPopupPanel pop = new DecoratedPopupPanel(true);
+			pop.setAnimationEnabled(true);
+			VerticalPanel vp = new VerticalPanel();
+			vp.setSpacing(2);
+			pop.setPopupPosition(left, top);
+			for (User u : userVec) {
+				Retailer reta = new Retailer(retailer.getRetailerName(), retailer.getId(), u.getId(), group.getId(),
+						groceryList.getId());
+
+				FocusPanel f = new FocusPanel();
+				HorizontalPanel hp = new HorizontalPanel();
+				HorizontalPanel hpPic = new HorizontalPanel();
+				Label userName = new Label(u.getUsername());
+				userName.setStyleName("text");
+				hp.addStyleName("pointer");
+				hp.setSpacing(2);
+				hp.setVerticalAlignment(ALIGN_MIDDLE);
+				hp.add(hpPic);
+				hp.add(userName);
+				f.add(hp);
+				f.addClickHandler(new ChangeRetailerUserClickhandler(reta, pop));
+				vp.add(f);
+				editorService.generateIdenticons(u, 25, 25, new GetPictureCallback(hpPic));
+			}
+			pop.setWidget(vp);
+			pop.show();
+
+		}
+
+	}
+
+	class ChangeRetailerUserClickhandler implements ClickHandler {
+		Retailer ret;
+		DecoratedPopupPanel pop;
+
+		public ChangeRetailerUserClickhandler(Retailer re, DecoratedPopupPanel p) {
+			ret = re;
+			pop = p;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			editorService.saveRetailer(ret, new ChangeRetailerUserCallback(pop));
+		}
+	}
+
+	class ChangeRetailerUserCallback implements AsyncCallback<Retailer> {
+		DecoratedPopupPanel pop;
+
+		public ChangeRetailerUserCallback(DecoratedPopupPanel p) {
+			pop = p;
+
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to update Retailer: " + t);
+
+		}
+
+		public void onSuccess(Retailer arg0) {
+			pop.hide();
+			GWTBugFixing = 0;
+			onLoad();
+		}
+
+	}
+
+	/**
+	 * Callback um Artikel Vector zu erhalten
+	 */
 	class ArticleCallback implements AsyncCallback<Vector<Article>> {
 		Retailer retailer;
 
@@ -367,7 +479,24 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Vector<Article> articles) {
-			createForms(articles, retailer);
+			editorService.getRetailerById(retailer.getId(), new GetFullRetaierInfoCallback(articles));
+		}
+	};
+
+	class GetFullRetaierInfoCallback implements AsyncCallback<Retailer> {
+		Vector<Article> articles;
+
+		public GetFullRetaierInfoCallback(Vector<Article> a) {
+			articles = a;
+		}
+
+		public void onFailure(Throwable arg0) {
+
+		}
+
+		public void onSuccess(Retailer r) {
+			createForms(articles, r);
+
 		}
 	};
 
@@ -412,6 +541,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			r.setGroup(group);
 			r.setUser(user);
 			r.setRetailerName("Neuer Laden");
+			r.setGroceryListId(groceryList.getId());
 			editorService.createRetailer(r, newRetailerCallback);
 		}
 	}

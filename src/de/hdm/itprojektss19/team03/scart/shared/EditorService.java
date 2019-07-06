@@ -22,7 +22,7 @@ import de.hdm.itprojektss19.team03.scart.shared.bo.User;
  */
 @RemoteServiceRelativePath("editorservice")
 public interface EditorService extends RemoteService {
-	public String generateIdenticons(String text, int image_width, int image_height)
+	public String generateIdenticons(User u, int image_width, int image_height)
 			throws IllegalArgumentException, IOException;
 
 	/**
@@ -612,6 +612,15 @@ public interface EditorService extends RemoteService {
 	 */
 	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group group, GroceryList gl)
 			throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * 
+	 * @param gl GroceryList Objekt
+	 * @return gibt alle eindeutigen Retailer einer GroceryList zurueck
+	 * @throws IllegalArgumentException
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroceryList(GroceryList gl) throws IllegalArgumentException;
 
 	// GroceryListArticle===========================================================================
 

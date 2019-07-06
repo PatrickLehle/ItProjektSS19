@@ -111,7 +111,7 @@ public class ProfileForm extends VerticalPanel {
 		editButton.addClickHandler(new EditButtonClickHandler());
 		deleteButton.addClickHandler(new DeleteButtonClickHandler());
 
-		editorService.generateIdenticons(user.getEmail(), 100, 100, new getImageCallback(profilePicPanel));
+		editorService.generateIdenticons(user, 100, 100, new getImageCallback(profilePicPanel));
 		this.addStyleName("inner-content");
 		this.add(contentPanel);
 		this.add(buttonPanel);

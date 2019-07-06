@@ -82,6 +82,7 @@ public class RetailerMapper {
 				retailer.setUser(user);
 				retailer.setId(rs.getInt("retailerId"));
 				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				return retailer;
 			}
 		} catch (SQLException e2) {
@@ -127,6 +128,7 @@ public class RetailerMapper {
 				group.setId(rs.getInt("groupId"));
 				retailer.setGroup(group);
 				retailer.setUser(user);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				result.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -166,6 +168,7 @@ public class RetailerMapper {
 				retailer.setId(rs.getInt("retailerId"));
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailer.setUser(user);
 				retailers.addElement(retailer);
 			}
@@ -208,6 +211,7 @@ public class RetailerMapper {
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setUser(user);
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailers.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -249,6 +253,7 @@ public class RetailerMapper {
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setUser(user);
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailers.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -276,7 +281,7 @@ public class RetailerMapper {
 		try {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(
-					"SELECT DISTINCT retailerId, retailerName, retailerGroupId, retailerUserId FROM retailer JOIN "
+					"SELECT DISTINCT retailer.retailerId, retailer.retailerName, retailer.retailerGroupId, retailer.retailerUserId FROM retailer JOIN "
 							+ "article ON retailer.retailerId = article.articleRetailerId JOIN grocerylistarticle ON "
 							+ "grocerylistarticle.articleId = article.articleId WHERE grocerylistarticle.grocerylistId = "
 							+ gr.getId() + " AND article.articleGroupId = " + g.getId());
@@ -291,6 +296,46 @@ public class RetailerMapper {
 				retailer.setRetailerName(rs.getString("retailerName"));
 				retailer.setUser(user);
 				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
+
+	/**
+	 * Gibt alle einzigartigen Retailer nach GroceryList aus
+	 * 
+	 * @param gr GroceryList
+	 * @return Vector aus gefundenen retailern
+	 * @throws DatabaseException DatabaseException Falls die Datenbankabfrage
+	 *             fehlschlaegt
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroceryList(GroceryList gr) throws DatabaseException {
+		Connection con = DBConnection.connection();
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT DISTINCT retailer.retailerId, retailer.retailerName, "
+					+ "retailer.retailerGroupId, retailer.retailerGroceryListId, "
+					+ "retailer.retailerUserId FROM retailer WHERE retailer.retailerGroceryListId =" + gr.getId());
+
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				User user = new User();
+				user.setId(rs.getInt("retailerUserId"));
+				Group group = new Group();
+				group.setId(rs.getInt("retailerGroupId"));
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+				retailer.setUser(user);
+				retailer.setGroup(group);
+				retailer.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				retailers.addElement(retailer);
 			}
 		} catch (SQLException e2) {
@@ -313,7 +358,7 @@ public class RetailerMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 		String maxIdSQL = "SELECT MAX(retailerId) AS maxid FROM retailer";
-		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId) VALUES (?,?,?,?)";
+		String insertSQL = "INSERT INTO retailer (retailerId, retailerName, retailerGroupId, retailerUserId, retailerGroceryListId) VALUES (?,?,?,?, ?)";
 
 		try {
 			con = DBConnection.connection();
@@ -329,6 +374,7 @@ public class RetailerMapper {
 				stmt.setString(2, retailer.getRetailerName());
 				stmt.setInt(3, retailer.getGroup().getId());
 				stmt.setInt(4, retailer.getUser().getId());
+				stmt.setInt(5, retailer.getGroceryListId());
 				stmt.executeUpdate();
 				return retailer;
 			} else {
@@ -352,7 +398,7 @@ public class RetailerMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String update = "UPDATE retailer SET retailerName=?, retailerGroupId=?, retailerUserId=? WHERE retailerId=?";
+		String update = "UPDATE retailer SET retailerName=?, retailerGroupId=?, retailerUserId=?, retailerGroceryListId=? WHERE retailerId=?";
 
 		try {
 			con = DBConnection.connection();
@@ -362,6 +408,7 @@ public class RetailerMapper {
 			stmt.setInt(2, retailer.getGroup().getId());
 			stmt.setInt(3, retailer.getUser().getId());
 			stmt.setInt(4, retailer.getId());
+			stmt.setInt(5, retailer.getGroceryListId());
 			stmt.executeUpdate();
 			return retailer;
 		} catch (SQLException e2) {
@@ -419,6 +466,7 @@ public class RetailerMapper {
 				user.setUsername(rs.getString("userName"));
 				r.setId(rs.getInt("retailerId"));
 				r.setRetailerName(rs.getString("retailerName"));
+				r.setGroceryListId(rs.getInt("retailerGroceryListId"));
 				r.setGroup(group);
 				r.setUser(user);
 				return r;

@@ -49,15 +49,15 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @see <a href=
 	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
 	 * 
-	 * @see <a href=
-	 *      "https://stackoverflow.com/questions/40697056/how-can-i-create-identicons-using-java-or-android">https://stackoverflow.com</a>
-	 * 
 	 */
-	public String generateIdenticons(String text, int image_width, int image_height) throws IOException {
+	public String generateIdenticons(User u, int image_width, int image_height) throws IOException {
 		int width = 5, height = 5;
+		String username = u.getUsername();
+		String uid = Integer.toString(u.getId());
+		String text = uid + username;
 
 		byte[] hash = text.getBytes();
-
+		System.out.println(text + " " + text.getBytes()[0]);
 		BufferedImage identicon = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		WritableRaster raster = identicon.getRaster();
 
@@ -992,6 +992,23 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	public Vector<Retailer> getAllRetailerByGroupId(int groupId) throws IllegalArgumentException {
 		try {
 			return this.rMapper.getAllRetailersByGroupId(groupId);
+
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	/**
+	 * Auslesen aller einzigartigen Retailer Objekte einer Groupe und eines
+	 * Retailers
+	 * 
+	 * @param gl GroceryListObjekt
+	 * @return gibt alle Retailer Objekte zurueck die in der Gruppe sind.
+	 */
+	public Vector<Retailer> getAllDistinctRetailerByGroceryList(GroceryList gl) throws IllegalArgumentException {
+		try {
+			return this.rMapper.getAllDistinctRetailerByGroceryList(gl);
 
 		} catch (IllegalArgumentException | DatabaseException e) {
 			e.printStackTrace();

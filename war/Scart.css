@@ -216,6 +216,10 @@
         height: 50%;
     }
     
+    .pointer {
+     cursor: pointer;
+    }
+    
     .toolbar {
         background: url(/images/scartbannerblue.jpg);
         background-size: cover;
