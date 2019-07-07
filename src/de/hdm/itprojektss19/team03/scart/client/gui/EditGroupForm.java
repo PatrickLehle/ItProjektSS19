@@ -70,8 +70,8 @@ public class EditGroupForm extends VerticalPanel {
 	/**
 	 * Konstruktor der EditGroup-Seite
 	 * 
-	 * @param User u (User-Objekt des Users der die EditUser-Seite aufrufen will)
-	 * @param Group g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
+	 * @param  u (User-Objekt des Users der die EditUser-Seite aufrufen will)
+	 * @param  g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
 	 */
 	public EditGroupForm(User u, Group g) {
 		this.user = u;
