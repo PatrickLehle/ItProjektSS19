@@ -49,6 +49,8 @@ public class Scart implements EntryPoint {
 	 * eingeloggt ist
 	 */
 	public void onModuleLoad() {
+
+		Window.alert("Diese Seite verwendet funktionale Cookies. Deal with it!");
 		changeCSS();
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
@@ -123,8 +125,18 @@ public class Scart implements EntryPoint {
 		link2.setId("desktop");
 
 		if (Window.getClientWidth() < 600) {
+			try {
+				RootPanel.get("navigation").getWidget(0).addStyleName("hide");
+				RootPanel.get("content").getElement().getStyle().setProperty("margin", "120px 0px 0px 0px");
+			} catch (Exception e) {
+			}
 			nativeAttachToHead(link, "desktop");
 		} else {
+			try {
+				RootPanel.get("content").getElement().getStyle().setProperty("margin", "120px 0px 0px 250px");
+				RootPanel.get("navigation").getWidget(0).removeStyleName("hide");
+			} catch (Exception e) {
+			}
 			nativeAttachToHead(link2, "mobile");
 		}
 	}

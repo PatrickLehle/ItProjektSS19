@@ -203,8 +203,11 @@ public class GroupForm extends VerticalPanel {
 		loadingPanel.clear();
 		groupsPanel.add(groupTree);
 		navigation.add(groupsPanel);
-		RootPanel.get("content").getElement().getStyle().setProperty("margin",
-				"0px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
+		if (RootPanel.get("navigation").getWidget(0).getStyleName() == "hide") {
+		} else {
+			RootPanel.get("content").getElement().getStyle().setProperty("margin",
+					"120px 0px 0px " + (navigation.getOffsetWidth() + 30) + "px");
+		}
 	}
 
 	/**

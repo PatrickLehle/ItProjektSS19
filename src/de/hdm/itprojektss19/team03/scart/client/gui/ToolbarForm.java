@@ -29,13 +29,32 @@ public class ToolbarForm extends HorizontalPanel {
 		Anchor reportGeneratorLink = new Anchor("", "ScartReport.html");
 		Button reportBtn = new Button("Report Generator");
 		Button profilBtn = new Button("Profil");
+		Button menutBtn = new Button("<image src='/images/menu.png' width='16px' height='16px' align='center'/>");
+		menutBtn.setStyleName("icon-button");
+		menutBtn.addClickHandler(new ClickHandler() {
+
+			public void onClick(ClickEvent arg0) {
+				if (RootPanel.get("navigation").getWidget(0).getStyleName() == "hide") {
+					RootPanel.get("navigation").getWidget(0).removeStyleName("hide");
+					if (Window.getClientWidth() >= 600) {
+						RootPanel.get("content").getElement().getStyle().setProperty("margin", "120px 0px 0px 300px");
+					}
+				} else {
+					RootPanel.get("navigation").getWidget(0).addStyleName("hide");
+
+					RootPanel.get("content").getElement().getStyle().setProperty("margin", "120px 0px 0px 0px");
+				}
+			}
+
+		});
+
 		final ProfileForm profileForm = new ProfileForm(user);
 
 		reportBtn.addStyleName("button");
 		profilBtn.addStyleName("button");
 		this.addStyleName("toolbar");
 		this.setVerticalAlignment(ALIGN_MIDDLE);
-		this.setHorizontalAlignment(ALIGN_CENTER);
+		this.setHorizontalAlignment(ALIGN_LEFT);
 
 		profilBtn.addClickHandler(new ClickHandler() {
 
@@ -51,7 +70,7 @@ public class ToolbarForm extends HorizontalPanel {
 				Window.open(GWT.getHostPageBaseURL() + "ScartReport.html", "_blank", "");
 			}
 		});
-
+		this.add(menutBtn);
 		// reportGeneratorLink.getElement().appendChild(reportBtn.getElement());
 		this.add(profilBtn);
 		this.add(reportBtn);

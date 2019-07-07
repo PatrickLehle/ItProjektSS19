@@ -70,8 +70,8 @@ public class EditGroupForm extends VerticalPanel {
 	/**
 	 * Konstruktor der EditGroup-Seite
 	 * 
-	 * @param  u (User-Objekt des Users der die EditUser-Seite aufrufen will)
-	 * @param  g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
+	 * @param u (User-Objekt des Users der die EditUser-Seite aufrufen will)
+	 * @param g (Gruppen-Objekt der Gruppe in der etwas gaendert werden soll)
 	 */
 	public EditGroupForm(User u, Group g) {
 		this.user = u;
@@ -341,7 +341,7 @@ public class EditGroupForm extends VerticalPanel {
 
 				// UserDelete Button
 				Button deleteButton = new Button("x");
-				deleteButton.addStyleName("table-button1");
+				deleteButton.setStyleName("table-icon-button");
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
 
 				if (allUsers.get(userNumber).getId() != user.getId()) {

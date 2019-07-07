@@ -12,6 +12,10 @@ body {
 	font-family: 'Raleway', sans-serif !important;
 }
 
+.hide {
+	display: none;
+}
+
 .article-row {
 	height: 30px !important;
 	border: 1px solid #BBBBBB;
@@ -32,10 +36,10 @@ body {
 	margin: 0px;
 	margin-top: 120px;
 	text-align: -webkit-center;
+	z-index: -1;
 }
 
 .inner-content {
-	padding-top: 120px;
 	margin-bottom: 70px;
 }
 
@@ -46,7 +50,9 @@ body {
 	-webkit-box-shadow: 0 0 10px #000000;
 	box-shadow: 0 0 10px #000000;
 	margin-bottom: 80px;
-	margin-top: 50px;
+	background: white;
+	z-index: 10;
+	top: 100px;
 }
 
 .text {
@@ -97,8 +103,8 @@ body {
 }
 
 .table-icon-button {
-	    margin-right: 2px !important;
-    margin-left: 2px !important;
+	margin-right: 2px !important;
+	margin-left: 2px !important;
 	border: 1px solid black !important;
 	color: rgb(25, 31, 31) !important;
 	width: 24px;
@@ -107,17 +113,17 @@ body {
 	text-align: center;;
 	cursor: pointer;
 	padding: 0;
+	background: grey;
+}
+
+.table-icon-button:hover {
+	background: rgb(242, 210, 37) !important;
 }
 
 .table-button1 {
 	background: grey;
 	color: black;
 	border: 1px solid #555555;
-}
-
-.table-button1:hover {
-	background: rgb(242, 210, 37) !important;
-	color: white;
 }
 
 .retailer-panel {
@@ -193,7 +199,7 @@ body {
 	margin-right: 0;
 	font-weight: bold;
 	text-align: -webkit-center;
-	    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .h4 {
@@ -271,4 +277,5 @@ body {
 	-moz-box-shadow: 0 0 10px #000000;
 	-webkit-box-shadow: 0 0 10px #000000;
 	box-shadow: 0 0 10px #000000;
+	z-index: 11;
 }

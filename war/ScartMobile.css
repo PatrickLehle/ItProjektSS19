@@ -10,7 +10,11 @@ body {
 
 * {
 	font-family: 'Raleway', sans-serif !important;
-} 
+}
+
+.hide {
+	display: none;
+}
 
 .article-row {
 	height: 30px !important;
@@ -19,7 +23,7 @@ body {
 }
 
 .tables td {
-	padding-right: 3px !important; 
+	padding-right: 3px !important;
 }
 
 .first-row {
@@ -31,11 +35,11 @@ body {
 	padding: 0px;
 	margin: 0px;
 	margin-top: 120px;
+	z-index: -1;
 	text-align: -webkit-center;
 }
 
 .inner-content {
-	padding-top: 120px;
 	margin-bottom: 70px;
 }
 
@@ -46,7 +50,9 @@ body {
 	-webkit-box-shadow: 0 0 10px #000000;
 	box-shadow: 0 0 10px #000000;
 	margin-bottom: 80px;
-	margin-top: 50px;
+	background: white;
+	z-index: 10;
+	top: 100px;
 }
 
 .text {
@@ -97,8 +103,8 @@ body {
 }
 
 .table-icon-button {
-	    margin-right: 2px !important;
-    margin-left: 2px !important;
+	margin-right: 2px !important;
+	margin-left: 2px !important;
 	border: 1px solid black !important;
 	color: rgb(25, 31, 31) !important;
 	width: 24px;
@@ -193,7 +199,7 @@ body {
 	margin-right: 0;
 	font-weight: bold;
 	text-align: -webkit-center;
-	    white-space: nowrap;
+	white-space: nowrap;
 }
 
 .h4 {
@@ -271,4 +277,5 @@ body {
 	-moz-box-shadow: 0 0 10px #000000;
 	-webkit-box-shadow: 0 0 10px #000000;
 	box-shadow: 0 0 10px #000000;
+	z-index: 11;
 }
