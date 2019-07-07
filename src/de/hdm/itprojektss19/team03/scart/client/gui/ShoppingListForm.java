@@ -48,7 +48,6 @@ public class ShoppingListForm extends HorizontalPanel {
 
 	private FlowPanel retailersPanel = new FlowPanel();
 	private VerticalPanel outerPanel = new VerticalPanel();
-	private Button addRetailerButton = new Button("Laden einfügen");
 
 	// Change GroceryList Name
 	HorizontalPanel changeGlNamePanel = new HorizontalPanel();
@@ -80,6 +79,7 @@ public class ShoppingListForm extends HorizontalPanel {
 	 * 
 	 */
 	public void onLoad() {
+		Button addRetailerButton = new Button("Laden einfügen");
 		if (GWTBugFixing > 0) {
 			return;
 		}
@@ -625,6 +625,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			r.setUser(user);
 			r.setRetailerName("Neuer Laden");
 			r.setGroceryListId(groceryList.getId());
+			GWT.log(r.getRetailerName());
 			editorService.createRetailer(r, newRetailerCallback);
 		}
 	}

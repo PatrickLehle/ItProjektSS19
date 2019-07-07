@@ -2,6 +2,13 @@ package de.hdm.itprojektss19.team03.scart.client;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.JavaScriptObject;
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.LinkElement;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -42,6 +49,7 @@ public class Scart implements EntryPoint {
 	 * eingeloggt ist
 	 */
 	public void onModuleLoad() {
+		changeCSS();
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
 			public void onFailure(Throwable err) {
@@ -76,9 +84,61 @@ public class Scart implements EntryPoint {
 			}
 		});
 
+		Window.addResizeHandler(new ResponsiveHandler());
 		RootPanel.get("footer").clear();
 		RootPanel.get("footer").add(footer);
 	}
+
+	/**
+	 * Responsive Behaviour wird hier behandelt
+	 *
+	 */
+	class ResponsiveHandler implements ResizeHandler {
+
+		Timer resizeTimer = new Timer() {
+			public void run() {
+				changeCSS();
+			}
+		};
+
+		public void onResize(ResizeEvent event) {
+			resizeTimer.cancel();
+			resizeTimer.schedule(250);
+		}
+
+	}
+
+	/**
+	 * Change CSS class acroding to size
+	 */
+	public void changeCSS() {
+
+		LinkElement link = Document.get().createLinkElement();
+		link.setRel("stylesheet");
+		link.setHref("ScartMobile.css");
+		link.setId("mobile");
+		LinkElement link2 = Document.get().createLinkElement();
+		link2.setRel("stylesheet");
+		link2.setHref("Scart.css");
+		link2.setId("desktop");
+
+		if (Window.getClientWidth() < 600) {
+			nativeAttachToHead(link, "desktop");
+		} else {
+			nativeAttachToHead(link2, "mobile");
+		}
+	}
+
+	/**
+	 * Attach element to head
+	 */
+	protected static native void nativeAttachToHead(JavaScriptObject scriptElement, String remove) /*-{
+		$doc.getElementsByTagName("head")[0].appendChild(scriptElement);
+		if ($doc.getElementById(remove) != null) {
+			$doc.getElementById(remove).remove();
+		}
+		;
+	}-*/;
 
 	/**
 	 * Laed die LoginForm in das Content Panel

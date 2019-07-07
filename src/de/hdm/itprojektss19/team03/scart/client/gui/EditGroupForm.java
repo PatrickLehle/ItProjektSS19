@@ -62,9 +62,6 @@ public class EditGroupForm extends VerticalPanel {
 	// TextBox
 	TextBox groupTextBox = new TextBox();
 
-	// FlexTable
-	FlexTable userTable = new FlexTable();
-
 	// Buttons
 	Button deleteGroupButton = new Button("Aus Gruppe austreten");
 	Button saveGroupButton = new Button("Änderungen speichern");
@@ -86,7 +83,8 @@ public class EditGroupForm extends VerticalPanel {
 	 * Methode wird automatisch bei Seitenaufruf gestartet
 	 */
 	public void onLoad() {
-
+		// FlexTable
+		FlexTable userTable = new FlexTable();
 		groupTextBox.setText(group.getGroupName());
 		groupTextBox.addStyleName("textbox-big");
 		// groupTextBox.addStyleName("h3");
@@ -108,7 +106,7 @@ public class EditGroupForm extends VerticalPanel {
 		groupFormPanel.add(groupNameHPanel);
 		groupFormPanel.add(userPanel);
 		groupFormPanel.add(btnPanel);
-		userPanel.add(userTable);
+		userPanel.setWidget(userTable);
 
 		btnPanel.add(deleteGroupButton);
 		btnPanel.add(saveGroupButton);
@@ -116,7 +114,7 @@ public class EditGroupForm extends VerticalPanel {
 
 		this.add(groupFormPanel);
 
-		loadTable();
+		loadTable(userTable);
 
 	}
 
@@ -124,7 +122,7 @@ public class EditGroupForm extends VerticalPanel {
 	 * Methode um die Tabelle bei dem Aufrufen der GUI-Seite zu fuellen oder die
 	 * Tabelle neu zu laden nachdem Aenderungen durchgefuehrt wurden
 	 */
-	public void loadTable() {
+	public void loadTable(FlexTable userTable) {
 
 		// // new User Textfield
 		// TextBox userNameTextBox = new TextBox();
@@ -148,7 +146,7 @@ public class EditGroupForm extends VerticalPanel {
 		// userTable.setWidget(2, 1, userEmailTextBox);
 		// userTable.setWidget(2, 2, addButton);
 
-		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback());
+		editorVerwaltung.getAllUserByGroupId(group.getId(), new AllUserCallback(userTable));
 
 	}
 
@@ -181,7 +179,7 @@ public class EditGroupForm extends VerticalPanel {
 	 * @param userName (TextBox-Objekt der Username des Users der eingeladen wird)
 	 * @param group (Gruppen-Objekt der Gruppe zu der der User eingeladen wird))
 	 */
-	public void addUser(TextBox userEmail, TextBox userName, Group group) {
+	public void addUser(TextBox userEmail, Group group) {
 		TextBox userEmailTextBox = new TextBox();
 		userEmailTextBox = userEmail;
 		String uemail;
@@ -292,13 +290,11 @@ public class EditGroupForm extends VerticalPanel {
 
 		Group groups = new Group();
 		User users = new User();
-		TextBox userEmailTextBox = new TextBox();
-		TextBox userNameTextBox = new TextBox();
+		TextBox userEmailTextBox;
 
-		public AddUserClickHandler(TextBox userEmail, TextBox userName, Group group) {
+		public AddUserClickHandler(TextBox userEmail, Group group) {
 
 			userEmailTextBox = userEmail;
-			userNameTextBox = userName;
 			groups = group;
 
 		}
@@ -306,7 +302,7 @@ public class EditGroupForm extends VerticalPanel {
 		public void onClick(ClickEvent arg0) {
 			GWT.log(userEmailTextBox.getText() + " passts?");
 
-			addUser(userEmailTextBox, userNameTextBox, groups);
+			addUser(userEmailTextBox, groups);
 
 		}
 	}
@@ -327,6 +323,11 @@ public class EditGroupForm extends VerticalPanel {
 	 *
 	 */
 	class AllUserCallback implements AsyncCallback<Vector<User>> {
+		FlexTable userTable;
+
+		public AllUserCallback(FlexTable uT) {
+			userTable = uT;
+		}
 
 		public void onFailure(Throwable caught) {
 			GWT.log(caught.getLocalizedMessage());
@@ -338,33 +339,29 @@ public class EditGroupForm extends VerticalPanel {
 
 			for (int userNumber = 0; userNumber < allUsers.size(); userNumber++) {
 
-				// // new User Textfield
-				TextBox userNameTextBox = new TextBox();
-				TextBox userEmailTextBox = new TextBox();
-
 				// UserDelete Button
 				Button deleteButton = new Button("x");
 				deleteButton.addStyleName("table-button1");
 				deleteButton.addClickHandler(new DeleteUserClickHandler(allUsers.get(userNumber), group));
 
-				// // Add User Button
-				Button addButton = new Button(
-						"<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
-				addButton.setStyleName("icon-button");
-				addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, userNameTextBox, group));
-
 				if (allUsers.get(userNumber).getId() != user.getId()) {
 					userTable.setText(userNumber + 3, 0, allUsers.get(userNumber).getUsername());
 					userTable.setText(userNumber + 3, 1, allUsers.get(userNumber).getEmail());
 					userTable.setWidget(userNumber + 3, 2, deleteButton);
-
 				}
-				userTable.setWidget(userNumber + 4, 0, userNameTextBox);
-				userTable.setWidget(userNumber + 4, 1, userEmailTextBox);
-				userTable.setWidget(userNumber + 4, 2, addButton);
 
 			}
 
+			// // new User Textfield
+			TextBox userEmailTextBox = new TextBox();
+			// // Add User Button
+			Button addButton = new Button(
+					"<image src='/images/plusButton.png' width='16px' height='16px' align='center'/>");
+			addButton.setStyleName("icon-button");
+			addButton.addClickHandler(new AddUserClickHandler(userEmailTextBox, group));
+			int rowCount = userTable.getRowCount();
+			userTable.setWidget(rowCount, 1, userEmailTextBox);
+			userTable.setWidget(rowCount, 2, addButton);
 		}
 
 	}
@@ -423,9 +420,9 @@ public class EditGroupForm extends VerticalPanel {
 		}
 
 		public void onSuccess(GroupUser arg0) {
-			GWT.log("funzt");
 			onLoad();
-			Window.alert("Der User wurde erfolgreich zu der Gruppe " + group.getGroupName() + " hinzugefügt!");
+			// Window.alert("Der User wurde erfolgreich zu der Gruppe " +
+			// group.getGroupName() + " hinzugefügt!");
 
 		}
 	}
