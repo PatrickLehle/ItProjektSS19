@@ -526,7 +526,7 @@ public class ArticleMapper {
 			ResultSet rs = stmt.executeQuery("SELECT DISTINCT articleName, articleUnit FROM "
 					+ "article WHERE articleBoolean = 0 AND article.articleFav = TRUE AND article.articleGroupId = "
 					+ g.getId());
-
+			System.out.println("tests");
 			while (rs.next()) {
 				Article a = new Article();
 				a.setName(rs.getString("articleName"));
@@ -693,24 +693,26 @@ public class ArticleMapper {
 	public Vector<Article> findAllArticleByDateFavouriteTRUE(Vector<Group> groups, Timestamp start, Timestamp end)
 			throws DatabaseException {
 		Connection con = DBConnection.connection();
-
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
-
+			end.setHours(23);
+			end.setMinutes(59);
+			end.setSeconds(59);
 			String s = new String();
 
 			for (int i = 1; i < groups.size(); i++) {
 				s = s + " OR " + groups.get(i).getId();
 			}
 
+			System.out.println(groups.get(0).getId() + " " + start + " " + end + s);
 			ResultSet rs = stmt.executeQuery(
 					"SELECT * FROM article JOIN retailer ON article.articleRetailerId = retailer.retailerId JOIN groups ON article.articleGroupId = groups.groupId "
 							+ "WHERE articleDelDat IS NOT NULL AND articleFav = TRUE AND (article.articleGroupId = "
 							+ groups.get(0).getId() + s + ") AND articleDelDat BETWEEN '" + start + "' AND '" + end
 							+ "'");
-
 			while (rs.next()) {
+				System.out.println(rs.getInt("articleId") + " " + rs.getString("articleName"));
 				Group group = new Group();
 				Retailer retailer = new Retailer();
 				group.setGroupName(rs.getString("groupName"));
@@ -756,7 +758,9 @@ public class ArticleMapper {
 	public Vector<Article> findAllArticleByDateRetailerFavouriteTRUE(Vector<Group> groups, Vector<Retailer> retailers,
 			Timestamp start, Timestamp end) throws DatabaseException {
 		Connection con = DBConnection.connection();
-
+		end.setHours(23);
+		end.setMinutes(59);
+		end.setSeconds(59);
 		Vector<Article> result = new Vector<Article>();
 		try {
 			Statement stmt = con.createStatement();
