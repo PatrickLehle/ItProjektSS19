@@ -441,12 +441,7 @@ public class EditGroupForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Void arg0) {
-			GroupForm groupForm = new GroupForm(user);
-			RootPanel.get("navigation").clear();
-			groupForm.setStyleName("navigation");
-			RootPanel.get("navigation").add(groupForm);
-			onLoad();
-			Window.alert("User wurde aus der Gruppe gelöscht!");
+			Window.Location.reload();
 		}
 	}
 

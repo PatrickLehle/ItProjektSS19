@@ -291,7 +291,7 @@ public class GroupForm extends VerticalPanel {
 				}
 
 				public void onSuccess(GroceryList arg0) {
-					onLoad();
+					Window.Location.reload();
 				}
 
 			});
