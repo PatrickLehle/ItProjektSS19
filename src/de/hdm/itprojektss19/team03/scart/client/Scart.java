@@ -7,6 +7,7 @@ import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.LinkElement;
 import com.google.gwt.event.logical.shared.ResizeEvent;
 import com.google.gwt.event.logical.shared.ResizeHandler;
+import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -49,8 +50,11 @@ public class Scart implements EntryPoint {
 	 * eingeloggt ist
 	 */
 	public void onModuleLoad() {
-
-		Window.alert("Diese Seite verwendet funktionale Cookies. Deal with it!");
+		if (Cookies.getCookie("cookie") != "accepted") {
+			Window.alert(
+					"Diese Seite verwendet funktionale Cookies. Falls Sie das nicht möchten, sollten Sie die Seite verlassen.");
+		}
+		Cookies.setCookie("cookie", "accepted");
 		changeCSS();
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 
