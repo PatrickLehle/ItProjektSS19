@@ -233,8 +233,8 @@ public class ArticlesForm extends VerticalPanel {
 			edit.setStyleName("text");
 			f1.add(edit);
 			f2.add(delete);
-			f2.addClickHandler(new DeleteArticleClickHandler(article));
-			f1.addClickHandler(new EditArticleClickHandler(article, row));
+			f2.addClickHandler(new DeleteArticleClickHandler(article, pop));
+			f1.addClickHandler(new EditArticleClickHandler(article, row, pop));
 			vp.add(f1);
 			vp.add(f2);
 			vp.setSpacing(2);
@@ -253,13 +253,16 @@ public class ArticlesForm extends VerticalPanel {
 	class EditArticleClickHandler implements ClickHandler {
 		Article article;
 		int row;
+		DecoratedPopupPanel pop;
 
-		public EditArticleClickHandler(Article a, int r) {
+		public EditArticleClickHandler(Article a, int r, DecoratedPopupPanel p) {
 			article = a;
 			row = r;
+			pop = p;
 		}
 
 		public void onClick(ClickEvent e) {
+			pop.hide();
 			TextBox nameTB = new TextBox();
 			nameTB.setText(article.getName());
 			nameTB.setWidth(articleTable.getWidget(row, 1).getOffsetWidth() + "px");
@@ -275,13 +278,13 @@ public class ArticlesForm extends VerticalPanel {
 			unitTB.setWidth(articleTable.getWidget(row, 3).getOffsetWidth() + "px");
 			articleTable.setWidget(row, 3, unitTB);
 
-			articleTable.removeCell(row, 4);
 			Button checkBtn = new Button(
 					"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
 			checkBtn.setStyleName("table-icon-button");
 			checkBtn.addClickHandler(new SaveArticleClickHandler(article, nameTB, quantityTB, unitTB));
 			checkBtn.setTitle("Speichern");
 			articleTable.setWidget(row, 5, checkBtn);
+			articleTable.removeCell(row, 4);
 
 		}
 	}
@@ -292,14 +295,17 @@ public class ArticlesForm extends VerticalPanel {
 	 */
 	class DeleteArticleClickHandler implements ClickHandler {
 		Article article;
+		DecoratedPopupPanel pop;
 
-		public DeleteArticleClickHandler(Article a) {
+		public DeleteArticleClickHandler(Article a, DecoratedPopupPanel p) {
 			article = a;
+			pop = p;
 
 		}
 
 		public void onClick(ClickEvent arg0) {
 			article.setCheckBoolean(true);
+			pop.hide();
 			editorService.saveArticle(article, new SaveArticleCallback());
 
 		}
@@ -374,7 +380,9 @@ public class ArticlesForm extends VerticalPanel {
 			article.setOwnerId(user.getId());
 			article.setGroupId(group.getId());
 			article.setGroceryListId(groceryList.getId());
-
+			articleNameTB.setText("");
+			articleUnitTB.setText("");
+			articleQuantityTB.setText("");
 			editorService.createArticle(article, new CreateArticleCallback());
 		}
 	}

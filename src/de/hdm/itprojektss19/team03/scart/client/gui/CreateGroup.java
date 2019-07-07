@@ -56,7 +56,7 @@ public class CreateGroup extends VerticalPanel {
 	TextBox groupTextbox = new TextBox();
 
 	// LABELS==========================================================
-	Label createGroupLabel = new Label("Gruppe erstellen"); // Ueberschrift
+	// Ueberschrift
 	Label nameLabel = new Label("Gruppenname: ");
 	Label responseLabel = new Label("");
 
@@ -89,7 +89,7 @@ public class CreateGroup extends VerticalPanel {
 	 */
 	public void onLoad() {
 		super.onLoad();
-
+		Label createGroupLabel = new Label("Gruppe erstellen");
 		// STYLING==========================================================
 		createGroupLabel.addStyleName("h1");
 		backButton.addStyleName("button");
