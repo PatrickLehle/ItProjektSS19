@@ -179,6 +179,33 @@ public class RetailerMapper {
 
 		return retailers;
 	}
+	
+	
+	public Vector<Retailer> findAllReport() throws DatabaseException {
+		// DB-Verbindung herstellen
+		Connection con = DBConnection.connection();
+
+		Vector<Retailer> retailers = new Vector<Retailer>();
+
+		try {
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery("SELECT retailerId, retailerName FROM retailer");
+
+			// Neues retailer Objekt f�r jede gefundene ID
+			while (rs.next()) {
+				Retailer retailer = new Retailer();
+				retailer.setId(rs.getInt("retailerId"));
+				retailer.setRetailerName(rs.getString("retailerName"));
+
+				retailers.addElement(retailer);
+			}
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+
+		return retailers;
+	}
 
 	/**
 	 * 

@@ -58,20 +58,22 @@ public class GroceryListArticleMapper {
 
 		Connection con = null;
 		PreparedStatement stmt = null;
-		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId) VALUES (?,?)";
-
+		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId, retailerId) VALUES (?,?,?)";
+		System.out.println("mapper");
 		try {
+			System.out.println(gl.getId() + " " + a.getId() + " " + a.getRetailerId());
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(article);
 			stmt.setInt(1, gl.getId());
 			stmt.setInt(2, a.getId());
+			stmt.setInt(3, a.getRetailerId());
 			stmt.executeUpdate();
 
+			return null;
 		} catch (SQLException e2) {
 			ServersideSettings.getLogger().severe(e2.getMessage());
 			throw new DatabaseException(e2);
 		}
-		return null;
 	}
 
 	/**

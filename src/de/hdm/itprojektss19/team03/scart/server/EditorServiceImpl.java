@@ -1127,6 +1127,20 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
+	
+	/**
+	 * Auslesen aller Retailer Objekte in der Datenbank für den Report
+	 * 
+	 * @return gibt alle Retailer Objekte in der Datenbank zurueck
+	 */
+	public Vector<Retailer> findAllRetailerReport() {
+		try {
+			return this.rMapper.findAllReport();
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+	}
 
 	// GroceryListArticle===========================================================================
 

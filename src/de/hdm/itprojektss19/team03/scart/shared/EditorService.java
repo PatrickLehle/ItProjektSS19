@@ -591,6 +591,15 @@ public interface EditorService extends RemoteService {
 	 *             erlaubten Arguments.
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
+	
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 *      #findAllRetailerReport();
+	 * @return gibt alle Retailer zurueck für den Report
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht
+	 *             erlaubten Arguments.
+	 */
+	public Vector<Retailer> findAllRetailerReport() throws IllegalArgumentException;
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl

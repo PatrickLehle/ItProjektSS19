@@ -165,7 +165,7 @@ public class CreateGroup extends VerticalPanel {
 		public void onClick(ClickEvent event) {
 			// Uebergabe des Gruppennamen an den Server/Mapper (s. Methode)
 
-			if (checkName(groupTextbox.getText())) {
+			if (checkName(groupTextbox.getText()) != null) {
 				String gname = groupTextbox.getText();
 				createGroupDB(gname); // Aufruf von ceateGroup Methode in EditorServiceImpl bzw.
 										// entsprechenden Mapper
@@ -179,15 +179,15 @@ public class CreateGroup extends VerticalPanel {
 		 * Wird aufgerufen wenn ENTER gedrueckt wird
 		 * 
 		 */
-//			public void onKeyUp(KeyUpEvent event) {
-//				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-//					if (checkName(groupTextbox.getText())) {
-//						createGroupDB(groupTextbox.getText()); // Aufruf von createGroupDB Methode
-//					} else {
-//						responseLabel.setVisible(true);
-//						responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
-//					}
-//				}
+		// public void onKeyUp(KeyUpEvent event) {
+		// if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
+		// if (checkName(groupTextbox.getText())) {
+		// createGroupDB(groupTextbox.getText()); // Aufruf von createGroupDB Methode
+		// } else {
+		// responseLabel.setVisible(true);
+		// responseLabel.setText("Fehler: Bitte geben Sie einen passenden Namen ein");
+		// }
+		// }
 	}
 
 	/**

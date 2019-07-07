@@ -139,7 +139,7 @@ public class ShoppingListForm extends HorizontalPanel {
 
 		retailerPanel.addStyleName("retailer-panel");
 		retailerPanel.add(headerPanel);
-		retailerPanel.add(new GroceryListForm(user, group, articles, retailer, groceryList));
+		retailerPanel.add(new ArticlesForm(user, group, articles, retailer, groceryList));
 
 		decoPanel.addStyleName("retailers-panel");
 		decoPanel.setWidget(retailerPanel);
