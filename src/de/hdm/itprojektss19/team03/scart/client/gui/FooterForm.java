@@ -8,8 +8,11 @@ import com.google.gwt.user.client.ui.Label;
 public class FooterForm extends HorizontalPanel {
 
 	public FooterForm() {
-		Label txt = new Label("footer text");
+		Label txt = new Label("IT Projekt SS19 Team Scart © Copyright 2019");
 
+
+
+		
 		this.setHorizontalAlignment(ALIGN_CENTER);
 		this.setVerticalAlignment(ALIGN_MIDDLE);
 		this.addStyleName("footer");
