@@ -399,7 +399,6 @@ public class ShoppingListForm extends HorizontalPanel {
 		public void onSuccess(Vector<User> userVec) {
 
 			DecoratedPopupPanel pop = new DecoratedPopupPanel(true);
-			pop.setAnimationEnabled(true);
 			VerticalPanel vp = new VerticalPanel();
 			vp.setSpacing(2);
 			pop.setPopupPosition(left, top);

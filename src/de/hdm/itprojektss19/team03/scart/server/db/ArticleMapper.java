@@ -319,7 +319,7 @@ public class ArticleMapper {
 				+ "articleFav=?, articleDelDat=? WHERE articleId=" + article.getId();
 
 		try {
-			System.out.println(article.getId() + " article update id");
+			System.out.println(article.getCheckBoolean() + " article update id");
 
 			// NullPointerException wenn nicht alles bei der uebergabe des Objektes
 			// angegeben wird

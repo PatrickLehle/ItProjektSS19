@@ -9,11 +9,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DecoratedPopupPanel;
 import com.google.gwt.user.client.ui.FlexTable;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 import de.hdm.itprojektss19.team03.scart.client.ClientsideSettings;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
@@ -197,7 +200,7 @@ public class ArticlesForm extends VerticalPanel {
 	}
 
 	/**
-	 * ClickHandler für das Artikel Menü
+	 * ClickHandler für das Artikel Menue
 	 * 
 	 */
 	class DotClickHandler implements ClickHandler {
@@ -207,10 +210,64 @@ public class ArticlesForm extends VerticalPanel {
 			article = a;
 		}
 
-		public void onClick(ClickEvent e) {
-			// xx
+		public void onClick(ClickEvent event) {
+			Widget source = (Widget) event.getSource();
+			int left = source.getAbsoluteLeft() + 10;
+			int top = source.getAbsoluteTop() + 10;
+
+			DecoratedPopupPanel pop = new DecoratedPopupPanel(true);
+			VerticalPanel vp = new VerticalPanel();
+			FocusPanel f1 = new FocusPanel();
+			FocusPanel f2 = new FocusPanel();
+			Label delete = new Label("Löschen");
+			Label edit = new Label("Bearbeiten");
+			f1.addStyleName("pointer");
+			f2.addStyleName("pointer");
+			delete.setStyleName("text");
+			edit.setStyleName("text");
+			f1.add(edit);
+			f2.add(delete);
+			f2.addClickHandler(new DeleteArticleClickHandler(article));
+			f1.addClickHandler(new EditArticleClickHandler(article));
+			vp.add(f1);
+			vp.add(f2);
+			vp.setSpacing(2);
+
+			pop.setPopupPosition(left, top);
+			pop.setWidget(vp);
+			pop.show();
 		}
 
+	}
+
+	class EditArticleClickHandler implements ClickHandler {
+		Article article;
+
+		public EditArticleClickHandler(Article a) {
+			article = a;
+		}
+
+		public void onClick(ClickEvent arg0) {
+
+		}
+	}
+
+	/**
+	 * ClickHandler um einen Artikel zu loeschen
+	 *
+	 */
+	class DeleteArticleClickHandler implements ClickHandler {
+		Article article;
+
+		public DeleteArticleClickHandler(Article a) {
+			article = a;
+		}
+
+		public void onClick(ClickEvent arg0) {
+			article.setCheckBoolean(true);
+			editorService.saveArticle(article, new SaveArticleCallback());
+
+		}
 	}
 
 	/**
@@ -293,6 +350,10 @@ public class ArticlesForm extends VerticalPanel {
 
 	}
 
+	/**
+	 * Callback um einen Artikel einer Einkaufsliste hinzuzufuegen
+	 *
+	 */
 	class AddArticleToGroceryList implements AsyncCallback<GroceryListArticle> {
 		Article article;
 
