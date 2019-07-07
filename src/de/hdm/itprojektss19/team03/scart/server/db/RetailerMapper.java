@@ -434,8 +434,9 @@ public class RetailerMapper {
 			stmt.setString(1, retailer.getRetailerName());
 			stmt.setInt(2, retailer.getGroup().getId());
 			stmt.setInt(3, retailer.getUser().getId());
-			stmt.setInt(4, retailer.getId());
-			stmt.setInt(5, retailer.getGroceryListId());
+			stmt.setInt(4, retailer.getGroceryListId());
+			stmt.setInt(5, retailer.getId());
+			
 			stmt.executeUpdate();
 			return retailer;
 		} catch (SQLException e2) {
