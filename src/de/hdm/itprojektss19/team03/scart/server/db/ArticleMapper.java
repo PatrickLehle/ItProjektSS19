@@ -314,8 +314,9 @@ public class ArticleMapper {
 		Connection con = null;
 		PreparedStatement stmt = null;
 
-		String update = "UPDATE article SET articleName=?, articleQuantity=?, articleUnit=?, articleRetailerId=?, articleOwnerId=?, articleModDat=?, articleBoolean=?, articleFav=? WHERE articleId="
-				+ article.getId();
+		String update = "UPDATE article SET articleName=?, articleQuantity=?, articleUnit=?, "
+				+ "articleRetailerId=?, articleOwnerId=?, articleModDat=?, articleBoolean=?, "
+				+ "articleFav=?, articleDelDat=? WHERE articleId=" + article.getId();
 
 		try {
 			System.out.println(article.getId() + " article update id");
@@ -333,6 +334,7 @@ public class ArticleMapper {
 			stmt.setTimestamp(6, article.getModDat());
 			stmt.setBoolean(7, article.getCheckBoolean());
 			stmt.setBoolean(8, article.getFav());
+			stmt.setTimestamp(9, article.getDelDat());
 
 			stmt.executeUpdate();
 

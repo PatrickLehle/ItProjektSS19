@@ -20,6 +20,7 @@ public class Article extends BusinessObject {
 	private int quantity;
 	private String unit;
 	private int retailerId;
+	private int groceryListId;
 	private int groupId;
 	private String retailerName;
 	private int ownerId;
@@ -123,6 +124,13 @@ public class Article extends BusinessObject {
 		return this.fav;
 	}
 
+	public int getGroceryListId() {
+		return groceryListId;
+	}
+
+	public void setGroceryListId(int groceryListId) {
+		this.groceryListId = groceryListId;
+	}
 	// RETAILER======================================================
 
 	// }
