@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Erstellungszeit: 04. Jul 2019 um 11:30
+-- Erstellungszeit: 07. Jul 2019 um 12:45
 -- Server-Version: 5.7.24-log
 -- PHP-Version: 7.2.10
 
@@ -28,10 +28,8 @@ SET time_zone = "+00:00";
 -- Tabellenstruktur für Tabelle `article`
 --
 
-DROP DATABASE itprojektss19; 
-CREATE DATABASE itprojektss19; 
+CREATE DATABASE itprojektss19;
 USE itprojektss19;
-
 
 CREATE TABLE `article` (
   `articleId` int(100) NOT NULL,
@@ -107,7 +105,8 @@ CREATE TABLE `retailer` (
   `retailerId` int(100) NOT NULL,
   `retailerName` varchar(100) NOT NULL,
   `retailerGroupId` int(11) NOT NULL,
-  `retailerUserId` int(11) DEFAULT NULL
+  `retailerUserId` int(11) DEFAULT NULL,
+  `retailerGroceryListId` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -171,7 +170,8 @@ ALTER TABLE `retailer`
   ADD PRIMARY KEY (`retailerId`),
   ADD KEY `groupId` (`retailerGroupId`),
   ADD KEY `accountable` (`retailerUserId`),
-  ADD KEY `accountable_2` (`retailerUserId`);
+  ADD KEY `accountable_2` (`retailerUserId`),
+  ADD KEY `retailer_ibfk_3` (`retailerGroceryListId`);
 
 --
 -- Indizes für die Tabelle `user`
@@ -193,13 +193,13 @@ ALTER TABLE `article`
 -- AUTO_INCREMENT für Tabelle `grocerylist`
 --
 ALTER TABLE `grocerylist`
-  MODIFY `groceryListId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `groceryListId` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `groupId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `groupId` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `retailer`
@@ -211,7 +211,7 @@ ALTER TABLE `retailer`
 -- AUTO_INCREMENT für Tabelle `user`
 --
 ALTER TABLE `user`
-  MODIFY `userId` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `userId` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints der exportierten Tabellen
@@ -251,8 +251,9 @@ ALTER TABLE `groupuser`
 -- Constraints der Tabelle `retailer`
 --
 ALTER TABLE `retailer`
-  ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`retailerGroupId`) REFERENCES `groups` (`groupId`) ON DELETE CASCADE,
-  ADD CONSTRAINT `retailer_ibfk_2` FOREIGN KEY (`retailerUserId`) REFERENCES `user` (`userId`) ON DELETE SET NULL;
+  ADD CONSTRAINT `retailer_ibfk_1` FOREIGN KEY (`retailerGroupId`) REFERENCES `groups` (`groupId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `retailer_ibfk_2` FOREIGN KEY (`retailerUserId`) REFERENCES `user` (`userId`) ON DELETE SET NULL ON UPDATE CASCADE,
+  ADD CONSTRAINT `retailer_ibfk_3` FOREIGN KEY (`retailerGroceryListId`) REFERENCES `grocerylist` (`groceryListId`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
