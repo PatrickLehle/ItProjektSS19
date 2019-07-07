@@ -97,15 +97,16 @@ body {
 }
 
 .table-icon-button {
-	margin: 5px !important;
+	    margin-right: 2px !important;
+    margin-left: 2px !important;
 	border: 1px solid black !important;
-	background: transparent !important;
 	color: rgb(25, 31, 31) !important;
 	width: 24px;
 	height: 24px;
 	border-radius: 200px;
-	text-align: center;
+	text-align: center;;
 	cursor: pointer;
+	padding: 0;
 }
 
 .table-button1 {
@@ -192,6 +193,7 @@ body {
 	margin-right: 0;
 	font-weight: bold;
 	text-align: -webkit-center;
+	    white-space: nowrap;
 }
 
 .h4 {
