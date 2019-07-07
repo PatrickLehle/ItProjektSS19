@@ -110,6 +110,7 @@ public class ArticlesForm extends VerticalPanel {
 						"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
 				checkBtn.setStyleName("table-icon-button");
 				checkBtn.addClickHandler(new CheckClickHandler(articleVector.get(articleNumber)));
+				checkBtn.setTitle("Als gekauft markieren");
 				articleTable.setWidget(falseCount, 0, checkBtn);
 
 				Label articleName = new Label(articleVector.get(articleNumber).getName());
@@ -130,7 +131,7 @@ public class ArticlesForm extends VerticalPanel {
 				Button dotBtn = new Button(
 						"<image src='/images/dots-vertical.png' width='20px' height='20	px' align='center'/>");
 				dotBtn.setStyleName("table-icon-button");
-				dotBtn.addClickHandler(new DotClickHandler(articleVector.get(articleNumber)));
+				dotBtn.addClickHandler(new DotClickHandler(articleVector.get(articleNumber), falseCount));
 				articleTable.setWidget(falseCount, 5, dotBtn);
 				articleTable.getRowFormatter().setStyleName(falseCount, "article-row");
 
@@ -142,6 +143,7 @@ public class ArticlesForm extends VerticalPanel {
 						"<image src='/images/minusButton.png' width='16px' height='16px' align='center'/>");
 				checkBtn.setStyleName("table-icon-button");
 				checkBtn.addClickHandler(new CheckClickHandler(articleVector.get(articleNumber)));
+				checkBtn.setTitle("Als nicht gekauft markieren");
 				boughtTable.setWidget(trueCount, 0, checkBtn);
 
 				Label articleName = new Label(articleVector.get(articleNumber).getName());
@@ -159,11 +161,13 @@ public class ArticlesForm extends VerticalPanel {
 					boughtTable.setWidget(trueCount, 4, new FavButton(articleVector.get(articleNumber), true));
 				}
 
-				Button dotBtn = new Button(
-						"<image src='/images/dots-vertical.png' width='20px' height='20	px' align='center'/>");
-				dotBtn.setStyleName("table-icon-button");
-				dotBtn.addClickHandler(new DotClickHandler(articleVector.get(articleNumber)));
-				boughtTable.setWidget(trueCount, 5, dotBtn);
+				// Button dotBtn = new Button(
+				// "<image src='/images/dots-vertical.png' width='20px' height='20 px'
+				// align='center'/>");
+				// dotBtn.setStyleName("table-icon-button");
+				// dotBtn.addClickHandler(new DotClickHandler(articleVector.get(articleNumber),
+				// trueCount));
+				// boughtTable.setWidget(trueCount, 5, dotBtn);
 				boughtTable.getRowFormatter().setStyleName(trueCount, "article-row");
 
 				trueCount++;
@@ -205,9 +209,11 @@ public class ArticlesForm extends VerticalPanel {
 	 */
 	class DotClickHandler implements ClickHandler {
 		Article article;
+		int row;
 
-		public DotClickHandler(Article a) {
+		public DotClickHandler(Article a, int r) {
 			article = a;
+			row = r;
 		}
 
 		public void onClick(ClickEvent event) {
@@ -228,7 +234,7 @@ public class ArticlesForm extends VerticalPanel {
 			f1.add(edit);
 			f2.add(delete);
 			f2.addClickHandler(new DeleteArticleClickHandler(article));
-			f1.addClickHandler(new EditArticleClickHandler(article));
+			f1.addClickHandler(new EditArticleClickHandler(article, row));
 			vp.add(f1);
 			vp.add(f2);
 			vp.setSpacing(2);
@@ -240,14 +246,42 @@ public class ArticlesForm extends VerticalPanel {
 
 	}
 
+	/**
+	 * ClickHandler um Artikel zu bearbeiten
+	 *
+	 */
 	class EditArticleClickHandler implements ClickHandler {
 		Article article;
+		int row;
 
-		public EditArticleClickHandler(Article a) {
+		public EditArticleClickHandler(Article a, int r) {
 			article = a;
+			row = r;
 		}
 
-		public void onClick(ClickEvent arg0) {
+		public void onClick(ClickEvent e) {
+			TextBox nameTB = new TextBox();
+			nameTB.setText(article.getName());
+			nameTB.setWidth(articleTable.getWidget(row, 1).getOffsetWidth() + "px");
+			articleTable.setWidget(row, 1, nameTB);
+
+			TextBox quantityTB = new TextBox();
+			quantityTB.setText(Integer.toString(article.getQuantity()));
+			quantityTB.setWidth(articleTable.getWidget(row, 2).getOffsetWidth() + "px");
+			articleTable.setWidget(row, 2, quantityTB);
+
+			TextBox unitTB = new TextBox();
+			unitTB.setText(article.getUnit());
+			unitTB.setWidth(articleTable.getWidget(row, 3).getOffsetWidth() + "px");
+			articleTable.setWidget(row, 3, unitTB);
+
+			articleTable.removeCell(row, 4);
+			Button checkBtn = new Button(
+					"<image src='/images/check-bold.png' width='16px' height='16px' align='center'/>");
+			checkBtn.setStyleName("table-icon-button");
+			checkBtn.addClickHandler(new SaveArticleClickHandler(article, nameTB, quantityTB, unitTB));
+			checkBtn.setTitle("Speichern");
+			articleTable.setWidget(row, 5, checkBtn);
 
 		}
 	}
@@ -261,6 +295,7 @@ public class ArticlesForm extends VerticalPanel {
 
 		public DeleteArticleClickHandler(Article a) {
 			article = a;
+
 		}
 
 		public void onClick(ClickEvent arg0) {
@@ -290,6 +325,32 @@ public class ArticlesForm extends VerticalPanel {
 			editorService.saveArticle(article, new SaveArticleCallback());
 		}
 
+	}
+
+	/**
+	 * Clickhandler, um einen Artikel zu speichern
+	 *
+	 */
+	class SaveArticleClickHandler implements ClickHandler {
+		Article article;
+		TextBox nameTB;
+		TextBox quantityTB;
+		TextBox unitTB;
+
+		public SaveArticleClickHandler(Article a, TextBox nTB, TextBox qTB, TextBox uTB) {
+			article = a;
+			nameTB = nTB;
+			quantityTB = qTB;
+			unitTB = uTB;
+		}
+
+		public void onClick(ClickEvent c) {
+			article.setName(nameTB.getText());
+			article.setQuantity(Integer.parseInt(quantityTB.getText()));
+			article.setUnit(unitTB.getText());
+			editorService.saveArticle(article, new SaveArticleCallback());
+
+		}
 	}
 
 	/**
@@ -386,17 +447,6 @@ public class ArticlesForm extends VerticalPanel {
 			} else {
 				this.setUrl("/images/heart.png");
 			}
-		}
-	}
-
-	/**
-	 * DotButton Klasse
-	 */
-	class DotButton extends Button {
-
-		public DotButton(Article a) {
-
-			this.addClickHandler(new DotClickHandler(a));
 		}
 	}
 
