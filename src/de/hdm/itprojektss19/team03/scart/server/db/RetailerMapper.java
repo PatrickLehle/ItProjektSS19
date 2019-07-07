@@ -253,7 +253,7 @@ public class RetailerMapper {
 	 * 
 	 * Gibt alle Retailer einer GroceryList zurueck
 	 * 
-	 * @param groupId Die besagte GroceryList
+	 * @param groceryListId Die besagte GroceryList
 	 * @return einen Vector aus gefundenen Retailers
 	 * @throws DatabaseException Falls die Datenbankabfrage fehlschlaegt
 	 */

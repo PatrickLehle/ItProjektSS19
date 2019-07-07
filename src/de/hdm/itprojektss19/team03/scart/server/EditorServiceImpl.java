@@ -661,7 +661,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	 * @param retailerId beschreibt die Eindeutigkeit eines Retailer Objekts via id
 	 * @return gibt alle Article Objekte eines GroceryList Objekts eines Retailers
 	 *         zurueck
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public Vector<Article> findAllArticleByGroceryListIdAndRetailerId(int groceryListId, int retailerId)
 			throws IllegalArgumentException {

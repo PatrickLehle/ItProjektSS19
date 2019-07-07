@@ -50,7 +50,7 @@ public class GroceryListArticleMapper {
 	 * @param gl fuer das GroceryListobjekt
 	 * @param a fuer das Articleobjekt
 	 * 
-	 * @return null
+	 * @return null gibt null zurueck
 	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
 	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
@@ -133,9 +133,10 @@ public class GroceryListArticleMapper {
 	/**
 	 * Findet alle Artikel einer Einkaufsliste (wer hätte es gedacht...)
 	 * 
-	 * @param grocerylistId
-	 * @return
-	 * @throws DatabaseException
+	 * @param grocerylistId beschreibt die Eindeutigkeit einer Grocerylist via id
+	 * @return gibt einen Vector von Artikel Objekten zurueck
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByGroceryListId(int grocerylistId) throws DatabaseException {
 
@@ -182,9 +183,11 @@ public class GroceryListArticleMapper {
 	/**
 	 * Findet alle Artikel eines Retailers einer Einkaufsliste
 	 * 
-	 * @param grocerylistId
-	 * @return
-	 * @throws DatabaseException
+	 * @param grocerylistId beschreibt eine GroceryList via id
+	 * @param retailerId beschreibt einen Retailer via id
+	 * @return gibt einen Vecotr Article zurueck
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
 	 */
 	public Vector<Article> findAllArticleByGroceryListIdAndRetailerId(int grocerylistId, int retailerId)
 			throws DatabaseException {

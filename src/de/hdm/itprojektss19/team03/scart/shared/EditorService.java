@@ -353,7 +353,8 @@ public interface EditorService extends RemoteService {
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllArticleByGroceryListAndRetailerId(int id);
-	 * @param id beschreibt die Eindeutigkeit einer Grocerylist via id
+	 * @param groceryListId beschreibt die Eindeutigkeit einer Grocerylist via id
+	 * @param retailerId beschreibt die Eindeutigkeit einer Retailer via id
 	 * @return gibt alle Article einer GroceryList eines retailers aus.
 	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht
 	 *             erlaubten Arguments.
@@ -434,7 +435,7 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
-	 * @param group Gruppe nach der gefiltert wird
+	 * @param g Gruppe nach der gefiltert wird
 	 * @return gibt alle Fav-Artikel einer Gruppe zurueck
 	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht
 	 *             erlaubten Arguments.
@@ -446,17 +447,16 @@ public interface EditorService extends RemoteService {
 	 *      #findAllArticleByOwnerId(int ownerId)
 	 * @param ownerId beschreibt die Eindeutigkeit eines Owners vioa id.
 	 * @return gibt alle Artikel eines Owners zurueck
-	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht
-	 *             erlaubten Arguments.
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public Vector<Article> findAllArticleByOwnerId(int ownerId) throws IllegalArgumentException;
 
 	/**
 	 * 
-	 * @param name
-	 * @param groupId
+	 * @param name beschreibt den Namen eines Artikels
+	 * @param groupId beschreibt die Eindeutigkeit einer Gruppe via id
 	 * @return gibt alle Artikel eines Namens und Gruppe zurueck
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public Vector<Article> getAllArticleByName(String name, int groupId) throws IllegalArgumentException;
 
@@ -626,7 +626,7 @@ public interface EditorService extends RemoteService {
 	 * @param group GruppenObjekt
 	 * @param gl GroceryList Objekt
 	 * @return gibt alle eindeutigen Retailer einer Gruppe zurueck
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public Vector<Retailer> getAllDistinctRetailerByGroupAndGroceryList(Group group, GroceryList gl)
 			throws IllegalArgumentException;
@@ -636,7 +636,7 @@ public interface EditorService extends RemoteService {
 	 * 
 	 * @param gl GroceryList Objekt
 	 * @return gibt alle eindeutigen Retailer einer GroceryList zurueck
-	 * @throws IllegalArgumentException
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public Vector<Retailer> getAllDistinctRetailerByGroceryList(GroceryList gl) throws IllegalArgumentException;
 
@@ -687,8 +687,8 @@ public interface EditorService extends RemoteService {
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #deleteAllArticlesFromGroceryList(GroceryList gl);
 	 * 
-	 * @param gl
-	 * @throws IllegalArgumentException
+	 * @param gl beschreibt ein GroceryList Objekt
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht erlaubten Arguments.
 	 */
 	public void deleteAllArticlesFromGroceryList(GroceryList gl) throws IllegalArgumentException;
 }

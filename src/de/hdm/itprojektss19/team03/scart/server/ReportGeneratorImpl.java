@@ -184,7 +184,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users mit Zeitraum generiert.
 	 * 
-	 * @param u beschreibt ein User Objekt
+	 * @param user beschreibt ein User Objekt
 	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
 	 * @param choosenStartDate ausgewaehltes Start Datum
 	 * @param choosenEndDate ausgewaehltes End Datum
@@ -324,7 +324,7 @@ public class ReportGeneratorImpl extends RemoteServiceServlet implements ReportG
 	/**
 	 * Es wird eine Statistik ueber favourisierte Article in einzelnen Gruppen des Users mit dessen Retailer und Zeitraum generiert.
 	 * 
-	 * @param u beschreibt ein User Objekt
+	 * @param user beschreibt ein User Objekt
 	 * @param groups beschreibt ein Vector aller Gruppen in dem der User Mitglied ist.
 	 * @param retailers beschreibt ein Retailer Objekt
 	 * @param choosenStartDate ausgewaehltes Start Datum

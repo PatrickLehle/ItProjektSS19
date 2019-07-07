@@ -166,7 +166,7 @@ public class ArticleMapper {
 	/**
 	 * 
 	 * @param name des Artikels der gesucht werden soll
-	 * @param a Vector von Articlen
+	 * @param groupId beschreibt eine Eundeutige Gruppe via id
 	 * @return Vektor mit allen Artikel-Objekten die den Namen haben nach dem
 	 *         gesucht wurde
 	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
@@ -512,7 +512,6 @@ public class ArticleMapper {
 	/**
 	 * Gibt alle Artikel einer Gruppe zurueck
 	 * 
-	 * @param u User Objekt
 	 * @param g Gruppen Objekt
 	 * @return Artikel-Vektor
 	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
