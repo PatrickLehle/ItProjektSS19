@@ -1074,6 +1074,26 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 	}
 
 	/**
+	 * Auslesen aller Favoriten-Artikel einer Gruppe
+	 * 
+	 * @param g Gruppe nach der gefiltert wird
+	 * @return Vector aus Artikeln
+	 * @throws IllegalArgumentException Wird ausgegeben, wenn eine Fehler in der
+	 *             Datenbankabfrage entsteht
+	 */
+	public Vector<Article> findAllFavArticleByGroup(Group g) throws IllegalArgumentException {
+		try {
+
+			return this.aMapper.findAllFavArticleByGroup(g);
+
+		} catch (IllegalArgumentException | DatabaseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
+
+	}
+
+	/**
 	 * 
 	 * @param id beschreibt die Eindeutigkeit eines Retailer Objekts via id
 	 * @param start Datums Zeitraum der im Report ausgewahelt wurde
@@ -1127,7 +1147,7 @@ public class EditorServiceImpl extends RemoteServiceServlet implements EditorSer
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	/**
 	 * Auslesen aller Retailer Objekte in der Datenbank für den Report
 	 * 

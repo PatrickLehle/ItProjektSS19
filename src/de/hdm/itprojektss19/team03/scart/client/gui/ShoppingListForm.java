@@ -27,6 +27,7 @@ import de.hdm.itprojektss19.team03.scart.shared.EditorService;
 import de.hdm.itprojektss19.team03.scart.shared.EditorServiceAsync;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Article;
 import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryList;
+import de.hdm.itprojektss19.team03.scart.shared.bo.GroceryListArticle;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Group;
 import de.hdm.itprojektss19.team03.scart.shared.bo.Retailer;
 import de.hdm.itprojektss19.team03.scart.shared.bo.User;
@@ -482,6 +483,10 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 	};
 
+	/**
+	 * Callback um Retailer information zu bekommen
+	 *
+	 */
 	class GetFullRetaierInfoCallback implements AsyncCallback<Retailer> {
 		Vector<Article> articles;
 
@@ -498,6 +503,84 @@ public class ShoppingListForm extends HorizontalPanel {
 
 		}
 	};
+
+	/**
+	 * Callback, um alle Favoriten einer Gruppe zu bekommen
+	 *
+	 */
+	class FavArticleCallback implements AsyncCallback<Vector<Article>> {
+		Retailer retailer;
+
+		public FavArticleCallback(Retailer r) {
+			retailer = r;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to getFavarticle: " + t);
+		}
+
+		public void onSuccess(Vector<Article> articles) {
+			int callbackCount = 0;
+			for (Article a : articles) {
+				callbackCount++;
+				a.setRetailer(retailer);
+				a.setOwnerId(user.getId());
+				a.setGroupId(group.getId());
+				editorService.createArticle(a, new CreateArticleCallback(articles.size(), callbackCount));
+			}
+			GWTBugFixing = 0;
+			onLoad();
+
+		}
+	}
+
+	/**
+	 * Callback, um neue Artikel anzulegen
+	 *
+	 */
+	class CreateArticleCallback implements AsyncCallback<Article> {
+		int favCount;
+		int callbackCount;
+
+		public CreateArticleCallback(int i, int j) {
+			favCount = i;
+			callbackCount = j;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to create Article: " + t);
+		}
+
+		public void onSuccess(Article a) {
+			editorService.addArticleToGroceryList(groceryList, a, new AddArticleToGroceryList(favCount, callbackCount));
+		}
+
+	}
+
+	/**
+	 * Callback, im einen Artikel einer Einkaufsliste zuzufuegen
+	 *
+	 */
+	class AddArticleToGroceryList implements AsyncCallback<GroceryListArticle> {
+		int favCount;
+		int callbackCount;
+
+		public AddArticleToGroceryList(int fc, int cC) {
+			favCount = fc;
+			callbackCount = cC;
+		}
+
+		public void onFailure(Throwable t) {
+			GWT.log("Failed to add Article to Retailer: " + t);
+		}
+
+		public void onSuccess(GroceryListArticle gla) {
+			if (callbackCount == favCount) {
+				onLoad();
+			}
+		}
+
+	}
 
 	/**
 	 * Callback um die Retailer der Gruppe aus der DB zu finden. Bei Erfolg werden
@@ -517,6 +600,7 @@ public class ShoppingListForm extends HorizontalPanel {
 			}
 		}
 	};
+
 	/**
 	 * Callback-Methode um einen neuen Retailer in der DB anzulegen
 	 */
@@ -526,8 +610,8 @@ public class ShoppingListForm extends HorizontalPanel {
 		}
 
 		public void onSuccess(Retailer r) {
-			GWTBugFixing = 0;
-			onLoad();
+			editorService.findAllFavArticleByGroup(group, new FavArticleCallback(r));
+
 		}
 	};
 

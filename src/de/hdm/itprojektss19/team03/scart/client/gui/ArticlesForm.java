@@ -405,7 +405,6 @@ public class ArticlesForm extends VerticalPanel {
 		}
 
 		public void onSuccess(Article article) {
-
 			editorService.addArticleToGroceryList(groceryList, article, new AddArticleToGroceryList(article));
 		}
 

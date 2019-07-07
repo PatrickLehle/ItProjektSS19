@@ -61,7 +61,7 @@ public class GroceryListArticleMapper {
 		String article = "INSERT INTO grocerylistarticle (grocerylistId, articleId, retailerId) VALUES (?,?,?)";
 		System.out.println("mapper");
 		try {
-			System.out.println(gl.getId() + " " + a.getId() + " " + a.getRetailerId());
+			System.out.println("gl: " + gl.getId() + " ar: " + a.getId() + " ret: " + a.getRetailerId());
 			con = DBConnection.connection();
 			stmt = con.prepareStatement(article);
 			stmt.setInt(1, gl.getId());

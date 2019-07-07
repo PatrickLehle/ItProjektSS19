@@ -233,7 +233,7 @@ public class ArticleMapper {
 				article.setId(rs.getInt("articleId"));
 				article.setName(rs.getString("articleName"));
 				article.setQuantity(rs.getInt("articleQuantity"));
-				article.setUnit("articleUnit");
+				article.setUnit(rs.getString("articleUnit"));
 				article.setRetailerId(rs.getInt("articleRetailerId"));
 				article.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				article.setModDat(rs.getTimestamp("articlemodDat"));
@@ -319,7 +319,7 @@ public class ArticleMapper {
 				+ "articleFav=?, articleDelDat=? WHERE articleId=" + article.getId();
 
 		try {
-			System.out.println(article.getCheckBoolean() + " article update id");
+			System.out.println(article.getId() + " article update id");
 
 			// NullPointerException wenn nicht alles bei der uebergabe des Objektes
 			// angegeben wird
@@ -402,7 +402,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setRetailerId(rs.getInt("articleRetailerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articlemodDat"));
@@ -450,7 +450,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setRetailerId(rs.getInt("articleRetailerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articlemodDat"));
@@ -491,13 +491,51 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setRetailerId(rs.getInt("articleRetailerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articlemodDat"));
 				a.setCheckBoolean(rs.getBoolean("articleBoolean"));
 				a.setFav(rs.getBoolean("articleFav"));
 				a.setDelDat(rs.getTimestamp("articleDelDat"));
+
+				result.addElement(a);
+			}
+
+			return result;
+		} catch (SQLException e2) {
+			ServersideSettings.getLogger().severe(e2.getMessage());
+			throw new DatabaseException(e2);
+		}
+	}
+
+	/**
+	 * Gibt alle Artikel einer Gruppe zurueck
+	 * 
+	 * @param u User Objekt
+	 * @param g Gruppen Objekt
+	 * @return Artikel-Vektor
+	 * @throws DatabaseException Entsteht durch ein Attribut, dass nicht in der
+	 *             Datanbank vorhanden ist aber dennoch gesetzt wurde.
+	 */
+	public Vector<Article> findAllFavArticleByGroup(Group g) throws DatabaseException {
+		Connection con = DBConnection.connection();
+
+		Vector<Article> result = new Vector<Article>();
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery("SELECT DISTINCT articleName, articleUnit FROM "
+					+ "article WHERE articleBoolean = 0 AND article.articleFav = TRUE AND article.articleGroupId = "
+					+ g.getId());
+
+			while (rs.next()) {
+				Article a = new Article();
+				a.setName(rs.getString("articleName"));
+				a.setQuantity(1);
+				a.setUnit(rs.getString("articleUnit"));
+				a.setCheckBoolean(false);
+				a.setFav(true);
+				a.setDelDat(null);
 
 				result.addElement(a);
 			}
@@ -531,7 +569,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setRetailerId(rs.getInt("articleRetailerId"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
@@ -571,7 +609,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setRetailerId(rs.getInt("articleRetailerId"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
@@ -625,7 +663,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articleModDat"));
@@ -685,7 +723,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articleModDat"));
@@ -751,7 +789,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articleModDat"));
@@ -814,7 +852,7 @@ public class ArticleMapper {
 				a.setId(rs.getInt("articleId"));
 				a.setName(rs.getString("articleName"));
 				a.setQuantity(rs.getInt("articleQuantity"));
-				a.setUnit("articleUnit");
+				a.setUnit(rs.getString("articleUnit"));
 				a.setOwnerId(rs.getInt("articleOwnerId"));
 				a.setCreationDat(rs.getTimestamp("articleCreationDat"));
 				a.setModDat(rs.getTimestamp("articleModDat"));

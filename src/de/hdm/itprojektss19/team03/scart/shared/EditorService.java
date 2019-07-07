@@ -434,6 +434,15 @@ public interface EditorService extends RemoteService {
 
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
+	 * @param group Gruppe nach der gefiltert wird
+	 * @return gibt alle Fav-Artikel einer Gruppe zurueck
+	 * @throws IllegalArgumentException Entsteht bei der Uebergabe eines nicht
+	 *             erlaubten Arguments.
+	 */
+	public Vector<Article> findAllFavArticleByGroup(Group g) throws IllegalArgumentException;
+
+	/**
+	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllArticleByOwnerId(int ownerId)
 	 * @param ownerId beschreibt die Eindeutigkeit eines Owners vioa id.
 	 * @return gibt alle Artikel eines Owners zurueck
@@ -591,7 +600,7 @@ public interface EditorService extends RemoteService {
 	 *             erlaubten Arguments.
 	 */
 	public Vector<Retailer> findAllRetailer() throws IllegalArgumentException;
-	
+
 	/**
 	 * @see de.hdm.itprojektss19.team03.scart.server.EditorServiceImpl
 	 *      #findAllRetailerReport();
