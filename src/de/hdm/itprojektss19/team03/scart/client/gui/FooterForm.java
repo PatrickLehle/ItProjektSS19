@@ -17,5 +17,6 @@ public class FooterForm extends HorizontalPanel {
 		this.setVerticalAlignment(ALIGN_MIDDLE);
 		this.addStyleName("footer");
 		this.add(txt);
+		
 	}
 }
